@@ -18,7 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fakeamazon.R
@@ -28,68 +30,80 @@ val DISCOUNT_RED: Color = Color(0xFFCC0020)
 
 @Composable
 fun HomeScreenRoot(modifier: Modifier) {
-    RecommendedDeals(modifier.padding(horizontal = 8.dp))
+    RecommendedDealsSection(modifier.padding(horizontal = 8.dp))
 }
 
 @Composable
-fun RecommendedDeals(modifier: Modifier = Modifier) {
+fun RecommendedDealsSection(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
     ) {
-        Text(text = "Recommended deals for you", style = MaterialTheme.typography.titleLarge)
+        val cardWidth = dimensionResource(R.dimen.recommended_deals_card_width)
+        val paddingSmall = dimensionResource(R.dimen.padding_small)
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = stringResource(R.string.recommended_deals_for_you_section_title), style = MaterialTheme.typography.titleLarge)
 
-        Card(
-            modifier = Modifier.width(280.dp)
+        Spacer(modifier = Modifier.height(paddingSmall))
+
+        RecommendedDealsCard(Modifier.width(cardWidth))
+    }
+}
+
+@Composable
+private fun RecommendedDealsCard(
+    modifier: Modifier = Modifier
+) {
+    val itemHeight = dimensionResource(R.dimen.recommended_deals_item_height)
+    val paddingSmall = dimensionResource(R.dimen.padding_small)
+
+    Card(
+        modifier = modifier
+    ) {
+        Column(
+            modifier = Modifier
+                .wrapContentSize()
+                .padding(paddingSmall)
         ) {
-            Column(
-                modifier = Modifier
-                    .wrapContentSize()
-                    .padding(8.dp)
-            ) {
-                Text("Deals for you")
+            Text(stringResource(R.string.recommended_deals_for_you))
 
-                val itemHeight = 200.dp
-                val itemModifier = Modifier
-                    .background(Color.White)
-                    .height(itemHeight)
-                    .weight(1f)
-                    .padding(8.dp)
+            val itemModifier = Modifier
+                .background(Color.White)
+                .height(itemHeight)
+                .weight(1f)
+                .padding(paddingSmall)
 
-                Row(modifier = Modifier.wrapContentSize()) {
-                    RecommendedItem(
-                        discount = 0.17f,
-                        imageRes = R.drawable.item_backpack,
-                        modifier = itemModifier
-                    )
+            Row(modifier = Modifier.wrapContentSize()) {
+                RecommendedItem(
+                    discount = 0.17f,
+                    imageRes = R.drawable.item_backpack,
+                    modifier = itemModifier
+                )
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(paddingSmall))
 
-                    RecommendedItem(
-                        discount = 0.20f,
-                        imageRes = R.drawable.item_headphones,
-                        modifier = itemModifier
-                    )
-                }
+                RecommendedItem(
+                    discount = 0.20f,
+                    imageRes = R.drawable.item_headphones,
+                    modifier = itemModifier
+                )
+            }
 
-                Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(paddingSmall))
 
-                Row(modifier = Modifier.wrapContentSize()) {
-                    RecommendedItem(
-                        discount = 0.12f,
-                        imageRes = R.drawable.item_detergent,
-                        modifier = itemModifier
-                    )
+            Row(modifier = Modifier.wrapContentSize()) {
+                RecommendedItem(
+                    discount = 0.12f,
+                    imageRes = R.drawable.item_detergent,
+                    modifier = itemModifier
+                )
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(paddingSmall))
 
-                    RecommendedItem(
-                        discount = 0.13f,
-                        imageRes = R.drawable.item_dishwash_detergent,
-                        modifier = itemModifier
-                    )
-                }
+                RecommendedItem(
+                    discount = 0.13f,
+                    imageRes = R.drawable.item_dishwash_detergent,
+                    modifier = itemModifier
+                )
             }
         }
     }
@@ -101,6 +115,8 @@ private fun RecommendedItem(
     discount: Float,
     @DrawableRes imageRes: Int
 ) {
+    val discountPercent = (discount * 100).roundToInt()
+
     Column(modifier = modifier) {
         Image(
             contentDescription = null,
@@ -112,19 +128,22 @@ private fun RecommendedItem(
             painter = painterResource(imageRes),
         )
 
-        val discountPercent = (discount * 100).roundToInt()
-
         Text(
             color = Color.White,
             modifier = Modifier
                 .background(color = DISCOUNT_RED)
                 .padding(horizontal = 4.dp, vertical = 2.dp),
-            text = "$discountPercent% off",
+            text = stringResource(
+                R.string.recommended_deals_discount_off_label,
+                discountPercent
+            ),
+            style = MaterialTheme.typography.labelSmall,
             fontSize = 12.sp,
         )
+
         Text(
             color = DISCOUNT_RED,
-            text = "Limited time deal",
+            text = stringResource(R.string.recommended_deals_limited_time),
             style = MaterialTheme.typography.labelSmall,
             fontSize = 12.sp,
         )
