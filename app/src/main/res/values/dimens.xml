@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="padding_small">8dp</dimen>
-    <dimen name="recommended_deals_card_width">280dp</dimen>
-    <dimen name="recommended_deals_item_height">200.dp</dimen>
+    <dimen name="padding_xsmall">6dp</dimen>
+    <dimen name="recommended_deals_item_height">180dp</dimen>
+    <dimen name="recommended_deals_item_width">136dp</dimen>
 </resources>

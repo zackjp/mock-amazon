@@ -3,8 +3,10 @@ package com.example.fakeamazon.features.home
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,6 +30,11 @@ import kotlin.math.roundToInt
 
 val DISCOUNT_RED: Color = Color(0xFFCC0020)
 
+data class Recommendation(
+    @DrawableRes val imageRes: Int,
+    val discount: Float,
+)
+
 @Composable
 fun HomeScreenRoot(modifier: Modifier) {
     RecommendedDealsSection(modifier.padding(horizontal = 8.dp))
@@ -38,23 +45,32 @@ fun RecommendedDealsSection(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
     ) {
-        val cardWidth = dimensionResource(R.dimen.recommended_deals_card_width)
-        val paddingSmall = dimensionResource(R.dimen.padding_small)
+        val items = listOf(
+            Recommendation(R.drawable.item_backpack, 0.17f),
+            Recommendation(R.drawable.item_headphones, 0.2f),
+            Recommendation(R.drawable.item_detergent, 0.12f),
+            Recommendation(R.drawable.item_dishwash_detergent, 0.13f),
+        )
 
-        Text(text = stringResource(R.string.recommended_deals_for_you_section_title), style = MaterialTheme.typography.titleLarge)
-
-        Spacer(modifier = Modifier.height(paddingSmall))
-
-        RecommendedDealsCard(Modifier.width(cardWidth))
+        Text(
+            text = stringResource(R.string.recommended_deals_for_you_section_title),
+            style = MaterialTheme.typography.titleLarge
+        )
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
+        RecommendedDealsCard(items = items, modifier = Modifier.wrapContentSize())
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class) // FlowRow
 @Composable
 private fun RecommendedDealsCard(
-    modifier: Modifier = Modifier
+    items: List<Recommendation>,
+    modifier: Modifier = Modifier,
 ) {
     val itemHeight = dimensionResource(R.dimen.recommended_deals_item_height)
+    val itemWidth = dimensionResource(R.dimen.recommended_deals_item_width)
     val paddingSmall = dimensionResource(R.dimen.padding_small)
+    val paddingXSmall = dimensionResource(R.dimen.padding_xsmall)
 
     Card(
         modifier = modifier
@@ -66,45 +82,29 @@ private fun RecommendedDealsCard(
         ) {
             Text(stringResource(R.string.recommended_deals_for_you))
 
+            Spacer(modifier = Modifier.height(paddingSmall))
+
             val itemModifier = Modifier
                 .background(Color.White)
                 .height(itemHeight)
-                .weight(1f)
+                .width(itemWidth)
                 .padding(paddingSmall)
 
-            Row(modifier = Modifier.wrapContentSize()) {
-                RecommendedItem(
-                    discount = 0.17f,
-                    imageRes = R.drawable.item_backpack,
-                    modifier = itemModifier
-                )
-
-                Spacer(modifier = Modifier.width(paddingSmall))
-
-                RecommendedItem(
-                    discount = 0.20f,
-                    imageRes = R.drawable.item_headphones,
-                    modifier = itemModifier
-                )
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(paddingXSmall),
+                maxItemsInEachRow = 2,
+                modifier = Modifier.wrapContentSize(),
+                verticalArrangement = Arrangement.spacedBy(paddingXSmall),
+            ) {
+                repeat(items.size) { i ->
+                    RecommendedItem(
+                        discount = items[i].discount,
+                        imageRes = items[i].imageRes,
+                        modifier = itemModifier
+                    )
+                }
             }
 
-            Spacer(modifier = Modifier.height(paddingSmall))
-
-            Row(modifier = Modifier.wrapContentSize()) {
-                RecommendedItem(
-                    discount = 0.12f,
-                    imageRes = R.drawable.item_detergent,
-                    modifier = itemModifier
-                )
-
-                Spacer(modifier = Modifier.width(paddingSmall))
-
-                RecommendedItem(
-                    discount = 0.13f,
-                    imageRes = R.drawable.item_dishwash_detergent,
-                    modifier = itemModifier
-                )
-            }
         }
     }
 }
