@@ -8,12 +8,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -58,7 +63,12 @@ fun RecommendedDealsSection(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.titleLarge
         )
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
-        RecommendedDealsCard(items = items, modifier = Modifier.wrapContentSize())
+        RecommendedDealsCard(
+            items = items,
+            modifier = Modifier
+                .wrapContentSize()
+                .width(dimensionResource(R.dimen.recommended_deals_card_width))
+        )
     }
 }
 
@@ -69,41 +79,64 @@ private fun RecommendedDealsCard(
     modifier: Modifier = Modifier,
 ) {
     val itemHeight = dimensionResource(R.dimen.recommended_deals_item_height)
-    val itemWidth = dimensionResource(R.dimen.recommended_deals_item_width)
     val paddingSmall = dimensionResource(R.dimen.padding_small)
     val paddingXSmall = dimensionResource(R.dimen.padding_xsmall)
 
     Card(
         border = BorderStroke(1.dp, Color.LightGray),
-        modifier = modifier,
+        modifier = modifier.width(300.dp),
     ) {
         Column(
             modifier = Modifier
                 .wrapContentSize()
                 .padding(paddingSmall)
         ) {
-            Text(stringResource(R.string.recommended_deals_for_you))
+            Row(
+                modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(paddingSmall)
+            ) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.recommended_deals_for_you),
+                )
+                Icon(
+                    contentDescription = null,
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                )
+            }
 
             Spacer(modifier = Modifier.height(paddingSmall))
 
-            val itemModifier = Modifier
-                .background(Color.White)
-                .height(itemHeight)
-                .width(itemWidth)
-                .padding(paddingSmall)
-
+            val twoChunkedItems = items.chunked(2)
             FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(paddingXSmall),
                 maxItemsInEachRow = 2,
                 modifier = Modifier.wrapContentSize(),
                 verticalArrangement = Arrangement.spacedBy(paddingXSmall),
             ) {
-                repeat(items.size) { i ->
-                    RecommendedItem(
-                        discount = items[i].discount,
-                        imageRes = items[i].imageRes,
-                        modifier = itemModifier
-                    )
+                repeat(twoChunkedItems.size) { i ->
+                    val itemModifier = Modifier
+                        .background(Color.White)
+                        .height(itemHeight)
+                        .weight(1f)
+                        .padding(paddingSmall)
+
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        RecommendedItem(
+                            discount = twoChunkedItems[i][0].discount,
+                            imageRes = twoChunkedItems[i][0].imageRes,
+                            modifier = itemModifier
+                        )
+
+                        if (twoChunkedItems.size > 1) {
+                            Spacer(modifier = Modifier.width(paddingXSmall))
+
+                            RecommendedItem(
+                                discount = twoChunkedItems[i][1].discount,
+                                imageRes = twoChunkedItems[i][1].imageRes,
+                                modifier = itemModifier
+                            )
+                        }
+                    }
                 }
             }
 
