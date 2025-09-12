@@ -1,6 +1,7 @@
 package com.example.fakeamazon.features.home
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -73,7 +74,8 @@ private fun RecommendedDealsCard(
     val paddingXSmall = dimensionResource(R.dimen.padding_xsmall)
 
     Card(
-        modifier = modifier
+        border = BorderStroke(1.dp, Color.LightGray),
+        modifier = modifier,
     ) {
         Column(
             modifier = Modifier
