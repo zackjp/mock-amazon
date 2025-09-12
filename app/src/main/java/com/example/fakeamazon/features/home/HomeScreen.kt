@@ -43,7 +43,7 @@ data class Recommendation(
 
 @Composable
 fun HomeScreenRoot(modifier: Modifier) {
-    RecommendedDealsSection(modifier.padding(horizontal = 8.dp))
+    RecommendedDealsSection(modifier.padding(horizontal = 16.dp))
 }
 
 @Composable
