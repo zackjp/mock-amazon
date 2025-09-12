@@ -17,9 +17,9 @@ object DealsRepository {
         RecommendationGroup(
             "Inspired by your recent history",
             Recommendation(R.drawable.item_handsoap, 0.11f),
-            Recommendation(R.drawable.item_sandwich_bags, 0.7f),
+            Recommendation(R.drawable.item_sandwich_bags, 0.07f),
             Recommendation(R.drawable.item_matcha, 0.10f),
-            Recommendation(R.drawable.item_kitchen_sponge, 0.9f),
+            Recommendation(R.drawable.item_kitchen_sponge, 0.09f),
         )
     )
 
