@@ -3,6 +3,7 @@ package com.example.fakeamazon.model
 import androidx.annotation.DrawableRes
 
 data class RecommendationGroup(
+    val title: String,
     val rec1: Recommendation,
     val rec2: Recommendation,
     val rec3: Recommendation,

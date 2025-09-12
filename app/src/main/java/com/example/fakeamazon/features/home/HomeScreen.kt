@@ -118,7 +118,7 @@ private fun RecommendedDealsCard(
             ) {
                 Text(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.recommended_deals_for_you),
+                    text = recommendationGroup.title,
                 )
                 Icon(
                     contentDescription = null,

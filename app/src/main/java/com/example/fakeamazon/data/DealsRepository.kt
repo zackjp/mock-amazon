@@ -8,12 +8,14 @@ object DealsRepository {
 
     val RECOMMENDED_DEALS: List<RecommendationGroup> = listOf(
         RecommendationGroup(
+            "Deals for you",
             Recommendation(R.drawable.item_backpack, 0.17f),
             Recommendation(R.drawable.item_headphones, 0.2f),
             Recommendation(R.drawable.item_detergent, 0.12f),
             Recommendation(R.drawable.item_dishwash_detergent, 0.13f),
         ),
         RecommendationGroup(
+            "Inspired by your recent history",
             Recommendation(R.drawable.item_handsoap, 0.11f),
             Recommendation(R.drawable.item_sandwich_bags, 0.7f),
             Recommendation(R.drawable.item_matcha, 0.10f),
