@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
@@ -52,12 +54,20 @@ data class Recommendation(
     val discount: Float,
 )
 
-val RECOMMENDATION_GROUP = RecommendationGroup(
+val RECOMMENDATION_GROUPS = listOf(
+    RecommendationGroup(
         Recommendation(R.drawable.item_backpack, 0.17f),
         Recommendation(R.drawable.item_headphones, 0.2f),
         Recommendation(R.drawable.item_detergent, 0.12f),
         Recommendation(R.drawable.item_dishwash_detergent, 0.13f),
+    ),
+    RecommendationGroup(
+        Recommendation(R.drawable.item_handsoap, 0.11f),
+        Recommendation(R.drawable.item_sandwich_bags, 0.7f),
+        Recommendation(R.drawable.item_matcha, 0.10f),
+        Recommendation(R.drawable.item_kitchen_sponge, 0.9f),
     )
+)
 
 @Composable
 fun HomeScreenRoot(modifier: Modifier) {
@@ -69,17 +79,27 @@ fun RecommendedDealsSection(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
     ) {
+        val paddingSmall = dimensionResource(R.dimen.padding_small)
+
         Text(
             text = stringResource(R.string.recommended_deals_for_you_section_title),
             style = MaterialTheme.typography.titleLarge
         )
-        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
-        RecommendedDealsCard(
-            recommendationGroup = RECOMMENDATION_GROUP,
-            modifier = Modifier
-                .wrapContentSize()
-                .width(dimensionResource(R.dimen.recommended_deals_card_width))
-        )
+
+        Spacer(modifier = Modifier.height(paddingSmall))
+
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(paddingSmall)
+        ) {
+            items(RECOMMENDATION_GROUPS) { recommendationGroup ->
+                RecommendedDealsCard(
+                    recommendationGroup = recommendationGroup,
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .width(dimensionResource(R.dimen.recommended_deals_card_width))
+                )
+            }
+        }
     }
 }
 
