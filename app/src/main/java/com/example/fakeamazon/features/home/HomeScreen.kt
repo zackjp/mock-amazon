@@ -36,46 +36,30 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fakeamazon.R
+import com.example.fakeamazon.data.DealsRepository
+import com.example.fakeamazon.model.RecommendationGroup
+import com.example.fakeamazon.model.toList
 import kotlin.math.roundToInt
 
 val DISCOUNT_RED: Color = Color(0xFFC60B37)
 val RECOMMENDED_CARD_BORDER_COLOR: Color = Color(0xFFD0D4D4)
 val RECOMMENDED_ITEM_BG_COLOR: Color = Color(0xFFF7F7F7)
 
-data class RecommendationGroup(
-    val rec1: Recommendation,
-    val rec2: Recommendation,
-    val rec3: Recommendation,
-    val rec4: Recommendation,
-)
-
-data class Recommendation(
-    @DrawableRes val imageRes: Int,
-    val discount: Float,
-)
-
-val RECOMMENDATION_GROUPS = listOf(
-    RecommendationGroup(
-        Recommendation(R.drawable.item_backpack, 0.17f),
-        Recommendation(R.drawable.item_headphones, 0.2f),
-        Recommendation(R.drawable.item_detergent, 0.12f),
-        Recommendation(R.drawable.item_dishwash_detergent, 0.13f),
-    ),
-    RecommendationGroup(
-        Recommendation(R.drawable.item_handsoap, 0.11f),
-        Recommendation(R.drawable.item_sandwich_bags, 0.7f),
-        Recommendation(R.drawable.item_matcha, 0.10f),
-        Recommendation(R.drawable.item_kitchen_sponge, 0.9f),
-    )
-)
-
 @Composable
 fun HomeScreenRoot(modifier: Modifier) {
-    RecommendedDealsSection(modifier.padding(horizontal = 16.dp))
+    val recommendationGroups = DealsRepository.RECOMMENDED_DEALS
+
+    RecommendedDealsSection(
+        modifier = modifier.padding(horizontal = 16.dp),
+        recommendationGroups = recommendationGroups
+    )
 }
 
 @Composable
-fun RecommendedDealsSection(modifier: Modifier = Modifier) {
+fun RecommendedDealsSection(
+    modifier: Modifier = Modifier,
+    recommendationGroups: List<RecommendationGroup>
+) {
     Column(
         modifier = modifier
     ) {
@@ -91,7 +75,7 @@ fun RecommendedDealsSection(modifier: Modifier = Modifier) {
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(paddingSmall)
         ) {
-            items(RECOMMENDATION_GROUPS) { recommendationGroup ->
+            items(recommendationGroups) { recommendationGroup ->
                 RecommendedDealsCard(
                     recommendationGroup = recommendationGroup,
                     modifier = Modifier
@@ -219,5 +203,3 @@ private fun RecommendedItem(
         )
     }
 }
-
-private fun RecommendationGroup.toList(): List<Recommendation> = listOf(rec1, rec2, rec3, rec4)
