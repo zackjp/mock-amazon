@@ -188,15 +188,13 @@ private fun RecommendedItem(
                 R.string.recommended_deals_discount_off_label,
                 discountPercent
             ),
-            style = MaterialTheme.typography.labelSmall,
-            fontSize = 12.sp,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp)
         )
 
         Text(
             color = DISCOUNT_RED,
             text = stringResource(R.string.recommended_deals_limited_time),
-            style = MaterialTheme.typography.labelSmall,
-            fontSize = 12.sp,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp)
         )
     }
 }
