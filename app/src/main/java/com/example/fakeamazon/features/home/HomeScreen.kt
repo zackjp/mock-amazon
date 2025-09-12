@@ -24,7 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -34,7 +36,9 @@ import androidx.compose.ui.unit.sp
 import com.example.fakeamazon.R
 import kotlin.math.roundToInt
 
-val DISCOUNT_RED: Color = Color(0xFFCC0020)
+val DISCOUNT_RED: Color = Color(0xFFC60B37)
+val RECOMMENDED_CARD_BORDER_COLOR: Color = Color(0xFFD0D4D4)
+val RECOMMENDED_ITEM_BG_COLOR: Color = Color(0xFFF7F7F7)
 
 data class Recommendation(
     @DrawableRes val imageRes: Int,
@@ -83,11 +87,12 @@ private fun RecommendedDealsCard(
     val paddingXSmall = dimensionResource(R.dimen.padding_xsmall)
 
     Card(
-        border = BorderStroke(1.dp, Color.LightGray),
+        border = BorderStroke(1.dp, RECOMMENDED_CARD_BORDER_COLOR),
         modifier = modifier.width(300.dp),
     ) {
         Column(
             modifier = Modifier
+                .background(Color.White)
                 .wrapContentSize()
                 .padding(paddingSmall)
         ) {
@@ -115,10 +120,8 @@ private fun RecommendedDealsCard(
             ) {
                 repeat(twoChunkedItems.size) { i ->
                     val itemModifier = Modifier
-                        .background(Color.White)
                         .height(itemHeight)
                         .weight(1f)
-                        .padding(paddingSmall)
 
                     Row(modifier = Modifier.fillMaxWidth()) {
                         RecommendedItem(
@@ -152,10 +155,15 @@ private fun RecommendedItem(
 ) {
     val discountPercent = (discount * 100).roundToInt()
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .background(RECOMMENDED_ITEM_BG_COLOR)
+            .padding(dimensionResource(R.dimen.padding_xxsmall))
+    ) {
         Image(
             contentDescription = null,
             contentScale = ContentScale.Fit,
+            colorFilter = ColorFilter.tint(RECOMMENDED_ITEM_BG_COLOR, BlendMode.Multiply),
             modifier = Modifier
                 .weight(1f)
                 .align(Alignment.CenterHorizontally)
