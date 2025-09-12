@@ -99,7 +99,7 @@ private fun RecommendedDealsCard(
 
     Card(
         border = BorderStroke(1.dp, RECOMMENDED_CARD_BORDER_COLOR),
-        modifier = modifier.width(300.dp),
+        modifier = modifier,
     ) {
         Column(
             modifier = Modifier
