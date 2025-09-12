@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fakeamazon.R
 import com.example.fakeamazon.data.DealsRepository
+import com.example.fakeamazon.model.Recommendation
 import com.example.fakeamazon.model.RecommendationGroup
 import com.example.fakeamazon.model.toList
 import kotlin.math.roundToInt
@@ -136,8 +137,7 @@ private fun RecommendedDealsCard(
 
                     Row(modifier = Modifier.fillMaxWidth()) {
                         RecommendedItem(
-                            discount = twoChunkedItems[i][0].discount,
-                            imageRes = twoChunkedItems[i][0].imageRes,
+                            item = twoChunkedItems[i][0],
                             modifier = itemModifier
                         )
 
@@ -145,9 +145,8 @@ private fun RecommendedDealsCard(
                             Spacer(modifier = Modifier.width(paddingXSmall))
 
                             RecommendedItem(
-                                discount = twoChunkedItems[i][1].discount,
-                                imageRes = twoChunkedItems[i][1].imageRes,
-                                modifier = itemModifier
+                                item = twoChunkedItems[i][1],
+                                modifier = itemModifier,
                             )
                         }
                     }
@@ -161,10 +160,9 @@ private fun RecommendedDealsCard(
 @Composable
 private fun RecommendedItem(
     modifier: Modifier = Modifier,
-    discount: Float,
-    @DrawableRes imageRes: Int
+    item: Recommendation
 ) {
-    val discountPercent = (discount * 100).roundToInt()
+    val discountPercent = (item.discount * 100).roundToInt()
 
     Column(
         modifier = modifier
@@ -179,7 +177,7 @@ private fun RecommendedItem(
                 .weight(1f)
                 .align(Alignment.CenterHorizontally)
                 .padding(4.dp),
-            painter = painterResource(imageRes),
+            painter = painterResource(item.imageRes),
         )
 
         Text(
