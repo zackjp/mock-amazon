@@ -40,10 +40,24 @@ val DISCOUNT_RED: Color = Color(0xFFC60B37)
 val RECOMMENDED_CARD_BORDER_COLOR: Color = Color(0xFFD0D4D4)
 val RECOMMENDED_ITEM_BG_COLOR: Color = Color(0xFFF7F7F7)
 
+data class RecommendationGroup(
+    val rec1: Recommendation,
+    val rec2: Recommendation,
+    val rec3: Recommendation,
+    val rec4: Recommendation,
+)
+
 data class Recommendation(
     @DrawableRes val imageRes: Int,
     val discount: Float,
 )
+
+val RECOMMENDATION_GROUP = RecommendationGroup(
+        Recommendation(R.drawable.item_backpack, 0.17f),
+        Recommendation(R.drawable.item_headphones, 0.2f),
+        Recommendation(R.drawable.item_detergent, 0.12f),
+        Recommendation(R.drawable.item_dishwash_detergent, 0.13f),
+    )
 
 @Composable
 fun HomeScreenRoot(modifier: Modifier) {
@@ -55,20 +69,13 @@ fun RecommendedDealsSection(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
     ) {
-        val items = listOf(
-            Recommendation(R.drawable.item_backpack, 0.17f),
-            Recommendation(R.drawable.item_headphones, 0.2f),
-            Recommendation(R.drawable.item_detergent, 0.12f),
-            Recommendation(R.drawable.item_dishwash_detergent, 0.13f),
-        )
-
         Text(
             text = stringResource(R.string.recommended_deals_for_you_section_title),
             style = MaterialTheme.typography.titleLarge
         )
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
         RecommendedDealsCard(
-            items = items,
+            recommendationGroup = RECOMMENDATION_GROUP,
             modifier = Modifier
                 .wrapContentSize()
                 .width(dimensionResource(R.dimen.recommended_deals_card_width))
@@ -79,7 +86,7 @@ fun RecommendedDealsSection(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalLayoutApi::class) // FlowRow
 @Composable
 private fun RecommendedDealsCard(
-    items: List<Recommendation>,
+    recommendationGroup: RecommendationGroup,
     modifier: Modifier = Modifier,
 ) {
     val itemHeight = dimensionResource(R.dimen.recommended_deals_item_height)
@@ -112,7 +119,7 @@ private fun RecommendedDealsCard(
 
             Spacer(modifier = Modifier.height(paddingSmall))
 
-            val twoChunkedItems = items.chunked(2)
+            val twoChunkedItems = recommendationGroup.toList().chunked(2)
             FlowRow(
                 maxItemsInEachRow = 2,
                 modifier = Modifier.wrapContentSize(),
@@ -192,3 +199,5 @@ private fun RecommendedItem(
         )
     }
 }
+
+private fun RecommendationGroup.toList(): List<Recommendation> = listOf(rec1, rec2, rec3, rec4)
