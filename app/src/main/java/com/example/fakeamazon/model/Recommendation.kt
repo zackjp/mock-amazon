@@ -13,5 +13,3 @@ data class Recommendation(
     @DrawableRes val imageRes: Int,
     val discount: Float,
 )
-
-fun RecommendationGroup.toList(): List<Recommendation> = listOf(rec1, rec2, rec3, rec4)

@@ -1,6 +1,5 @@
 package com.example.fakeamazon.features.home
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,13 +32,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fakeamazon.R
 import com.example.fakeamazon.data.DealsRepository
 import com.example.fakeamazon.model.Recommendation
 import com.example.fakeamazon.model.RecommendationGroup
-import com.example.fakeamazon.model.toList
 import kotlin.math.roundToInt
 
 val DISCOUNT_RED: Color = Color(0xFFC60B37)
@@ -81,7 +80,8 @@ fun RecommendedDealsSection(
                     recommendationGroup = recommendationGroup,
                     modifier = Modifier
                         .wrapContentSize()
-                        .width(dimensionResource(R.dimen.recommended_deals_card_width))
+                        .width(dimensionResource(R.dimen.recommended_deals_card_width)),
+                    cardWidth = dimensionResource(R.dimen.recommended_deals_card_width)
                 )
             }
         }
@@ -93,10 +93,14 @@ fun RecommendedDealsSection(
 private fun RecommendedDealsCard(
     recommendationGroup: RecommendationGroup,
     modifier: Modifier = Modifier,
+    cardWidth: Dp
 ) {
-    val itemHeight = dimensionResource(R.dimen.recommended_deals_item_height)
     val paddingSmall = dimensionResource(R.dimen.padding_small)
     val paddingXSmall = dimensionResource(R.dimen.padding_xsmall)
+    val cardPadding = paddingSmall
+    val itemSpacing = paddingXSmall
+    val itemHeight = dimensionResource(R.dimen.recommended_deals_item_height)
+    val itemWidth = (cardWidth - cardPadding * 2 - itemSpacing) / 2
 
     Card(
         border = BorderStroke(1.dp, RECOMMENDED_CARD_BORDER_COLOR),
@@ -106,7 +110,7 @@ private fun RecommendedDealsCard(
             modifier = Modifier
                 .background(Color.White)
                 .wrapContentSize()
-                .padding(paddingSmall)
+                .padding(cardPadding)
         ) {
             Row(
                 modifier.fillMaxWidth(),
@@ -124,35 +128,30 @@ private fun RecommendedDealsCard(
 
             Spacer(modifier = Modifier.height(paddingSmall))
 
-            val twoChunkedItems = recommendationGroup.toList().chunked(2)
             FlowRow(
                 maxItemsInEachRow = 2,
                 modifier = Modifier.wrapContentSize(),
                 verticalArrangement = Arrangement.spacedBy(paddingXSmall),
+                horizontalArrangement = Arrangement.spacedBy(paddingXSmall),
             ) {
-                repeat(twoChunkedItems.size) { i ->
+                repeat(4) { i ->
+                    val item = when (i) {
+                        0 -> recommendationGroup.rec1
+                        1 -> recommendationGroup.rec2
+                        2 -> recommendationGroup.rec3
+                        else -> recommendationGroup.rec4
+                    }
+
                     val itemModifier = Modifier
                         .height(itemHeight)
-                        .weight(1f)
+                        .width(itemWidth)
 
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        RecommendedItem(
-                            item = twoChunkedItems[i][0],
-                            modifier = itemModifier
-                        )
-
-                        if (twoChunkedItems.size > 1) {
-                            Spacer(modifier = Modifier.width(paddingXSmall))
-
-                            RecommendedItem(
-                                item = twoChunkedItems[i][1],
-                                modifier = itemModifier,
-                            )
-                        }
-                    }
+                    RecommendedItem(
+                        item = item,
+                        modifier = itemModifier
+                    )
                 }
             }
-
         }
     }
 }
