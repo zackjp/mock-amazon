@@ -23,6 +23,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
@@ -35,8 +37,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
-import com.example.fakeamazon.data.DealsRepository
 import com.example.fakeamazon.model.Recommendation
 import com.example.fakeamazon.model.RecommendationGroup
 import kotlin.math.roundToInt
@@ -46,8 +49,15 @@ val RECOMMENDED_CARD_BORDER_COLOR: Color = Color(0xFFD0D4D4)
 val RECOMMENDED_ITEM_BG_COLOR: Color = Color(0xFFF7F7F7)
 
 @Composable
-fun HomeScreenRoot(modifier: Modifier) {
-    val recommendationGroups = DealsRepository.RECOMMENDED_DEALS
+fun HomeScreenRoot(
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = hiltViewModel()
+) {
+    LaunchedEffect(Unit) {
+        viewModel.load()
+    }
+
+    val recommendationGroups by viewModel.recommendationGroups.collectAsStateWithLifecycle()
 
     RecommendedDealsSection(
         modifier = modifier.padding(horizontal = 16.dp),
