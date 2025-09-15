@@ -2,9 +2,10 @@ package com.example.fakeamazon.features.home
 
 import com.example.fakeamazon.base.TestDispatcherProvider
 import com.example.fakeamazon.data.DealsRepository
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.test.StandardTestDispatcher
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 class HomeViewModelTest {
 
@@ -13,7 +14,7 @@ class HomeViewModelTest {
 
     lateinit var viewModel: HomeViewModel
 
-    @Before
+    @BeforeEach
     fun setUp() {
         viewModel = HomeViewModel(testDispatcherProvider)
     }
@@ -27,9 +28,9 @@ class HomeViewModelTest {
     fun viewModel_Load_LoadsRecommendedDealsAsync() {
         viewModel.load()
 
-        assert(viewModel.recommendationGroups.value.isEmpty())
+        viewModel.recommendationGroups.value shouldBe emptyList()
         testDispatcher.scheduler.advanceUntilIdle()
-        assert(viewModel.recommendationGroups.value.containsAll(DealsRepository.RECOMMENDED_DEALS))
+        viewModel.recommendationGroups.value shouldBe DealsRepository.RECOMMENDED_DEALS
     }
 
 }

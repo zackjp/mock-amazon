@@ -1,7 +1,8 @@
 package com.example.fakeamazon.base
 
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.Dispatchers
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class DefaultDispatcherProviderTest {
 
@@ -9,9 +10,9 @@ class DefaultDispatcherProviderTest {
     fun init_DispatchersAreCorrect() {
         val provider = DefaultDispatcherProvider()
 
-        assert(provider.default == Dispatchers.Default)
-        assert(provider.io == Dispatchers.IO)
-        assert(provider.main == Dispatchers.Main)
+        provider.default shouldBe Dispatchers.Default
+        provider.io shouldBe Dispatchers.IO
+        provider.main shouldBe  Dispatchers.Main
     }
 
 }
