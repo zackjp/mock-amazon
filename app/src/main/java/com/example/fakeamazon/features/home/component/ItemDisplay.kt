@@ -21,16 +21,14 @@ import androidx.compose.ui.unit.sp
 import com.example.fakeamazon.R
 import com.example.fakeamazon.features.home.DISCOUNT_RED
 import com.example.fakeamazon.features.home.RECOMMENDED_ITEM_BG_COLOR
-import com.example.fakeamazon.model.Recommendation
+import com.example.fakeamazon.features.home.model.DisplayableItem
 import kotlin.math.roundToInt
 
 @Composable
 fun ItemDisplay(
-    item: Recommendation,
+    item: DisplayableItem,
     modifier: Modifier = Modifier,
 ) {
-    val discountPercent = (item.discount * 100).roundToInt()
-
     Column(
         modifier = modifier
             .background(RECOMMENDED_ITEM_BG_COLOR)
@@ -44,24 +42,28 @@ fun ItemDisplay(
                 .weight(1f)
                 .align(Alignment.CenterHorizontally)
                 .padding(4.dp),
-            painter = painterResource(item.imageRes),
+            painter = painterResource(item.imageId),
         )
 
-        Text(
-            color = Color.White,
-            modifier = Modifier
-                .background(color = DISCOUNT_RED)
-                .padding(horizontal = 4.dp, vertical = 2.dp),
-            text = stringResource(
-                R.string.recommended_deals_discount_off_label, discountPercent
-            ),
-            style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp)
-        )
+        item.discount?.let {
+            val discountPercent = (it * 100).roundToInt()
 
-        Text(
-            color = DISCOUNT_RED,
-            text = stringResource(R.string.recommended_deals_limited_time),
-            style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp)
-        )
+            Text(
+                color = Color.White,
+                modifier = Modifier
+                    .background(color = DISCOUNT_RED)
+                    .padding(horizontal = 4.dp, vertical = 2.dp),
+                text = stringResource(
+                    R.string.recommended_deals_discount_off_label, discountPercent
+                ),
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp)
+            )
+
+            Text(
+                color = DISCOUNT_RED,
+                text = stringResource(R.string.recommended_deals_limited_time),
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp)
+            )
+        }
     }
 }

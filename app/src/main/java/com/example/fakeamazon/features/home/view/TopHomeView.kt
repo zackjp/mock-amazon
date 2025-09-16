@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.fakeamazon.R
 import com.example.fakeamazon.features.home.component.ItemDisplay
+import com.example.fakeamazon.features.home.model.DisplayableItem
 import com.example.fakeamazon.model.Recommendation
 
 @Composable
@@ -18,7 +19,7 @@ fun TopHomeSection(modifier: Modifier) {
         Column {
             Text(text = "More top\npicks for you", style = MaterialTheme.typography.titleLarge)
 
-            val item = Recommendation(R.drawable.item_sandwich_bags, 0.0f)
+            val item = DisplayableItem(imageId = R.drawable.item_sandwich_bags)
             ItemDisplay(
                 item = item,
                 modifier = Modifier.size(140.dp, 200.dp),
