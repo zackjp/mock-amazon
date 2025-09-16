@@ -37,14 +37,14 @@ fun HomeScreenRoot(
     Column(
         modifier = modifier.verticalScroll(rememberScrollState())
     ) {
-        val paddingMedium = dimensionResource(R.dimen.padding_medium)
+        val paddingLarge = dimensionResource(R.dimen.padding_large)
 
-        TopHomeSection(modifier = Modifier.fillMaxWidth().padding(horizontal = paddingMedium))
+        TopHomeSection(modifier = Modifier.fillMaxWidth().padding(horizontal = paddingLarge))
 
-        Spacer(modifier = Modifier.height(paddingMedium))
+        Spacer(modifier = Modifier.height(paddingLarge))
 
         RecommendedDealsSection(
-            modifier = Modifier.padding(horizontal = paddingMedium),
+            modifier = Modifier.padding(horizontal = paddingLarge),
             recommendationGroups = recommendationGroups
         )
     }

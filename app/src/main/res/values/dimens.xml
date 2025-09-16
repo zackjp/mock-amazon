@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="padding_small">8dp</dimen>
-    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_medium">12dp</dimen>
+    <dimen name="padding_large">16dp</dimen>
     <dimen name="padding_xsmall">6dp</dimen>
     <dimen name="padding_xxsmall">4dp</dimen>
     <dimen name="recommended_deals_card_width">300dp</dimen>
     <dimen name="recommended_deals_item_height">180dp</dimen>
+    <dimen name="top_home_card_width">288dp</dimen>
+    <dimen name="top_home_card_height">460dp</dimen>
 </resources>
