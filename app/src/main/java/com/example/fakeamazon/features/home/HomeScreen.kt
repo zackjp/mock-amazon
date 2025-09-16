@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -33,7 +35,7 @@ fun HomeScreenRoot(
     val recommendationGroups by viewModel.recommendationGroups.collectAsStateWithLifecycle()
 
     Column(
-        modifier = modifier
+        modifier = modifier.verticalScroll(rememberScrollState())
     ) {
         val paddingMedium = dimensionResource(R.dimen.padding_medium)
 
