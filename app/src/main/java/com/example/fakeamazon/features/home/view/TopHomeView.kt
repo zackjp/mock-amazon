@@ -1,5 +1,6 @@
 package com.example.fakeamazon.features.home.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -19,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.LayoutDirection
@@ -43,11 +45,15 @@ fun TopHomeSection(modifier: Modifier, topHomeGroups: List<TopHomeGroup>) {
         horizontalArrangement = Arrangement.spacedBy(paddingSmall)
     ) {
 
-        items(topHomeGroups) { itemGroup ->
+        items(topHomeGroups) { topHomeGroup ->
             Card(modifier = Modifier.size(cardWidth, cardHeight)) {
-                Column(modifier = Modifier.padding(cardPadding)) {
+                Column(modifier = Modifier
+                    .background(topHomeGroup.background)
+                    .padding(cardPadding)
+                ) {
                     Text(
-                        text = itemGroup.title,
+                        color = Color.White,
+                        text = topHomeGroup.title,
                         style = MaterialTheme.typography.titleLarge
                     )
 
@@ -55,7 +61,7 @@ fun TopHomeSection(modifier: Modifier, topHomeGroups: List<TopHomeGroup>) {
 
                     val maxItemsInEachColumn = 3
 
-                    val reversedBottomUpItems = itemGroup.items
+                    val reversedBottomUpItems = topHomeGroup.items
                         .reversed()
                         .chunked(maxItemsInEachColumn)
                         .map { it.reversed() }

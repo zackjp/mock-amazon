@@ -1,6 +1,7 @@
 package com.example.fakeamazon.features.home.model
 
 import androidx.annotation.DrawableRes
+import androidx.compose.ui.graphics.Color
 import com.example.fakeamazon.model.Recommendation
 
 data class DisplayableItem(
@@ -10,6 +11,7 @@ data class DisplayableItem(
 
 data class TopHomeGroup(
     val title: String,
+    val background: Color,
     val items: List<DisplayableItem>
 )
 

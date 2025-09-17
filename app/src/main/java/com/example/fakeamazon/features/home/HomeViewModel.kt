@@ -1,5 +1,6 @@
 package com.example.fakeamazon.features.home
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fakeamazon.R
@@ -21,6 +22,7 @@ class HomeViewModel @Inject constructor(
     private val mockTopHomeGroups: List<TopHomeGroup> = listOf(
         TopHomeGroup(
             "More top\npicks for you",
+            Color(0xFF3A6DB1),
             listOf(
                 DisplayableItem(imageId = R.drawable.item_headphones),
                 DisplayableItem(imageId = R.drawable.item_backpack),
@@ -31,6 +33,7 @@ class HomeViewModel @Inject constructor(
         ),
         TopHomeGroup(
             "Kitchen\ncorner",
+            Color(0xFF6AD17D),
             listOf(
                 DisplayableItem(imageId = R.drawable.item_kitchen_sponge),
                 DisplayableItem(imageId = R.drawable.item_matcha),
