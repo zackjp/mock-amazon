@@ -2,7 +2,10 @@ package com.example.fakeamazon.features.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fakeamazon.R
 import com.example.fakeamazon.data.DealsRepository
+import com.example.fakeamazon.features.home.model.DisplayableItem
+import com.example.fakeamazon.features.home.model.TopHomeGroup
 import com.example.fakeamazon.model.RecommendationGroup
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,12 +18,39 @@ class HomeViewModel @Inject constructor(
     val dealsRepository: DealsRepository,
 ) : ViewModel() {
 
+    private val mockTopHomeGroups: List<TopHomeGroup> = listOf(
+        TopHomeGroup(
+            "More top\npicks for you",
+            listOf(
+                DisplayableItem(imageId = R.drawable.item_headphones),
+                DisplayableItem(imageId = R.drawable.item_backpack),
+                DisplayableItem(imageId = R.drawable.item_matcha),
+                DisplayableItem(imageId = R.drawable.item_handsoap),
+                DisplayableItem(imageId = R.drawable.item_detergent),
+            )
+        ),
+        TopHomeGroup(
+            "Kitchen\ncorner",
+            listOf(
+                DisplayableItem(imageId = R.drawable.item_kitchen_sponge),
+                DisplayableItem(imageId = R.drawable.item_matcha),
+                DisplayableItem(imageId = R.drawable.item_sandwich_bags),
+                DisplayableItem(imageId = R.drawable.item_dishwash_detergent),
+                DisplayableItem(imageId = R.drawable.item_handsoap),
+            )
+        )
+    )
+
+    private val _topHomeGroups = MutableStateFlow<List<TopHomeGroup>>(emptyList())
+    val topHomeGroups = _topHomeGroups.asStateFlow()
+
     private val _recommendationGroups: MutableStateFlow<List<RecommendationGroup>> =
         MutableStateFlow(emptyList())
     val recommendationGroups = _recommendationGroups.asStateFlow()
 
     fun load() {
         viewModelScope.launch {
+            _topHomeGroups.value = mockTopHomeGroups
             _recommendationGroups.value = dealsRepository.loadRecommendedDeals()
         }
     }

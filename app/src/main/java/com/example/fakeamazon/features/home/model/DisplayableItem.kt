@@ -8,4 +8,9 @@ data class DisplayableItem(
     val discount: Float? = null,
 )
 
+data class TopHomeGroup(
+    val title: String,
+    val items: List<DisplayableItem>
+)
+
 fun Recommendation.toDisplayableItem() = DisplayableItem(imageId = imageRes, discount = discount)

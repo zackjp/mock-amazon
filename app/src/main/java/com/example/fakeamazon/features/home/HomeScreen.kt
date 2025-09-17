@@ -32,6 +32,7 @@ fun HomeScreenRoot(
         viewModel.load()
     }
 
+    val topHomeGroups by viewModel.topHomeGroups.collectAsStateWithLifecycle()
     val recommendationGroups by viewModel.recommendationGroups.collectAsStateWithLifecycle()
 
     Column(
@@ -39,7 +40,12 @@ fun HomeScreenRoot(
     ) {
         val paddingLarge = dimensionResource(R.dimen.padding_large)
 
-        TopHomeSection(modifier = Modifier.fillMaxWidth().padding(horizontal = paddingLarge))
+        TopHomeSection(
+            topHomeGroups = topHomeGroups,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = paddingLarge),
+        )
 
         Spacer(modifier = Modifier.height(paddingLarge))
 

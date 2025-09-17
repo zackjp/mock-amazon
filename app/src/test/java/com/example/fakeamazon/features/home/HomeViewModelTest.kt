@@ -3,10 +3,12 @@ package com.example.fakeamazon.features.home
 import com.example.fakeamazon.data.DealsRepository
 import com.example.fakeamazon.model.Recommendation
 import com.example.fakeamazon.model.RecommendationGroup
+import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
@@ -55,7 +57,16 @@ class HomeViewModelTest {
 
         viewModel.recommendationGroups.value shouldBe emptyList()
         advanceUntilIdle()
-        viewModel.recommendationGroups.value shouldBe mockDeals
+        viewModel.recommendationGroups.first { it.isNotEmpty() } shouldBe mockDeals
+    }
+
+    @Test
+    fun viewModel_Load_LoadsTopHomeGroupsAsync() = runTest {
+        viewModel.load()
+
+        viewModel.topHomeGroups.value shouldBe emptyList()
+        advanceUntilIdle()
+        viewModel.topHomeGroups.first { it.isNotEmpty() }.size shouldBeGreaterThan 0
     }
 
 }
