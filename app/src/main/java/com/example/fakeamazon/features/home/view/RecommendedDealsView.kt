@@ -29,10 +29,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.fakeamazon.R
-import com.example.fakeamazon.features.home.RECOMMENDED_CARD_BORDER_COLOR
 import com.example.fakeamazon.features.home.component.ItemDisplay
 import com.example.fakeamazon.features.home.model.toDisplayableItem
 import com.example.fakeamazon.model.RecommendationGroup
+
+val RECOMMENDED_CARD_BORDER_COLOR: Color = Color(0xFFD0D4D4)
 
 @Composable
 fun RecommendedDealsSection(

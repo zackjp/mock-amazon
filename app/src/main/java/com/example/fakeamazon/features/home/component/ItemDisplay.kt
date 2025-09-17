@@ -22,10 +22,11 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.example.fakeamazon.R
-import com.example.fakeamazon.features.home.DISCOUNT_RED
-import com.example.fakeamazon.features.home.RECOMMENDED_ITEM_BG_COLOR
 import com.example.fakeamazon.features.home.model.DisplayableItem
 import kotlin.math.roundToInt
+
+val DISCOUNT_RED: Color = Color(0xFFC60B37)
+val RECOMMENDED_ITEM_BG_COLOR: Color = Color(0xFFF7F7F7)
 
 @Composable
 fun ItemDisplay(

@@ -11,17 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
 import com.example.fakeamazon.features.home.view.RecommendedDealsSection
 import com.example.fakeamazon.features.home.view.TopHomeSection
-
-val DISCOUNT_RED: Color = Color(0xFFC60B37)
-val RECOMMENDED_CARD_BORDER_COLOR: Color = Color(0xFFD0D4D4)
-val RECOMMENDED_ITEM_BG_COLOR: Color = Color(0xFFF7F7F7)
 
 @Composable
 fun HomeScreenRoot(
