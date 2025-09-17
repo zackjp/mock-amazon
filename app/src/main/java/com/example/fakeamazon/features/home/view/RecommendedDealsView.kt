@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,21 +25,26 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.offset
 import com.example.fakeamazon.R
+import com.example.fakeamazon.base.ignoreParentPadding
 import com.example.fakeamazon.features.home.component.ItemDisplay
 import com.example.fakeamazon.features.home.model.toDisplayableItem
 import com.example.fakeamazon.model.RecommendationGroup
+import kotlin.math.roundToInt
 
 val RECOMMENDED_CARD_BORDER_COLOR: Color = Color(0xFFD0D4D4)
 
 @Composable
 fun RecommendedDealsSection(
+    mainContentHorizontalPadding: Dp,
     modifier: Modifier = Modifier,
-    recommendationGroups: List<RecommendationGroup>
+    recommendationGroups: List<RecommendationGroup>,
 ) {
     Column(
         modifier = modifier
@@ -53,7 +59,11 @@ fun RecommendedDealsSection(
         Spacer(modifier = Modifier.height(paddingSmall))
 
         LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(paddingSmall)
+            contentPadding = PaddingValues(horizontal = mainContentHorizontalPadding),
+            modifier = Modifier
+                .fillMaxWidth()
+                .ignoreParentPadding(mainContentHorizontalPadding),
+            horizontalArrangement = Arrangement.spacedBy(paddingSmall),
         ) {
             items(recommendationGroups) { recommendationGroup ->
                 RecommendedDealsCard(

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowColumn
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -30,18 +31,24 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import com.example.fakeamazon.R
+import com.example.fakeamazon.base.ignoreParentPadding
 import com.example.fakeamazon.features.home.component.ItemDisplay
 import com.example.fakeamazon.features.home.model.TopHomeGroup
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun TopHomeSection(modifier: Modifier, topHomeGroups: List<TopHomeGroup>) {
+fun TopHomeSection(
+    mainContentHorizontalPadding: Dp,
+    modifier: Modifier,
+    topHomeGroups: List<TopHomeGroup>,
+) {
     val cardWidth = dimensionResource(R.dimen.top_home_card_width)
     val cardHeight = dimensionResource(R.dimen.top_home_card_height)
     val paddingSmall = dimensionResource(R.dimen.padding_small)
 
     LazyRow(
-        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = mainContentHorizontalPadding),
+        modifier = modifier.ignoreParentPadding(mainContentHorizontalPadding),
         state = rememberLazyListState(),
         horizontalArrangement = Arrangement.spacedBy(paddingSmall)
     ) {

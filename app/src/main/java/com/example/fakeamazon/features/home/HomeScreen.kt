@@ -30,22 +30,25 @@ fun HomeScreenRoot(
     val topHomeGroups by viewModel.topHomeGroups.collectAsStateWithLifecycle()
     val recommendationGroups by viewModel.recommendationGroups.collectAsStateWithLifecycle()
 
+    val paddingLarge = dimensionResource(R.dimen.padding_large)
+    val mainContentPadding = paddingLarge
     Column(
-        modifier = modifier.verticalScroll(rememberScrollState())
+        modifier = modifier
+            .padding(start = mainContentPadding)
+            .verticalScroll(rememberScrollState())
     ) {
-        val paddingLarge = dimensionResource(R.dimen.padding_large)
 
         TopHomeSection(
+            mainContentHorizontalPadding = mainContentPadding,
+            modifier = Modifier.fillMaxWidth(),
             topHomeGroups = topHomeGroups,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = paddingLarge),
         )
 
         Spacer(modifier = Modifier.height(paddingLarge))
 
         RecommendedDealsSection(
-            modifier = Modifier.padding(horizontal = paddingLarge),
+            mainContentHorizontalPadding = mainContentPadding,
+            modifier = Modifier.fillMaxWidth(),
             recommendationGroups = recommendationGroups
         )
     }
