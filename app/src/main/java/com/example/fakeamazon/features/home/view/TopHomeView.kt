@@ -15,8 +15,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.fakeamazon.R
 import com.example.fakeamazon.features.home.component.ItemDisplay
@@ -39,6 +42,7 @@ fun TopHomeSection(modifier: Modifier) {
 
                 Spacer(Modifier.height(paddingMedium))
 
+                val maxItemsInEachColumn = 3
                 val items = listOf(
                     DisplayableItem(imageId = R.drawable.item_headphones),
                     DisplayableItem(imageId = R.drawable.item_backpack),
@@ -47,27 +51,53 @@ fun TopHomeSection(modifier: Modifier) {
                     DisplayableItem(imageId = R.drawable.item_detergent),
                 )
 
-                FlowColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.spacedBy(itemSpacing),
-                    maxItemsInEachColumn = 3,
-                    verticalArrangement = Arrangement.spacedBy(itemSpacing),
-                ) {
-                    val itemWidth = (cardWidth - cardPadding * 2 - itemSpacing) / 2 - 1.dp
+                val reversedBottomUpItems = items
+                    .reversed()
+                    .chunked(maxItemsInEachColumn)
+                    .map { it.reversed() }
+                    .flatten()
+                val originalLayoutDirection = LocalLayoutDirection.current
 
-                    repeat(items.size) { i ->
-                        val itemModifier = Modifier
-                            .width(itemWidth)
-                            .weight(1f)
+                // We want to match the Amazon App experience in which the start column renders
+                // the "tall" items (ie, the column with non-max items). FlowColumn, however,
+                // renders the end/final column with the "tall" items and does not have an api to
+                // reverse. So, we can simulate this if we reverse the layout direction of
+                // FlowColumn, thereby making the 'start' side the "final" column. We then also need
+                // to reverse the item list, and reverse them again in chunks of
+                // `maxItemsInEachColumn` to simulate bottom-up rendering. Separately, we make sure
+                // to use the original layout direction when rendering individual items.
+                CompositionLocalProvider(LocalLayoutDirection provides originalLayoutDirection.opposite()) {
+                    FlowColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.spacedBy(itemSpacing),
+                        maxItemsInEachColumn = maxItemsInEachColumn,
+                        verticalArrangement = Arrangement.spacedBy(itemSpacing),
+                    ) {
+                        val itemWidth = (cardWidth - cardPadding * 2 - itemSpacing) / 2 - 1.dp
 
-                        val item = items[i]
-                        ItemDisplay(
-                            item = item,
-                            modifier = itemModifier,
-                        )
+                        CompositionLocalProvider(LocalLayoutDirection provides originalLayoutDirection) {
+                            repeat(reversedBottomUpItems.size) { i ->
+                                val itemModifier = Modifier
+                                    .width(itemWidth)
+                                    .weight(1f)
+
+                                val item = reversedBottomUpItems[i]
+                                ItemDisplay(
+                                    item = item,
+                                    modifier = itemModifier,
+                                )
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+}
+
+private fun LayoutDirection.opposite(): LayoutDirection {
+    return when (this) {
+        LayoutDirection.Ltr -> LayoutDirection.Rtl
+        LayoutDirection.Rtl -> LayoutDirection.Ltr
     }
 }
