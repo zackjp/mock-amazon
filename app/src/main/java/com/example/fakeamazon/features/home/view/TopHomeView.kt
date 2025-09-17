@@ -63,13 +63,9 @@ fun TopHomeSection(modifier: Modifier, topHomeGroups: List<TopHomeGroup>) {
                     val originalLayoutDirection = LocalLayoutDirection.current
 
                     // We want to match the Amazon App experience in which the start column renders
-                    // the "tall" items (ie, the column with non-max items). FlowColumn, however,
-                    // renders the end/final column with the "tall" items and does not have an api to
-                    // reverse. So, we can simulate this if we reverse the layout direction of
-                    // FlowColumn, thereby making the 'start' side the "final" column. We then also need
-                    // to reverse the item list, and reverse them again in chunks of
-                    // `maxItemsInEachColumn` to simulate bottom-up rendering. Separately, we make sure
-                    // to use the original layout direction when rendering individual items.
+                    // the "tall" items (ie, the column with non-max items). We can emulate this
+                    // by rendering the FlowColumn in reverse order so that the 'start' side is the
+                    // final column.
                     CompositionLocalProvider(LocalLayoutDirection provides originalLayoutDirection.opposite()) {
                         FlowColumn(
                             modifier = Modifier.fillMaxSize(),
@@ -79,6 +75,7 @@ fun TopHomeSection(modifier: Modifier, topHomeGroups: List<TopHomeGroup>) {
                         ) {
                             val itemWidth = (cardWidth - cardPadding * 2 - itemSpacing) / 2 - 1.dp
 
+                            // Render each item in the original layout direction
                             CompositionLocalProvider(LocalLayoutDirection provides originalLayoutDirection) {
                                 repeat(reversedBottomUpItems.size) { i ->
                                     val itemModifier = Modifier
