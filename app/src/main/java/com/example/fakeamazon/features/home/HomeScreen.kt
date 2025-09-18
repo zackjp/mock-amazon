@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -64,18 +65,20 @@ fun HomeScreenRoot(
     ) {
         val localDensity = LocalDensity.current
         var topHomeHeightPx by remember { mutableIntStateOf(0) }
+        var topHomeColor by remember { mutableStateOf(Color.Transparent) }
         val endGradientHeight = with(localDensity) { (topHomeHeightPx * .8).toInt().toDp() }
 
         Box {
             Box(
                 modifier = Modifier
-                    .background(Brush.verticalGradient(listOf(Color.LightGray, Color.Transparent)))
+                    .background(Brush.verticalGradient(listOf(topHomeColor, Color.Transparent)))
                     .ignoreParentPadding(mainContentPadding)
                     .fillMaxWidth()
                     .height(innerPadding.calculateTopPadding() + endGradientHeight)
             )
 
             TopHomeSection(
+                onColorChanged = { color: Color -> topHomeColor = color },
                 mainContentHorizontalPadding = mainContentPadding,
                 modifier = Modifier
                     .fillMaxWidth()

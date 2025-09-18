@@ -21,7 +21,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -35,10 +39,12 @@ import com.example.fakeamazon.R
 import com.example.fakeamazon.base.ignoreParentPadding
 import com.example.fakeamazon.features.home.component.ItemDisplay
 import com.example.fakeamazon.features.home.model.TopHomeGroup
+import kotlin.math.abs
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TopHomeSection(
+    onColorChanged: (Color) -> Unit,
     mainContentHorizontalPadding: Dp,
     modifier: Modifier,
     topHomeGroups: List<TopHomeGroup>,
@@ -48,6 +54,24 @@ fun TopHomeSection(
     val paddingSmall = dimensionResource(R.dimen.padding_small)
 
     val lazyListState = rememberLazyListState()
+    val groups by rememberUpdatedState(topHomeGroups)
+
+    LaunchedEffect(lazyListState) {
+        snapshotFlow {
+            val layoutInfo = lazyListState.layoutInfo
+            val visibleItems = layoutInfo.visibleItemsInfo
+            val viewportCenter = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
+            val closestItemToCenter = visibleItems.minByOrNull {
+                item -> abs(viewportCenter - (item.offset + item.size / 2))
+            }
+
+            closestItemToCenter?.index?.let {
+                groups[it].background
+            } ?: Color.Transparent
+        }.collect { color ->
+            onColorChanged(color)
+        }
+    }
 
     LazyRow(
         contentPadding = PaddingValues(horizontal = mainContentHorizontalPadding),
@@ -56,11 +80,11 @@ fun TopHomeSection(
         flingBehavior = rememberSnapFlingBehavior(lazyListState),
         horizontalArrangement = Arrangement.spacedBy(paddingSmall)
     ) {
-        items(topHomeGroups) { topHomeGroup ->
+        items(groups) { group ->
             TopHomeCard(
                 cardWidth = cardWidth,
                 modifier = Modifier.size(cardWidth, cardHeight),
-                topHomeGroup = topHomeGroup,
+                topHomeGroup = group,
             )
         }
     }
