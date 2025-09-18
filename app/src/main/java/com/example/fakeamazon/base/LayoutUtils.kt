@@ -7,13 +7,13 @@ import androidx.compose.ui.unit.offset
 import kotlin.math.roundToInt
 
 
-fun Modifier.ignoreParentPadding(padding: Dp): Modifier {
+fun Modifier.ignoreParentPadding(horizontalPadding: Dp): Modifier {
     return this.layout { measurable, constraints ->
-        val paddingPx = padding.toPx().roundToInt()
-        val placeable = measurable.measure(constraints.offset(horizontal = paddingPx))
+        val horizontalPaddingPx = horizontalPadding.toPx().roundToInt()
+        val placeable = measurable.measure(constraints.offset(horizontal = horizontalPaddingPx * 2))
 
-        layout(placeable.width + paddingPx, placeable.height) {
-            placeable.placeRelative(0, 0)
+        layout(placeable.width + horizontalPaddingPx * 2, placeable.height) {
+            placeable.placeRelative(horizontalPaddingPx, 0)
         }
     }
 }

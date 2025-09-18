@@ -59,7 +59,7 @@ fun HomeScreenRoot(
                 end = innerPadding.calculateEndPadding(currentLayoutDirection),
                 bottom = innerPadding.calculateBottomPadding()
             )
-            .padding(start = mainContentPadding)
+            .padding(horizontal = mainContentPadding)
             .verticalScroll(rememberScrollState())
     ) {
         val localDensity = LocalDensity.current
