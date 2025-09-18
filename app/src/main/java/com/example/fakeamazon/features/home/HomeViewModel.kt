@@ -41,6 +41,17 @@ class HomeViewModel @Inject constructor(
                 DisplayableItem(imageId = R.drawable.item_dishwash_detergent),
                 DisplayableItem(imageId = R.drawable.item_handsoap),
             )
+        ),
+        TopHomeGroup(
+            "Amazon picks\nfor you",
+            Color(0xFFED7571),
+            listOf(
+                DisplayableItem(imageId = R.drawable.item_game_monopoly_deal),
+                DisplayableItem(imageId = R.drawable.item_game_catan),
+                DisplayableItem(imageId = R.drawable.item_game_ra),
+                DisplayableItem(imageId = R.drawable.item_game_lost_cities),
+                DisplayableItem(imageId = R.drawable.item_game_forest_shuffle),
+            )
         )
     )
 

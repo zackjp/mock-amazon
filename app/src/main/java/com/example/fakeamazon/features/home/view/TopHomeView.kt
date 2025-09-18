@@ -1,6 +1,7 @@
 package com.example.fakeamazon.features.home.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -46,10 +47,13 @@ fun TopHomeSection(
     val cardHeight = dimensionResource(R.dimen.top_home_card_height)
     val paddingSmall = dimensionResource(R.dimen.padding_small)
 
+    val lazyListState = rememberLazyListState()
+
     LazyRow(
         contentPadding = PaddingValues(horizontal = mainContentHorizontalPadding),
         modifier = modifier.ignoreParentPadding(mainContentHorizontalPadding),
-        state = rememberLazyListState(),
+        state = lazyListState,
+        flingBehavior = rememberSnapFlingBehavior(lazyListState),
         horizontalArrangement = Arrangement.spacedBy(paddingSmall)
     ) {
         items(topHomeGroups) { topHomeGroup ->
