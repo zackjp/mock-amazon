@@ -139,10 +139,10 @@ private fun TopHomeCard(
 }
 
 private fun getContrastColor(color: Color): Color {
-    return if (ColorUtils.calculateLuminance(color.toArgb()) < 0.5) {
-        Color.White
-    } else {
+    return if (ColorUtils.calculateLuminance(color.toArgb()) > 0.3) {
         Color.Black
+    } else {
+        Color.White
     }
 }
 
