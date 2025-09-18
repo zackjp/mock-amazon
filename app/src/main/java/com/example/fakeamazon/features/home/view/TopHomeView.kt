@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -106,7 +107,10 @@ private fun TopHomeCard(
         getContrastColor(cardBackground)
     }
 
-    Card(modifier = modifier) {
+    Card(
+        modifier = modifier,
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
+    ) {
         Column(
             modifier = Modifier
                 .background(cardBackground)
