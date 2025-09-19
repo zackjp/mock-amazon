@@ -77,15 +77,18 @@ fun HomeScreenRoot(
                     .height(innerPadding.calculateTopPadding() + endGradientHeight)
             )
 
-            TopHomeSection(
-                onColorChanged = { color: Color -> topHomeColor = color },
-                mainContentHorizontalPadding = mainContentPadding,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = innerPadding.calculateTopPadding())
-                    .onSizeChanged { topHomeHeightPx = it.height },
-                topHomeGroups = topHomeGroups,
-            )
+            Column {
+                Spacer(modifier = Modifier.height(innerPadding.calculateTopPadding()))
+
+                TopHomeSection(
+                    onColorChanged = { color: Color -> topHomeColor = color },
+                    mainContentHorizontalPadding = mainContentPadding,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onSizeChanged { topHomeHeightPx = it.height },
+                    topHomeGroups = topHomeGroups,
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(paddingLarge))
