@@ -3,4 +3,5 @@
     <string name="recommended_deals_discount_off_label">%1$d%% off</string>
     <string name="recommended_deals_for_you_section_title">Recommended deals for you</string>
     <string name="recommended_deals_limited_time">Limited time deal</string>
+    <string name="search_bar_placeholder">Search or ask a question</string>
 </resources>
