@@ -1,7 +1,6 @@
 package com.example.fakeamazon.features.home.view
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
@@ -23,20 +23,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.offset
 import com.example.fakeamazon.R
 import com.example.fakeamazon.base.ignoreParentPadding
 import com.example.fakeamazon.features.home.component.ItemDisplay
 import com.example.fakeamazon.features.home.model.toDisplayableItem
 import com.example.fakeamazon.model.RecommendationGroup
-import kotlin.math.roundToInt
 
 val RECOMMENDED_CARD_BORDER_COLOR: Color = Color(0xFFD0D4D4)
 
@@ -85,9 +83,10 @@ private fun RecommendedDealsCard(
     modifier: Modifier = Modifier,
     cardWidth: Dp
 ) {
-    val paddingSmall = dimensionResource(R.dimen.padding_small)
+    val paddingXXSmall = dimensionResource(R.dimen.padding_xxsmall)
     val paddingXSmall = dimensionResource(R.dimen.padding_xsmall)
-    val cardPadding = paddingSmall
+    val paddingMedium = dimensionResource(R.dimen.padding_medium)
+    val cardPadding = paddingMedium
     val itemSpacing = paddingXSmall
     val itemHeight = dimensionResource(R.dimen.recommended_deals_item_height)
     val itemWidth = (cardWidth - cardPadding * 2 - itemSpacing) / 2
@@ -98,26 +97,15 @@ private fun RecommendedDealsCard(
     ) {
         Column(
             modifier = Modifier
-                .background(Color.White)
                 .wrapContentSize()
                 .padding(cardPadding)
         ) {
-            Row(
-                modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(paddingSmall)
-            ) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.titleSmall,
-                    text = recommendationGroup.title,
-                )
-                Icon(
-                    contentDescription = null,
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                )
-            }
+            CardHeader(
+                modifier = Modifier.fillMaxWidth(),
+                title = recommendationGroup.title,
+            )
 
-            Spacer(modifier = Modifier.height(paddingSmall))
+            Spacer(modifier = Modifier.height(paddingXXSmall))
 
             FlowRow(
                 maxItemsInEachRow = 2,
@@ -144,5 +132,30 @@ private fun RecommendedDealsCard(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun CardHeader(
+    modifier: Modifier = Modifier,
+    title: String,
+) {
+    Row(
+        horizontalArrangement =
+            Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Text(
+            modifier = Modifier
+                .weight(1f)
+                .align(Alignment.CenterVertically),
+            style = MaterialTheme.typography.titleSmall,
+            text = title,
+        )
+        Icon(
+            contentDescription = null,
+            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            modifier = Modifier.size(28.dp)
+        )
     }
 }
