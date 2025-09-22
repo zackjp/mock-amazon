@@ -119,7 +119,7 @@ private fun TopHomeCard(
             Text(
                 color = titleForeground,
                 text = topHomeGroup.title,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.displayLarge
             )
 
             Spacer(Modifier.height(paddingMedium))

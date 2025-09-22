@@ -53,7 +53,7 @@ fun RecommendedDealsSection(
 
         Text(
             text = stringResource(R.string.recommended_deals_for_you_section_title),
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.headlineMedium,
         )
 
         Spacer(modifier = Modifier.height(paddingSmall))
@@ -108,6 +108,7 @@ private fun RecommendedDealsCard(
             ) {
                 Text(
                     modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.titleSmall,
                     text = recommendationGroup.title,
                 )
                 Icon(

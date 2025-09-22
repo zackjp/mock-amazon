@@ -18,7 +18,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.example.fakeamazon.R
@@ -53,11 +52,11 @@ fun ItemDisplay(
                     start.linkTo(parent.start)
                     bottom.linkTo(parent.bottom)
                 },
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp),
+                style = MaterialTheme.typography.labelSmall,
             )
 
             Text(
-                color = Color.White,
+                color = RECOMMENDED_ITEM_BG_COLOR,
                 modifier = Modifier
                     .background(color = DISCOUNT_RED)
                     .padding(horizontal = 4.dp, vertical = 2.dp)
@@ -68,7 +67,7 @@ fun ItemDisplay(
                 text = stringResource(
                     R.string.recommended_deals_discount_off_label, discountPercent
                 ),
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp)
+                style = MaterialTheme.typography.bodySmall
             )
         }
 
