@@ -1,11 +1,16 @@
 package com.example.fakeamazon
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,8 +26,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -50,17 +55,40 @@ fun App() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BasicAppBar() {
-    Box(
+    val paddingSmall = dimensionResource(R.dimen.padding_small)
+    val paddingMedium = dimensionResource(R.dimen.padding_medium)
+    val paddingLarge = dimensionResource(R.dimen.padding_large)
+
+    val navigationChips = listOf(
+        "Early Prime Deals",
+        "Groceries",
+        "Haul",
+        "Medical Care",
+        "Same-Day",
+        "Pharmacy",
+        "In-Store Code",
+        "Alexa Lists",
+        "Prime",
+        "Video",
+        "Music",
+        "Customer Service"
+    )
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                start = 16.dp,
-                end = 16.dp,
-                bottom = dimensionResource(R.dimen.padding_large)
-            )
+            .padding(bottom = paddingSmall)
     ) {
         SimpleSearchBar(
-            modifier = Modifier.align(Alignment.TopCenter)
+            modifier = Modifier
+                .padding(
+                    start = paddingLarge,
+                    end = paddingLarge,
+                )
+        )
+
+        NavigationChips(
+            modifier = Modifier.padding(top = paddingMedium),
+            navigationChips = navigationChips,
         )
     }
 }
@@ -131,6 +159,34 @@ private fun SimpleSearchBar(modifier: Modifier = Modifier) {
             )
         },
     ) { }
+}
+
+@Composable
+private fun NavigationChips(modifier: Modifier, navigationChips: List<String>) {
+    val paddingXSmall = dimensionResource(R.dimen.padding_xsmall)
+    val paddingSmall = dimensionResource(R.dimen.padding_small)
+    val paddingMedium = dimensionResource(R.dimen.padding_medium)
+    val paddingLarge = dimensionResource(R.dimen.padding_large)
+
+    LazyRow(
+        contentPadding = PaddingValues(horizontal = paddingLarge),
+        horizontalArrangement = Arrangement.spacedBy(paddingSmall),
+        modifier = modifier,
+    ) {
+        items(navigationChips) { item ->
+            Text(
+                text = item,
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.large)
+                    .background(Color(0x99FFFFFF))
+                    .padding(
+                        vertical = paddingXSmall,
+                        horizontal = paddingMedium
+                    ),
+                style = MaterialTheme.typography.bodySmall.copy(color = Color.Black),
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
