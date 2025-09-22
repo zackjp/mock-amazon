@@ -51,7 +51,7 @@ fun RecommendedDealsSection(
 
         Text(
             text = stringResource(R.string.recommended_deals_for_you_section_title),
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.displayMedium,
         )
 
         Spacer(modifier = Modifier.height(paddingSmall))

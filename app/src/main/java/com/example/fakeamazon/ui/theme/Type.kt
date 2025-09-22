@@ -21,20 +21,8 @@ val AmazonEmberDisplay = FontFamily(
 )
 
 val Typography = Typography(
-    displayLarge = TextStyle(
-        fontSize = 30.sp,
-        fontFamily = AmazonEmberDisplay,
-        fontWeight = FontWeight.ExtraBold,
-        letterSpacing = (-0.75).sp,
-    ),
-    headlineMedium = TextStyle(
-        fontSize = 22.sp,
-        fontFamily = AmazonEmberDisplay,
-        fontWeight = FontWeight.ExtraBold,
-        letterSpacing = (-0.75).sp,
-    ),
-    titleSmall = TextStyle(
-        fontSize = 16.sp,
+    labelSmall = TextStyle(
+        fontSize = 12.sp,
         fontFamily = AmazonEmber,
         fontWeight = FontWeight.Bold,
     ),
@@ -53,9 +41,21 @@ val Typography = Typography(
         fontFamily = AmazonEmber,
         fontWeight = FontWeight.Normal,
     ),
-    labelSmall = TextStyle(
-        fontSize = 12.sp,
+    titleSmall = TextStyle(
+        fontSize = 16.sp,
         fontFamily = AmazonEmber,
         fontWeight = FontWeight.Bold,
+    ),
+    displayMedium = TextStyle(
+        fontSize = 22.sp,
+        fontFamily = AmazonEmberDisplay,
+        fontWeight = FontWeight.ExtraBold,
+        letterSpacing = (-0.75).sp,
+    ),
+    displayLarge = TextStyle(
+        fontSize = 30.sp,
+        fontFamily = AmazonEmberDisplay,
+        fontWeight = FontWeight.ExtraBold,
+        letterSpacing = (-0.75).sp,
     ),
 )
