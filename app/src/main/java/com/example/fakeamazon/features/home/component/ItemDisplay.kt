@@ -38,6 +38,9 @@ fun ItemDisplay(
             .background(RECOMMENDED_ITEM_BG_COLOR)
             .padding(dimensionResource(R.dimen.padding_xxsmall))
     ) {
+        val paddingSmall = dimensionResource(R.dimen.padding_small)
+        val paddingXSmall = dimensionResource(R.dimen.padding_xsmall)
+
         val (imageRef, discountTextRef, discountRef) = createRefs()
         var showDiscount = item.discount != null
 
@@ -58,11 +61,12 @@ fun ItemDisplay(
             Text(
                 color = RECOMMENDED_ITEM_BG_COLOR,
                 modifier = Modifier
+                    .clip(RoundedCornerShape(2.dp))
                     .background(color = DISCOUNT_RED)
-                    .padding(horizontal = 4.dp, vertical = 2.dp)
+                    .padding(horizontal = paddingSmall, vertical = paddingXSmall)
                     .constrainAs(discountRef) {
                         start.linkTo(parent.start)
-                        bottom.linkTo(discountTextRef.top)
+                        bottom.linkTo(discountTextRef.top, margin = paddingXSmall)
                     },
                 text = stringResource(
                     R.string.recommended_deals_discount_off_label, discountPercent
@@ -78,11 +82,14 @@ fun ItemDisplay(
             modifier = Modifier
                 .fillMaxWidth()
                 .constrainAs(imageRef) {
-                    val bottomConstraint = if (showDiscount) discountRef.top else parent.bottom
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                    bottom.linkTo(bottomConstraint)
+                    if (showDiscount) {
+                        bottom.linkTo(discountRef.top, 4.dp)
+                    } else {
+                        bottom.linkTo(parent.bottom)
+                    }
 
                     width = Dimension.fillToConstraints
                     height = Dimension.fillToConstraints
