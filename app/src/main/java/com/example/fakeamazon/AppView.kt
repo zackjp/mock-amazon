@@ -57,7 +57,13 @@ fun App() {
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { AmazonTopAppBar() },
+        topBar = {
+            AmazonTopAppBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = dimensionResource(R.dimen.padding_small)),
+            )
+        },
         bottomBar = {
             AmazonBottomAppBar(
                 modifier = Modifier.height(80.dp),
@@ -74,12 +80,11 @@ fun App() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AmazonTopAppBar() {
-    val paddingSmall = dimensionResource(R.dimen.padding_small)
+private fun AmazonTopAppBar(modifier: Modifier = Modifier) {
     val paddingMedium = dimensionResource(R.dimen.padding_medium)
     val paddingLarge = dimensionResource(R.dimen.padding_large)
 
-    val navigationChips = listOf(
+    val navChips = listOf(
         "Early Prime Deals",
         "Groceries",
         "Haul",
@@ -94,11 +99,7 @@ private fun AmazonTopAppBar() {
         "Customer Service"
     )
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = paddingSmall)
-    ) {
+    Column(modifier = modifier) {
         SimpleSearchBar(
             modifier = Modifier
                 .padding(
@@ -107,9 +108,9 @@ private fun AmazonTopAppBar() {
                 )
         )
 
-        NavigationChips(
+        NavChipsRow(
             modifier = Modifier.padding(top = paddingMedium),
-            navigationChips = navigationChips,
+            navigationChips = navChips,
         )
     }
 }
@@ -199,11 +200,12 @@ private fun SimpleSearchBar(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun NavigationChips(modifier: Modifier, navigationChips: List<String>) {
+private fun NavChipsRow(modifier: Modifier, navigationChips: List<String>) {
     val paddingXSmall = dimensionResource(R.dimen.padding_xsmall)
     val paddingSmall = dimensionResource(R.dimen.padding_small)
     val paddingMedium = dimensionResource(R.dimen.padding_medium)
     val paddingLarge = dimensionResource(R.dimen.padding_large)
+    val translucentWhite = Color(0x99FFFFFF)
 
     LazyRow(
         contentPadding = PaddingValues(horizontal = paddingLarge),
@@ -215,12 +217,12 @@ private fun NavigationChips(modifier: Modifier, navigationChips: List<String>) {
                 text = item,
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.large)
-                    .background(Color(0x99FFFFFF))
+                    .background(translucentWhite)
                     .padding(
                         vertical = paddingXSmall,
                         horizontal = paddingMedium
                     ),
-                style = MaterialTheme.typography.bodySmall.copy(color = Color.Black),
+                style = MaterialTheme.typography.bodySmall,
             )
         }
     }
