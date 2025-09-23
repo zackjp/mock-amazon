@@ -1,5 +1,9 @@
 package com.example.fakeamazon.features.home
 
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -65,13 +69,22 @@ fun HomeScreenRoot(
     ) {
         val localDensity = LocalDensity.current
         var topHomeHeightPx by remember { mutableIntStateOf(0) }
-        var topHomeColor by remember { mutableStateOf(Color.Transparent) }
         val endGradientHeight = with(localDensity) { (topHomeHeightPx * .8).toInt().toDp() }
+        var targetTopColor by remember { mutableStateOf(Color.Transparent) }
+        val colorTransition = updateTransition(targetState = targetTopColor)
+        val currentTopColor by colorTransition.animateColor(transitionSpec = {
+            tween(
+                durationMillis = 300,
+                easing = LinearEasing
+            )
+        }) { it }
 
         Box {
             Box(
                 modifier = Modifier
-                    .background(Brush.verticalGradient(listOf(topHomeColor, Color.Transparent)))
+                    .background(
+                        Brush.verticalGradient(listOf(currentTopColor, Color.Transparent))
+                    )
                     .ignoreParentPadding(mainContentPadding)
                     .fillMaxWidth()
                     .height(innerPadding.calculateTopPadding() + endGradientHeight)
@@ -81,7 +94,7 @@ fun HomeScreenRoot(
                 Spacer(modifier = Modifier.height(innerPadding.calculateTopPadding()))
 
                 TopHomeSection(
-                    onColorChanged = { color: Color -> topHomeColor = color },
+                    onColorChanged = { color: Color -> targetTopColor = color },
                     mainContentHorizontalPadding = mainContentPadding,
                     modifier = Modifier
                         .fillMaxWidth()
