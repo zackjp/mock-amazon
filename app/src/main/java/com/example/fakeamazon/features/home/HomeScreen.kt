@@ -98,5 +98,7 @@ fun HomeScreenRoot(
             modifier = Modifier.fillMaxWidth(),
             recommendationGroups = recommendationGroups
         )
+
+        Spacer(modifier = Modifier.height(paddingLarge))
     }
 }

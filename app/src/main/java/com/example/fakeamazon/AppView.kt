@@ -16,9 +16,15 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
@@ -29,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -41,9 +48,22 @@ import com.example.fakeamazon.ui.theme.FakeAmazonTheme
 
 @Composable
 fun App() {
+    val bottomNavItems = listOf(
+        BottomNavItem(Icons.Outlined.Home),
+        BottomNavItem(Icons.Outlined.Person),
+        BottomNavItem(Icons.Outlined.ShoppingCart),
+        BottomNavItem(Icons.Outlined.Menu),
+    )
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { BasicAppBar() }
+        topBar = { AmazonTopAppBar() },
+        bottomBar = {
+            AmazonBottomAppBar(
+                modifier = Modifier.height(80.dp),
+                navItems = bottomNavItems,
+            )
+        },
     ) { innerPadding ->
         HomeScreenRoot(
             innerPadding = innerPadding,
@@ -54,7 +74,7 @@ fun App() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BasicAppBar() {
+private fun AmazonTopAppBar() {
     val paddingSmall = dimensionResource(R.dimen.padding_small)
     val paddingMedium = dimensionResource(R.dimen.padding_medium)
     val paddingLarge = dimensionResource(R.dimen.padding_large)
@@ -73,6 +93,7 @@ private fun BasicAppBar() {
         "Music",
         "Customer Service"
     )
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -90,6 +111,22 @@ private fun BasicAppBar() {
             modifier = Modifier.padding(top = paddingMedium),
             navigationChips = navigationChips,
         )
+    }
+}
+
+@Composable
+private fun AmazonBottomAppBar(
+    modifier: Modifier = Modifier,
+    navItems: List<BottomNavItem>,
+) {
+    NavigationBar(modifier) {
+        navItems.forEach { navItem ->
+            NavigationBarItem(
+                selected = (navItem.icon === Icons.Outlined.Home),
+                onClick = {},
+                icon = { Icon(contentDescription = null, imageVector = navItem.icon) },
+            )
+        }
     }
 }
 
@@ -196,3 +233,7 @@ fun AppPreview() {
         HomeScreenRoot(modifier = Modifier.fillMaxSize())
     }
 }
+
+private data class BottomNavItem(
+    val icon: ImageVector
+)
