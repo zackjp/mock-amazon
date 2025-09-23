@@ -144,7 +144,7 @@ private fun TopHomeCard(
                     maxItemsInEachColumn = maxItemsInEachColumn,
                     verticalArrangement = Arrangement.spacedBy(itemSpacing),
                 ) {
-                    val itemWidth = (cardWidth - cardPadding * 2 - itemSpacing) / 2 - 1.dp
+                    val itemWidth = (cardWidth - cardPadding * 2 - itemSpacing - 1.dp) / 2
 
                     // Render each item in the original layout direction
                     CompositionLocalProvider(LocalLayoutDirection provides originalLayoutDirection) {

@@ -89,7 +89,7 @@ private fun RecommendedDealsCard(
     val cardPadding = paddingMedium
     val itemSpacing = paddingXSmall
     val itemHeight = dimensionResource(R.dimen.recommended_deals_item_height)
-    val itemWidth = (cardWidth - cardPadding * 2 - itemSpacing) / 2
+    val itemWidth = (cardWidth - cardPadding * 2 - itemSpacing - 1.dp) / 2
 
     Card(
         border = BorderStroke(1.dp, RECOMMENDED_CARD_BORDER_COLOR),
