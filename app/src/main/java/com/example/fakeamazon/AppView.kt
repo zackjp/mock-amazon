@@ -16,11 +16,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.KeyboardArrowDown
+import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.ShoppingCart
@@ -53,6 +57,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -266,24 +275,42 @@ private fun NavChipsRow(modifier: Modifier, navigationChips: List<String>) {
     val paddingMedium = dimensionResource(R.dimen.padding_medium)
     val paddingLarge = dimensionResource(R.dimen.padding_large)
     val translucentWhite = Color(0x99FFFFFF)
+    val navChipFont = MaterialTheme.typography.bodySmall
 
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = paddingLarge),
-        horizontalArrangement = Arrangement.spacedBy(paddingSmall),
-        modifier = modifier,
+    val navChipModifier = Modifier
+        .clip(MaterialTheme.shapes.large)
+        .background(translucentWhite)
+        .padding(
+            vertical = paddingXSmall,
+            horizontal = paddingMedium
+        )
+
+    val locationIconData = remember { createLocationIconData(navChipFont) }
+
+    Box(
+        modifier = modifier
     ) {
-        items(navigationChips) { item ->
-            Text(
-                text = item,
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.large)
-                    .background(translucentWhite)
-                    .padding(
-                        vertical = paddingXSmall,
-                        horizontal = paddingMedium
-                    ),
-                style = MaterialTheme.typography.bodySmall,
-            )
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = paddingLarge),
+            horizontalArrangement = Arrangement.spacedBy(paddingSmall),
+        ) {
+            item {
+                // Location icon will appear small
+                Text(
+                    inlineContent = locationIconData.inlineContent,
+                    modifier = navChipModifier,
+                    style = navChipFont,
+                    text = locationIconData.text,
+                )
+            }
+
+            items(navigationChips) { item ->
+                Text(
+                    modifier = navChipModifier,
+                    style = navChipFont,
+                    text = item,
+                )
+            }
         }
     }
 }
@@ -299,6 +326,40 @@ private fun rememberCollapsibleState(maxCollapseHeightPx: Float): CollapsibleSta
     }
 }
 
+/**
+ * Embeds the two icons (location + down arrow) in an [AnnotatedString] to
+ * easily match the size of the other navigation chips, which are text-only.
+ * This allows dynamic resizing for accessibility reasons. Eg, if the user
+ * increases the system's font size from settings, all navigation chips
+ * will resize the same.
+ */
+private fun createLocationIconData(font: TextStyle): LocationIconData {
+    val locationIconId = "location_icon"
+    val downIconId = "down_icon"
+
+    val locationIconString = buildAnnotatedString {
+        appendInlineContent(locationIconId, "[loc]")
+        appendInlineContent(downIconId, "[dwn]")
+    }
+
+    val placeholder = Placeholder(
+        width = font.fontSize,
+        height = font.fontSize,
+        placeholderVerticalAlign = PlaceholderVerticalAlign.Center
+    )
+
+    val inlineContent = mapOf(
+        locationIconId to InlineTextContent(placeholder = placeholder) {
+            Icon(Icons.Outlined.LocationOn, null)
+        },
+        downIconId to InlineTextContent(placeholder = placeholder) {
+            Icon(Icons.Outlined.KeyboardArrowDown, null)
+        }
+    )
+
+    return LocationIconData(locationIconString, inlineContent)
+}
+
 @Preview(showBackground = true)
 @Composable
 fun AppPreview() {
@@ -309,6 +370,11 @@ fun AppPreview() {
 
 private data class BottomNavItem(
     val icon: ImageVector
+)
+
+private data class LocationIconData(
+    val text: AnnotatedString,
+    val inlineContent: Map<String, InlineTextContent>,
 )
 
 private class CollapsibleState(
