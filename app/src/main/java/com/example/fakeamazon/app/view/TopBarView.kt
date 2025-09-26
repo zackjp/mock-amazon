@@ -212,7 +212,6 @@ private fun NavChipsRow(modifier: Modifier, navigationChips: List<String>) {
             horizontalArrangement = Arrangement.spacedBy(paddingSmall),
         ) {
             item {
-                // Location icon will appear small
                 Text(
                     inlineContent = locationIconData.inlineContent,
                     modifier = navChipModifier,
@@ -236,8 +235,13 @@ private fun NavChipsRow(modifier: Modifier, navigationChips: List<String>) {
  * Embeds the two icons (location + down arrow) in an [AnnotatedString] to
  * easily match the size of the other navigation chips, which are text-only.
  * This allows dynamic resizing for accessibility reasons. Eg, if the user
- * increases the system's font size from settings, all navigation chips
- * will resize the same.
+ * increases the system's font size from settings, this navigation chip
+ * will resize the same as the text-only ones.
+ *
+ * The location icons will appear small while using Android's default
+ * [Icons.Outlined] icons. This is because these icons have padding built
+ * into the vector data, which takes up space. Once replaced with icons
+ * having no built-in padding, it will look more like the Amazon app.
  */
 private fun createLocationIconData(font: TextStyle): LocationIconData {
     val locationIconId = "location_icon"
