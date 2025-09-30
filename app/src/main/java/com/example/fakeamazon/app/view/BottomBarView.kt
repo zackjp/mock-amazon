@@ -19,7 +19,7 @@ fun AmazonBottomAppBar(
         navItems.forEach { navItem ->
             NavigationBarItem(
                 selected = (navItem.icon === Icons.Outlined.Home),
-                onClick = {},
+                onClick = navItem.onClick,
                 icon = { Icon(contentDescription = null, imageVector = navItem.icon) },
             )
         }
@@ -27,5 +27,6 @@ fun AmazonBottomAppBar(
 }
 
 data class BottomNavItem(
-    val icon: ImageVector
+    val icon: ImageVector,
+    val onClick: () -> Unit
 )

@@ -66,7 +66,7 @@ val NAV_CHIPS = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AmazonTopAppBar(
+fun AmazonTopAppBarWithNavChips(
     modifier: Modifier = Modifier,
     navChipsOffset: Float,
     @FloatRange(0.0, 1.0) offsetFraction: Float,
@@ -114,6 +114,25 @@ fun AmazonTopAppBar(
                 navigationChips = NAV_CHIPS,
             )
         }
+    }
+}
+
+@Composable
+fun AmazonTopAppBar(
+    modifier: Modifier = Modifier,
+) {
+    val paddingLarge = dimensionResource(R.dimen.padding_large)
+    val paddingSmall = dimensionResource(R.dimen.padding_small)
+
+    Box(modifier = modifier) {
+        SimpleSearchBar(
+            modifier = Modifier
+                .padding(
+                    start = paddingLarge,
+                    end = paddingLarge,
+                    bottom = paddingSmall,
+                )
+        )
     }
 }
 

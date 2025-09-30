@@ -40,6 +40,10 @@ class CollapsibleState(
                 available: Offset,
                 source: NestedScrollSource
             ): Offset {
+                if (maxCollapseHeight == 0f) {
+                    return super.onPostScroll(consumed, available, source)
+                }
+
                 val isScrollingAwayFromTop = consumed.y < 0.0f
                 val isOverscrollingAtTop = consumed.y == 0.0f && available.y > 0.0f
                 val deltaToApply: Float? = when {
@@ -67,6 +71,10 @@ class CollapsibleState(
             }
 
             override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
+                if (maxCollapseHeight == 0f) {
+                    return super.onPostFling(consumed, available)
+                }
+
                 val isOverfling = available.y > 0 && available.y > consumed.y
 
                 // when the user attempts to fling beyond the top of main content,
