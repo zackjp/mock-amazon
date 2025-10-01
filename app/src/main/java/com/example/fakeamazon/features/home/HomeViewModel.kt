@@ -4,10 +4,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fakeamazon.R
-import com.example.fakeamazon.data.DealsRepository
+import com.example.fakeamazon.data.HomeRepository
 import com.example.fakeamazon.features.home.model.DisplayableItem
 import com.example.fakeamazon.features.home.model.TopHomeGroup
-import com.example.fakeamazon.model.RecommendationGroup
+import com.example.fakeamazon.model.ItemSection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    val dealsRepository: DealsRepository,
+    val homeRepository: HomeRepository,
 ) : ViewModel() {
 
     private val mockTopHomeGroups: List<TopHomeGroup> = listOf(
@@ -58,14 +58,14 @@ class HomeViewModel @Inject constructor(
     private val _topHomeGroups = MutableStateFlow<List<TopHomeGroup>>(emptyList())
     val topHomeGroups = _topHomeGroups.asStateFlow()
 
-    private val _recommendationGroups: MutableStateFlow<List<RecommendationGroup>> =
+    private val _itemSections: MutableStateFlow<List<ItemSection>> =
         MutableStateFlow(emptyList())
-    val recommendationGroups = _recommendationGroups.asStateFlow()
+    val itemSections = _itemSections.asStateFlow()
 
     fun load() {
         viewModelScope.launch {
             _topHomeGroups.value = mockTopHomeGroups
-            _recommendationGroups.value = dealsRepository.loadRecommendedDeals()
+            _itemSections.value = homeRepository.loadSections()
         }
     }
 

@@ -2,7 +2,7 @@ package com.example.fakeamazon.features.home.model
 
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
-import com.example.fakeamazon.model.Recommendation
+import com.example.fakeamazon.model.Item
 
 data class DisplayableItem(
     @DrawableRes val imageId: Int,
@@ -15,4 +15,4 @@ data class TopHomeGroup(
     val items: List<DisplayableItem>
 )
 
-fun Recommendation.toDisplayableItem() = DisplayableItem(imageId = imageRes, discount = discount)
+fun Item.toDisplayableItem() = DisplayableItem(imageId = imageRes, discount = discount)

@@ -14,8 +14,8 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -35,7 +35,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
 import com.example.fakeamazon.base.ignoreParentPadding
-import com.example.fakeamazon.features.home.view.RecommendedDealsSection
+import com.example.fakeamazon.features.home.view.ItemSectionView
 import com.example.fakeamazon.features.home.view.TopHomeSection
 
 @Composable
@@ -49,14 +49,26 @@ fun HomeScreenRoot(
     }
 
     val topHomeGroups by viewModel.topHomeGroups.collectAsStateWithLifecycle()
-    val recommendationGroups by viewModel.recommendationGroups.collectAsStateWithLifecycle()
+    val itemSections by viewModel.itemSections.collectAsStateWithLifecycle()
 
     val paddingLarge = dimensionResource(R.dimen.padding_large)
     val mainContentPadding = paddingLarge
 
     val currentLayoutDirection = LocalLayoutDirection.current
 
-    Column(
+    val localDensity = LocalDensity.current
+    var topHomeHeightPx by remember { mutableIntStateOf(0) }
+    val endGradientHeight = with(localDensity) { (topHomeHeightPx * .8).toInt().toDp() }
+    var targetTopColor by remember { mutableStateOf(Color.Transparent) }
+    val colorTransition = updateTransition(targetState = targetTopColor)
+    val currentTopColor by colorTransition.animateColor(transitionSpec = {
+        tween(
+            durationMillis = 300,
+            easing = LinearEasing
+        )
+    }) { it }
+
+    LazyColumn(
         modifier = modifier
             .padding(
                 top = 0.dp,
@@ -65,53 +77,45 @@ fun HomeScreenRoot(
                 bottom = innerPadding.calculateBottomPadding()
             )
             .padding(horizontal = mainContentPadding)
-            .verticalScroll(rememberScrollState())
     ) {
-        val localDensity = LocalDensity.current
-        var topHomeHeightPx by remember { mutableIntStateOf(0) }
-        val endGradientHeight = with(localDensity) { (topHomeHeightPx * .8).toInt().toDp() }
-        var targetTopColor by remember { mutableStateOf(Color.Transparent) }
-        val colorTransition = updateTransition(targetState = targetTopColor)
-        val currentTopColor by colorTransition.animateColor(transitionSpec = {
-            tween(
-                durationMillis = 300,
-                easing = LinearEasing
-            )
-        }) { it }
-
-        Box {
-            Box(
-                modifier = Modifier
-                    .background(
-                        Brush.verticalGradient(listOf(currentTopColor, Color.Transparent))
-                    )
-                    .ignoreParentPadding(mainContentPadding)
-                    .fillMaxWidth()
-                    .height(innerPadding.calculateTopPadding() + endGradientHeight)
-            )
-
-            Column {
-                Spacer(modifier = Modifier.height(innerPadding.calculateTopPadding()))
-
-                TopHomeSection(
-                    onColorChanged = { color: Color -> targetTopColor = color },
-                    mainContentHorizontalPadding = mainContentPadding,
+        item {
+            Box {
+                Box(
                     modifier = Modifier
+                        .background(
+                            Brush.verticalGradient(listOf(currentTopColor, Color.Transparent))
+                        )
+                        .ignoreParentPadding(mainContentPadding)
                         .fillMaxWidth()
-                        .onSizeChanged { topHomeHeightPx = it.height },
-                    topHomeGroups = topHomeGroups,
+                        .height(innerPadding.calculateTopPadding() + endGradientHeight)
                 )
+
+                Column {
+                    Spacer(modifier = Modifier.height(innerPadding.calculateTopPadding()))
+
+                    TopHomeSection(
+                        onColorChanged = { color: Color -> targetTopColor = color },
+                        mainContentHorizontalPadding = mainContentPadding,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .onSizeChanged { topHomeHeightPx = it.height },
+                        topHomeGroups = topHomeGroups,
+                    )
+                }
             }
+
+            Spacer(modifier = Modifier.height(paddingLarge))
         }
 
-        Spacer(modifier = Modifier.height(paddingLarge))
+        items(itemSections) { itemSection ->
+            ItemSectionView(
+                mainContentHorizontalPadding = mainContentPadding,
+                modifier = Modifier.fillMaxWidth(),
+                itemSection = itemSection
+            )
 
-        RecommendedDealsSection(
-            mainContentHorizontalPadding = mainContentPadding,
-            modifier = Modifier.fillMaxWidth(),
-            recommendationGroups = recommendationGroups
-        )
+            Spacer(modifier = Modifier.height(paddingLarge))
+        }
 
-        Spacer(modifier = Modifier.height(paddingLarge))
     }
 }

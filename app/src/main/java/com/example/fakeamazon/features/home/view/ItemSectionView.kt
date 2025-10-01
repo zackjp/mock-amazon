@@ -27,22 +27,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.fakeamazon.R
 import com.example.fakeamazon.base.ignoreParentPadding
 import com.example.fakeamazon.features.home.component.ItemDisplay
 import com.example.fakeamazon.features.home.model.toDisplayableItem
-import com.example.fakeamazon.model.RecommendationGroup
+import com.example.fakeamazon.model.ItemGroup
+import com.example.fakeamazon.model.ItemSection
 
-val RECOMMENDED_CARD_BORDER_COLOR: Color = Color(0xFFD0D4D4)
+val ITEM_GROUP_CARD_BORDER_COLOR: Color = Color(0xFFD0D4D4)
 
 @Composable
-fun RecommendedDealsSection(
+fun ItemSectionView(
     mainContentHorizontalPadding: Dp,
     modifier: Modifier = Modifier,
-    recommendationGroups: List<RecommendationGroup>,
+    itemSection: ItemSection,
 ) {
     Column(
         modifier = modifier
@@ -50,7 +50,7 @@ fun RecommendedDealsSection(
         val paddingSmall = dimensionResource(R.dimen.padding_small)
 
         Text(
-            text = stringResource(R.string.recommended_deals_for_you_section_title),
+            text = itemSection.title,
             style = MaterialTheme.typography.displayMedium,
         )
 
@@ -63,13 +63,13 @@ fun RecommendedDealsSection(
                 .ignoreParentPadding(mainContentHorizontalPadding),
             horizontalArrangement = Arrangement.spacedBy(paddingSmall),
         ) {
-            items(recommendationGroups) { recommendationGroup ->
-                RecommendedDealsCard(
-                    recommendationGroup = recommendationGroup,
+            items(itemSection.itemGroups) { itemGroup ->
+                ItemSectionCard(
+                    itemGroup = itemGroup,
                     modifier = Modifier
                         .wrapContentSize()
-                        .width(dimensionResource(R.dimen.recommended_deals_card_width)),
-                    cardWidth = dimensionResource(R.dimen.recommended_deals_card_width)
+                        .width(dimensionResource(R.dimen.item_section_group_card_width)),
+                    cardWidth = dimensionResource(R.dimen.item_section_group_card_width)
                 )
             }
         }
@@ -78,8 +78,8 @@ fun RecommendedDealsSection(
 
 @OptIn(ExperimentalLayoutApi::class) // FlowRow
 @Composable
-private fun RecommendedDealsCard(
-    recommendationGroup: RecommendationGroup,
+private fun ItemSectionCard(
+    itemGroup: ItemGroup,
     modifier: Modifier = Modifier,
     cardWidth: Dp
 ) {
@@ -88,11 +88,11 @@ private fun RecommendedDealsCard(
     val paddingMedium = dimensionResource(R.dimen.padding_medium)
     val cardPadding = paddingMedium
     val itemSpacing = paddingXSmall
-    val itemHeight = dimensionResource(R.dimen.recommended_deals_item_height)
+    val itemHeight = dimensionResource(R.dimen.item_section_item_height)
     val itemWidth = (cardWidth - cardPadding * 2 - itemSpacing - 1.dp) / 2
 
     Card(
-        border = BorderStroke(1.dp, RECOMMENDED_CARD_BORDER_COLOR),
+        border = BorderStroke(1.dp, ITEM_GROUP_CARD_BORDER_COLOR),
         modifier = modifier,
     ) {
         Column(
@@ -102,7 +102,7 @@ private fun RecommendedDealsCard(
         ) {
             CardHeader(
                 modifier = Modifier.fillMaxWidth(),
-                title = recommendationGroup.title,
+                title = itemGroup.title,
             )
 
             Spacer(modifier = Modifier.height(paddingXXSmall))
@@ -115,10 +115,10 @@ private fun RecommendedDealsCard(
             ) {
                 repeat(4) { i ->
                     val item = when (i) {
-                        0 -> recommendationGroup.rec1
-                        1 -> recommendationGroup.rec2
-                        2 -> recommendationGroup.rec3
-                        else -> recommendationGroup.rec4
+                        0 -> itemGroup.rec1
+                        1 -> itemGroup.rec2
+                        2 -> itemGroup.rec3
+                        else -> itemGroup.rec4
                     }
 
                     val itemModifier = Modifier

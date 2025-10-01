@@ -25,7 +25,7 @@ import com.example.fakeamazon.features.home.model.DisplayableItem
 import kotlin.math.roundToInt
 
 val DISCOUNT_RED: Color = Color(0xFFC60B37)
-val RECOMMENDED_ITEM_BG_COLOR: Color = Color(0xFFF7F7F7)
+val ITEM_BG_COLOR: Color = Color(0xFFF7F7F7)
 
 @Composable
 fun ItemDisplay(
@@ -35,7 +35,7 @@ fun ItemDisplay(
     ConstraintLayout(
         modifier = modifier
             .clip(RoundedCornerShape(4.dp))
-            .background(RECOMMENDED_ITEM_BG_COLOR)
+            .background(ITEM_BG_COLOR)
             .padding(dimensionResource(R.dimen.padding_xxsmall))
     ) {
         val paddingSmall = dimensionResource(R.dimen.padding_small)
@@ -50,7 +50,7 @@ fun ItemDisplay(
 
             Text(
                 color = DISCOUNT_RED,
-                text = stringResource(R.string.recommended_deals_limited_time),
+                text = stringResource(R.string.item_display_discount_limited_time),
                 modifier = Modifier.constrainAs(discountTextRef) {
                     start.linkTo(parent.start)
                     bottom.linkTo(parent.bottom)
@@ -59,7 +59,7 @@ fun ItemDisplay(
             )
 
             Text(
-                color = RECOMMENDED_ITEM_BG_COLOR,
+                color = ITEM_BG_COLOR,
                 modifier = Modifier
                     .clip(RoundedCornerShape(2.dp))
                     .background(color = DISCOUNT_RED)
@@ -69,7 +69,7 @@ fun ItemDisplay(
                         bottom.linkTo(discountTextRef.top, margin = paddingXSmall)
                     },
                 text = stringResource(
-                    R.string.recommended_deals_discount_off_label, discountPercent
+                    R.string.item_display_discount_off_label, discountPercent
                 ),
                 style = MaterialTheme.typography.bodySmall
             )
@@ -78,7 +78,7 @@ fun ItemDisplay(
         Image(
             contentDescription = null,
             contentScale = ContentScale.Fit,
-            colorFilter = ColorFilter.tint(RECOMMENDED_ITEM_BG_COLOR, BlendMode.Multiply),
+            colorFilter = ColorFilter.tint(ITEM_BG_COLOR, BlendMode.Multiply),
             modifier = Modifier
                 .fillMaxWidth()
                 .constrainAs(imageRef) {

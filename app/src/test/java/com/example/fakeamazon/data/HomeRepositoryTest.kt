@@ -6,16 +6,16 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
-class DealsRepositoryTest {
+class HomeRepositoryTest {
 
     val testDispatcher = StandardTestDispatcher()
     val testDispatcherProvider = TestDispatcherProvider(testDispatcher)
 
     @Test
-    fun dealsRepository_Load_ReturnsMockData() = runTest(testDispatcher) {
-        val repository = DealsRepository(testDispatcherProvider)
+    fun homeRepository_Load_ReturnsMockData() = runTest(testDispatcher) {
+        val repository = HomeRepository(testDispatcherProvider)
 
-        repository.loadRecommendedDeals().size shouldBeGreaterThan 0
+        repository.loadSections().size shouldBeGreaterThan 0
     }
 
 }
