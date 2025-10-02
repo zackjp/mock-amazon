@@ -32,6 +32,7 @@ import com.example.fakeamazon.app.view.BottomNavItem
 import com.example.fakeamazon.base.HomeStart
 import com.example.fakeamazon.base.TopRoute
 import com.example.fakeamazon.base.navigateToTopRoute
+import com.example.fakeamazon.base.topDestination
 import com.example.fakeamazon.features.home.HomeScreenRoot
 import com.example.fakeamazon.ui.theme.FakeAmazonTheme
 
@@ -44,18 +45,21 @@ fun App() {
     val collapsibleState = rememberCollapsibleState(maxCollapseHeightPx = -navChipsHeightPx)
     val navController = rememberNavController()
 
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = backStackEntry?.destination
+
     val bottomNavItems = remember(navController) {
         listOf(
-            BottomNavItem(Icons.Outlined.Home) {
+            BottomNavItem(Icons.Outlined.Home, TopRoute.HomeGraph) {
                 navController.navigateToTopRoute(TopRoute.HomeGraph)
             },
-            BottomNavItem(Icons.Outlined.Person) {
+            BottomNavItem(Icons.Outlined.Person, TopRoute.ProfileGraph) {
                 navController.navigateToTopRoute(TopRoute.ProfileGraph)
             },
-            BottomNavItem(Icons.Outlined.ShoppingCart) {
+            BottomNavItem(Icons.Outlined.ShoppingCart, TopRoute.CartGraph) {
                 navController.navigateToTopRoute(TopRoute.CartGraph)
             },
-            BottomNavItem(Icons.Outlined.Menu) {
+            BottomNavItem(Icons.Outlined.Menu, TopRoute.ShortcutsGraph) {
                 navController.navigateToTopRoute(TopRoute.ShortcutsGraph)
             },
         )
@@ -66,9 +70,7 @@ fun App() {
             .fillMaxSize()
             .nestedScroll(collapsibleState.scrollObserver),
         topBar = {
-            val backStackEntry by navController.currentBackStackEntryAsState()
-            val destination = backStackEntry?.destination
-            val isHome = destination?.hierarchy?.any { it.hasRoute(HomeStart::class) } ?: false
+            val isHome = currentDestination?.hierarchy?.any { it.hasRoute<HomeStart>() } ?: false
 
             if (isHome) {
                 AmazonTopAppBarWithNavChips(
@@ -89,8 +91,11 @@ fun App() {
         },
         bottomBar = {
             AmazonBottomAppBar(
+                topRouteChecker = { topRoute: TopRoute ->
+                    currentDestination?.topDestination()?.hasRoute(topRoute::class) ?: false
+                },
                 modifier = Modifier.height(80.dp),
-                navItems = bottomNavItems,
+                navItems = bottomNavItems
             )
         },
     ) { innerPadding ->

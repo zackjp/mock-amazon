@@ -1,6 +1,8 @@
 package com.example.fakeamazon.base
 
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import kotlinx.serialization.Serializable
 
@@ -32,4 +34,8 @@ fun NavController.navigateToTopRoute(topRoute: TopRoute) {
         launchSingleTop = true
         restoreState = true
     }
+}
+
+fun NavDestination.topDestination(): NavDestination? {
+    return hierarchy.lastOrNull { it.route != null }
 }
