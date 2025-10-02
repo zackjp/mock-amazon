@@ -22,7 +22,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.fakeamazon.app.view.AmazonBottomAppBar
@@ -70,7 +69,7 @@ fun App() {
             .fillMaxSize()
             .nestedScroll(collapsibleState.scrollObserver),
         topBar = {
-            val isHome = currentDestination?.hierarchy?.any { it.hasRoute<HomeStart>() } ?: false
+            val isHome = currentDestination?.hasRoute<HomeStart>() ?: false
 
             if (isHome) {
                 AmazonTopAppBarWithNavChips(
