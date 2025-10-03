@@ -94,7 +94,7 @@ fun AmazonTopAppBarWithNavChips(
                 )
         )
 
-        Column(modifier = Modifier.padding(bottom = 8.dp)) {
+        Column(modifier = Modifier.padding(bottom = paddingMedium)) {
             SimpleSearchBar(
                 modifier = Modifier
                     .padding(
@@ -207,19 +207,18 @@ private fun SimpleSearchBar(modifier: Modifier = Modifier) {
 @Composable
 private fun NavChipsRow(modifier: Modifier, navigationChips: List<String>) {
     val translucentWhite = Color(0x99FFFFFF)
-    val navChipFont = MaterialTheme.typography.bodySmall
+    val navChipFont = MaterialTheme.typography.bodyLarge
 
-    val paddingXSmall = dimensionResource(R.dimen.padding_xsmall)
     val paddingSmall = dimensionResource(R.dimen.padding_small)
     val paddingMedium = dimensionResource(R.dimen.padding_medium)
     val paddingLarge = dimensionResource(R.dimen.padding_large)
     val locationIconData = remember { createLocationIconData(navChipFont) }
 
     val navChipModifier = Modifier
-        .clip(MaterialTheme.shapes.large)
+        .clip(MaterialTheme.shapes.extraLarge)
         .background(translucentWhite)
         .padding(
-            vertical = paddingXSmall,
+            vertical = paddingSmall,
             horizontal = paddingMedium
         )
 

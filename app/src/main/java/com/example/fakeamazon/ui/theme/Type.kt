@@ -37,7 +37,7 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
     ),
     bodyLarge = TextStyle(
-        fontSize = 18.sp,
+        fontSize = 16.sp,
         fontFamily = AmazonEmber,
         fontWeight = FontWeight.Normal,
     ),
