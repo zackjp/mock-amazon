@@ -52,6 +52,7 @@ fun HomeScreenRoot(
     val itemSections by viewModel.itemSections.collectAsStateWithLifecycle()
 
     val paddingLarge = dimensionResource(R.dimen.padding_large)
+    val paddingXLarge = dimensionResource(R.dimen.padding_xlarge)
     val mainContentPadding = paddingLarge
 
     val currentLayoutDirection = LocalLayoutDirection.current
@@ -104,7 +105,7 @@ fun HomeScreenRoot(
                 }
             }
 
-            Spacer(modifier = Modifier.height(paddingLarge))
+            Spacer(modifier = Modifier.height(paddingXLarge))
         }
 
         items(itemSections) { itemSection ->
@@ -114,7 +115,7 @@ fun HomeScreenRoot(
                 itemSection = itemSection
             )
 
-            Spacer(modifier = Modifier.height(paddingLarge))
+            Spacer(modifier = Modifier.height(paddingXLarge))
         }
 
     }
