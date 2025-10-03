@@ -39,7 +39,8 @@ import androidx.core.graphics.ColorUtils
 import com.example.fakeamazon.R
 import com.example.fakeamazon.base.ignoreParentPadding
 import com.example.fakeamazon.features.home.component.ItemDisplay
-import com.example.fakeamazon.features.home.model.TopHomeGroup
+import com.example.fakeamazon.features.home.model.toDisplayableItem
+import com.example.fakeamazon.model.TopHomeGroup
 import kotlin.math.abs
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -155,7 +156,7 @@ private fun TopHomeCard(
 
                             val item = reversedBottomUpItems[i]
                             ItemDisplay(
-                                item = item,
+                                item = item.toDisplayableItem(),
                                 modifier = itemModifier,
                             )
                         }

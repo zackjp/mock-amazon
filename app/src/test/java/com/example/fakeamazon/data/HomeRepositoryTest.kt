@@ -12,7 +12,14 @@ class HomeRepositoryTest {
     val testDispatcherProvider = TestDispatcherProvider(testDispatcher)
 
     @Test
-    fun homeRepository_Load_ReturnsMockData() = runTest(testDispatcher) {
+    fun homeRepository_LoadTopHome_ReturnsMockData() = runTest(testDispatcher) {
+        val repository = HomeRepository(testDispatcherProvider)
+
+        repository.loadTopHome().size shouldBeGreaterThan 0
+    }
+
+    @Test
+    fun homeRepository_LoadSections_ReturnsMockData() = runTest(testDispatcher) {
         val repository = HomeRepository(testDispatcherProvider)
 
         repository.loadSections().size shouldBeGreaterThan 0

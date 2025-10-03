@@ -1,10 +1,13 @@
 package com.example.fakeamazon.features.home
 
+import androidx.compose.ui.graphics.Color
+import com.example.fakeamazon.R
 import com.example.fakeamazon.data.HomeRepository
+import com.example.fakeamazon.features.home.model.DisplayableItem
 import com.example.fakeamazon.model.Item
 import com.example.fakeamazon.model.ItemGroup
 import com.example.fakeamazon.model.ItemSection
-import io.kotest.matchers.ints.shouldBeGreaterThan
+import com.example.fakeamazon.model.TopHomeGroup
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -21,26 +24,19 @@ class HomeViewModelTest {
     val mockHomeRepository = mockk<HomeRepository>()
     val mockSections = listOf(
         ItemSection(
-            "Title 1",
+            "Section Title 1",
             listOf(
                 ItemGroup(
-                    "Group heading 1a",
+                    "Group heading 1",
                     Item(123, 0.01f),
                     Item(234, 0.02f),
                     Item(345, 0.03f),
                     Item(456, 0.04f),
                 ),
-                ItemGroup(
-                    "Group heading 1b",
-                    Item(567, 0.05f),
-                    Item(678, 0.06f),
-                    Item(789, 0.07f),
-                    Item(890, 0.08f),
-                )
-            ),
+            )
         ),
         ItemSection(
-            "Title 2",
+            "Section Title 2",
             listOf(
                 ItemGroup(
                     "Group heading 2a",
@@ -49,23 +45,35 @@ class HomeViewModelTest {
                     Item(543, 0.13f),
                     Item(654, 0.14f),
                 ),
-                ItemGroup(
-                    "Group heading 2b",
-                    Item(765, 0.15f),
-                    Item(876, 0.16f),
-                    Item(987, 0.17f),
-                    Item(198, 0.18f),
-                )
             ),
         ),
     )
 
+    private val mockTopHomeGroups: List<TopHomeGroup> = listOf(
+        TopHomeGroup(
+            "TopHome Title 1",
+            Color.Black,
+            listOf(
+                DisplayableItem(imageId = R.drawable.item_headphones),
+                DisplayableItem(imageId = R.drawable.item_backpack),
+            )
+        ),
+        TopHomeGroup(
+            "TopHome Title 2",
+            Color.White,
+            listOf(
+                DisplayableItem(imageId = R.drawable.item_kitchen_sponge),
+                DisplayableItem(imageId = R.drawable.item_matcha),
+            )
+        ),
+    )
 
     lateinit var viewModel: HomeViewModel
 
     @BeforeEach
     fun setUp() {
         coEvery { mockHomeRepository.loadSections() } returns mockSections
+        coEvery { mockHomeRepository.loadTopHome() } returns mockTopHomeGroups
 
         viewModel = HomeViewModel(mockHomeRepository)
     }
@@ -92,7 +100,7 @@ class HomeViewModelTest {
 
         viewModel.topHomeGroups.value shouldBe emptyList()
         advanceUntilIdle()
-        viewModel.topHomeGroups.first { it.isNotEmpty() }.size shouldBeGreaterThan 0
+        viewModel.topHomeGroups.first { it.isNotEmpty() } shouldBe mockTopHomeGroups
     }
 
 }

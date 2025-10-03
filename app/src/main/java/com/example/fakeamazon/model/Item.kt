@@ -1,6 +1,13 @@
 package com.example.fakeamazon.model
 
 import androidx.annotation.DrawableRes
+import androidx.compose.ui.graphics.Color
+
+data class TopHomeGroup(
+    val title: String,
+    val background: Color,
+    val items: List<Item>
+)
 
 data class ItemSection(
     val title: String,
@@ -17,5 +24,5 @@ data class ItemGroup(
 
 data class Item(
     @DrawableRes val imageRes: Int,
-    val discount: Float,
+    val discount: Float? = null,
 )
