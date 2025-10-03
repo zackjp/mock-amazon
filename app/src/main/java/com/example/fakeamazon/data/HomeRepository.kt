@@ -89,17 +89,17 @@ class HomeRepository @Inject constructor(
                     listOf(
                         ItemGroup(
                             "Reorder soon",
-                            Item(R.drawable.item_deodorant, 0.17f),
-                            Item(R.drawable.item_soda, 0.2f),
-                            Item(R.drawable.item_water_filter, 0.12f),
-                            Item(R.drawable.item_cleaning_gloves, 0.13f),
+                            Item(R.drawable.item_deodorant),
+                            Item(R.drawable.item_soda),
+                            Item(R.drawable.item_water_filter),
+                            Item(R.drawable.item_cleaning_gloves),
                         ),
                         ItemGroup(
                             "Home & Kitchen",
-                            Item(R.drawable.item_kitchen_sponge, 0.11f),
-                            Item(R.drawable.item_dishwash_detergent, 0.07f),
-                            Item(R.drawable.item_handsoap, 0.10f),
-                            Item(R.drawable.item_sandwich_bags, 0.09f),
+                            Item(R.drawable.item_kitchen_sponge),
+                            Item(R.drawable.item_dishwash_detergent),
+                            Item(R.drawable.item_handsoap),
+                            Item(R.drawable.item_sandwich_bags),
                         )
                     )
                 ),
