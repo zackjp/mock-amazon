@@ -94,6 +94,7 @@ private fun ItemSectionCard(
     Card(
         border = BorderStroke(1.dp, ITEM_GROUP_CARD_BORDER_COLOR),
         modifier = modifier,
+        shape = MaterialTheme.shapes.small,
     ) {
         Column(
             modifier = Modifier
