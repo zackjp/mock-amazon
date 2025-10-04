@@ -6,9 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val LightColorScheme = lightColorScheme(
+    background = Color.White,
     onBackground = AmazonBlack,
     onSurface = AmazonBlack,
     onSurfaceVariant = AmazonGray,
+    surfaceContainer = Color.White,
     surfaceContainerHighest = Color.White,
 )
 
