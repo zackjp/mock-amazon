@@ -90,7 +90,7 @@ private fun ItemSectionCard(
     }
 
     Card(
-        border = BorderStroke(1.dp, AmazonOutline),
+        border = BorderStroke(0.5.dp, AmazonOutline),
         modifier = modifier,
         shape = MaterialTheme.shapes.small,
     ) {
