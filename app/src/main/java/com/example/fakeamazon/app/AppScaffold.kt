@@ -17,9 +17,12 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -33,6 +36,7 @@ import com.example.fakeamazon.base.TopRoute
 import com.example.fakeamazon.base.navigateToTopRoute
 import com.example.fakeamazon.base.topDestination
 import com.example.fakeamazon.features.home.HomeScreenRoot
+import com.example.fakeamazon.ui.theme.AmazonOutline
 import com.example.fakeamazon.ui.theme.FakeAmazonTheme
 
 val AMAZON_BEIGE = Color(0xeFF5BE89)
@@ -93,7 +97,9 @@ fun App() {
                 topRouteChecker = { topRoute: TopRoute ->
                     currentDestination?.topDestination()?.hasRoute(topRoute::class) ?: false
                 },
-                modifier = Modifier.height(80.dp),
+                modifier = Modifier
+                    .height(80.dp)
+                    .topBorder(AmazonOutline, 1.dp),
                 navItems = bottomNavItems
             )
         },
@@ -104,6 +110,15 @@ fun App() {
             navController = navController
         )
 
+    }
+}
+
+private fun Modifier.topBorder(color: Color, borderWidth: Dp): Modifier {
+    return drawWithContent {
+        drawContent()
+        val start = Offset(0f, 0f)
+        val end = Offset(size.width, 0f)
+        drawLine(color, start, end, borderWidth.toPx())
     }
 }
 

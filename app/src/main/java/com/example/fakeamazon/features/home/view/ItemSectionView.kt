@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -34,8 +33,7 @@ import com.example.fakeamazon.base.ignoreParentPadding
 import com.example.fakeamazon.features.home.component.ItemDisplayWindow
 import com.example.fakeamazon.model.ItemGroup
 import com.example.fakeamazon.model.ItemSection
-
-val ITEM_GROUP_CARD_BORDER_COLOR: Color = Color(0xFFD0D4D4)
+import com.example.fakeamazon.ui.theme.AmazonOutline
 
 @Composable
 fun ItemSectionView(
@@ -92,7 +90,7 @@ private fun ItemSectionCard(
     }
 
     Card(
-        border = BorderStroke(1.dp, ITEM_GROUP_CARD_BORDER_COLOR),
+        border = BorderStroke(1.dp, AmazonOutline),
         modifier = modifier,
         shape = MaterialTheme.shapes.small,
     ) {
