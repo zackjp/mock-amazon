@@ -94,6 +94,8 @@ fun HomeScreenRoot(
                 Column {
                     Spacer(modifier = Modifier.height(innerPadding.calculateTopPadding()))
 
+                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
+
                     TopHomeSection(
                         onColorChanged = { color: Color -> targetTopColor = color },
                         mainContentHorizontalPadding = mainContentPadding,

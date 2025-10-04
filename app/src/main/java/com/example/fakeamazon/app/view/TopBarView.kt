@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -74,7 +75,8 @@ fun AmazonTopAppBarWithNavChips(
     @FloatRange(0.0, 1.0) offsetFraction: Float,
     onNavChipsSizeChange: (IntSize) -> Unit,
 ) {
-    val paddingMedium = dimensionResource(R.dimen.padding_medium)
+    val paddingXXSmall = dimensionResource(R.dimen.padding_xxsmall)
+    val paddingSmall = dimensionResource(R.dimen.padding_small)
     val paddingLarge = dimensionResource(R.dimen.padding_large)
 
     val topBarBackgroundColorStart = Color.White.copy(alpha = offsetFraction)
@@ -96,19 +98,20 @@ fun AmazonTopAppBarWithNavChips(
                 )
         )
 
-        Column(modifier = Modifier.padding(bottom = paddingMedium)) {
+        Column(modifier = Modifier) {
             SimpleSearchBar(
                 modifier = Modifier
                     .padding(
                         start = paddingLarge,
                         end = paddingLarge,
+                        bottom = paddingSmall
                     )
             )
 
             NavChipsRow(
                 modifier = Modifier
                     .onSizeChanged(onNavChipsSizeChange)
-                    .padding(top = paddingMedium)
+                    .padding(top = paddingXXSmall)
                     .graphicsLayer {
                         alpha = (1 - offsetFraction)
                         translationY = navChipsOffset
@@ -117,6 +120,7 @@ fun AmazonTopAppBarWithNavChips(
             )
         }
     }
+
 }
 
 @Composable
