@@ -36,7 +36,7 @@ import com.example.fakeamazon.base.TopRoute
 import com.example.fakeamazon.base.navigateToTopRoute
 import com.example.fakeamazon.base.topDestination
 import com.example.fakeamazon.features.home.HomeScreenRoot
-import com.example.fakeamazon.ui.theme.AmazonOutline
+import com.example.fakeamazon.ui.theme.AmazonOutlineLight
 import com.example.fakeamazon.ui.theme.FakeAmazonTheme
 
 val AMAZON_BEIGE = Color(0xeFF5BE89)
@@ -99,7 +99,7 @@ fun App() {
                 },
                 modifier = Modifier
                     .height(80.dp)
-                    .topBorder(AmazonOutline, 1.dp),
+                    .topBorder(AmazonOutlineLight, 1.dp),
                 navItems = bottomNavItems
             )
         },

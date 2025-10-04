@@ -2,6 +2,7 @@ package com.example.fakeamazon.app.view
 
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,6 +49,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.example.fakeamazon.R
+import com.example.fakeamazon.ui.theme.AmazonOutlineMedium
 
 val NAV_CHIPS = listOf(
     "Early Prime Deals",
@@ -140,6 +142,7 @@ fun AmazonTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 private fun SimpleSearchBar(modifier: Modifier = Modifier) {
     val interactionSource = remember { MutableInteractionSource() }
+    val textFieldShape = MaterialTheme.shapes.extraLarge
 
     SearchBar(
         colors = SearchBarDefaults.colors(),
@@ -151,7 +154,9 @@ private fun SimpleSearchBar(modifier: Modifier = Modifier) {
                 value = "",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(44.dp),
+                    .height(44.dp)
+                    .clip(textFieldShape)
+                    .border(0.5.dp, AmazonOutlineMedium, textFieldShape),
                 onValueChange = {},
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -185,18 +190,8 @@ private fun SimpleSearchBar(modifier: Modifier = Modifier) {
                         },
                         placeholder = { Text(stringResource(R.string.search_bar_placeholder)) },
                         singleLine = true,
-                        shape = MaterialTheme.shapes.extraLarge,
                         visualTransformation = VisualTransformation.None,
                         interactionSource = interactionSource,
-                        container = {
-                            TextFieldDefaults.Container(
-                                colors = colors,
-                                enabled = true,
-                                isError = false,
-                                interactionSource = interactionSource,
-                                shape = MaterialTheme.shapes.extraLarge,
-                            )
-                        }
                     )
                 }
             )

@@ -33,7 +33,7 @@ import com.example.fakeamazon.base.ignoreParentPadding
 import com.example.fakeamazon.features.home.component.ItemDisplayWindow
 import com.example.fakeamazon.model.ItemGroup
 import com.example.fakeamazon.model.ItemSection
-import com.example.fakeamazon.ui.theme.AmazonOutline
+import com.example.fakeamazon.ui.theme.AmazonOutlineLight
 
 @Composable
 fun ItemSectionView(
@@ -90,7 +90,7 @@ private fun ItemSectionCard(
     }
 
     Card(
-        border = BorderStroke(0.5.dp, AmazonOutline),
+        border = BorderStroke(0.5.dp, AmazonOutlineLight),
         modifier = modifier,
         shape = MaterialTheme.shapes.small,
     ) {
