@@ -26,6 +26,11 @@ val Typography = Typography(
         fontFamily = AmazonEmber,
         fontWeight = FontWeight.Bold,
     ),
+    labelLarge = TextStyle(
+        fontSize = 18.sp,
+        fontFamily = AmazonEmber,
+        fontWeight = FontWeight.Bold,
+    ),
     bodySmall = TextStyle(
         fontSize = 12.sp,
         fontFamily = AmazonEmber,

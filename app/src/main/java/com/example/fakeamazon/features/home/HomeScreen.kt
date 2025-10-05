@@ -51,9 +51,8 @@ fun HomeScreenRoot(
     val topHomeGroups by viewModel.topHomeGroups.collectAsStateWithLifecycle()
     val itemSections by viewModel.itemSections.collectAsStateWithLifecycle()
 
-    val paddingLarge = dimensionResource(R.dimen.padding_large)
     val paddingXLarge = dimensionResource(R.dimen.padding_xlarge)
-    val mainContentPadding = paddingLarge
+    val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
 
     val currentLayoutDirection = LocalLayoutDirection.current
 

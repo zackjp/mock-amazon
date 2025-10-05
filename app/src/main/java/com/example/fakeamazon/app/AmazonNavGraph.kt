@@ -2,13 +2,11 @@ package com.example.fakeamazon.app
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,6 +18,7 @@ import com.example.fakeamazon.base.ProfileStart
 import com.example.fakeamazon.base.ShortcutsStart
 import com.example.fakeamazon.base.TopRoute
 import com.example.fakeamazon.base.ui.ComingSoonScreen
+import com.example.fakeamazon.features.cart.CartScreen
 import com.example.fakeamazon.features.home.HomeScreenRoot
 
 
@@ -69,11 +68,10 @@ fun AmazonNavGraph(
             startDestination = CartStart,
         ) {
             composable<CartStart> {
-                ComingSoonScreen(
+                CartScreen(
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize(),
-                    title = "Cart",
                 )
             }
         }
