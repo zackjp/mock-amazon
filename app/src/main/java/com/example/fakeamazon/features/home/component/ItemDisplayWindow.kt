@@ -2,6 +2,7 @@ package com.example.fakeamazon.features.home.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,6 +45,7 @@ fun ItemDisplayWindow(
     items: List<Item>,
     itemSpacing: Dp,
     modifier: Modifier = Modifier,
+    onViewProduct: () -> Unit = {},
 ) {
     val itemWidth = (cardWidth - cardPadding * 2 - itemSpacing - 1.dp) / 2
     val maxItemsInEachColumn = when (items.size) {
@@ -83,7 +85,7 @@ fun ItemDisplayWindow(
                     val item = reversedBottomUpItems[i]
                     ItemDisplay(
                         item = item.toDisplayableItem(),
-                        modifier = itemModifier,
+                        modifier = itemModifier.clickable { onViewProduct() },
                     )
                 }
             }

@@ -49,6 +49,7 @@ fun AmazonNavGraph(
                 HomeScreenRoot(
                     innerPadding = innerPadding,
                     modifier = Modifier,
+                    onViewProduct = onViewProduct,
                 )
             }
         }

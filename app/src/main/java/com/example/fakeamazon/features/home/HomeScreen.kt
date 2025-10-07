@@ -42,6 +42,7 @@ import com.example.fakeamazon.features.home.view.TopHomeSection
 fun HomeScreenRoot(
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues = PaddingValues(),
+    onViewProduct: () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
@@ -96,11 +97,12 @@ fun HomeScreenRoot(
                     Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
 
                     TopHomeSection(
-                        onColorChanged = { color: Color -> targetTopColor = color },
                         mainContentHorizontalPadding = mainContentPadding,
                         modifier = Modifier
                             .fillMaxWidth()
                             .onSizeChanged { topHomeHeightPx = it.height },
+                        onColorChanged = { color: Color -> targetTopColor = color },
+                        onViewProduct = onViewProduct,
                         topHomeGroups = topHomeGroups,
                     )
                 }
@@ -111,9 +113,10 @@ fun HomeScreenRoot(
 
         items(itemSections) { itemSection ->
             ItemSectionView(
+                itemSection = itemSection,
                 mainContentHorizontalPadding = mainContentPadding,
                 modifier = Modifier.fillMaxWidth(),
-                itemSection = itemSection
+                onViewProduct = onViewProduct,
             )
 
             Spacer(modifier = Modifier.height(paddingXLarge))

@@ -37,9 +37,10 @@ import com.example.fakeamazon.ui.theme.AmazonOutlineLight
 
 @Composable
 fun ItemSectionView(
+    itemSection: ItemSection,
     mainContentHorizontalPadding: Dp,
     modifier: Modifier = Modifier,
-    itemSection: ItemSection,
+    onViewProduct: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -64,9 +65,10 @@ fun ItemSectionView(
         ) {
             items(itemSection.itemGroups) { itemGroup ->
                 ItemSectionCard(
+                    cardWidth = cardWidth,
                     itemGroup = itemGroup,
                     modifier = Modifier.size(cardWidth, cardHeight),
-                    cardWidth = cardWidth
+                    onViewProduct = onViewProduct,
                 )
             }
         }
@@ -76,9 +78,10 @@ fun ItemSectionView(
 @OptIn(ExperimentalLayoutApi::class) // FlowRow
 @Composable
 private fun ItemSectionCard(
+    cardWidth: Dp,
     itemGroup: ItemGroup,
     modifier: Modifier = Modifier,
-    cardWidth: Dp
+    onViewProduct: () -> Unit,
 ) {
     val paddingXXSmall = dimensionResource(R.dimen.padding_xxsmall)
     val paddingXSmall = dimensionResource(R.dimen.padding_xsmall)
@@ -112,6 +115,7 @@ private fun ItemSectionCard(
                 items = items,
                 itemSpacing = itemSpacing,
                 modifier = Modifier.fillMaxSize(),
+                onViewProduct = onViewProduct,
             )
         }
     }

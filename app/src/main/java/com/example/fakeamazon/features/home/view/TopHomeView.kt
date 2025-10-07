@@ -40,9 +40,10 @@ import kotlin.math.abs
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TopHomeSection(
-    onColorChanged: (Color) -> Unit,
     mainContentHorizontalPadding: Dp,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
+    onColorChanged: (Color) -> Unit = {},
+    onViewProduct: () -> Unit = {},
     topHomeGroups: List<TopHomeGroup>,
 ) {
     val cardWidth = dimensionResource(R.dimen.top_home_card_width)
@@ -80,6 +81,7 @@ fun TopHomeSection(
             TopHomeCard(
                 cardWidth = cardWidth,
                 modifier = Modifier.size(cardWidth, cardHeight),
+                onViewProduct = onViewProduct,
                 topHomeGroup = group,
             )
         }
@@ -90,6 +92,7 @@ fun TopHomeSection(
 private fun TopHomeCard(
     cardWidth: Dp,
     modifier: Modifier = Modifier,
+    onViewProduct: () -> Unit = {},
     topHomeGroup: TopHomeGroup,
 ) {
     val paddingMedium = dimensionResource(R.dimen.padding_medium)
@@ -124,6 +127,7 @@ private fun TopHomeCard(
                 items = topHomeGroup.items,
                 itemSpacing = itemSpacing,
                 modifier = Modifier.fillMaxSize(),
+                onViewProduct = onViewProduct,
             )
         }
     }
