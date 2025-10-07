@@ -33,6 +33,7 @@ import com.example.fakeamazon.app.view.AmazonTopAppBarWithNavChips
 import com.example.fakeamazon.app.view.BottomNavItem
 import com.example.fakeamazon.base.HomeStart
 import com.example.fakeamazon.base.TopRoute
+import com.example.fakeamazon.base.ViewProduct
 import com.example.fakeamazon.base.navigateToTopRoute
 import com.example.fakeamazon.base.topDestination
 import com.example.fakeamazon.features.home.HomeScreenRoot
@@ -66,6 +67,10 @@ fun App() {
                 navController.navigateToTopRoute(TopRoute.ShortcutsGraph)
             },
         )
+    }
+
+    val onViewProduct = {
+        navController.navigate(ViewProduct)
     }
 
     Scaffold(
@@ -106,8 +111,9 @@ fun App() {
     ) { innerPadding ->
         AmazonNavGraph(
             innerPadding = innerPadding,
+            navController = navController,
             modifier = Modifier.fillMaxSize(),
-            navController = navController
+            onViewProduct = onViewProduct,
         )
 
     }

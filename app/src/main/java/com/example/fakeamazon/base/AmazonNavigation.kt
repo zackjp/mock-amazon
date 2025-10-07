@@ -25,6 +25,8 @@ object ProfileStart
 object CartStart
 @Serializable
 object ShortcutsStart
+@Serializable
+object ViewProduct
 
 fun NavController.navigateToTopRoute(topRoute: TopRoute) {
     navigate(topRoute) {

@@ -4,6 +4,7 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,9 +18,11 @@ import com.example.fakeamazon.base.HomeStart
 import com.example.fakeamazon.base.ProfileStart
 import com.example.fakeamazon.base.ShortcutsStart
 import com.example.fakeamazon.base.TopRoute
+import com.example.fakeamazon.base.ViewProduct
 import com.example.fakeamazon.base.ui.ComingSoonScreen
 import com.example.fakeamazon.features.cart.CartScreen
 import com.example.fakeamazon.features.home.HomeScreenRoot
+import com.example.fakeamazon.features.product.ProductScreen
 
 
 @Composable
@@ -27,6 +30,7 @@ fun AmazonNavGraph(
     innerPadding: PaddingValues,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    onViewProduct: () -> Unit,
 ) {
     NavHost(
         modifier = modifier,
@@ -72,6 +76,7 @@ fun AmazonNavGraph(
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize(),
+                    onViewProduct = onViewProduct,
                 )
             }
         }
@@ -88,6 +93,14 @@ fun AmazonNavGraph(
                     title = "Shortcuts",
                 )
             }
+        }
+
+        composable<ViewProduct> {
+            ProductScreen(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxWidth()
+            )
         }
     }
 }

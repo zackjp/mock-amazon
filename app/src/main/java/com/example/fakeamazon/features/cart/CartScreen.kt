@@ -3,6 +3,7 @@ package com.example.fakeamazon.features.cart
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,7 +45,10 @@ import java.util.Locale
 val DATE_FORMATTER = DateTimeFormatter.ofPattern("EEE, MMM d", Locale.getDefault())
 
 @Composable
-fun CartScreen(modifier: Modifier = Modifier) {
+fun CartScreen(
+    modifier: Modifier = Modifier,
+    onViewProduct: () -> Unit,
+) {
     Surface(modifier = modifier) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -71,6 +75,7 @@ fun CartScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .fillMaxWidth(),
+                onViewProduct = onViewProduct,
             )
         }
     }
@@ -124,6 +129,7 @@ private fun CartListHeader(modifier: Modifier = Modifier) {
 private fun CartItem(
     cartItem: CartItem,
     modifier: Modifier = Modifier,
+    onViewProduct: () -> Unit,
 ) {
     val containerColor = Gray90
     val mainTextStyle = MaterialTheme.typography.bodyMedium.copy(lineHeight = 1.25.em)
@@ -136,7 +142,9 @@ private fun CartItem(
         Box(modifier = Modifier.padding(8.dp)) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 Image(
-                    modifier = Modifier.size(132.dp),
+                    modifier = Modifier
+                        .size(132.dp)
+                        .clickable { onViewProduct() },
                     colorFilter = ColorFilter.tint(
                         blendMode = BlendMode.Multiply,
                         color = containerColor
@@ -150,7 +158,9 @@ private fun CartItem(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         maxLines = 2,
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onViewProduct() },
                         overflow = TextOverflow.Ellipsis,
                         style = mainTextStyle,
                         text = cartItem.title,
