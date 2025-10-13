@@ -12,6 +12,7 @@ import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -26,16 +27,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import com.example.fakeamazon.app.navigation.rememberTabbedRouteController
 import com.example.fakeamazon.app.view.AmazonBottomAppBar
 import com.example.fakeamazon.app.view.AmazonTopAppBar
 import com.example.fakeamazon.app.view.AmazonTopAppBarWithNavChips
 import com.example.fakeamazon.app.view.BottomNavItem
 import com.example.fakeamazon.base.HomeStart
+import com.example.fakeamazon.base.TOP_ROUTES_SET
 import com.example.fakeamazon.base.TopRoute
 import com.example.fakeamazon.base.ViewProduct
-import com.example.fakeamazon.base.navigateToTopRoute
-import com.example.fakeamazon.base.topDestination
 import com.example.fakeamazon.features.home.HomeScreenRoot
 import com.example.fakeamazon.ui.theme.AmazonOutlineLight
 import com.example.fakeamazon.ui.theme.FakeAmazonTheme
@@ -47,30 +47,30 @@ val AMAZON_BEIGE = Color(0xeFF5BE89)
 fun App() {
     var navChipsHeightPx by remember { mutableFloatStateOf(0f) }
     val collapsibleState = rememberCollapsibleState(maxCollapseHeightPx = -navChipsHeightPx)
-    val navController = rememberNavController()
 
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = backStackEntry?.destination
+    val tabbedNavController = rememberTabbedRouteController(TOP_ROUTES_SET)
+    val currentDestination by tabbedNavController.navController.currentBackStackEntryAsState()
 
-    val bottomNavItems = remember(navController) {
+    val bottomNavItems = remember(tabbedNavController) {
         listOf(
             BottomNavItem(Icons.Outlined.Home, TopRoute.HomeGraph) {
-                navController.navigateToTopRoute(TopRoute.HomeGraph)
+                tabbedNavController.navigateToRoute(TopRoute.HomeGraph)
             },
             BottomNavItem(Icons.Outlined.Person, TopRoute.ProfileGraph) {
-                navController.navigateToTopRoute(TopRoute.ProfileGraph)
+                tabbedNavController.navigateToRoute(TopRoute.ProfileGraph)
             },
             BottomNavItem(Icons.Outlined.ShoppingCart, TopRoute.CartGraph) {
-                navController.navigateToTopRoute(TopRoute.CartGraph)
+                tabbedNavController.navigateToRoute(TopRoute.CartGraph)
             },
             BottomNavItem(Icons.Outlined.Menu, TopRoute.ShortcutsGraph) {
-                navController.navigateToTopRoute(TopRoute.ShortcutsGraph)
+                tabbedNavController.navigateToRoute(TopRoute.ShortcutsGraph)
             },
         )
     }
 
+    val currentTab by tabbedNavController.currentTab.collectAsState()
     val onViewProduct = {
-        navController.navigate(ViewProduct)
+        tabbedNavController.navigateToRoute(ViewProduct)
     }
 
     Scaffold(
@@ -78,7 +78,7 @@ fun App() {
             .fillMaxSize()
             .nestedScroll(collapsibleState.scrollObserver),
         topBar = {
-            val isHome = currentDestination?.hasRoute<HomeStart>() ?: false
+            val isHome = currentDestination?.destination?.hasRoute<HomeStart>() ?: false
 
             if (isHome) {
                 AmazonTopAppBarWithNavChips(
@@ -99,9 +99,7 @@ fun App() {
         },
         bottomBar = {
             AmazonBottomAppBar(
-                topRouteChecker = { topRoute: TopRoute ->
-                    currentDestination?.topDestination()?.hasRoute(topRoute::class) ?: false
-                },
+                selectedTab = currentTab,
                 modifier = Modifier
                     .height(80.dp)
                     .topBorder(AmazonOutlineLight, 1.dp),
@@ -110,8 +108,9 @@ fun App() {
         },
     ) { innerPadding ->
         AmazonNavGraph(
+            backHandlerForTabs = tabbedNavController.backHandlerForTabs.collectAsState().value,
             innerPadding = innerPadding,
-            navController = navController,
+            navController = tabbedNavController.navController,
             modifier = Modifier.fillMaxSize(),
             onViewProduct = onViewProduct,
         )

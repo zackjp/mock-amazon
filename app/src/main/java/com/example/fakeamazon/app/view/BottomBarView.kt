@@ -11,14 +11,14 @@ import com.example.fakeamazon.base.TopRoute
 
 @Composable
 fun AmazonBottomAppBar(
-    topRouteChecker: (TopRoute) ->  Boolean,
+    selectedTab: TopRoute?,
     modifier: Modifier = Modifier,
     navItems: List<BottomNavItem>,
 ) {
     NavigationBar(modifier) {
         navItems.forEach { navItem ->
             NavigationBarItem(
-                selected = topRouteChecker(navItem.topRoute),
+                selected = navItem.topRoute == selectedTab,
                 onClick = navItem.onClick,
                 icon = { Icon(contentDescription = null, imageVector = navItem.icon) },
             )

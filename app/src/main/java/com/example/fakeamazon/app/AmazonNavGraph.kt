@@ -16,6 +16,7 @@ import androidx.navigation.navigation
 import com.example.fakeamazon.base.CartStart
 import com.example.fakeamazon.base.HomeStart
 import com.example.fakeamazon.base.ProfileStart
+import com.example.fakeamazon.base.RootGraph
 import com.example.fakeamazon.base.ShortcutsStart
 import com.example.fakeamazon.base.TopRoute
 import com.example.fakeamazon.base.ViewProduct
@@ -29,8 +30,9 @@ import com.example.fakeamazon.features.product.ProductScreen
 fun AmazonNavGraph(
     innerPadding: PaddingValues,
     modifier: Modifier = Modifier,
+    backHandlerForTabs: @Composable () -> Unit = {},
     navController: NavHostController = rememberNavController(),
-    onViewProduct: () -> Unit,
+    onViewProduct: () -> Unit = {},
 ) {
     NavHost(
         modifier = modifier,
@@ -39,6 +41,7 @@ fun AmazonNavGraph(
         exitTransition = { ExitTransition.None },
         popExitTransition = { ExitTransition.None },
         navController = navController,
+        route = RootGraph::class,
         startDestination = TopRoute.HomeGraph,
     ) {
         navigation(
@@ -46,6 +49,7 @@ fun AmazonNavGraph(
             startDestination = HomeStart,
         ) {
             composable<HomeStart> {
+                backHandlerForTabs()
                 HomeScreenRoot(
                     innerPadding = innerPadding,
                     modifier = Modifier,
@@ -59,6 +63,7 @@ fun AmazonNavGraph(
             startDestination = ProfileStart,
         ) {
             composable<ProfileStart> {
+                backHandlerForTabs()
                 ComingSoonScreen(
                     modifier = Modifier
                         .padding(innerPadding)
@@ -73,6 +78,7 @@ fun AmazonNavGraph(
             startDestination = CartStart,
         ) {
             composable<CartStart> {
+                backHandlerForTabs()
                 CartScreen(
                     modifier = Modifier
                         .padding(innerPadding)
@@ -87,6 +93,7 @@ fun AmazonNavGraph(
             startDestination = ShortcutsStart
         ) {
             composable<ShortcutsStart> {
+                backHandlerForTabs()
                 ComingSoonScreen(
                     modifier = Modifier
                         .padding(innerPadding)

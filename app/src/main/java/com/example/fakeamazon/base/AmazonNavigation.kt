@@ -1,11 +1,22 @@
 package com.example.fakeamazon.base
 
-import androidx.navigation.NavController
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import kotlinx.serialization.Serializable
 
+val TOP_ROUTES_SET = setOfNotNull(
+    TopRoute.HomeGraph,
+    TopRoute.ProfileGraph,
+    TopRoute.CartGraph,
+    TopRoute.ShortcutsGraph,
+)
+
+@Serializable
+object RootGraph
+
+@Serializable
 sealed interface TopRoute {
     @Serializable
     object HomeGraph: TopRoute
@@ -28,16 +39,24 @@ object ShortcutsStart
 @Serializable
 object ViewProduct
 
-fun NavController.navigateToTopRoute(topRoute: TopRoute) {
-    navigate(topRoute) {
-        popUpTo(graph.findStartDestination().id) {
-            saveState = true
+fun List<NavBackStackEntry>.nearestTopRoute(): TopRoute? {
+    for (entry in reversed()) {
+        val candidate = TOP_ROUTES_SET.firstOrNull { topRoute ->
+            entry.destination.topDestination()?.hasRoute(topRoute::class) == true
         }
-        launchSingleTop = true
-        restoreState = true
+        if (candidate != null) {
+            return candidate
+        }
     }
+
+    return null
 }
 
 fun NavDestination.topDestination(): NavDestination? {
-    return hierarchy.lastOrNull { it.route != null }
+    return hierarchy.firstOrNull { destination -> TOP_ROUTES_SET.any { destination.hasRoute(it::class) } }
+}
+
+fun NavDestination.findTopRoute(): TopRoute? {
+    val topDestination = topDestination()
+    return TOP_ROUTES_SET.firstOrNull { topDestination?.hasRoute(it::class) == true }
 }
