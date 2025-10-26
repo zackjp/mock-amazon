@@ -88,7 +88,7 @@ class HomeViewModelTest {
     fun viewModel_Load_LoadsItemSectionsAsync() = runTest {
         viewModel.load()
 
-        viewModel.itemSections.value shouldBe emptyList()
+        viewModel.itemSections.first() shouldBe emptyList()
         advanceUntilIdle()
         viewModel.itemSections.first { it.isNotEmpty() } shouldBe mockSections
     }
@@ -97,7 +97,7 @@ class HomeViewModelTest {
     fun viewModel_Load_LoadsTopHomeGroupsAsync() = runTest {
         viewModel.load()
 
-        viewModel.topHomeGroups.value shouldBe emptyList()
+        viewModel.topHomeGroups.first() shouldBe emptyList()
         advanceUntilIdle()
         viewModel.topHomeGroups.first { it.isNotEmpty() } shouldBe mockTopHomeGroups
     }

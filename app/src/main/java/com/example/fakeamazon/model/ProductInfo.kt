@@ -1,0 +1,12 @@
+package com.example.fakeamazon.model
+
+import androidx.annotation.DrawableRes
+
+
+data class ProductInfo(
+    val storeName: String,
+    val storeInitials: String,
+    val title: String,
+    val productRating: Float,
+    @param:DrawableRes val imageId: Int,
+)

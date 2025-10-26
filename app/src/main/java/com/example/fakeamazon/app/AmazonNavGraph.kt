@@ -23,7 +23,7 @@ import com.example.fakeamazon.base.ViewProduct
 import com.example.fakeamazon.base.ui.ComingSoonScreen
 import com.example.fakeamazon.features.cart.CartScreen
 import com.example.fakeamazon.features.home.HomeScreenRoot
-import com.example.fakeamazon.features.product.ProductScreen
+import com.example.fakeamazon.features.product.ProductScreenRoot
 
 
 @Composable
@@ -104,7 +104,7 @@ fun AmazonNavGraph(
         }
 
         composable<ViewProduct> {
-            ProductScreen(
+            ProductScreenRoot(
                 modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxWidth()

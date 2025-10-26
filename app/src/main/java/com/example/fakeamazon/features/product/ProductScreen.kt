@@ -1,6 +1,5 @@
 package com.example.fakeamazon.features.product
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,6 +21,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,20 +31,36 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
 import com.example.fakeamazon.app.AMAZON_BEIGE
+import com.example.fakeamazon.model.ProductInfo
 
 @Composable
-fun ProductScreen(
+fun ProductScreenRoot(
     modifier: Modifier = Modifier,
+    viewModel: ProductViewModel = hiltViewModel(),
 ) {
-    val productInfo = ProductInfo(
-        storeName = "Thames & Kosmos",
-        storeInitials = "TK",
-        title = "Lost Cities Card Game - with 6th Expedition - Thames & Kosmos Store - Designed By Reiner Knizia",
-        productRating = 4.4f,
-        imageId = R.drawable.item_game_lost_cities,
-    )
+    LaunchedEffect(Unit) {
+        viewModel.load()
+    }
+
+    val productInfo by viewModel.productInfo.collectAsStateWithLifecycle()
+
+    productInfo?.let { productInfo ->
+        ProductScreen(
+            modifier = modifier,
+            productInfo = productInfo,
+        )
+    }
+}
+
+@Composable
+private fun ProductScreen(
+    modifier: Modifier = Modifier,
+    productInfo: ProductInfo,
+) {
     val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
 
     Surface(modifier = modifier) {
@@ -74,7 +91,9 @@ fun ProductScreen(
 
                 ProductImage(
                     imageId = productInfo.imageId,
-                    modifier = Modifier.fillMaxWidth().aspectRatio(1f),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f),
                 )
             }
         }
@@ -140,11 +159,3 @@ fun ProductImage(modifier: Modifier, imageId: Int) {
         )
     }
 }
-
-private data class ProductInfo(
-    val storeName: String,
-    val storeInitials: String,
-    val title: String,
-    val productRating: Float,
-    @param:DrawableRes val imageId: Int,
-)
