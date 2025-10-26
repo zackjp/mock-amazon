@@ -3,7 +3,6 @@ package com.example.fakeamazon.features.home
 import androidx.compose.ui.graphics.Color
 import com.example.fakeamazon.R
 import com.example.fakeamazon.data.HomeRepository
-import com.example.fakeamazon.features.home.model.DisplayableItem
 import com.example.fakeamazon.model.Item
 import com.example.fakeamazon.model.ItemGroup
 import com.example.fakeamazon.model.ItemSection
@@ -54,16 +53,16 @@ class HomeViewModelTest {
             "TopHome Title 1",
             Color.Black,
             listOf(
-                DisplayableItem(imageId = R.drawable.item_headphones),
-                DisplayableItem(imageId = R.drawable.item_backpack),
+                Item(imageRes = R.drawable.item_headphones),
+                Item(imageRes = R.drawable.item_backpack),
             )
         ),
         TopHomeGroup(
             "TopHome Title 2",
             Color.White,
             listOf(
-                DisplayableItem(imageId = R.drawable.item_kitchen_sponge),
-                DisplayableItem(imageId = R.drawable.item_matcha),
+                Item(imageRes = R.drawable.item_kitchen_sponge),
+                Item(imageRes = R.drawable.item_matcha),
             )
         ),
     )
