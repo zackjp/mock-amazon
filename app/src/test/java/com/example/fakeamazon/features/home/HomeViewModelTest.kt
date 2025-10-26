@@ -28,7 +28,7 @@ class HomeViewModelTest {
                 ItemGroup(
                     "Group heading 1",
                     Item(id = 123, imageRes = 123, discount = 0.01f),
-                    Item(id = 234, imageRes = 234, discount = 0.02f,),
+                    Item(id = 234, imageRes = 234, discount = 0.02f),
                     Item(id = 345, imageRes = 345, discount = 0.03f),
                     Item(id = 456, imageRes = 456, discount = 0.04f),
                 ),

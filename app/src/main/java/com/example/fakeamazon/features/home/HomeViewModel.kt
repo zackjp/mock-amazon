@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    val homeRepository: HomeRepository,
+    private val homeRepository: HomeRepository,
 ) : ViewModel() {
 
     private val _topHomeGroups = MutableStateFlow<List<TopHomeGroup>>(emptyList())
