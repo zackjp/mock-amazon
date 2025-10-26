@@ -40,7 +40,7 @@ fun ItemSectionView(
     itemSection: ItemSection,
     mainContentHorizontalPadding: Dp,
     modifier: Modifier = Modifier,
-    onViewProduct: () -> Unit,
+    onViewProduct: (Int) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -81,7 +81,7 @@ private fun ItemSectionCard(
     cardWidth: Dp,
     itemGroup: ItemGroup,
     modifier: Modifier = Modifier,
-    onViewProduct: () -> Unit,
+    onViewProduct: (Int) -> Unit,
 ) {
     val paddingXXSmall = dimensionResource(R.dimen.padding_xxsmall)
     val paddingXSmall = dimensionResource(R.dimen.padding_xsmall)

@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import androidx.navigation.toRoute
 import com.example.fakeamazon.base.CartStart
 import com.example.fakeamazon.base.HomeStart
 import com.example.fakeamazon.base.ProfileStart
@@ -32,7 +33,7 @@ fun AmazonNavGraph(
     modifier: Modifier = Modifier,
     backHandlerForTabs: @Composable () -> Unit = {},
     navController: NavHostController = rememberNavController(),
-    onViewProduct: () -> Unit = {},
+    onViewProduct: (Int) -> Unit = {},
 ) {
     NavHost(
         modifier = modifier,
@@ -103,11 +104,13 @@ fun AmazonNavGraph(
             }
         }
 
-        composable<ViewProduct> {
+        composable<ViewProduct> { destination ->
+            val route = destination.toRoute<ViewProduct>()
             ProductScreenRoot(
                 modifier = Modifier
                     .padding(innerPadding)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                productId = route.productId,
             )
         }
     }

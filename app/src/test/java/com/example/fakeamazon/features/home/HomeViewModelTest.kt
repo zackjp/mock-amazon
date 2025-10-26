@@ -27,10 +27,10 @@ class HomeViewModelTest {
             listOf(
                 ItemGroup(
                     "Group heading 1",
-                    Item(123, 0.01f),
-                    Item(234, 0.02f),
-                    Item(345, 0.03f),
-                    Item(456, 0.04f),
+                    Item(id = 123, imageRes = 123, discount = 0.01f),
+                    Item(id = 234, imageRes = 234, discount = 0.02f,),
+                    Item(id = 345, imageRes = 345, discount = 0.03f),
+                    Item(id = 456, imageRes = 456, discount = 0.04f),
                 ),
             )
         ),
@@ -39,10 +39,10 @@ class HomeViewModelTest {
             listOf(
                 ItemGroup(
                     "Group heading 2a",
-                    Item(321, 0.11f),
-                    Item(432, 0.12f),
-                    Item(543, 0.13f),
-                    Item(654, 0.14f),
+                    Item(id = 321, imageRes = 321, discount = 0.11f),
+                    Item(id = 432, imageRes = 432, discount = 0.12f),
+                    Item(id = 543, imageRes = 543, discount = 0.13f),
+                    Item(id = 654, imageRes = 654, discount = 0.14f),
                 ),
             ),
         ),
@@ -53,16 +53,16 @@ class HomeViewModelTest {
             "TopHome Title 1",
             Color.Black,
             listOf(
-                Item(imageRes = R.drawable.item_headphones),
-                Item(imageRes = R.drawable.item_backpack),
+                Item(id = R.drawable.item_headphones, imageRes = R.drawable.item_headphones),
+                Item(id = R.drawable.item_backpack, imageRes = R.drawable.item_backpack),
             )
         ),
         TopHomeGroup(
             "TopHome Title 2",
             Color.White,
             listOf(
-                Item(imageRes = R.drawable.item_kitchen_sponge),
-                Item(imageRes = R.drawable.item_matcha),
+                Item(id = R.drawable.item_kitchen_sponge, imageRes = R.drawable.item_kitchen_sponge),
+                Item(id = R.drawable.item_matcha, imageRes = R.drawable.item_matcha),
             )
         ),
     )

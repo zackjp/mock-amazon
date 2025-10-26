@@ -43,7 +43,7 @@ fun TopHomeSection(
     mainContentHorizontalPadding: Dp,
     modifier: Modifier = Modifier,
     onColorChanged: (Color) -> Unit = {},
-    onViewProduct: () -> Unit = {},
+    onViewProduct: (Int) -> Unit = {},
     topHomeGroups: List<TopHomeGroup>,
 ) {
     val cardWidth = dimensionResource(R.dimen.top_home_card_width)
@@ -92,7 +92,7 @@ fun TopHomeSection(
 private fun TopHomeCard(
     cardWidth: Dp,
     modifier: Modifier = Modifier,
-    onViewProduct: () -> Unit = {},
+    onViewProduct: (Int) -> Unit = {},
     topHomeGroup: TopHomeGroup,
 ) {
     val paddingMedium = dimensionResource(R.dimen.padding_medium)

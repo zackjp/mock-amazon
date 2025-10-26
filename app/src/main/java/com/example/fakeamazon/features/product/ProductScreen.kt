@@ -40,10 +40,11 @@ import com.example.fakeamazon.model.ProductInfo
 @Composable
 fun ProductScreenRoot(
     modifier: Modifier = Modifier,
+    productId: Int,
     viewModel: ProductViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.load()
+    LaunchedEffect(productId) {
+        viewModel.load(productId)
     }
 
     val productInfo by viewModel.productInfo.collectAsStateWithLifecycle()

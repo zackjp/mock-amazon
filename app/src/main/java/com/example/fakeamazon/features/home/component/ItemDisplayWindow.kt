@@ -45,7 +45,7 @@ fun ItemDisplayWindow(
     items: List<Item>,
     itemSpacing: Dp,
     modifier: Modifier = Modifier,
-    onViewProduct: () -> Unit = {},
+    onViewProduct: (Int) -> Unit = {},
 ) {
     val itemWidth = (cardWidth - cardPadding * 2 - itemSpacing - 1.dp) / 2
     val maxItemsInEachColumn = when (items.size) {
@@ -85,7 +85,7 @@ fun ItemDisplayWindow(
                     val item = reversedBottomUpItems[i]
                     ItemDisplay(
                         item = item.toDisplayableItem(),
-                        modifier = itemModifier.clickable { onViewProduct() },
+                        modifier = itemModifier.clickable { onViewProduct(item.id) },
                     )
                 }
             }

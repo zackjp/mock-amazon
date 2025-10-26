@@ -47,7 +47,7 @@ val DATE_FORMATTER = DateTimeFormatter.ofPattern("EEE, MMM d", Locale.getDefault
 @Composable
 fun CartScreen(
     modifier: Modifier = Modifier,
-    onViewProduct: () -> Unit,
+    onViewProduct: (Int) -> Unit,
 ) {
     Surface(modifier = modifier) {
         Column(
@@ -62,6 +62,7 @@ fun CartScreen(
             )
 
             val cartItem = CartItem(
+                id = R.drawable.item_game_lost_cities,
                 imageId = R.drawable.item_game_lost_cities,
                 title = "Lost Cities Card Game - with 6th Expedition - Thames & Kosmos Store - Designed By Reiner Knizia",
                 priceUSD = 19.99f,
@@ -129,7 +130,7 @@ private fun CartListHeader(modifier: Modifier = Modifier) {
 private fun CartItem(
     cartItem: CartItem,
     modifier: Modifier = Modifier,
-    onViewProduct: () -> Unit,
+    onViewProduct: (Int) -> Unit,
 ) {
     val containerColor = Gray90
     val mainTextStyle = MaterialTheme.typography.bodyMedium.copy(lineHeight = 1.25.em)
@@ -144,7 +145,7 @@ private fun CartItem(
                 Image(
                     modifier = Modifier
                         .size(132.dp)
-                        .clickable { onViewProduct() },
+                        .clickable { onViewProduct(cartItem.id) },
                     colorFilter = ColorFilter.tint(
                         blendMode = BlendMode.Multiply,
                         color = containerColor
@@ -160,7 +161,7 @@ private fun CartItem(
                         maxLines = 2,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onViewProduct() },
+                            .clickable { onViewProduct(cartItem.id) },
                         overflow = TextOverflow.Ellipsis,
                         style = mainTextStyle,
                         text = cartItem.title,
@@ -241,6 +242,7 @@ private fun CartItem(
 }
 
 private data class CartItem(
+    val id: Int,
     @param:DrawableRes val imageId: Int,
     val title: String,
     val priceUSD: Float, // we'll want this in local currency, but for now indicate it's USD only

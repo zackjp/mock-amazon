@@ -42,7 +42,7 @@ import com.example.fakeamazon.features.home.view.TopHomeSection
 fun HomeScreenRoot(
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues = PaddingValues(),
-    onViewProduct: () -> Unit = {},
+    onViewProduct: (Int) -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {

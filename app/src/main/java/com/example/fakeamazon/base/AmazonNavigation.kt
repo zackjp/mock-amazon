@@ -37,7 +37,7 @@ object CartStart
 @Serializable
 object ShortcutsStart
 @Serializable
-object ViewProduct
+data class ViewProduct(val productId: Int)
 
 fun List<NavBackStackEntry>.nearestTopRoute(): TopRoute? {
     for (entry in reversed()) {

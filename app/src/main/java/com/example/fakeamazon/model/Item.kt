@@ -23,6 +23,7 @@ data class ItemGroup(
 )
 
 data class Item(
-    @DrawableRes val imageRes: Int,
+    val id: Int,
+    @param:DrawableRes val imageRes: Int,
     val discount: Float? = null,
 )

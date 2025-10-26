@@ -69,8 +69,8 @@ fun App() {
     }
 
     val currentTab by tabbedNavController.currentTab.collectAsState()
-    val onViewProduct = {
-        tabbedNavController.navigateToRoute(ViewProduct)
+    val onViewProduct = { productId: Int ->
+        tabbedNavController.navigateToRoute(ViewProduct(productId))
     }
 
     Scaffold(
