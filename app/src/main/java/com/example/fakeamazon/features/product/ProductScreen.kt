@@ -49,53 +49,55 @@ fun ProductScreenRoot(
 
     val productInfo by viewModel.productInfo.collectAsStateWithLifecycle()
 
-    productInfo?.let { productInfo ->
-        ProductScreen(
-            modifier = modifier,
-            productInfo = productInfo,
-        )
-    }
+    ProductScreen(
+        modifier = modifier,
+        productInfo = productInfo,
+    )
 }
 
 @Composable
 private fun ProductScreen(
     modifier: Modifier = Modifier,
-    productInfo: ProductInfo,
+    productInfo: ProductInfo?,
 ) {
-    val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
+    if (productInfo == null) {
+        Surface(modifier = modifier) {}
+    } else {
+        val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
 
-    Surface(modifier = modifier) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp, start = mainContentPadding, end = mainContentPadding)
-        ) {
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
+        Surface(modifier = modifier) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, start = mainContentPadding, end = mainContentPadding)
+            ) {
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                StoreAndProductRatingHeader(
-                    modifier = Modifier.fillMaxWidth(),
-                    storeName = productInfo.storeName,
-                    storeInitials = productInfo.storeInitials,
-                    productRating = productInfo.productRating,
-                )
+                    StoreAndProductRatingHeader(
+                        modifier = Modifier.fillMaxWidth(),
+                        storeName = productInfo.storeName,
+                        storeInitials = productInfo.storeInitials,
+                        productRating = productInfo.productRating,
+                    )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    text = productInfo.title,
-                )
-            }
+                    Text(
+                        text = productInfo.title,
+                    )
+                }
 
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                ProductImage(
-                    imageId = productInfo.imageId,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f),
-                )
+                    ProductImage(
+                        imageId = productInfo.imageId,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f),
+                    )
+                }
             }
         }
     }
