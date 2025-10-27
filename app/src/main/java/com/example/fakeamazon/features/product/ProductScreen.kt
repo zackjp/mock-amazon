@@ -16,7 +16,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.foundation.text.appendInlineContent
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -28,14 +34,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
 import com.example.fakeamazon.app.ui.AMAZON_BEIGE
 import com.example.fakeamazon.shared.model.ProductInfo
+import com.example.fakeamazon.ui.theme.AmazonOrange
+import kotlin.math.roundToInt
 
 @Composable
 fun ProductScreenRoot(
@@ -139,14 +151,36 @@ private fun StoreAndProductRatingHeader(
 
             Row {
                 Text(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .weight(1f),
                     style = MaterialTheme.typography.bodyMedium,
                     text = "Visit the Store",
                 )
 
-                Text(style = MaterialTheme.typography.bodySmall, text = "$productRating")
+                val filledStarCount = productRating.roundToInt().coerceAtMost(5)
+                val emptyStarCount = 5 - filledStarCount
+                val starString = buildAnnotatedString {
+                    repeat(filledStarCount) {
+                        appendInlineContent("filledStar", "[*]")
+                    }
+                    repeat(emptyStarCount) {
+                        appendInlineContent("emptyStar", "[-]")
+                    }
+                }
+
+                Text(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    style = MaterialTheme.typography.bodySmall,
+                    text = "$productRating",
+                )
                 Spacer(modifier = Modifier.width(2.dp))
-                Text(text = "*****")
+                Text(
+                    inlineContent = starRatingsIconMap,
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    style = MaterialTheme.typography.bodySmall,
+                    text = starString,
+                )
             }
         }
     }
@@ -162,3 +196,20 @@ fun ProductImage(modifier: Modifier, imageId: Int) {
         )
     }
 }
+
+private val starRatingsIconMap = mapOf(
+    "filledStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
+        Icon(
+            contentDescription = null,
+            imageVector = Icons.Filled.Star,
+            tint = AmazonOrange,
+        )
+    },
+    "emptyStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
+        Icon(
+            contentDescription = null,
+            imageVector = Icons.Outlined.Star,
+            tint = AmazonOrange.copy(alpha = 0.25f),
+        )
+    },
+)
