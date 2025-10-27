@@ -44,7 +44,7 @@ import com.example.fakeamazon.R
 import com.example.fakeamazon.app.ui.AMAZON_BEIGE
 import com.example.fakeamazon.shared.model.ProductInfo
 import com.example.fakeamazon.ui.theme.AmazonOrange
-import kotlin.math.roundToInt
+import kotlin.math.floor
 
 @Composable
 fun ProductScreenRoot(
@@ -155,23 +155,20 @@ private fun StoreAndProductRatingHeader(
                     text = "Visit the Store",
                 )
 
-                val filledStarCount = productRating.roundToInt().coerceAtMost(5)
-                val emptyStarCount = 5 - filledStarCount
+                val starCounts = calculateStarCounts(productRating)
                 val starString = buildAnnotatedString {
-                    repeat(filledStarCount) {
-                        appendInlineContent("filledStar", "[*]")
+                    append("$productRating ")
+                    repeat(starCounts.fullStarCount) {
+                        appendInlineContent("fullStar", "[*]")
                     }
-                    repeat(emptyStarCount) {
+                    repeat(starCounts.halfStarCount) {
+                        appendInlineContent("halfStar", "[/]")
+                    }
+                    repeat(starCounts.emptyStarCount) {
                         appendInlineContent("emptyStar", "[-]")
                     }
                 }
 
-                Text(
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    style = MaterialTheme.typography.bodySmall,
-                    text = "$productRating",
-                )
-                Spacer(modifier = Modifier.width(2.dp))
                 Text(
                     inlineContent = starRatingsIconMap,
                     modifier = Modifier.align(Alignment.CenterVertically),
@@ -194,19 +191,50 @@ fun ProductImage(modifier: Modifier, imageId: Int) {
     }
 }
 
+private fun calculateStarCounts(rawProductRating: Float): StarCounts {
+    val productRating = rawProductRating.coerceAtMost(5f)
+    val ratingFraction = productRating - floor(productRating)
+
+    var fullStarCount = productRating.toInt()
+    var halfStarCount = 0
+
+    when {
+        ratingFraction >= 0.8f -> fullStarCount++ // .8+ = round up to full-star
+        ratingFraction >= 0.3f -> halfStarCount = 1 // .3+ = show half-star
+        else -> {} // do nothing
+    }
+
+    val emptyStarCount = 5 - fullStarCount - halfStarCount // fill remaining with empty-stars
+
+    return StarCounts(fullStarCount, halfStarCount, emptyStarCount)
+}
+
 private val starRatingsIconMap = mapOf(
-    "filledStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
+    "fullStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
         Icon(
             contentDescription = null,
             painter = painterResource(R.drawable.ic_baseline_star_24),
             tint = AmazonOrange,
         )
     },
+    "halfStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
+        Icon(
+            contentDescription = null,
+            painter = painterResource(R.drawable.ic_outline_star_half_24),
+            tint = AmazonOrange,
+        )
+    },
     "emptyStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
         Icon(
             contentDescription = null,
-            painter = painterResource(R.drawable.ic_baseline_star_24),
-            tint = AmazonOrange.copy(alpha = 0.25f),
+            painter = painterResource(R.drawable.ic_outline_star_24),
+            tint = AmazonOrange,
         )
     },
+)
+
+data class StarCounts(
+    val fullStarCount: Int,
+    val halfStarCount: Int,
+    val emptyStarCount: Int,
 )
