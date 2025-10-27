@@ -4,11 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Menu
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -27,16 +22,17 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.fakeamazon.R
 import com.example.fakeamazon.app.navigation.AmazonNavGraph
+import com.example.fakeamazon.app.navigation.HomeStart
+import com.example.fakeamazon.app.navigation.TOP_ROUTES_SET
+import com.example.fakeamazon.app.navigation.TopRoute
+import com.example.fakeamazon.app.navigation.ViewProduct
 import com.example.fakeamazon.app.navigation.rememberTabbedRouteController
 import com.example.fakeamazon.app.ui.view.AmazonBottomAppBar
 import com.example.fakeamazon.app.ui.view.AmazonTopAppBar
 import com.example.fakeamazon.app.ui.view.AmazonTopAppBarWithNavChips
 import com.example.fakeamazon.app.ui.view.BottomNavItem
-import com.example.fakeamazon.app.navigation.HomeStart
-import com.example.fakeamazon.app.navigation.TOP_ROUTES_SET
-import com.example.fakeamazon.app.navigation.TopRoute
-import com.example.fakeamazon.app.navigation.ViewProduct
 import com.example.fakeamazon.features.home.HomeScreenRoot
 import com.example.fakeamazon.ui.theme.AmazonOutlineLight
 import com.example.fakeamazon.ui.theme.FakeAmazonTheme
@@ -54,16 +50,16 @@ fun App() {
 
     val bottomNavItems = remember(tabbedNavController) {
         listOf(
-            BottomNavItem(Icons.Outlined.Home, TopRoute.HomeGraph) {
+            BottomNavItem(R.drawable.ic_outline_home_24, TopRoute.HomeGraph) {
                 tabbedNavController.navigateToRoute(TopRoute.HomeGraph)
             },
-            BottomNavItem(Icons.Outlined.Person, TopRoute.ProfileGraph) {
+            BottomNavItem(R.drawable.ic_outline_person_24, TopRoute.ProfileGraph) {
                 tabbedNavController.navigateToRoute(TopRoute.ProfileGraph)
             },
-            BottomNavItem(Icons.Outlined.ShoppingCart, TopRoute.CartGraph) {
+            BottomNavItem(R.drawable.ic_outline_shopping_cart_24, TopRoute.CartGraph) {
                 tabbedNavController.navigateToRoute(TopRoute.CartGraph)
             },
-            BottomNavItem(Icons.Outlined.Menu, TopRoute.ShortcutsGraph) {
+            BottomNavItem(R.drawable.ic_outline_menu_24, TopRoute.ShortcutsGraph) {
                 tabbedNavController.navigateToRoute(TopRoute.ShortcutsGraph)
             },
         )

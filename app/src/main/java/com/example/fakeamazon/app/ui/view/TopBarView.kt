@@ -18,10 +18,6 @@ import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
@@ -187,7 +184,7 @@ private fun SimpleSearchBar(modifier: Modifier = Modifier) {
                         enabled = true,
                         leadingIcon = {
                             Icon(
-                                imageVector = Icons.Default.Search,
+                                painter = painterResource(R.drawable.ic_outline_search_24),
                                 contentDescription = null
                             )
                         },
@@ -276,10 +273,10 @@ private fun createLocationIconData(font: TextStyle): LocationIconData {
 
     val inlineContent = mapOf(
         locationIconId to InlineTextContent(placeholder = placeholder) {
-            Icon(Icons.Outlined.LocationOn, null)
+            Icon(painterResource(R.drawable.ic_outline_location_on_24), null)
         },
         downIconId to InlineTextContent(placeholder = placeholder) {
-            Icon(Icons.Outlined.KeyboardArrowDown, null)
+            Icon(painterResource(R.drawable.ic_outline_keyboard_arrow_down_24), null)
         }
     )
 

@@ -1,11 +1,12 @@
 package com.example.fakeamazon.app.ui.view
 
+import androidx.annotation.DrawableRes
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import com.example.fakeamazon.app.navigation.TopRoute
 
 
@@ -20,14 +21,14 @@ fun AmazonBottomAppBar(
             NavigationBarItem(
                 selected = navItem.topRoute == selectedTab,
                 onClick = navItem.onClick,
-                icon = { Icon(contentDescription = null, imageVector = navItem.icon) },
+                icon = { Icon(contentDescription = null, painter = painterResource(navItem.iconId)) },
             )
         }
     }
 }
 
 data class BottomNavItem(
-    val icon: ImageVector,
+    @param:DrawableRes val iconId: Int,
     val topRoute: TopRoute,
     val onClick: () -> Unit
 )

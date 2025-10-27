@@ -19,9 +19,6 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -201,14 +198,14 @@ private val starRatingsIconMap = mapOf(
     "filledStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
         Icon(
             contentDescription = null,
-            imageVector = Icons.Filled.Star,
+            painter = painterResource(R.drawable.ic_baseline_star_24),
             tint = AmazonOrange,
         )
     },
     "emptyStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
         Icon(
             contentDescription = null,
-            imageVector = Icons.Outlined.Star,
+            painter = painterResource(R.drawable.ic_baseline_star_24),
             tint = AmazonOrange.copy(alpha = 0.25f),
         )
     },

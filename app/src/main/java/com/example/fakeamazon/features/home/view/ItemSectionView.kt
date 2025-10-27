@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,11 +24,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.fakeamazon.R
-import com.example.fakeamazon.shared.ignoreParentPadding
 import com.example.fakeamazon.features.home.component.ItemDisplayWindow
+import com.example.fakeamazon.shared.ignoreParentPadding
 import com.example.fakeamazon.shared.model.ItemGroup
 import com.example.fakeamazon.shared.model.ItemSection
 import com.example.fakeamazon.ui.theme.AmazonOutlineLight
@@ -140,7 +139,7 @@ private fun CardHeader(
         )
         Icon(
             contentDescription = null,
-            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            painter = painterResource(R.drawable.ic_sharp_chevron_forward_24),
             modifier = Modifier.size(28.dp)
         )
     }
