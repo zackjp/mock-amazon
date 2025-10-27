@@ -1,4 +1,4 @@
-package com.example.fakeamazon.base
+package com.example.fakeamazon.shared
 
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.Dispatchers

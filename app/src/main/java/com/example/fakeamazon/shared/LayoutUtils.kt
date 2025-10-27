@@ -1,4 +1,4 @@
-package com.example.fakeamazon.base
+package com.example.fakeamazon.shared
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout

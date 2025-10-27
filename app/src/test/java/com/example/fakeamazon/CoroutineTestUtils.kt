@@ -1,5 +1,6 @@
-package com.example.fakeamazon.base
+package com.example.fakeamazon
 
+import com.example.fakeamazon.shared.DispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.test.StandardTestDispatcher
 

@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
-import com.example.fakeamazon.base.ignoreParentPadding
+import com.example.fakeamazon.shared.ignoreParentPadding
 import com.example.fakeamazon.features.home.view.ItemSectionView
 import com.example.fakeamazon.features.home.view.TopHomeSection
 

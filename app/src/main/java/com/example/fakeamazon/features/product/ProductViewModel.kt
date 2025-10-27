@@ -2,9 +2,9 @@ package com.example.fakeamazon.features.product
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fakeamazon.base.DispatcherProvider
+import com.example.fakeamazon.shared.DispatcherProvider
 import com.example.fakeamazon.data.ProductStaticDataSource
-import com.example.fakeamazon.model.ProductInfo
+import com.example.fakeamazon.shared.model.ProductInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay

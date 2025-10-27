@@ -1,4 +1,4 @@
-package com.example.fakeamazon.app
+package com.example.fakeamazon.app.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -14,14 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
-import com.example.fakeamazon.base.CartStart
-import com.example.fakeamazon.base.HomeStart
-import com.example.fakeamazon.base.ProfileStart
-import com.example.fakeamazon.base.RootGraph
-import com.example.fakeamazon.base.ShortcutsStart
-import com.example.fakeamazon.base.TopRoute
-import com.example.fakeamazon.base.ViewProduct
-import com.example.fakeamazon.base.ui.ComingSoonScreen
+import com.example.fakeamazon.shared.ui.ComingSoonScreen
 import com.example.fakeamazon.features.cart.CartScreen
 import com.example.fakeamazon.features.home.HomeScreenRoot
 import com.example.fakeamazon.features.product.ProductScreenRoot

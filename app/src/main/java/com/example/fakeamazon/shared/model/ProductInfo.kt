@@ -1,4 +1,4 @@
-package com.example.fakeamazon.model
+package com.example.fakeamazon.shared.model
 
 import androidx.annotation.DrawableRes
 

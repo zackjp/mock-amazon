@@ -32,9 +32,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import com.example.fakeamazon.R
-import com.example.fakeamazon.base.ignoreParentPadding
+import com.example.fakeamazon.shared.ignoreParentPadding
 import com.example.fakeamazon.features.home.component.ItemDisplayWindow
-import com.example.fakeamazon.model.TopHomeGroup
+import com.example.fakeamazon.shared.model.TopHomeGroup
 import kotlin.math.abs
 
 @OptIn(ExperimentalLayoutApi::class)

@@ -1,4 +1,4 @@
-package com.example.fakeamazon.base
+package com.example.fakeamazon.shared
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

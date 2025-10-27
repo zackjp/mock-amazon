@@ -1,6 +1,6 @@
 package com.example.fakeamazon.data
 
-import com.example.fakeamazon.base.TestDispatcherProvider
+import com.example.fakeamazon.TestDispatcherProvider
 import io.kotest.matchers.ints.shouldBeGreaterThan
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest

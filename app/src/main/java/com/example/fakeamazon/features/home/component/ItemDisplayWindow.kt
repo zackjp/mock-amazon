@@ -32,7 +32,7 @@ import androidx.constraintlayout.compose.Dimension
 import com.example.fakeamazon.R
 import com.example.fakeamazon.features.home.model.DisplayableItem
 import com.example.fakeamazon.features.home.model.toDisplayableItem
-import com.example.fakeamazon.model.Item
+import com.example.fakeamazon.shared.model.Item
 import kotlin.math.roundToInt
 
 val DISCOUNT_RED: Color = Color(0xFFC60B37)

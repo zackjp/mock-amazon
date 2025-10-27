@@ -1,8 +1,8 @@
 package com.example.fakeamazon.features.product
 
-import com.example.fakeamazon.base.TestDispatcherProvider
+import com.example.fakeamazon.TestDispatcherProvider
 import com.example.fakeamazon.data.ProductStaticDataSource
-import com.example.fakeamazon.model.ProductInfo
+import com.example.fakeamazon.shared.model.ProductInfo
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe

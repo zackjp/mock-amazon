@@ -1,4 +1,4 @@
-package com.example.fakeamazon.base.ui
+package com.example.fakeamazon.shared.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

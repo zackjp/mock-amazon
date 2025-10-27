@@ -1,7 +1,7 @@
 package com.example.fakeamazon.data
 
 import com.example.fakeamazon.R
-import com.example.fakeamazon.model.ProductInfo
+import com.example.fakeamazon.shared.model.ProductInfo
 import javax.inject.Inject
 import javax.inject.Singleton
 

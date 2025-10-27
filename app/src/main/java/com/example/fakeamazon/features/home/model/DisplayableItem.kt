@@ -1,7 +1,7 @@
 package com.example.fakeamazon.features.home.model
 
 import androidx.annotation.DrawableRes
-import com.example.fakeamazon.model.Item
+import com.example.fakeamazon.shared.model.Item
 
 data class DisplayableItem(
     @DrawableRes val imageId: Int,

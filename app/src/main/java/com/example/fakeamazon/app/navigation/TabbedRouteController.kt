@@ -12,9 +12,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.savedstate.SavedState
 import androidx.savedstate.read
-import com.example.fakeamazon.base.TopRoute
-import com.example.fakeamazon.base.findTopRoute
-import com.example.fakeamazon.base.nearestTopRoute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

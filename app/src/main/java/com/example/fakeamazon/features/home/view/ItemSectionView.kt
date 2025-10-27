@@ -29,10 +29,10 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.fakeamazon.R
-import com.example.fakeamazon.base.ignoreParentPadding
+import com.example.fakeamazon.shared.ignoreParentPadding
 import com.example.fakeamazon.features.home.component.ItemDisplayWindow
-import com.example.fakeamazon.model.ItemGroup
-import com.example.fakeamazon.model.ItemSection
+import com.example.fakeamazon.shared.model.ItemGroup
+import com.example.fakeamazon.shared.model.ItemSection
 import com.example.fakeamazon.ui.theme.AmazonOutlineLight
 
 @Composable

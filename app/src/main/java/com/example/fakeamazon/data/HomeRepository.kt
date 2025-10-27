@@ -2,12 +2,12 @@ package com.example.fakeamazon.data
 
 import androidx.compose.ui.graphics.Color
 import com.example.fakeamazon.R
-import com.example.fakeamazon.base.DispatcherProvider
-import com.example.fakeamazon.model.Item
-import com.example.fakeamazon.model.ItemGroup
-import com.example.fakeamazon.model.ItemSection
-import com.example.fakeamazon.model.ProductInfo
-import com.example.fakeamazon.model.TopHomeGroup
+import com.example.fakeamazon.shared.DispatcherProvider
+import com.example.fakeamazon.shared.model.Item
+import com.example.fakeamazon.shared.model.ItemGroup
+import com.example.fakeamazon.shared.model.ItemSection
+import com.example.fakeamazon.shared.model.ProductInfo
+import com.example.fakeamazon.shared.model.TopHomeGroup
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

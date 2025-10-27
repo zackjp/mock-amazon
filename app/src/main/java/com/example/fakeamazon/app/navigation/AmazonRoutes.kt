@@ -1,4 +1,4 @@
-package com.example.fakeamazon.base
+package com.example.fakeamazon.app.navigation
 
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination

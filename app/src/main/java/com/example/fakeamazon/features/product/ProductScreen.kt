@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
-import com.example.fakeamazon.app.AMAZON_BEIGE
-import com.example.fakeamazon.model.ProductInfo
+import com.example.fakeamazon.app.ui.AMAZON_BEIGE
+import com.example.fakeamazon.shared.model.ProductInfo
 
 @Composable
 fun ProductScreenRoot(

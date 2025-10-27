@@ -1,7 +1,7 @@
-package com.example.fakeamazon.di
+package com.example.fakeamazon.app.di
 
-import com.example.fakeamazon.base.DefaultDispatcherProvider
-import com.example.fakeamazon.base.DispatcherProvider
+import com.example.fakeamazon.shared.DefaultDispatcherProvider
+import com.example.fakeamazon.shared.DispatcherProvider
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

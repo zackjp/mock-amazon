@@ -3,10 +3,10 @@ package com.example.fakeamazon.features.home
 import androidx.compose.ui.graphics.Color
 import com.example.fakeamazon.R
 import com.example.fakeamazon.data.HomeRepository
-import com.example.fakeamazon.model.Item
-import com.example.fakeamazon.model.ItemGroup
-import com.example.fakeamazon.model.ItemSection
-import com.example.fakeamazon.model.TopHomeGroup
+import com.example.fakeamazon.shared.model.Item
+import com.example.fakeamazon.shared.model.ItemGroup
+import com.example.fakeamazon.shared.model.ItemSection
+import com.example.fakeamazon.shared.model.TopHomeGroup
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk

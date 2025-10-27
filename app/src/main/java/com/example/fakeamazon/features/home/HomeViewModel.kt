@@ -3,8 +3,8 @@ package com.example.fakeamazon.features.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fakeamazon.data.HomeRepository
-import com.example.fakeamazon.model.ItemSection
-import com.example.fakeamazon.model.TopHomeGroup
+import com.example.fakeamazon.shared.model.ItemSection
+import com.example.fakeamazon.shared.model.TopHomeGroup
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
