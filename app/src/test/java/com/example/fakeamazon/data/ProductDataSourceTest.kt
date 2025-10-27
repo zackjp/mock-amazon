@@ -9,14 +9,14 @@ class ProductDataSourceTest {
 
     @Test
     fun getProductById_WithValidProductId_ReturnsInfo() {
-        val dataSource = ProductDataSource()
+        val dataSource = ProductStaticDataSource()
 
         dataSource.getProductById(R.drawable.item_backpack) shouldNotBeNull {}
     }
 
     @Test
     fun getProductById_WithInvalidProductId_ReturnsNull() {
-        val dataSource = ProductDataSource()
+        val dataSource = ProductStaticDataSource()
 
         dataSource.getProductById(0) shouldBe null
     }

@@ -3,7 +3,7 @@ package com.example.fakeamazon.features.product
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fakeamazon.base.DispatcherProvider
-import com.example.fakeamazon.data.ProductDataSource
+import com.example.fakeamazon.data.ProductStaticDataSource
 import com.example.fakeamazon.model.ProductInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductViewModel @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
-    private val productDataSource: ProductDataSource,
+    private val productStaticDataSource: ProductStaticDataSource,
 ) : ViewModel() {
 
     private val _productInfo = MutableStateFlow<ProductInfo?>(null)
@@ -24,7 +24,7 @@ class ProductViewModel @Inject constructor(
     fun load(productId: Int) {
         viewModelScope.async(dispatcherProvider.default) {
             delay(500)
-            _productInfo.value = productDataSource.getProductById(productId)
+            _productInfo.value = productStaticDataSource.getProductById(productId)
         }
     }
 

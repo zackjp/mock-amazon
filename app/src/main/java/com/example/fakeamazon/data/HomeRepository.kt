@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @Singleton
 class HomeRepository @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
-    private val productDataSource: ProductDataSource,
+    private val productStaticDataSource: ProductStaticDataSource,
 ) {
 
     private val mockTopHomeGroups: List<TopHomeGroup> = listOf(
@@ -109,7 +109,7 @@ class HomeRepository @Inject constructor(
         }
 
     private fun getProductAsItem(id: Int, discount: Float? = null): Item =
-        productDataSource.getProductById(id)!!.toItem(discount)
+        productStaticDataSource.getProductById(id)!!.toItem(discount)
 
     private fun ProductInfo.toItem(discount: Float?): Item =
         Item(

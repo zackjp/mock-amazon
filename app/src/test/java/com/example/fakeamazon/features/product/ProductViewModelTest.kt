@@ -1,7 +1,7 @@
 package com.example.fakeamazon.features.product
 
 import com.example.fakeamazon.base.TestDispatcherProvider
-import com.example.fakeamazon.data.ProductDataSource
+import com.example.fakeamazon.data.ProductStaticDataSource
 import com.example.fakeamazon.model.ProductInfo
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
@@ -30,11 +30,11 @@ class ProductViewModelTest {
 
     @BeforeEach
     fun setUp() {
-        val productDataSource = mockk<ProductDataSource>()
-        every { productDataSource.getProductById(VALID_PRODUCT_ID) } returns mockk<ProductInfo>()
-        every { productDataSource.getProductById(INVALID_PRODUCT_ID) } returns null
+        val productStaticDataSource = mockk<ProductStaticDataSource>()
+        every { productStaticDataSource.getProductById(VALID_PRODUCT_ID) } returns mockk<ProductInfo>()
+        every { productStaticDataSource.getProductById(INVALID_PRODUCT_ID) } returns null
 
-        viewModel = ProductViewModel(testDispatcherProvider, productDataSource)
+        viewModel = ProductViewModel(testDispatcherProvider, productStaticDataSource)
     }
 
     @Test
