@@ -24,11 +24,11 @@ class HomeRepository @Inject constructor(
             "More top\npicks for you",
             Color(0xFF3A6DB1),
             listOf(
-                getProductAsItem(R.drawable.item_headphones, false),
-                getProductAsItem(R.drawable.item_backpack, false),
-                getProductAsItem(R.drawable.item_matcha, false),
-                getProductAsItem(R.drawable.item_handsoap, false),
-                getProductAsItem(R.drawable.item_detergent, false),
+                getProductAsItem(R.drawable.item_sneaker_allbirds_treeglider),
+                getProductAsItem(R.drawable.item_sneaker_adidas_ubounce),
+                getProductAsItem(R.drawable.item_sneaker_allbirds_treedasher2),
+                getProductAsItem(R.drawable.item_sneaker_underarmour_chargedassert9),
+                getProductAsItem(R.drawable.item_sneaker_adidas_swiftrun1),
             )
         ),
         TopHomeGroup(

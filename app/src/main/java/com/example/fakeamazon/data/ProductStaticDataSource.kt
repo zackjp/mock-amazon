@@ -161,6 +161,61 @@ class ProductStaticDataSource @Inject constructor() {
             imageId = R.drawable.item_soda,
         ),
         ProductInfo(
+            // https://www.amazon.com/adidas-Swift-Sneaker-White-Black/dp/B0BHPVXZGX
+            id = R.drawable.item_sneaker_adidas_swiftrun1,
+            storeName = "adidas",
+            storeInitials = "a",
+            title = "adidas Men's Swift Run 1.0 Sneaker",
+            productRating = 4.4f,
+            imageId = R.drawable.item_sneaker_adidas_swiftrun1,
+        ),
+        ProductInfo(
+            // https://www.amazon.com/adidas-Ubounce-Alphaskin-Sneaker-Black/dp/B0BZ5BV1L1
+            id = R.drawable.item_sneaker_adidas_ubounce,
+            storeName = "adidas",
+            storeInitials = "a",
+            title = "adidas Men's Ubounce Dna Running Shoes",
+            productRating = 4.6f,
+            imageId = R.drawable.item_sneaker_adidas_ubounce,
+        ),
+        ProductInfo(
+            // https://www.amazon.com/Allbirds-Tree-Dasher-2/dp/B0FRNP3GBM
+            id = R.drawable.item_sneaker_allbirds_treedasher2,
+            storeName = "Allbirds",
+            storeInitials = "A",
+            title = "Allbirds Men's Tree Dasher 2, Active Running & Walking Sneakers",
+            productRating = 4.2f,
+            imageId = R.drawable.item_sneaker_allbirds_treedasher2,
+        ),
+        ProductInfo(
+            // https://www.amazon.com/Allbirds-Tree-Glider/dp/B0DQB1WWRS
+            id = R.drawable.item_sneaker_allbirds_treeglider,
+            storeName = "Allbirds",
+            storeInitials = "A",
+            title = "Allbirds Men's Tree Glider, Everyday Active Sneakers",
+            productRating = 4.4f,
+            imageId = R.drawable.item_sneaker_allbirds_treeglider,
+        ),
+        ProductInfo(
+            // https://www.amazon.com/Under-Armour-Mens-Charged-Assert-9/dp/B08CFTM283
+            id = R.drawable.item_sneaker_underarmour_chargedassert9,
+            storeName = "Under Armour",
+            storeInitials = "UA",
+            title = "Under Armour Men's Charged Assert 9 Running Shoe",
+            productRating = 4.6f,
+            imageId = R.drawable.item_sneaker_underarmour_chargedassert9,
+        ),
+        ProductInfo(
+            // https://www.amazon.com/Feethit-Slipon/dp/B08HLSLV6B
+            id = R.drawable.item_sneaker_feethit_slipon,
+            storeName = "Feethit",
+            storeInitials = "F",
+            title = "Feethit Mens Slip On Running Shoes Breathable Lightweight Comfortable Fashion Non Slip Sneakers for Men\n",
+            productRating = 4.1f,
+            imageId = R.drawable.item_sneaker_feethit_slipon,
+            discount = .2f,
+        ),
+        ProductInfo(
             // https://www.amazon.com/Brita-Standard-Replacement-Pitchers-Dispensers/dp/B00008IHL8
             id = R.drawable.item_water_filter,
             storeName = "Brita",
