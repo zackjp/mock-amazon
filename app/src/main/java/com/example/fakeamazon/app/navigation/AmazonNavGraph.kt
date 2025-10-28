@@ -14,10 +14,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
-import com.example.fakeamazon.shared.ui.ComingSoonScreen
-import com.example.fakeamazon.features.cart.CartScreen
+import com.example.fakeamazon.features.cart.CartScreenRoot
 import com.example.fakeamazon.features.home.HomeScreenRoot
 import com.example.fakeamazon.features.product.ProductScreenRoot
+import com.example.fakeamazon.shared.ui.ComingSoonScreen
 
 
 @Composable
@@ -73,7 +73,7 @@ fun AmazonNavGraph(
         ) {
             composable<CartStart> {
                 backHandlerForTabs()
-                CartScreen(
+                CartScreenRoot(
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize(),
