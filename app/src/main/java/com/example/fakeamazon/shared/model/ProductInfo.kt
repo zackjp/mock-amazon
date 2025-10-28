@@ -10,4 +10,5 @@ data class ProductInfo(
     val title: String,
     val productRating: Float,
     @param:DrawableRes val imageId: Int,
+    val discount: Float? = null,
 )

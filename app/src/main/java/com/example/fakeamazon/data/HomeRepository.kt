@@ -24,22 +24,22 @@ class HomeRepository @Inject constructor(
             "More top\npicks for you",
             Color(0xFF3A6DB1),
             listOf(
-                getProductAsItem(R.drawable.item_headphones),
-                getProductAsItem(R.drawable.item_backpack),
-                getProductAsItem(R.drawable.item_matcha),
-                getProductAsItem(R.drawable.item_handsoap),
-                getProductAsItem(R.drawable.item_detergent),
+                getProductAsItem(R.drawable.item_headphones, false),
+                getProductAsItem(R.drawable.item_backpack, false),
+                getProductAsItem(R.drawable.item_matcha, false),
+                getProductAsItem(R.drawable.item_handsoap, false),
+                getProductAsItem(R.drawable.item_detergent, false),
             )
         ),
         TopHomeGroup(
             "Kitchen\ncorner",
             Color(0xFF6AD17D),
             listOf(
-                getProductAsItem(R.drawable.item_kitchen_sponge),
-                getProductAsItem(R.drawable.item_matcha),
-                getProductAsItem(R.drawable.item_sandwich_bags),
-                getProductAsItem(R.drawable.item_dishwash_detergent),
-                getProductAsItem(R.drawable.item_handsoap),
+                getProductAsItem(R.drawable.item_kitchen_sponge, false),
+                getProductAsItem(R.drawable.item_matcha, false),
+                getProductAsItem(R.drawable.item_sandwich_bags, false),
+                getProductAsItem(R.drawable.item_dishwash_detergent, false),
+                getProductAsItem(R.drawable.item_handsoap, false),
             )
         ),
         TopHomeGroup(
@@ -72,17 +72,17 @@ class HomeRepository @Inject constructor(
                     listOf(
                         ItemGroup(
                             "Deals for you",
-                            getProductAsItem(R.drawable.item_backpack, 0.17f),
-                            getProductAsItem(R.drawable.item_headphones, 0.2f),
-                            getProductAsItem(R.drawable.item_detergent, 0.12f),
-                            getProductAsItem(R.drawable.item_dishwash_detergent, 0.13f),
+                            getProductAsItem(R.drawable.item_backpack),
+                            getProductAsItem(R.drawable.item_headphones),
+                            getProductAsItem(R.drawable.item_detergent),
+                            getProductAsItem(R.drawable.item_dishwash_detergent),
                         ),
                         ItemGroup(
                             "Inspired by your recent history",
-                            getProductAsItem(R.drawable.item_handsoap, 0.11f),
-                            getProductAsItem(R.drawable.item_sandwich_bags, 0.07f),
-                            getProductAsItem(R.drawable.item_matcha, 0.10f),
-                            getProductAsItem(R.drawable.item_kitchen_sponge, 0.09f),
+                            getProductAsItem(R.drawable.item_handsoap),
+                            getProductAsItem(R.drawable.item_sandwich_bags),
+                            getProductAsItem(R.drawable.item_matcha),
+                            getProductAsItem(R.drawable.item_kitchen_sponge),
                         )
                     )
                 ),
@@ -108,13 +108,13 @@ class HomeRepository @Inject constructor(
             )
         }
 
-    private fun getProductAsItem(id: Int, discount: Float? = null): Item =
-        productStaticDataSource.getProductById(id)!!.toItem(discount)
+    private fun getProductAsItem(id: Int, showDiscount: Boolean = true): Item =
+        productStaticDataSource.getProductById(id)!!.toItem(showDiscount)
 
-    private fun ProductInfo.toItem(discount: Float?): Item =
+    private fun ProductInfo.toItem(showDiscount: Boolean): Item =
         Item(
             id = id,
             imageRes = imageId,
-            discount = discount,
+            discount = if (showDiscount) discount else null,
         )
 }

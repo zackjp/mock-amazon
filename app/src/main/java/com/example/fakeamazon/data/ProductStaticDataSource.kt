@@ -16,6 +16,7 @@ class ProductStaticDataSource @Inject constructor() {
             title = "Bellroy Transit Workpack Pro (22L work bag/commuter backpack, fits 16” laptops; organization for travel and commutes)- Stone",
             productRating = 3.9f,
             imageId = R.drawable.item_backpack,
+            discount = 0.17f,
         ),
         ProductInfo(
             // https://www.amazon.com/Cleanbear-Synthetic-Rubber-Gloves-Medium/dp/B01HJAKV3O
@@ -43,6 +44,7 @@ class ProductStaticDataSource @Inject constructor() {
             title = "9 Elements Natural Laundry Detergent Liquid Soap, Lavender Scent, Vinegar Powered, 92 Fl Oz, 1 Count, Liquid Laundry Detergent, Laundry Soap",
             productRating = 4.6f,
             imageId = R.drawable.item_detergent,
+            discount = 0.12f,
         ),
         ProductInfo(
             // https://www.amazon.com/Cascade-Actionpacs-Dishwasher-Detergent-Lemon/dp/B07G28CM6P
@@ -52,6 +54,7 @@ class ProductStaticDataSource @Inject constructor() {
             title = "Cascade Complete Dishwasher Pods, Dishwasher Detergent, Lemon Scent ActionPacs, Cleaning Supplies, 78 Count",
             productRating = 4.8f,
             imageId = R.drawable.item_dishwash_detergent,
+            discount = 0.13f,
         ),
         ProductInfo(
             // https://www.amazon.com/CATAN-Classic-Strategy-Players-Playtime/dp/B0DYK1ZH2D
@@ -106,6 +109,7 @@ class ProductStaticDataSource @Inject constructor() {
             title = "Method Gel Hand Soap, Vetiver + Amber, Reusable Black Aluminum Bottle, Biodegradable Formula, 12 oz (Pack of 3)",
             productRating = 4.5f,
             imageId = R.drawable.item_handsoap,
+            discount = 0.11f,
         ),
         ProductInfo(
             // https://www.amazon.com/Bose-QuietComfort-Cancelling-Headphones-Bluetooth/dp/B0CCZ26B5V
@@ -115,6 +119,7 @@ class ProductStaticDataSource @Inject constructor() {
             title = "Bose QuietComfort Bluetooth Headphones, Wireless Headphones with Active Over Ear Noise Cancelling and Mic, Deep Bass, Up to 24 Hours of Playtime, Black",
             productRating = 4.5f,
             imageId = R.drawable.item_headphones,
+            discount = 0.2f,
         ),
         ProductInfo(
             // https://www.amazon.com/Scotch-Brite-Heavy-Scrub-Sponges-Strong/dp/B0043P0E2M
@@ -124,6 +129,7 @@ class ProductStaticDataSource @Inject constructor() {
             title = "Scotch-Brite Heavy Duty Scrub Sponge, 9 Kitchen Sponges Designed for Tough Messes in the Kitchen that Last 3X Longer*, Best for Cast Iron Skillets and Outdoor Grills, Flexible, Durable, and Strong",
             productRating = 4.8f,
             imageId = R.drawable.item_kitchen_sponge,
+            discount = 0.09f,
         ),
         ProductInfo(
             // https://www.amazon.com/Jade-Leaf-Certified-Authentic-Antioxidants/dp/B00PFDH0K0
@@ -133,6 +139,7 @@ class ProductStaticDataSource @Inject constructor() {
             title = "Jade Leaf Matcha Organic Culinary Grade Matcha Powder - Premium Second Harvest - Authentic Japanese Origin (3.53 Ounce Resealable Pouch)",
             productRating = 4.6f,
             imageId = R.drawable.item_matcha,
+            discount = 0.10f,
         ),
         ProductInfo(
             // https://www.amazon.com/Amazon-Basics-Reclosable-Sandwich-Storage/dp/B0CH929RS5
@@ -142,6 +149,7 @@ class ProductStaticDataSource @Inject constructor() {
             title = "Amazon Basics Reclosable Sandwich Double Zipper Storage Bags, 100 Count, Pack of 1",
             productRating = 4.7f,
             imageId = R.drawable.item_sandwich_bags,
+            discount = 0.07f,
         ),
         ProductInfo(
             // https://www.amazon.com/Zevia-Zero-Sugar-Soda-Ounce/dp/B0D6SM9SVM
