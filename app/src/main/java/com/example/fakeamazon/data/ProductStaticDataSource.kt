@@ -161,6 +161,69 @@ class ProductStaticDataSource @Inject constructor() {
             imageId = R.drawable.item_soda,
         ),
         ProductInfo(
+            // https://www.amazon.com/Amazon-Fresh-Pretzel-Nugget-Peanut/dp/B0BDTBBHD1
+            id = R.drawable.item_snack_amazon_pbpretzels,
+            storeName = "Amazon Grocery",
+            storeInitials = "AG",
+            title = "Amazon Grocery, Peanut Butter Filled Pretzels, 24 Oz (Previously Amazon Fresh, Packaging May Vary)",
+            productRating = 4.5f,
+            imageId = R.drawable.item_snack_amazon_pbpretzels,
+        ),
+        ProductInfo(
+            // https://www.amazon.com/Blue-Diamond-Almonds-Low-Sodium/dp/B07CTWYR92
+            id = R.drawable.item_snack_bluediamond_almonds,
+            storeName = "Blue Diamond",
+            storeInitials = "BD",
+            title = "Blue Diamond Almonds Low Sodium Lightly Salted Snack Nuts, 40 Oz Resealable Bag (Pack of 1)",
+            productRating = 4.7f,
+            imageId = R.drawable.item_snack_bluediamond_almonds,
+        ),
+        ProductInfo(
+            // https://www.amazon.com/Dots-Homestyle-Pretzels-16-Ounce/dp/B0824B36NW
+            id = R.drawable.item_snack_dots_originalpretzels,
+            storeName = "Dot's Homestyle Pretzels",
+            storeInitials = "DHP",
+            title = "Dot's Pretzels Original Seasoned Pretzel Twist Snack, 16oz Grocery Sized Bag",
+            productRating = 4.7f,
+            imageId = R.drawable.item_snack_dots_originalpretzels,
+        ),
+        ProductInfo(
+            // https://www.amazon.com/Larabar-Gluten-Peanut-Butter-Chocolate/dp/B003ZMXYMG
+            id = R.drawable.item_snack_larabar_pbchocolatechip,
+            storeName = "LÄRABAR",
+            storeInitials = "L",
+            title = "Larabar Peanut Butter Chocolate Chip, Gluten Free Fruit & Nut Bar, 16 Ct",
+            productRating = 4.6f,
+            imageId = R.drawable.item_snack_larabar_pbchocolatechip,
+        ),
+        ProductInfo(
+            // https://www.amazon.com/Pop-Secret-Popcorn-Theater-Butter/dp/B07BMGW2WX
+            id = R.drawable.item_snack_popsecret_popcorn,
+            storeName = "Pop Secret",
+            storeInitials = "PS",
+            title = "Pop Secret Microwave Popcorn, Movie Theater Butter Flavor, 1.75 Oz Snack Bags, (Pack of 12)",
+            productRating = 4.6f,
+            imageId = R.drawable.item_snack_popsecret_popcorn,
+        ),
+        ProductInfo(
+            // https://www.amazon.com/Sahale-Snacks-Glazed-Mix-Nut-Blend/dp/B07Z9SBTTC
+            id = R.drawable.item_snack_sahale_mixednuts,
+            storeName = "Sahale Snacks",
+            storeInitials = "S",
+            title = "Sahale Snacks Glazed Mix Nut Blend Variety Pack, 1.5 Oz Grab & Go Bags (12 Total Packs) - Four Different Dry-Roasted Deluxe Mixed Nuts Blends Included - Non-GMO Kosher & Certified Gluten-Free Snacks",
+            productRating = 4.6f,
+            imageId = R.drawable.item_snack_sahale_mixednuts,
+        ),
+        ProductInfo(
+            // https://www.amazon.com/Wonderful-Pistachios-No-Shells-Calorie/dp/B07TCW23N9
+            id = R.drawable.item_snack_wonderful_pistachios,
+            storeName = "Wonderful Pistachios",
+            storeInitials = "WP",
+            title = "Wonderful Pistachios No Shells, Roasted & Salted Nuts, 0.75 Ounce Bag (Pack of 14), Protein Snacks, Vegan Snacks, On-the-Go, Individual Snacks for Adults, Stocking Stuffers",
+            productRating = 4.7f,
+            imageId = R.drawable.item_snack_wonderful_pistachios,
+        ),
+        ProductInfo(
             // https://www.amazon.com/adidas-Swift-Sneaker-White-Black/dp/B0BHPVXZGX
             id = R.drawable.item_sneaker_adidas_swiftrun1,
             storeName = "adidas",

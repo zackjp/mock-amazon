@@ -32,14 +32,14 @@ class HomeRepository @Inject constructor(
             )
         ),
         TopHomeGroup(
-            "Kitchen\ncorner",
+            "Snack time\nfor everyone",
             Color(0xFF6AD17D),
             listOf(
-                getProductAsItem(R.drawable.item_kitchen_sponge, false),
-                getProductAsItem(R.drawable.item_matcha, false),
-                getProductAsItem(R.drawable.item_sandwich_bags, false),
-                getProductAsItem(R.drawable.item_dishwash_detergent, false),
-                getProductAsItem(R.drawable.item_handsoap, false),
+                getProductAsItem(R.drawable.item_snack_larabar_pbchocolatechip),
+                getProductAsItem(R.drawable.item_snack_wonderful_pistachios),
+                getProductAsItem(R.drawable.item_snack_bluediamond_almonds),
+                getProductAsItem(R.drawable.item_snack_dots_originalpretzels),
+                getProductAsItem(R.drawable.item_snack_popsecret_popcorn),
             )
         ),
         TopHomeGroup(
