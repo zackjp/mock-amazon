@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -54,43 +56,49 @@ fun CartScreenRoot(
         cartViewModel.load()
     }
 
-    val cartItemState = cartViewModel.cartItem.collectAsStateWithLifecycle()
+    val cartItemsState = cartViewModel.cartItems.collectAsStateWithLifecycle()
 
     CartScreen(
         modifier = modifier,
-        cartItem = cartItemState.value,
+        cartItems = cartItemsState.value,
         onViewProduct = onViewProduct,
     )
 }
 
 @Composable
 private fun CartScreen(
-    cartItem: CartItem?,
+    cartItems: List<CartItem>,
     modifier: Modifier = Modifier,
     onViewProduct: (Int) -> Unit = {},
 ) {
-    if (cartItem == null) {
+    if (cartItems.isEmpty()) {
         Surface(modifier = modifier) {}
     } else {
         Surface(modifier = modifier) {
-            Column(
+            LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
+                item {
+                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
 
-                CartListHeader(
-                    modifier = Modifier
-                        .padding(horizontal = dimensionResource(R.dimen.main_content_padding_horizontal))
-                        .fillMaxWidth()
-                )
+                    CartListHeader(
+                        modifier = Modifier
+                            .padding(horizontal = dimensionResource(R.dimen.main_content_padding_horizontal))
+                            .fillMaxWidth()
+                    )
+                }
 
-                CartItem(
-                    cartItem = cartItem,
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .fillMaxWidth(),
-                    onViewProduct = onViewProduct,
-                )
+                items(cartItems) { cartItem ->
+                    CartItem(
+                        cartItem = cartItem,
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .fillMaxWidth(),
+                        onViewProduct = onViewProduct,
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }

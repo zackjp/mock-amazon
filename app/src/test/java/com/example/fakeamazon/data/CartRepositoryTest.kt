@@ -3,8 +3,6 @@ package com.example.fakeamazon.data
 import com.example.fakeamazon.shared.model.CartItem
 import com.example.fakeamazon.shared.model.ProductInfo
 import com.example.fakeamazon.shared.model.toCartItem
-import io.kotest.matchers.nulls.beNull
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -26,7 +24,7 @@ class CartRepositoryTest {
     }
 
     @Test
-    fun getCartItem_HavingMultipleCartItemsFromApi_ReturnsLastItem() = runTest {
+    fun getCartItems_HavingMultipleCartItemsFromApi_ReturnsItems() = runTest {
         val cartItem1 = fakeCartItem(123)
         val cartItem2 = fakeCartItem(456)
         coEvery { cartFakeApiDataSource.getCartItems() } returns listOf(
@@ -34,14 +32,14 @@ class CartRepositoryTest {
             cartItem2,
         )
 
-        repo.getCartItem() shouldBe cartItem2
+        repo.getCartItems() shouldBe listOf(cartItem1, cartItem2)
     }
 
     @Test
-    fun getCartItem_HavingNoCartItemsFromApi_ReturnsNull() = runTest {
+    fun getCartItems_HavingNoCartItemsFromApi_ReturnsEmptyList() = runTest {
         coEvery { cartFakeApiDataSource.getCartItems() } returns emptyList()
 
-        repo.getCartItem() should beNull()
+        repo.getCartItems() shouldBe emptyList()
     }
 
     @Test

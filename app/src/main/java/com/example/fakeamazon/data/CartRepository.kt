@@ -8,8 +8,8 @@ class CartRepository @Inject constructor(
     private val cartFakeApiDataSource: CartFakeApiDataSource,
 ) {
 
-    suspend fun getCartItem(): CartItem? {
-        return cartFakeApiDataSource.getCartItems().lastOrNull()
+    suspend fun getCartItems(): List<CartItem> {
+        return cartFakeApiDataSource.getCartItems()
     }
 
     suspend fun addToCart(productId: Int) {

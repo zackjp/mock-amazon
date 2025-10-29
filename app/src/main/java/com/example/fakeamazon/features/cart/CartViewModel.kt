@@ -17,12 +17,12 @@ class CartViewModel @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
-    private val _cartItem = MutableStateFlow<CartItem?>(null)
-    val cartItem = _cartItem.asStateFlow()
+    private val _cartItem = MutableStateFlow<List<CartItem>>(emptyList())
+    val cartItems = _cartItem.asStateFlow()
 
     fun load() {
         viewModelScope.async(dispatcherProvider.default) {
-            _cartItem.value = cartRepository.getCartItem()
+            _cartItem.value = cartRepository.getCartItems()
         }
     }
 
