@@ -45,6 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
 import com.example.fakeamazon.app.ui.AMAZON_BEIGE
 import com.example.fakeamazon.shared.model.ProductInfo
+import com.example.fakeamazon.shared.ui.PrimaryCta
 import com.example.fakeamazon.ui.theme.AmazonOrange
 import kotlin.math.floor
 
@@ -113,15 +114,11 @@ private fun ProductScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Button(
-                        onClick = { onAddToCart(productInfo.id) },
+                    PrimaryCta(
                         modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Text(
-                            style = MaterialTheme.typography.labelLarge,
-                            text = stringResource(R.string.add_to_cart),
-                        )
-                    }
+                        onClick = { onAddToCart(productInfo.id) },
+                        text = stringResource(R.string.add_to_cart),
+                    )
                 }
             }
         }
