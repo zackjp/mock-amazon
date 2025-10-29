@@ -11,25 +11,25 @@ import org.junit.jupiter.api.Test
 
 class CartFakeApiDataSourceTest {
 
-    private val productStaticDataSource = mockk<ProductStaticDataSource>()
+    private val productInMemoryDb = mockk<ProductInMemoryDb>()
     private lateinit var dataSource: CartFakeApiDataSource
 
     @BeforeEach
     fun setUp() {
-        dataSource = CartFakeApiDataSource(productStaticDataSource)
+        dataSource = CartFakeApiDataSource(productInMemoryDb)
     }
 
     @Test
     fun addToCart_WithValidProductId_ReturnsTrue() = runTest {
         val productInfo = fakeProductInfo(123)
-        every { productStaticDataSource.getProductById(productInfo.id) } returns productInfo
+        every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
 
         dataSource.addToCart(productInfo.id) shouldBe true
     }
 
     @Test
     fun addToCart_WithInvalidProductId_DoesNotReturnTrue() = runTest {
-        every { productStaticDataSource.getProductById(0) } returns null
+        every { productInMemoryDb.getProductById(0) } returns null
 
         dataSource.addToCart(0) shouldBe false
     }
@@ -42,7 +42,7 @@ class CartFakeApiDataSourceTest {
             fakeProductInfo(789),
         )
         products.forEach {
-            every { productStaticDataSource.getProductById(it.id) } returns it
+            every { productInMemoryDb.getProductById(it.id) } returns it
         }
 
         dataSource.addToCart(products[0].id)
@@ -57,11 +57,11 @@ class CartFakeApiDataSourceTest {
     fun getCartItems_WithValidProductIdThatBecameInvalidProductId_ReturnsNothing() = runTest {
         val productInfo = fakeProductInfo(123)
 
-        every { productStaticDataSource.getProductById(productInfo.id) } returns productInfo
+        every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
         dataSource.addToCart(productInfo.id)
         dataSource.getCartItems() shouldBe listOf(productInfo.toCartItem())
 
-        every { productStaticDataSource.getProductById(productInfo.id) } returns null
+        every { productInMemoryDb.getProductById(productInfo.id) } returns null
         dataSource.getCartItems() shouldBe emptyList()
     }
 

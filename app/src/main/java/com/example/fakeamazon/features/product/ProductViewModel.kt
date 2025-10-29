@@ -3,7 +3,7 @@ package com.example.fakeamazon.features.product
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fakeamazon.data.CartRepository
-import com.example.fakeamazon.data.ProductStaticDataSource
+import com.example.fakeamazon.data.ProductInMemoryDb
 import com.example.fakeamazon.shared.DispatcherProvider
 import com.example.fakeamazon.shared.model.ProductInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +17,7 @@ import javax.inject.Inject
 class ProductViewModel @Inject constructor(
     private val cartRepository: CartRepository,
     private val dispatcherProvider: DispatcherProvider,
-    private val productStaticDataSource: ProductStaticDataSource,
+    private val productInMemoryDb: ProductInMemoryDb,
 ) : ViewModel() {
 
     private val _productInfo = MutableStateFlow<ProductInfo?>(null)
@@ -26,7 +26,7 @@ class ProductViewModel @Inject constructor(
     fun load(productId: Int) {
         viewModelScope.async(dispatcherProvider.default) {
             delay(500)
-            _productInfo.value = productStaticDataSource.getProductById(productId)
+            _productInfo.value = productInMemoryDb.getProductById(productId)
         }
     }
 

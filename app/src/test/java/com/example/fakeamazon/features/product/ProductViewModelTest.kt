@@ -2,7 +2,7 @@ package com.example.fakeamazon.features.product
 
 import com.example.fakeamazon.TestDispatcherProvider
 import com.example.fakeamazon.data.CartRepository
-import com.example.fakeamazon.data.ProductStaticDataSource
+import com.example.fakeamazon.data.ProductInMemoryDb
 import com.example.fakeamazon.shared.model.ProductInfo
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -36,14 +36,14 @@ class ProductViewModelTest {
     @BeforeEach
     fun setUp() {
         coEvery { cartRepository.addToCart(any()) } just Runs
-        val productStaticDataSource = mockk<ProductStaticDataSource>()
-        every { productStaticDataSource.getProductById(VALID_PRODUCT_ID) } returns mockk<ProductInfo>()
-        every { productStaticDataSource.getProductById(INVALID_PRODUCT_ID) } returns null
+        val productInMemoryDb = mockk<ProductInMemoryDb>()
+        every { productInMemoryDb.getProductById(VALID_PRODUCT_ID) } returns mockk<ProductInfo>()
+        every { productInMemoryDb.getProductById(INVALID_PRODUCT_ID) } returns null
 
         viewModel = ProductViewModel(
             cartRepository = cartRepository,
             dispatcherProvider = testDispatcherProvider,
-            productStaticDataSource = productStaticDataSource,
+            productInMemoryDb = productInMemoryDb,
         )
     }
 

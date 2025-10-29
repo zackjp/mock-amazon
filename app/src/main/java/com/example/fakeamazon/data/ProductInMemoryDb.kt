@@ -6,7 +6,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ProductStaticDataSource @Inject constructor() {
+class ProductInMemoryDb @Inject constructor() {
     private val products = listOf(
         ProductInfo(
             // https://www.amazon.com/Bellroy-Workpack-commuter-backpack-organization/dp/B0DK2ML5X3

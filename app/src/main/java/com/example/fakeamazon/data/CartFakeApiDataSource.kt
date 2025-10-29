@@ -8,7 +8,7 @@ import javax.inject.Singleton
 
 @Singleton
 class CartFakeApiDataSource @Inject constructor(
-    private val productStaticDataSource: ProductStaticDataSource,
+    private val productInMemoryDb: ProductInMemoryDb,
 ) {
 
     val cartProductIds = mutableListOf<Int>()
@@ -16,7 +16,7 @@ class CartFakeApiDataSource @Inject constructor(
     suspend fun addToCart(productId: Int): Boolean {
         delay(500)
 
-        val productInfo = productStaticDataSource.getProductById(productId)
+        val productInfo = productInMemoryDb.getProductById(productId)
         return productInfo != null && cartProductIds.add(productId)
     }
 
@@ -24,7 +24,7 @@ class CartFakeApiDataSource @Inject constructor(
         delay(300)
 
         return cartProductIds
-            .map { productStaticDataSource.getProductById(it) }
+            .map { productInMemoryDb.getProductById(it) }
             .filter { it != null }
             .map { it!!.toCartItem() }
     }
