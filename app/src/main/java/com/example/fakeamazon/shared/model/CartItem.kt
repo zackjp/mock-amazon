@@ -13,3 +13,14 @@ data class CartItem(
     val estDeliveryDate: LocalDate,
     val isInStock: Boolean,
 )
+
+fun ProductInfo.toCartItem(): CartItem =
+    CartItem(
+        id = id,
+        imageId = imageId,
+        title = title,
+        priceUSD = 19.99f,
+        deliveryCostUSD = 0f,
+        estDeliveryDate = LocalDate.now().plusDays(2),
+        isInStock = true,
+    )

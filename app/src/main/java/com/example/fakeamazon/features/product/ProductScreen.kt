@@ -19,6 +19,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.appendInlineContent
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -31,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
@@ -60,6 +62,7 @@ fun ProductScreenRoot(
 
     ProductScreen(
         modifier = modifier,
+        onAddToCart = { productId -> viewModel.addToCart(productId) },
         productInfo = productInfo,
     )
 }
@@ -67,6 +70,7 @@ fun ProductScreenRoot(
 @Composable
 private fun ProductScreen(
     modifier: Modifier = Modifier,
+    onAddToCart: (productId: Int) -> Unit = {},
     productInfo: ProductInfo?,
 ) {
     if (productInfo == null) {
@@ -106,6 +110,18 @@ private fun ProductScreen(
                             .fillMaxWidth()
                             .aspectRatio(1f),
                     )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = { onAddToCart(productInfo.id) },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(
+                            style = MaterialTheme.typography.labelLarge,
+                            text = stringResource(R.string.add_to_cart),
+                        )
+                    }
                 }
             }
         }
