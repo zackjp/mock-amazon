@@ -19,7 +19,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -44,7 +44,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
 import com.example.fakeamazon.app.ui.AMAZON_BEIGE
-import com.example.fakeamazon.shared.model.ProductInfo
 import com.example.fakeamazon.shared.ui.PrimaryCta
 import com.example.fakeamazon.ui.theme.AmazonOrange
 import kotlin.math.floor
@@ -59,12 +58,12 @@ fun ProductScreenRoot(
         viewModel.load(productId)
     }
 
-    val productInfo by viewModel.productInfo.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     ProductScreen(
         modifier = modifier,
         onAddToCart = { productId -> viewModel.addToCart(productId) },
-        productInfo = productInfo,
+        uiState = uiState,
     )
 }
 
@@ -72,54 +71,86 @@ fun ProductScreenRoot(
 private fun ProductScreen(
     modifier: Modifier = Modifier,
     onAddToCart: (productId: Int) -> Unit = {},
-    productInfo: ProductInfo?,
+    uiState: ProductUiState,
 ) {
-    if (productInfo == null) {
-        Surface(modifier = modifier) {}
-    } else {
-        val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
+    when (uiState) {
+        is ProductUiState.Loading -> LoadingScreen(modifier)
+        is ProductUiState.Error -> ErrorScreen(modifier)
+        is ProductUiState.Loaded -> LoadedScreen(
+            loadedState = uiState,
+            onAddToCart = onAddToCart,
+            modifier = modifier,
+        )
+    }
+}
 
-        Surface(modifier = modifier) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp, start = mainContentPadding, end = mainContentPadding)
-            ) {
-                item {
-                    Spacer(modifier = Modifier.height(8.dp))
+@Composable
+private fun LoadingScreen(modifier: Modifier) {
+    Surface(modifier = modifier) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+    }
+}
 
-                    StoreAndProductRatingHeader(
-                        modifier = Modifier.fillMaxWidth(),
-                        storeName = productInfo.storeName,
-                        storeInitials = productInfo.storeInitials,
-                        productRating = productInfo.productRating,
-                    )
+@Composable
+private fun ErrorScreen(modifier: Modifier) {
+    Surface(modifier = modifier) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(stringResource(R.string.error_loading_content))
+        }
+    }
+}
 
-                    Spacer(modifier = Modifier.height(8.dp))
+@Composable
+private fun LoadedScreen(
+    loadedState: ProductUiState.Loaded,
+    modifier: Modifier,
+    onAddToCart: (Int) -> Unit
+) {
+    val productInfo = loadedState.productInfo
+    val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
 
-                    Text(
-                        text = productInfo.title,
-                    )
-                }
+    Surface(modifier = modifier) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp, start = mainContentPadding, end = mainContentPadding)
+        ) {
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
 
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
+                StoreAndProductRatingHeader(
+                    modifier = Modifier.fillMaxWidth(),
+                    storeName = productInfo.storeName,
+                    storeInitials = productInfo.storeInitials,
+                    productRating = productInfo.productRating,
+                )
 
-                    ProductImage(
-                        imageId = productInfo.imageId,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f),
-                    )
+                Spacer(modifier = Modifier.height(8.dp))
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = productInfo.title,
+                )
+            }
 
-                    PrimaryCta(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { onAddToCart(productInfo.id) },
-                        text = stringResource(R.string.add_to_cart),
-                    )
-                }
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                ProductImage(
+                    imageId = productInfo.imageId,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f),
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                PrimaryCta(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { onAddToCart(productInfo.id) },
+                    text = stringResource(R.string.add_to_cart),
+                )
             }
         }
     }

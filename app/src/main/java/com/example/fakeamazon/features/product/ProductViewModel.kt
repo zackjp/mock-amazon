@@ -5,12 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.fakeamazon.data.CartRepository
 import com.example.fakeamazon.data.ProductInMemoryDb
 import com.example.fakeamazon.shared.DispatcherProvider
-import com.example.fakeamazon.shared.model.ProductInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,18 +20,23 @@ class ProductViewModel @Inject constructor(
     private val productInMemoryDb: ProductInMemoryDb,
 ) : ViewModel() {
 
-    private val _productInfo = MutableStateFlow<ProductInfo?>(null)
-    val productInfo = _productInfo.asStateFlow()
+    private val _uiState = MutableStateFlow<ProductUiState>(ProductUiState.Loading)
+    val uiState = _uiState.asStateFlow()
 
     fun load(productId: Int) {
-        viewModelScope.async(dispatcherProvider.default) {
+        viewModelScope.launch(dispatcherProvider.default) {
             delay(500)
-            _productInfo.value = productInMemoryDb.getProductById(productId)
+            val productInfo = productInMemoryDb.getProductById(productId)
+            if (productInfo == null) {
+                _uiState.update { ProductUiState.Error }
+            } else {
+                _uiState.update { ProductUiState.Loaded(productInfo) }
+            }
         }
     }
 
     fun addToCart(productId: Int) {
-        viewModelScope.async(dispatcherProvider.default) {
+        viewModelScope.launch(dispatcherProvider.default) {
             cartRepository.addToCart(productId)
         }
     }
