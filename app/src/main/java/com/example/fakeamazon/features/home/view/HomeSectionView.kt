@@ -35,7 +35,7 @@ import com.example.fakeamazon.shared.model.ItemSection
 import com.example.fakeamazon.ui.theme.AmazonOutlineLight
 
 @Composable
-fun ItemSectionView(
+fun HomeSectionView(
     itemSection: ItemSection,
     mainContentHorizontalPadding: Dp,
     modifier: Modifier = Modifier,

@@ -71,26 +71,26 @@ class HomeViewModelTest {
 
     @BeforeEach
     fun setUp() {
-        coEvery { mockHomeRepository.loadSections() } returns mockSections
-        coEvery { mockHomeRepository.loadTopHome() } returns mockTopHomeGroups
+        coEvery { mockHomeRepository.getHomeSections() } returns mockSections
+        coEvery { mockHomeRepository.getTopHomeGroups() } returns mockTopHomeGroups
 
         viewModel = HomeViewModel(mockHomeRepository)
     }
 
     @Test
-    fun viewModel_Init_StartsWithEmptyItemSections() = runTest {
+    fun viewModel_Init_StartsWithEmptyHomeSections() = runTest {
         advanceUntilIdle()
 
-        viewModel.itemSections.value shouldBe emptyList()
+        viewModel.homeSections.value shouldBe emptyList()
     }
 
     @Test
-    fun viewModel_Load_LoadsItemSectionsAsync() = runTest {
+    fun viewModel_Load_LoadsHomeSectionsAsync() = runTest {
         viewModel.load()
 
-        viewModel.itemSections.first() shouldBe emptyList()
+        viewModel.homeSections.first() shouldBe emptyList()
         advanceUntilIdle()
-        viewModel.itemSections.first { it.isNotEmpty() } shouldBe mockSections
+        viewModel.homeSections.first { it.isNotEmpty() } shouldBe mockSections
     }
 
     @Test

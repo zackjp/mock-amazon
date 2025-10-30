@@ -35,7 +35,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
 import com.example.fakeamazon.shared.ignoreParentPadding
-import com.example.fakeamazon.features.home.view.ItemSectionView
+import com.example.fakeamazon.features.home.view.HomeSectionView
 import com.example.fakeamazon.features.home.view.TopHomeSection
 
 @Composable
@@ -50,7 +50,7 @@ fun HomeScreenRoot(
     }
 
     val topHomeGroups by viewModel.topHomeGroups.collectAsStateWithLifecycle()
-    val itemSections by viewModel.itemSections.collectAsStateWithLifecycle()
+    val homeSections by viewModel.homeSections.collectAsStateWithLifecycle()
 
     val paddingXLarge = dimensionResource(R.dimen.padding_xlarge)
     val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
@@ -111,9 +111,9 @@ fun HomeScreenRoot(
             Spacer(modifier = Modifier.height(paddingXLarge))
         }
 
-        items(itemSections) { itemSection ->
-            ItemSectionView(
-                itemSection = itemSection,
+        items(homeSections) { homeSection ->
+            HomeSectionView(
+                itemSection = homeSection,
                 mainContentHorizontalPadding = mainContentPadding,
                 modifier = Modifier.fillMaxWidth(),
                 onViewProduct = onViewProduct,

@@ -19,14 +19,14 @@ class HomeViewModel @Inject constructor(
     private val _topHomeGroups = MutableStateFlow<List<TopHomeGroup>>(emptyList())
     val topHomeGroups = _topHomeGroups.asStateFlow()
 
-    private val _itemSections: MutableStateFlow<List<ItemSection>> =
+    private val _homeSections: MutableStateFlow<List<ItemSection>> =
         MutableStateFlow(emptyList())
-    val itemSections = _itemSections.asStateFlow()
+    val homeSections = _homeSections.asStateFlow()
 
     fun load() {
         viewModelScope.launch {
-            _topHomeGroups.value = homeRepository.loadTopHome()
-            _itemSections.value = homeRepository.loadSections()
+            _topHomeGroups.value = homeRepository.getTopHomeGroups()
+            _homeSections.value = homeRepository.getHomeSections()
         }
     }
 
