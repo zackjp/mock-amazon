@@ -2,6 +2,8 @@ package com.example.fakeamazon.data
 
 import com.example.fakeamazon.shared.model.ProductInfo
 import com.example.fakeamazon.shared.model.toCartItem
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldContainOnly
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
@@ -50,7 +52,7 @@ class CartFakeApiDataSourceTest {
         dataSource.addToCart(products[2].id)
 
         val cartItems = dataSource.getCartItems()
-        cartItems shouldBe products.map { it.toCartItem(1) }
+        cartItems shouldContainOnly products.map { it.toCartItem(1) }
     }
 
     @Test
@@ -67,9 +69,32 @@ class CartFakeApiDataSourceTest {
         repeat(7) { dataSource.addToCart(products[1].id) }
 
         val cartItems = dataSource.getCartItems()
-        cartItems shouldBe listOf(
+        cartItems shouldContainOnly listOf(
             products[0].toCartItem(3),
             products[1].toCartItem(7),
+        )
+    }
+
+    @Test
+    fun getCartItems_ReturnsCartItemsInOrderWithMostRecentFirst() = runTest {
+        val products = listOf(
+            fakeProductInfo(123),
+            fakeProductInfo(456),
+            fakeProductInfo(789),
+        )
+        products.forEach {
+            every { productInMemoryDb.getProductById(it.id) } returns it
+        }
+
+        repeat(1) { dataSource.addToCart(products[0].id) }
+        repeat(2) { dataSource.addToCart(products[1].id) }
+        repeat(3) { dataSource.addToCart(products[2].id) }
+
+        val cartItems = dataSource.getCartItems()
+        cartItems shouldContainExactly listOf(
+            products[2].toCartItem(3),
+            products[1].toCartItem(2),
+            products[0].toCartItem(1),
         )
     }
 
@@ -79,10 +104,10 @@ class CartFakeApiDataSourceTest {
 
         every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
         dataSource.addToCart(productInfo.id)
-        dataSource.getCartItems() shouldBe listOf(productInfo.toCartItem(1))
+        dataSource.getCartItems() shouldContainOnly listOf(productInfo.toCartItem(1))
 
         every { productInMemoryDb.getProductById(productInfo.id) } returns null
-        dataSource.getCartItems() shouldBe emptyList()
+        dataSource.getCartItems() shouldContainOnly emptyList()
     }
 
     private fun fakeProductInfo(number: Int): ProductInfo =

@@ -33,6 +33,7 @@ class CartFakeApiDataSource @Inject constructor(
             .map { productInMemoryDb.getProductById(it.key) to it.value }
             .filter { (product, quantity) -> product != null && quantity > 0 }
             .map { (product, quantity) -> product!!.toCartItem(quantity) }
+            .reversed()
     }
 
 }
