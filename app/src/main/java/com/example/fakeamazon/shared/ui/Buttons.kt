@@ -10,10 +10,12 @@ import androidx.compose.ui.Modifier
 @Composable
 fun PrimaryCta(
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     onClick: () -> Unit,
     text: String,
 ) {
     Button(
+        enabled = enabled,
         onClick = onClick,
         modifier = modifier,
     ) {

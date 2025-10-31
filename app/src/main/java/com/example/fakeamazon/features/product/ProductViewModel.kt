@@ -36,9 +36,35 @@ class ProductViewModel @Inject constructor(
     }
 
     fun addToCart(productId: Int) {
+        if ((_uiState.value as? ProductUiState.Loaded)?.addToCartState != AddToCartState.Inactive) {
+            return
+        }
+
+        _uiState.updateIf<ProductUiState.Loaded> { current ->
+            current.copy(addToCartState = AddToCartState.Adding)
+        }
+
         viewModelScope.launch(dispatcherProvider.default) {
             cartRepository.addToCart(productId)
+
+            _uiState.updateIf<ProductUiState.Loaded> { current ->
+                current.copy(addToCartState = AddToCartState.Added)
+            }
         }
     }
 
+    fun onCartAddedViewed() {
+        _uiState.updateIf<ProductUiState.Loaded> { current ->
+            current.copy(
+                addToCartState = AddToCartState.Inactive
+            )
+        }
+    }
+
+}
+
+private inline fun <reified T> MutableStateFlow<in T>.updateIf(updateBlock: (T) -> T) {
+    update { current ->
+        if (current is T) updateBlock(current) else current
+    }
 }

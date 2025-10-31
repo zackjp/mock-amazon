@@ -30,6 +30,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,13 +43,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
 import com.example.fakeamazon.app.ui.AMAZON_BEIGE
 import com.example.fakeamazon.shared.ui.PrimaryCta
+import com.example.fakeamazon.ui.theme.AmazonGray
 import com.example.fakeamazon.ui.theme.AmazonOrange
+import kotlinx.coroutines.delay
 import kotlin.math.floor
+
+private const val CART_ADDED_OVERLAY_TIMEOUT = 2000L
 
 @Composable
 fun ProductScreenRoot(
@@ -63,6 +71,7 @@ fun ProductScreenRoot(
     ProductScreen(
         modifier = modifier,
         onAddToCart = { productId -> viewModel.addToCart(productId) },
+        onCartAddedViewed = { viewModel.onCartAddedViewed() },
         uiState = uiState,
     )
 }
@@ -71,6 +80,7 @@ fun ProductScreenRoot(
 private fun ProductScreen(
     modifier: Modifier = Modifier,
     onAddToCart: (productId: Int) -> Unit = {},
+    onCartAddedViewed: () -> Unit = {},
     uiState: ProductUiState,
 ) {
     when (uiState) {
@@ -78,8 +88,9 @@ private fun ProductScreen(
         is ProductUiState.Error -> ErrorScreen(modifier)
         is ProductUiState.Loaded -> LoadedScreen(
             loadedState = uiState,
-            onAddToCart = onAddToCart,
             modifier = modifier,
+            onAddToCart = onAddToCart,
+            onCartAddedViewed = onCartAddedViewed,
         )
     }
 }
@@ -106,12 +117,19 @@ private fun ErrorScreen(modifier: Modifier) {
 private fun LoadedScreen(
     loadedState: ProductUiState.Loaded,
     modifier: Modifier,
-    onAddToCart: (Int) -> Unit
+    onAddToCart: (Int) -> Unit,
+    onCartAddedViewed: () -> Unit,
 ) {
     val productInfo = loadedState.productInfo
+    val addToCartState = loadedState.addToCartState
     val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
 
     Surface(modifier = modifier) {
+        AddToCartBlockingOverlay(
+            addToCartState = addToCartState,
+            onCartAddedViewed = onCartAddedViewed,
+        )
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -146,10 +164,17 @@ private fun LoadedScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                val primaryCtaText = if (addToCartState != AddToCartState.Adding) {
+                    stringResource(R.string.add_to_cart)
+                } else {
+                    "..."
+                }
+
                 PrimaryCta(
+                    enabled = addToCartState != AddToCartState.Adding,
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { onAddToCart(productInfo.id) },
-                    text = stringResource(R.string.add_to_cart),
+                    text = primaryCtaText,
                 )
             }
         }
@@ -232,6 +257,55 @@ fun ProductImage(modifier: Modifier, imageId: Int) {
             modifier = Modifier.fillMaxSize(),
             painter = painterResource(imageId),
         )
+    }
+}
+
+@Composable
+private fun AddToCartBlockingOverlay(
+    addToCartState: AddToCartState,
+    onCartAddedViewed: () -> Unit
+) {
+    if (addToCartState == AddToCartState.Inactive) {
+        return
+    }
+
+    InteractionBlockingOverlay(modifier = Modifier.fillMaxWidth()) {
+        if (addToCartState == AddToCartState.Added) {
+            Text(
+                color = Color.White,
+                modifier = Modifier
+                    .background(
+                        color = AmazonGray,
+                        shape = MaterialTheme.shapes.small
+                    )
+                    .padding(horizontal = 8.dp, vertical = 8.dp),
+                style = MaterialTheme.typography.labelMedium,
+                text = "Added to cart",
+            )
+
+            LaunchedEffect(Unit) {
+                delay(CART_ADDED_OVERLAY_TIMEOUT)
+                onCartAddedViewed()
+            }
+        }
+    }
+}
+
+@Composable
+fun InteractionBlockingOverlay(modifier: Modifier, content: @Composable () -> Unit) {
+    Box(
+        modifier = modifier
+            .zIndex(1f)
+            .pointerInput(Unit) {
+                awaitPointerEventScope {
+                    while (true) {
+                        awaitPointerEvent(pass = PointerEventPass.Initial)
+                    }
+                }
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        content()
     }
 }
 
