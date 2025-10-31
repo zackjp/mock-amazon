@@ -35,7 +35,7 @@ class CartFakeApiDataSourceTest {
     }
 
     @Test
-    fun getCartItems_WithValidProductIds_ReturnsCartItems() = runTest {
+    fun getCartItems_WithDistinctValidProductIds_ReturnsCartItems() = runTest {
         val products = listOf(
             fakeProductInfo(123),
             fakeProductInfo(456),
@@ -50,7 +50,27 @@ class CartFakeApiDataSourceTest {
         dataSource.addToCart(products[2].id)
 
         val cartItems = dataSource.getCartItems()
-        cartItems shouldBe products.map { it.toCartItem() }
+        cartItems shouldBe products.map { it.toCartItem(1) }
+    }
+
+    @Test
+    fun getCartItems_WithDuplicateValidProductIds_ReturnsCartItemsWithQuantity() = runTest {
+        val products = listOf(
+            fakeProductInfo(123),
+            fakeProductInfo(456),
+        )
+        products.forEach {
+            every { productInMemoryDb.getProductById(it.id) } returns it
+        }
+
+        repeat(3) { dataSource.addToCart(products[0].id) }
+        repeat(7) { dataSource.addToCart(products[1].id) }
+
+        val cartItems = dataSource.getCartItems()
+        cartItems shouldBe listOf(
+            products[0].toCartItem(3),
+            products[1].toCartItem(7),
+        )
     }
 
     @Test
@@ -59,7 +79,7 @@ class CartFakeApiDataSourceTest {
 
         every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
         dataSource.addToCart(productInfo.id)
-        dataSource.getCartItems() shouldBe listOf(productInfo.toCartItem())
+        dataSource.getCartItems() shouldBe listOf(productInfo.toCartItem(1))
 
         every { productInMemoryDb.getProductById(productInfo.id) } returns null
         dataSource.getCartItems() shouldBe emptyList()
@@ -75,4 +95,5 @@ class CartFakeApiDataSourceTest {
             imageId = number,
             discount = number * .01f
         )
+
 }
