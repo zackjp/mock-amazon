@@ -16,4 +16,8 @@ class CartRepository @Inject constructor(
         cartFakeApiDataSource.addToCart(productId)
     }
 
+    suspend fun removeByProductId(productId: Int) {
+        cartFakeApiDataSource.removeByProductId(productId)
+    }
+
 }

@@ -37,6 +37,18 @@ class CartFakeApiDataSourceTest {
     }
 
     @Test
+    fun removeByProductId_RemovesProductFromCart() = runTest {
+        val productInfo = fakeProductInfo(123)
+        every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
+        repeat(3) { dataSource.addToCart(123) }
+        dataSource.getCartItems() shouldBe listOf(productInfo.toCartItem(3))
+
+        dataSource.removeByProductId(123)
+
+        dataSource.getCartItems() shouldBe emptyList()
+    }
+
+    @Test
     fun getCartItems_WithDistinctValidProductIds_ReturnsCartItems() = runTest {
         val products = listOf(
             fakeProductInfo(123),

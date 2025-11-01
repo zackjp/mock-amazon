@@ -26,6 +26,11 @@ class CartFakeApiDataSource @Inject constructor(
         return true
     }
 
+    suspend fun removeByProductId(productId: Int) {
+        delay(1250)
+        cartProductIdQuantityMap.remove(productId)
+    }
+
     suspend fun getCartItems(): List<CartItem> {
         delay(300)
 

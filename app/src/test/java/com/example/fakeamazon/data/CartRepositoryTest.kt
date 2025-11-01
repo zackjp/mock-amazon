@@ -4,8 +4,10 @@ import com.example.fakeamazon.shared.model.CartItem
 import com.example.fakeamazon.shared.model.ProductInfo
 import com.example.fakeamazon.shared.model.toCartItem
 import io.kotest.matchers.shouldBe
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
@@ -20,7 +22,6 @@ class CartRepositoryTest {
     @BeforeEach
     fun setUp() {
         repo = CartRepository(cartFakeApiDataSource)
-
     }
 
     @Test
@@ -49,6 +50,15 @@ class CartRepositoryTest {
         repo.addToCart(123)
 
         coVerify { cartFakeApiDataSource.addToCart(123) }
+    }
+
+    @Test
+    fun removeByProductId_RemovesProductIdFromCartApi() = runTest {
+        coEvery { cartFakeApiDataSource.removeByProductId(123) } just Runs
+
+        repo.removeByProductId(123)
+
+        coVerify { cartFakeApiDataSource.removeByProductId(123) }
     }
 
     private fun fakeCartItem(number: Int): CartItem =

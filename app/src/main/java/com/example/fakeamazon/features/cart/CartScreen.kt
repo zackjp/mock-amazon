@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -39,11 +39,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
 import com.example.fakeamazon.shared.model.CartItem
 import com.example.fakeamazon.shared.ui.PrimaryCta
+import com.example.fakeamazon.ui.theme.AmazonOutlineMedium
 import com.example.fakeamazon.ui.theme.Gray90
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -67,6 +70,7 @@ fun CartScreenRoot(
     CartScreen(
         modifier = modifier,
         cartItems = cartItemsState.value,
+        onRemoveCartItem = { productId -> cartViewModel.removeByProductId(productId) },
         onViewProduct = onViewProduct,
     )
 }
@@ -75,6 +79,7 @@ fun CartScreenRoot(
 private fun CartScreen(
     cartItems: List<CartItem>,
     modifier: Modifier = Modifier,
+    onRemoveCartItem: (Int) -> Unit,
     onViewProduct: (Int) -> Unit = {},
 ) {
     if (cartItems.isEmpty()) {
@@ -100,6 +105,7 @@ private fun CartScreen(
                         modifier = Modifier
                             .padding(horizontal = 8.dp)
                             .fillMaxWidth(),
+                        onRemoveCartItem = onRemoveCartItem,
                         onViewProduct = onViewProduct,
                     )
 
@@ -151,6 +157,7 @@ private fun CartListHeader(modifier: Modifier = Modifier) {
 private fun CartItem(
     cartItem: CartItem,
     modifier: Modifier = Modifier,
+    onRemoveCartItem: (Int) -> Unit,
     onViewProduct: (Int) -> Unit,
 ) {
     Card(
@@ -159,26 +166,55 @@ private fun CartItem(
         shape = MaterialTheme.shapes.extraSmall,
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
-            Row(modifier = Modifier.fillMaxWidth()) {
+            ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
+                val (leftPanel, rightPanel, quantityChip, deleteButton) = createRefs()
+
                 LeftPanel(
                     imagePainter = painterResource(cartItem.imageId),
-                    modifier = Modifier.width(132.dp),
+                    modifier = Modifier
+                        .constrainAs(leftPanel) {
+                            start.linkTo(parent.start)
+                            top.linkTo(parent.top)
+                        }
+                        .width(132.dp),
                     onViewProduct = onViewProduct,
                     productId = cartItem.id,
                 )
 
-                Spacer(modifier = Modifier.width(10.dp))
-
                 RightPanel(
                     cartItem = cartItem,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.constrainAs(rightPanel) {
+                        start.linkTo(leftPanel.end, 10.dp)
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                        width = Dimension.fillToConstraints
+                    },
                     onViewProduct = onViewProduct,
                 )
+
+                val barrier = createBottomBarrier(leftPanel, rightPanel, margin = 8.dp)
+
+                CartItemQuantityChip(
+                    modifier = Modifier
+                        .width(116.dp)
+                        .constrainAs(quantityChip) {
+                            top.linkTo(barrier)
+                            start.linkTo(leftPanel.start)
+                            end.linkTo(leftPanel.end)
+                            horizontalBias = 0f
+                        },
+                    quantity = cartItem.quantity,
+                )
+
+                CartActionButton(
+                    onClick = { onRemoveCartItem(cartItem.id) },
+                    modifier = Modifier.constrainAs(deleteButton) {
+                        start.linkTo(rightPanel.start)
+                        top.linkTo(barrier)
+                    },
+                    text = stringResource(R.string.delete),
+                )
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            CartItemQuantityChip(cartItem.quantity)
         }
     }
 }
@@ -344,14 +380,36 @@ private fun CartItemQuantityChip(quantity: Int, modifier: Modifier = Modifier) {
         modifier = modifier
             .background(Color.White, MaterialTheme.shapes.large)
             .border(
-                2.dp,
-                MaterialTheme.colorScheme.primary,
-                MaterialTheme.shapes.large
+                width = 2.5.dp,
+                color = MaterialTheme.colorScheme.primary,
+                shape = MaterialTheme.shapes.large
             )
-            .padding(6.dp)
-            .width(108.dp),
+            .padding(horizontal = 12.dp, vertical = 8.dp),
         style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
         text = "$quantity",
+        textAlign = TextAlign.Center,
+    )
+}
+
+@Composable
+private fun CartActionButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    text: String,
+) {
+    Text(
+        modifier = modifier
+            .clip(MaterialTheme.shapes.large)
+            .background(Color.White, MaterialTheme.shapes.large)
+            .border(
+                width = 0.5.dp,
+                color = AmazonOutlineMedium,
+                shape = MaterialTheme.shapes.large
+            )
+            .clickable(onClick = onClick)
+            .padding(horizontal = 12.dp, vertical = 8.dp),
+        style = MaterialTheme.typography.bodyMedium,
+        text = text,
         textAlign = TextAlign.Center,
     )
 }
