@@ -39,7 +39,7 @@ class ProductViewModelTest {
     val testDispatcherProvider = TestDispatcherProvider()
     val dispatcher = testDispatcherProvider.default
     val cartRepository = mockk<CartRepository>()
-    val expectedProductInfo = mockk<ProductInfo>()
+    val expectedProductInfo = fakeProductInfo(VALID_PRODUCT_ID)
 
     lateinit var viewModel: ProductViewModel
 
@@ -91,11 +91,11 @@ class ProductViewModelTest {
         viewModel.load(VALID_PRODUCT_ID)
         advanceUntilIdle()
 
-        viewModel.addToCart(VALID_PRODUCT_ID)
+        viewModel.addToCart()
         advanceUntilIdle()
-        viewModel.addToCart(VALID_PRODUCT_ID)
+        viewModel.addToCart()
         advanceUntilIdle()
-        viewModel.addToCart(VALID_PRODUCT_ID)
+        viewModel.addToCart()
         advanceUntilIdle()
 
         coVerify(exactly = 1) { cartRepository.addToCart(VALID_PRODUCT_ID) }
@@ -110,7 +110,7 @@ class ProductViewModelTest {
         backgroundScope.launch(UnconfinedTestDispatcher(dispatcher.testCoroutineScheduler)) {
             viewModel.uiState.collect { statesEmitted.add(it) }
         }
-        viewModel.addToCart(VALID_PRODUCT_ID)
+        viewModel.addToCart()
         advanceUntilIdle()
 
         withClue("Expected three state transitions: " +
@@ -134,7 +134,7 @@ class ProductViewModelTest {
     fun onCartAddedViewed_WhenInCartAddingState_TransitionsToInactive() = runTest(dispatcher) {
         viewModel.load(VALID_PRODUCT_ID)
         advanceUntilIdle()
-        viewModel.addToCart(VALID_PRODUCT_ID)
+        viewModel.addToCart()
         advanceUntilIdle()
 
         val statesEmitted = mutableListOf<ProductUiState>()
@@ -154,3 +154,14 @@ class ProductViewModelTest {
         }
     }
 }
+
+private fun fakeProductInfo(number: Int): ProductInfo =
+    ProductInfo(
+        id = number,
+        storeName = "Store Name $number",
+        storeInitials = "SI$number",
+        title = "Title $number",
+        productRating = number % 5 + 0.5f,
+        imageId = number,
+        discount = number * .01f
+    )

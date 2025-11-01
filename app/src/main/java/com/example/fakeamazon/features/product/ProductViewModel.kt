@@ -35,8 +35,13 @@ class ProductViewModel @Inject constructor(
         }
     }
 
-    fun addToCart(productId: Int) {
-        if ((_uiState.value as? ProductUiState.Loaded)?.addToCartState != AddToCartState.Inactive) {
+    fun addToCart() {
+        val currentState = _uiState.value
+        if (currentState !is ProductUiState.Loaded) {
+            return
+        }
+
+        if (currentState.addToCartState != AddToCartState.Inactive) {
             return
         }
 
@@ -45,7 +50,7 @@ class ProductViewModel @Inject constructor(
         }
 
         viewModelScope.launch(dispatcherProvider.default) {
-            cartRepository.addToCart(productId)
+            cartRepository.addToCart(currentState.productInfo.id)
 
             _uiState.updateIf<ProductUiState.Loaded> { current ->
                 current.copy(addToCartState = AddToCartState.Added)

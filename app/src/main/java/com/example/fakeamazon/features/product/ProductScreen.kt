@@ -70,7 +70,7 @@ fun ProductScreenRoot(
 
     ProductScreen(
         modifier = modifier,
-        onAddToCart = { productId -> viewModel.addToCart(productId) },
+        onAddToCart = { viewModel.addToCart() },
         onCartAddedViewed = { viewModel.onCartAddedViewed() },
         uiState = uiState,
     )
@@ -79,7 +79,7 @@ fun ProductScreenRoot(
 @Composable
 private fun ProductScreen(
     modifier: Modifier = Modifier,
-    onAddToCart: (productId: Int) -> Unit = {},
+    onAddToCart: () -> Unit = {},
     onCartAddedViewed: () -> Unit = {},
     uiState: ProductUiState,
 ) {
@@ -117,7 +117,7 @@ private fun ErrorScreen(modifier: Modifier) {
 private fun LoadedScreen(
     loadedState: ProductUiState.Loaded,
     modifier: Modifier,
-    onAddToCart: (Int) -> Unit,
+    onAddToCart: () -> Unit,
     onCartAddedViewed: () -> Unit,
 ) {
     val productInfo = loadedState.productInfo
@@ -173,7 +173,7 @@ private fun LoadedScreen(
                 PrimaryCta(
                     enabled = addToCartState != AddToCartState.Adding,
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { onAddToCart(productInfo.id) },
+                    onClick = { onAddToCart() },
                     text = primaryCtaText,
                 )
             }
