@@ -11,4 +11,6 @@ data class ProductInfo(
     val productRating: Float,
     @param:DrawableRes val imageId: Int,
     val discount: Float? = null,
-)
+) {
+    companion object
+}

@@ -4,6 +4,7 @@ import com.example.fakeamazon.TestDispatcherProvider
 import com.example.fakeamazon.data.CartRepository
 import com.example.fakeamazon.data.ProductInMemoryDb
 import com.example.fakeamazon.shared.model.ProductInfo
+import com.example.fakeamazon.shared.model.fakeInfo
 import io.kotest.assertions.withClue
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
@@ -21,7 +22,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -39,7 +39,7 @@ class ProductViewModelTest {
     val testDispatcherProvider = TestDispatcherProvider()
     val dispatcher = testDispatcherProvider.default
     val cartRepository = mockk<CartRepository>()
-    val expectedProductInfo = fakeProductInfo(VALID_PRODUCT_ID)
+    val expectedProductInfo = ProductInfo.fakeInfo(VALID_PRODUCT_ID)
 
     lateinit var viewModel: ProductViewModel
 
@@ -153,15 +153,5 @@ class ProductViewModelTest {
             }
         }
     }
-}
 
-private fun fakeProductInfo(number: Int): ProductInfo =
-    ProductInfo(
-        id = number,
-        storeName = "Store Name $number",
-        storeInitials = "SI$number",
-        title = "Title $number",
-        productRating = number % 5 + 0.5f,
-        imageId = number,
-        discount = number * .01f
-    )
+}

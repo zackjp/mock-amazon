@@ -2,6 +2,7 @@ package com.example.fakeamazon.data
 
 import com.example.fakeamazon.shared.model.CartItem
 import com.example.fakeamazon.shared.model.ProductInfo
+import com.example.fakeamazon.shared.model.fakeInfo
 import com.example.fakeamazon.shared.model.toCartItem
 import io.kotest.matchers.shouldBe
 import io.mockk.Runs
@@ -62,14 +63,6 @@ class CartRepositoryTest {
     }
 
     private fun fakeCartItem(number: Int): CartItem =
-        ProductInfo(
-            id = number,
-            storeName = "Store Name $number",
-            storeInitials = "SI$number",
-            title = "Title $number",
-            productRating = number % 5 + 0.5f,
-            imageId = number,
-            discount = number * .01f
-        ).toCartItem()
+        ProductInfo.fakeInfo(number).toCartItem()
 
 }
