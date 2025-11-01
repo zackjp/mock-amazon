@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fakeamazon.data.CartRepository
 import com.example.fakeamazon.shared.DispatcherProvider
-import com.example.fakeamazon.shared.model.CartItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,19 +16,22 @@ class CartViewModel @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
-    private val _cartItem = MutableStateFlow<List<CartItem>>(emptyList())
-    val cartItems = _cartItem.asStateFlow()
+    private val _screenState = MutableStateFlow<CartScreenState>(CartScreenState.Loading)
+    val screenState = _screenState.asStateFlow()
 
     fun load() {
         viewModelScope.launch(dispatcherProvider.default) {
-            _cartItem.value = cartRepository.getCartItems()
+            val cartItems = cartRepository.getCartItems()
+            _screenState.value = CartScreenState.Loaded(cartItems)
         }
     }
 
     fun removeByProductId(productId: Int) {
         viewModelScope.launch(dispatcherProvider.default) {
             cartRepository.removeByProductId(productId)
-            _cartItem.value = cartRepository.getCartItems()
+
+            val updatedCartItems = cartRepository.getCartItems()
+            _screenState.value = CartScreenState.Loaded(updatedCartItems)
         }
     }
 

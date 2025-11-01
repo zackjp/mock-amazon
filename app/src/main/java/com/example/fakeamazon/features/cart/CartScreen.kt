@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,12 +16,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.BlendMode
@@ -65,52 +68,86 @@ fun CartScreenRoot(
         cartViewModel.load()
     }
 
-    val cartItemsState = cartViewModel.cartItems.collectAsStateWithLifecycle()
+    val screenState = cartViewModel.screenState.collectAsStateWithLifecycle()
 
     CartScreen(
         modifier = modifier,
-        cartItems = cartItemsState.value,
         onRemoveCartItem = { productId -> cartViewModel.removeByProductId(productId) },
         onViewProduct = onViewProduct,
+        screenState = screenState.value,
     )
 }
 
 @Composable
 private fun CartScreen(
-    cartItems: List<CartItem>,
     modifier: Modifier = Modifier,
     onRemoveCartItem: (Int) -> Unit,
     onViewProduct: (Int) -> Unit = {},
+    screenState: CartScreenState,
 ) {
-    if (cartItems.isEmpty()) {
-        Surface(modifier = modifier) {}
-    } else {
-        Surface(modifier = modifier) {
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                item {
-                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
+    when (screenState) {
+        is CartScreenState.Loading -> LoadingView(modifier)
+        is CartScreenState.Loaded -> LoadedView(
+            modifier = modifier,
+            onRemoveCartItem = onRemoveCartItem,
+            onViewProduct = onViewProduct,
+            screenState = screenState,
+        )
+        is CartScreenState.Error -> ErrorView(modifier)
+    }
+}
 
-                    CartListHeader(
-                        modifier = Modifier
-                            .padding(horizontal = dimensionResource(R.dimen.main_content_padding_horizontal))
-                            .fillMaxWidth()
-                    )
-                }
+@Composable
+private fun LoadingView(modifier: Modifier) {
+    Surface(modifier = modifier) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+    }
+}
 
-                items(cartItems) { cartItem ->
-                    CartItem(
-                        cartItem = cartItem,
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .fillMaxWidth(),
-                        onRemoveCartItem = onRemoveCartItem,
-                        onViewProduct = onViewProduct,
-                    )
+@Composable
+private fun ErrorView(modifier: Modifier) {
+    Surface(modifier = modifier) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(stringResource(R.string.error_loading_content))
+        }
+    }
+}
 
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
+@Composable
+private fun LoadedView(
+    modifier: Modifier = Modifier,
+    onRemoveCartItem: (Int) -> Unit,
+    onViewProduct: (Int) -> Unit,
+    screenState: CartScreenState.Loaded,
+) {
+    val cartItems = screenState.cartItems
+    Surface(modifier = modifier) {
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            item {
+                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
+
+                CartListHeader(
+                    modifier = Modifier
+                        .padding(horizontal = dimensionResource(R.dimen.main_content_padding_horizontal))
+                        .fillMaxWidth()
+                )
+            }
+
+            items(cartItems) { cartItem ->
+                CartItem(
+                    cartItem = cartItem,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .fillMaxWidth(),
+                    onRemoveCartItem = onRemoveCartItem,
+                    onViewProduct = onViewProduct,
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }

@@ -40,19 +40,19 @@ class CartViewModelTest {
     }
 
     @Test
-    fun init_DoesNotLoadData() = runTest(scheduler) {
+    fun init_StartsAsLoading() = runTest(scheduler) {
         advanceUntilIdle()
 
-        viewModel.cartItems.first() shouldBe emptyList()
+        viewModel.screenState.first() shouldBe CartScreenState.Loading
     }
 
     @Test
     fun load_LoadsDataFromRepository() = runTest(scheduler) {
         viewModel.load()
 
-        viewModel.cartItems.first() shouldBe emptyList()
+        viewModel.screenState.first() shouldBe CartScreenState.Loading
         advanceUntilIdle()
-        viewModel.cartItems.first { it.isNotEmpty() } shouldBe expectedCartItems
+        viewModel.screenState.first() shouldBe CartScreenState.Loaded(expectedCartItems)
     }
 
     @Test
@@ -64,7 +64,7 @@ class CartViewModelTest {
         advanceUntilIdle()
 
         coVerify { repository.removeByProductId(123) }
-        viewModel.cartItems.first() shouldBe newCartItems
+        viewModel.screenState.first() shouldBe CartScreenState.Loaded(newCartItems)
     }
 
 }
