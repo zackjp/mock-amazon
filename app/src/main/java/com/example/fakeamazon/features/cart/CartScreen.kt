@@ -340,16 +340,6 @@ private fun ProductTitle(
 }
 
 @Composable
-private fun ProductPriceText(modifier: Modifier = Modifier, priceUSD: Float) {
-    Text(
-        maxLines = 1,
-        modifier = modifier,
-        style = MaterialTheme.typography.titleSmall.copy(fontSize = 19.sp),
-        text = "$$priceUSD",
-    )
-}
-
-@Composable
 private fun ExpectedDeliveryText(
     extraLineHeightTextStyle: TextStyle,
     estDeliveryDate: LocalDate,
