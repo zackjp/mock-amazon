@@ -21,7 +21,7 @@ fun ProductInfo.toCartItem(quantity: Int = 0): CartItem =
         imageId = imageId,
         title = title,
         quantity = quantity,
-        priceUSD = 19.99f,
+        priceUSD = priceUSD,
         deliveryCostUSD = 0f,
         estDeliveryDate = LocalDate.now().plusDays(2),
         isInStock = true,

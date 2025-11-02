@@ -16,6 +16,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Bellroy Transit Workpack Pro (22L work bag/commuter backpack, fits 16” laptops; organization for travel and commutes)- Stone",
             productRating = 3.9f,
             imageId = R.drawable.item_backpack,
+            priceUSD = 249f,
             discount = 0.17f,
         ),
         ProductInfo(
@@ -25,6 +26,7 @@ class ProductInMemoryDb @Inject constructor() {
             storeInitials = "C",
             title = "Cleanbear Reusable Dish Washing Rubber Glove Set of 3, Household Cleaning Gloves for Washing",
             productRating = 4.6f,
+            priceUSD = 12.99f,
             imageId = R.drawable.item_cleaning_gloves,
         ),
         ProductInfo(
@@ -34,6 +36,7 @@ class ProductInMemoryDb @Inject constructor() {
             storeInitials = "N",
             title = "Native Aluminum-Free Clean Deodorant with Natural Derived Ingredients, 72HR odor control | Deodorant for Women and Men, With Baking Soda, Coconut Oil, Shea Butter | Eucalyptus & Mint",
             productRating = 4.4f,
+            priceUSD = 12.99f,
             imageId = R.drawable.item_deodorant,
         ),
         ProductInfo(
@@ -44,6 +47,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "9 Elements Natural Laundry Detergent Liquid Soap, Lavender Scent, Vinegar Powered, 92 Fl Oz, 1 Count, Liquid Laundry Detergent, Laundry Soap",
             productRating = 4.6f,
             imageId = R.drawable.item_detergent,
+            priceUSD = 15.99f,
             discount = 0.12f,
         ),
         ProductInfo(
@@ -54,6 +58,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Cascade Complete Dishwasher Pods, Dishwasher Detergent, Lemon Scent ActionPacs, Cleaning Supplies, 78 Count",
             productRating = 4.8f,
             imageId = R.drawable.item_dishwash_detergent,
+            priceUSD = 20.99f,
             discount = 0.13f,
         ),
         ProductInfo(
@@ -64,6 +69,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "CATAN Board Game (6th Edition) Trade, Build & Settle in The Classic Strategy Game for Family, Kids & Adults, Ages 10+, 3-4 Players, 60-90 Min Playtime",
             productRating = 4.8f,
             imageId = R.drawable.item_game_catan,
+            priceUSD = 54.99f,
         ),
         ProductInfo(
             // https://www.amazon.com/Lookout-Games-Forest-Shuffle-Card/dp/B0C87WK67Z
@@ -73,6 +79,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Lookout Games Forest Shuffle Card Game - Create an Ecological Paradise! Clever Strategy Game for Kids & Adults, Ages 10+, 2-5 Players, 60 Min Playtime, ECO-Friendly Packaging",
             productRating = 4.6f,
             imageId = R.drawable.item_game_forest_shuffle,
+            priceUSD = 29.99f,
         ),
         ProductInfo(
             // https://www.amazon.com/Lost-Cities-Card-Game-Expedition/dp/B07KLWPHFF
@@ -82,6 +89,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Lost Cities Card Game - with 6th Expedition - Thames & Kosmos Store - Designed By Reiner Knizia",
             productRating = 4.4f,
             imageId = R.drawable.item_game_lost_cities,
+            priceUSD = 19.95f,
         ),
         ProductInfo(
             // https://www.amazon.com/Monopoly-Deal-Card-Game-English/dp/B0CQ59KDMT
@@ -91,15 +99,17 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Monopoly Deal Card Game - English Version",
             productRating = 4.4f,
             imageId = R.drawable.item_game_monopoly_deal,
+            priceUSD = 13.99f,
         ),
         ProductInfo(
-            // https://www.amazon.com/25th-Century-Games-POS187-Board
+            // https://www.amazon.com/25th-Century-Games-POS187-Board/dp/B0BVMYN3ZS
             id = R.drawable.item_game_ra,
             storeName = "25th Century Games",
             storeInitials = "25CG",
             title = "RA by 25th Century Games – Ancient Egyptian Theme, Auction and Set-Collection Board Game, for 2-5 Players and Ages 12+",
             productRating = 4.4f,
             imageId = R.drawable.item_game_ra,
+            priceUSD = 49.99f,
         ),
         ProductInfo(
             // https://www.amazon.com/Method-Vetiver-Reusable-Aluminum-Bottle/dp/B09QXM15F6
@@ -109,6 +119,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Method Gel Hand Soap, Vetiver + Amber, Reusable Black Aluminum Bottle, Biodegradable Formula, 12 oz (Pack of 3)",
             productRating = 4.5f,
             imageId = R.drawable.item_handsoap,
+            priceUSD = 25.07f,
             discount = 0.11f,
         ),
         ProductInfo(
@@ -119,6 +130,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Bose QuietComfort Bluetooth Headphones, Wireless Headphones with Active Over Ear Noise Cancelling and Mic, Deep Bass, Up to 24 Hours of Playtime, Black",
             productRating = 4.5f,
             imageId = R.drawable.item_headphones,
+            priceUSD = 349.99f,
             discount = 0.2f,
         ),
         ProductInfo(
@@ -129,6 +141,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Scotch-Brite Heavy Duty Scrub Sponge, 9 Kitchen Sponges Designed for Tough Messes in the Kitchen that Last 3X Longer*, Best for Cast Iron Skillets and Outdoor Grills, Flexible, Durable, and Strong",
             productRating = 4.8f,
             imageId = R.drawable.item_kitchen_sponge,
+            priceUSD = 9.79f,
             discount = 0.09f,
         ),
         ProductInfo(
@@ -139,6 +152,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Jade Leaf Matcha Organic Culinary Grade Matcha Powder - Premium Second Harvest - Authentic Japanese Origin (3.53 Ounce Resealable Pouch)",
             productRating = 4.6f,
             imageId = R.drawable.item_matcha,
+            priceUSD = 25.99f,
             discount = 0.10f,
         ),
         ProductInfo(
@@ -149,6 +163,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Amazon Basics Reclosable Sandwich Double Zipper Storage Bags, 100 Count, Pack of 1",
             productRating = 4.7f,
             imageId = R.drawable.item_sandwich_bags,
+            priceUSD = 3.37f,
             discount = 0.07f,
         ),
         ProductInfo(
@@ -159,6 +174,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Zevia Zero Sugar Soda, Cola, 12 oz Cans (8-Pack) – Naturally Sweetened, Non-GMO Project Verified, Gluten-Free, Vegan",
             productRating = 4.1f,
             imageId = R.drawable.item_soda,
+            priceUSD = 6.97f,
         ),
         ProductInfo(
             // https://www.amazon.com/Amazon-Fresh-Pretzel-Nugget-Peanut/dp/B0BDTBBHD1
@@ -168,6 +184,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Amazon Grocery, Peanut Butter Filled Pretzels, 24 Oz (Previously Amazon Fresh, Packaging May Vary)",
             productRating = 4.5f,
             imageId = R.drawable.item_snack_amazon_pbpretzels,
+            priceUSD = 5.43f,
         ),
         ProductInfo(
             // https://www.amazon.com/Blue-Diamond-Almonds-Low-Sodium/dp/B07CTWYR92
@@ -177,6 +194,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Blue Diamond Almonds Low Sodium Lightly Salted Snack Nuts, 40 Oz Resealable Bag (Pack of 1)",
             productRating = 4.7f,
             imageId = R.drawable.item_snack_bluediamond_almonds,
+            priceUSD = 11.98f,
         ),
         ProductInfo(
             // https://www.amazon.com/Dots-Homestyle-Pretzels-16-Ounce/dp/B0824B36NW
@@ -186,6 +204,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Dot's Pretzels Original Seasoned Pretzel Twist Snack, 16oz Grocery Sized Bag",
             productRating = 4.7f,
             imageId = R.drawable.item_snack_dots_originalpretzels,
+            priceUSD = 6.17f,
         ),
         ProductInfo(
             // https://www.amazon.com/Larabar-Gluten-Peanut-Butter-Chocolate/dp/B003ZMXYMG
@@ -195,6 +214,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Larabar Peanut Butter Chocolate Chip, Gluten Free Fruit & Nut Bar, 16 Ct",
             productRating = 4.6f,
             imageId = R.drawable.item_snack_larabar_pbchocolatechip,
+            priceUSD = 17.25f,
         ),
         ProductInfo(
             // https://www.amazon.com/Pop-Secret-Popcorn-Theater-Butter/dp/B07BMGW2WX
@@ -204,6 +224,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Pop Secret Microwave Popcorn, Movie Theater Butter Flavor, 1.75 Oz Snack Bags, (Pack of 12)",
             productRating = 4.6f,
             imageId = R.drawable.item_snack_popsecret_popcorn,
+            priceUSD = 3.58f,
         ),
         ProductInfo(
             // https://www.amazon.com/Sahale-Snacks-Glazed-Mix-Nut-Blend/dp/B07Z9SBTTC
@@ -213,6 +234,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Sahale Snacks Glazed Mix Nut Blend Variety Pack, 1.5 Oz Grab & Go Bags (12 Total Packs) - Four Different Dry-Roasted Deluxe Mixed Nuts Blends Included - Non-GMO Kosher & Certified Gluten-Free Snacks",
             productRating = 4.6f,
             imageId = R.drawable.item_snack_sahale_mixednuts,
+            priceUSD = 39.99f,
         ),
         ProductInfo(
             // https://www.amazon.com/Wonderful-Pistachios-No-Shells-Calorie/dp/B07TCW23N9
@@ -222,6 +244,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Wonderful Pistachios No Shells, Roasted & Salted Nuts, 0.75 Ounce Bag (Pack of 14), Protein Snacks, Vegan Snacks, On-the-Go, Individual Snacks for Adults, Stocking Stuffers",
             productRating = 4.7f,
             imageId = R.drawable.item_snack_wonderful_pistachios,
+            priceUSD = 12.10f,
         ),
         ProductInfo(
             // https://www.amazon.com/adidas-Swift-Sneaker-White-Black/dp/B0BHPVXZGX
@@ -231,6 +254,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "adidas Men's Swift Run 1.0 Sneaker",
             productRating = 4.4f,
             imageId = R.drawable.item_sneaker_adidas_swiftrun1,
+            priceUSD = 90f,
         ),
         ProductInfo(
             // https://www.amazon.com/adidas-Ubounce-Alphaskin-Sneaker-Black/dp/B0BZ5BV1L1
@@ -240,6 +264,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "adidas Men's Ubounce Dna Running Shoes",
             productRating = 4.6f,
             imageId = R.drawable.item_sneaker_adidas_ubounce,
+            priceUSD = 100f,
         ),
         ProductInfo(
             // https://www.amazon.com/Allbirds-Tree-Dasher-2/dp/B0FRNP3GBM
@@ -249,6 +274,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Allbirds Men's Tree Dasher 2, Active Running & Walking Sneakers",
             productRating = 4.2f,
             imageId = R.drawable.item_sneaker_allbirds_treedasher2,
+            priceUSD = 135f,
         ),
         ProductInfo(
             // https://www.amazon.com/Allbirds-Tree-Glider/dp/B0DQB1WWRS
@@ -258,6 +284,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Allbirds Men's Tree Glider, Everyday Active Sneakers",
             productRating = 4.4f,
             imageId = R.drawable.item_sneaker_allbirds_treeglider,
+            priceUSD = 135f,
         ),
         ProductInfo(
             // https://www.amazon.com/Under-Armour-Mens-Charged-Assert-9/dp/B08CFTM283
@@ -267,6 +294,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Under Armour Men's Charged Assert 9 Running Shoe",
             productRating = 4.6f,
             imageId = R.drawable.item_sneaker_underarmour_chargedassert9,
+            priceUSD = 70f,
         ),
         ProductInfo(
             // https://www.amazon.com/Feethit-Slipon/dp/B08HLSLV6B
@@ -276,6 +304,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Feethit Mens Slip On Running Shoes Breathable Lightweight Comfortable Fashion Non Slip Sneakers for Men\n",
             productRating = 4.1f,
             imageId = R.drawable.item_sneaker_feethit_slipon,
+            priceUSD = 35.99f,
             discount = .2f,
         ),
         ProductInfo(
@@ -286,6 +315,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Brita Standard Water Filter for Pitchers and Dispensers, Reduces Copper, Cadmium and Mercury Impurities, Lasts Two Months or 40 Gallons, Includes 6 Filters for Pitchers",
             productRating = 4.8f,
             imageId = R.drawable.item_water_filter,
+            priceUSD = 28.49f,
         ),
     )
 

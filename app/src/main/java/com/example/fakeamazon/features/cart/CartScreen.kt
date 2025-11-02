@@ -48,6 +48,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
 import com.example.fakeamazon.shared.model.CartItem
+import com.example.fakeamazon.shared.ui.PriceDisplaySize
+import com.example.fakeamazon.shared.ui.PriceText
 import com.example.fakeamazon.shared.ui.PrimaryCta
 import com.example.fakeamazon.ui.theme.AmazonOutlineMedium
 import com.example.fakeamazon.ui.theme.Gray90
@@ -295,8 +297,9 @@ private fun RightPanel(
         )
 
         Spacer(modifier = Modifier.height(4.dp))
-        ProductPriceText(
-            modifier = Modifier.fillMaxWidth(),
+        PriceText(
+            displaySize = PriceDisplaySize.Medium,
+            modifier = Modifier,
             priceUSD = cartItem.priceUSD,
         )
 

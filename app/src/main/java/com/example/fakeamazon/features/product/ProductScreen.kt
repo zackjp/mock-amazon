@@ -48,6 +48,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
 import com.example.fakeamazon.app.ui.AMAZON_BEIGE
+import com.example.fakeamazon.shared.ui.PriceDisplaySize
+import com.example.fakeamazon.shared.ui.PriceText
 import com.example.fakeamazon.shared.ui.PrimaryCta
 import com.example.fakeamazon.ui.theme.AmazonGray
 import com.example.fakeamazon.ui.theme.AmazonOrange
@@ -164,17 +166,11 @@ private fun LoadedScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                val primaryCtaText = if (addToCartState != AddToCartState.Adding) {
-                    stringResource(R.string.add_to_cart)
-                } else {
-                    "..."
-                }
-
-                PrimaryCta(
-                    enabled = addToCartState != AddToCartState.Adding,
+                PurchaseInfoView(
+                    addToCartState = addToCartState,
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { onAddToCart() },
-                    text = primaryCtaText,
+                    onAddToCart = onAddToCart,
+                    priceUSD = productInfo.priceUSD,
                 )
             }
         }
@@ -256,6 +252,35 @@ fun ProductImage(modifier: Modifier, imageId: Int) {
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             painter = painterResource(imageId),
+        )
+    }
+}
+
+@Composable
+private fun PurchaseInfoView(
+    addToCartState: AddToCartState,
+    modifier: Modifier = Modifier,
+    onAddToCart: () -> Unit,
+    priceUSD: Float,
+) {
+    Column(modifier = modifier) {
+        PriceText(
+            displaySize = PriceDisplaySize.Large,
+            modifier = Modifier,
+            priceUSD = priceUSD,
+        )
+
+        val primaryCtaText = if (addToCartState != AddToCartState.Adding) {
+            stringResource(R.string.add_to_cart)
+        } else {
+            "..."
+        }
+
+        PrimaryCta(
+            enabled = addToCartState != AddToCartState.Adding,
+            modifier = Modifier.fillMaxWidth(),
+            onClick = { onAddToCart() },
+            text = primaryCtaText,
         )
     }
 }

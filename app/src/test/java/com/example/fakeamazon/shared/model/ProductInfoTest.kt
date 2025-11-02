@@ -9,5 +9,6 @@ fun ProductInfo.Companion.fakeInfo(number: Int): ProductInfo =
         title = "Title $number",
         productRating = number % 5 + 0.5f,
         imageId = number,
+        priceUSD = number * 10f,
         discount = number * .01f
     )
