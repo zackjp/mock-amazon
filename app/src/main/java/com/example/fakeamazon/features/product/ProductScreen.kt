@@ -51,6 +51,7 @@ import com.example.fakeamazon.app.ui.AMAZON_BEIGE
 import com.example.fakeamazon.shared.ui.PriceDisplaySize
 import com.example.fakeamazon.shared.ui.PriceText
 import com.example.fakeamazon.shared.ui.PrimaryCta
+import com.example.fakeamazon.shared.ui.WithPrimeLogoText
 import com.example.fakeamazon.ui.theme.AmazonGray
 import com.example.fakeamazon.ui.theme.AmazonOrange
 import kotlinx.coroutines.delay
@@ -269,6 +270,17 @@ private fun PurchaseInfoView(
             modifier = Modifier,
             priceUSD = priceUSD,
         )
+
+        WithPrimeLogoText {
+            Text(
+                fontWeight = FontWeight.Bold,
+                inlineContent = it.inlineContent,
+                text = buildAnnotatedString {
+                    it.appendPrimeLogo(this)
+                    append(" Overnight")
+                },
+            )
+        }
 
         val primaryCtaText = if (addToCartState != AddToCartState.Adding) {
             stringResource(R.string.add_to_cart)
