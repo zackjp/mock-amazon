@@ -37,7 +37,7 @@ import com.example.fakeamazon.features.home.HomeScreenRoot
 import com.example.fakeamazon.ui.theme.AmazonOutlineLight
 import com.example.fakeamazon.ui.theme.FakeAmazonTheme
 
-val AMAZON_BEIGE = Color(0xeFF5BE89)
+val AMAZON_BEIGE = Color(0xFFF5BE89)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
