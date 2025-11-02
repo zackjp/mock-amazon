@@ -14,10 +14,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -33,12 +36,15 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -53,6 +59,7 @@ import com.example.fakeamazon.shared.ui.PriceText
 import com.example.fakeamazon.shared.ui.PrimaryCta
 import com.example.fakeamazon.ui.theme.AmazonOutlineMedium
 import com.example.fakeamazon.ui.theme.Gray90
+import com.example.fakeamazon.ui.theme.Orange80
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -95,6 +102,7 @@ private fun CartScreen(
             onViewProduct = onViewProduct,
             screenState = screenState,
         )
+
         is CartScreenState.Error -> ErrorView(modifier)
     }
 }
@@ -377,18 +385,16 @@ private fun ReturnPolicyText(extraLineHeightTextStyle: TextStyle, modifier: Modi
 @Composable
 private fun PrimeDayText(extraLineHeightTextStyle: TextStyle, modifier: Modifier = Modifier) {
     Text(
+        inlineContent = buildTextIconMap(Orange80),
         maxLines = 1,
         modifier = modifier,
         style = extraLineHeightTextStyle.copy(fontWeight = FontWeight.Bold),
         text = buildAnnotatedString {
-            append("Prime Two-Day")
-            addStyle(
-                style = SpanStyle(
-                    color = Color(0xFF3779F6),
-                ),
-                start = 0,
-                end = 5
-            )
+            appendInlineContent("checkmark", "[check]")
+            withStyle(SpanStyle(color = Color(0xFF3779F6))) {
+                append("prime")
+            }
+            append(" Two-Day")
         },
     )
 }
@@ -441,5 +447,17 @@ private fun CartActionButton(
         style = MaterialTheme.typography.bodyMedium,
         text = text,
         textAlign = TextAlign.Center,
+    )
+}
+
+private fun buildTextIconMap(color: Color): Map<String, InlineTextContent> {
+    return mapOf(
+        "checkmark" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
+            Icon(
+                contentDescription = null,
+                painter = painterResource(R.drawable.baseline_check_24),
+                tint = color,
+            )
+        }
     )
 }
