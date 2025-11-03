@@ -33,13 +33,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -48,14 +51,22 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
 import com.example.fakeamazon.app.ui.AMAZON_BEIGE
+import com.example.fakeamazon.shared.toPrimeDeliveryString
+import com.example.fakeamazon.shared.toRelativeDateString
 import com.example.fakeamazon.shared.ui.PriceDisplaySize
 import com.example.fakeamazon.shared.ui.PriceText
 import com.example.fakeamazon.shared.ui.PrimaryCta
 import com.example.fakeamazon.shared.ui.WithPrimeLogoText
 import com.example.fakeamazon.ui.theme.AmazonGray
 import com.example.fakeamazon.ui.theme.AmazonOrange
+import com.example.fakeamazon.ui.theme.Green60
+import com.example.fakeamazon.ui.theme.LinkBlue
+import com.example.fakeamazon.ui.theme.Teal60
 import kotlinx.coroutines.delay
+import java.time.LocalDate
 import kotlin.math.floor
+import kotlin.text.Typography.nbsp
+import kotlin.time.ExperimentalTime
 
 private const val CART_ADDED_OVERLAY_TIMEOUT = 2000L
 
@@ -164,15 +175,22 @@ private fun LoadedScreen(
                         .fillMaxWidth()
                         .aspectRatio(1f),
                 )
+            }
 
+            item {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 PurchaseInfoView(
                     addToCartState = addToCartState,
+                    deliveryDate = productInfo.deliveryDate,
                     modifier = Modifier.fillMaxWidth(),
                     onAddToCart = onAddToCart,
                     priceUSD = productInfo.priceUSD,
                 )
+            }
+
+            item {
+                Spacer(Modifier.height(32.dp))
             }
         }
     }
@@ -257,9 +275,11 @@ fun ProductImage(modifier: Modifier, imageId: Int) {
     }
 }
 
+@OptIn(ExperimentalTime::class)
 @Composable
 private fun PurchaseInfoView(
     addToCartState: AddToCartState,
+    deliveryDate: LocalDate,
     modifier: Modifier = Modifier,
     onAddToCart: () -> Unit,
     priceUSD: Float,
@@ -271,16 +291,61 @@ private fun PurchaseInfoView(
             priceUSD = priceUSD,
         )
 
+        Spacer(modifier.height(16.dp))
+
+        val context = LocalContext.current
+
         WithPrimeLogoText {
             Text(
                 fontWeight = FontWeight.Bold,
                 inlineContent = it.inlineContent,
                 text = buildAnnotatedString {
                     it.appendPrimeLogo(this)
-                    append(" Overnight")
+
+                    val primeDeliveryString =
+                        deliveryDate.toPrimeDeliveryString(context)
+                    primeDeliveryString?.let {
+                        append(" $primeDeliveryString")
+                    }
                 },
             )
         }
+
+        Spacer(modifier.height(4.dp))
+
+        Text(
+            text = buildAnnotatedString {
+                append("FREE delivery ")
+                withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                    append(deliveryDate.toRelativeDateString(context, true))
+                }
+                append(" Order within ")
+                withStyle(SpanStyle(color = Teal60)) {
+                    append("4${nbsp}hrs${nbsp}29${nbsp}mins") // todo
+                }
+            }
+        )
+
+        Spacer(modifier.height(16.dp))
+
+        Text(
+            text = buildAnnotatedString {
+                withStyle(SpanStyle(color = LinkBlue)) {
+                    append("Deliver to John Doe - New York 10101")
+                }
+            }
+        )
+
+        Spacer(modifier.height(12.dp))
+
+        val bodyLarge = MaterialTheme.typography.bodyLarge
+        Text(
+            color = Green60,
+            style = bodyLarge.copy(fontSize = bodyLarge.fontSize * 1.12),
+            text = "In Stock",
+        )
+
+        Spacer(modifier.height(16.dp))
 
         val primaryCtaText = if (addToCartState != AddToCartState.Adding) {
             stringResource(R.string.add_to_cart)

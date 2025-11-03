@@ -2,6 +2,7 @@ package com.example.fakeamazon.data
 
 import com.example.fakeamazon.R
 import com.example.fakeamazon.shared.model.ProductInfo
+import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,6 +28,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Cleanbear Reusable Dish Washing Rubber Glove Set of 3, Household Cleaning Gloves for Washing",
             productRating = 4.6f,
             priceUSD = 12.99f,
+            deliveryDate = LocalDate.now().plusDays(1),
             imageId = R.drawable.item_cleaning_gloves,
         ),
         ProductInfo(
@@ -37,6 +39,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Native Aluminum-Free Clean Deodorant with Natural Derived Ingredients, 72HR odor control | Deodorant for Women and Men, With Baking Soda, Coconut Oil, Shea Butter | Eucalyptus & Mint",
             productRating = 4.4f,
             priceUSD = 12.99f,
+            deliveryDate = LocalDate.now().plusDays(1),
             imageId = R.drawable.item_deodorant,
         ),
         ProductInfo(
@@ -99,6 +102,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Monopoly Deal Card Game - English Version",
             productRating = 4.4f,
             imageId = R.drawable.item_game_monopoly_deal,
+            deliveryDate = LocalDate.now().plusDays(1),
             priceUSD = 13.99f,
         ),
         ProductInfo(
@@ -141,6 +145,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Scotch-Brite Heavy Duty Scrub Sponge, 9 Kitchen Sponges Designed for Tough Messes in the Kitchen that Last 3X Longer*, Best for Cast Iron Skillets and Outdoor Grills, Flexible, Durable, and Strong",
             productRating = 4.8f,
             imageId = R.drawable.item_kitchen_sponge,
+            deliveryDate = LocalDate.now().plusDays(1),
             priceUSD = 9.79f,
             discount = 0.09f,
         ),
@@ -163,6 +168,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Amazon Basics Reclosable Sandwich Double Zipper Storage Bags, 100 Count, Pack of 1",
             productRating = 4.7f,
             imageId = R.drawable.item_sandwich_bags,
+            deliveryDate = LocalDate.now().plusDays(1),
             priceUSD = 3.37f,
             discount = 0.07f,
         ),
@@ -184,6 +190,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Amazon Grocery, Peanut Butter Filled Pretzels, 24 Oz (Previously Amazon Fresh, Packaging May Vary)",
             productRating = 4.5f,
             imageId = R.drawable.item_snack_amazon_pbpretzels,
+            deliveryDate = LocalDate.now().plusDays(1),
             priceUSD = 5.43f,
         ),
         ProductInfo(
@@ -194,6 +201,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Blue Diamond Almonds Low Sodium Lightly Salted Snack Nuts, 40 Oz Resealable Bag (Pack of 1)",
             productRating = 4.7f,
             imageId = R.drawable.item_snack_bluediamond_almonds,
+            deliveryDate = LocalDate.now().plusDays(1),
             priceUSD = 11.98f,
         ),
         ProductInfo(
@@ -204,6 +212,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Dot's Pretzels Original Seasoned Pretzel Twist Snack, 16oz Grocery Sized Bag",
             productRating = 4.7f,
             imageId = R.drawable.item_snack_dots_originalpretzels,
+            deliveryDate = LocalDate.now().plusDays(1),
             priceUSD = 6.17f,
         ),
         ProductInfo(
@@ -214,6 +223,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Larabar Peanut Butter Chocolate Chip, Gluten Free Fruit & Nut Bar, 16 Ct",
             productRating = 4.6f,
             imageId = R.drawable.item_snack_larabar_pbchocolatechip,
+            deliveryDate = LocalDate.now().plusDays(1),
             priceUSD = 17.25f,
         ),
         ProductInfo(
@@ -224,6 +234,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Pop Secret Microwave Popcorn, Movie Theater Butter Flavor, 1.75 Oz Snack Bags, (Pack of 12)",
             productRating = 4.6f,
             imageId = R.drawable.item_snack_popsecret_popcorn,
+            deliveryDate = LocalDate.now().plusDays(1),
             priceUSD = 3.58f,
         ),
         ProductInfo(
@@ -234,6 +245,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Sahale Snacks Glazed Mix Nut Blend Variety Pack, 1.5 Oz Grab & Go Bags (12 Total Packs) - Four Different Dry-Roasted Deluxe Mixed Nuts Blends Included - Non-GMO Kosher & Certified Gluten-Free Snacks",
             productRating = 4.6f,
             imageId = R.drawable.item_snack_sahale_mixednuts,
+            deliveryDate = LocalDate.now().plusDays(1),
             priceUSD = 39.99f,
         ),
         ProductInfo(
@@ -244,6 +256,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Wonderful Pistachios No Shells, Roasted & Salted Nuts, 0.75 Ounce Bag (Pack of 14), Protein Snacks, Vegan Snacks, On-the-Go, Individual Snacks for Adults, Stocking Stuffers",
             productRating = 4.7f,
             imageId = R.drawable.item_snack_wonderful_pistachios,
+            deliveryDate = LocalDate.now().plusDays(1),
             priceUSD = 12.10f,
         ),
         ProductInfo(
@@ -315,6 +328,7 @@ class ProductInMemoryDb @Inject constructor() {
             title = "Brita Standard Water Filter for Pitchers and Dispensers, Reduces Copper, Cadmium and Mercury Impurities, Lasts Two Months or 40 Gallons, Includes 6 Filters for Pitchers",
             productRating = 4.8f,
             imageId = R.drawable.item_water_filter,
+            deliveryDate = LocalDate.now().plusDays(1),
             priceUSD = 28.49f,
         ),
     )

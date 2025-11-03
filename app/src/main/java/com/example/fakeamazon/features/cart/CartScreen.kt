@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -48,18 +50,18 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
 import com.example.fakeamazon.shared.model.CartItem
+import com.example.fakeamazon.shared.toPrimeDeliveryString
+import com.example.fakeamazon.shared.toRelativeDateString
 import com.example.fakeamazon.shared.ui.PriceDisplaySize
 import com.example.fakeamazon.shared.ui.PriceText
 import com.example.fakeamazon.shared.ui.PrimaryCta
 import com.example.fakeamazon.shared.ui.WithPrimeLogoText
 import com.example.fakeamazon.ui.theme.AmazonOutlineMedium
 import com.example.fakeamazon.ui.theme.Gray90
+import com.example.fakeamazon.ui.theme.Green60
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 private val CART_CONTAINER_COLOR = Gray90
-private val DATE_FORMATTER = DateTimeFormatter.ofPattern("EEE, MMM d", Locale.getDefault())
 
 @Composable
 fun CartScreenRoot(
@@ -306,7 +308,10 @@ private fun RightPanel(
         )
 
         Spacer(modifier = Modifier.height(2.dp))
-        PrimeDayText(extraLineHeightTextStyle)
+        PrimeDayText(
+            extraLineHeightTextStyle = extraLineHeightTextStyle,
+            estDeliveryDate = cartItem.estDeliveryDate,
+        )
         ExpectedDeliveryText(
             extraLineHeightTextStyle = extraLineHeightTextStyle,
             estDeliveryDate = cartItem.estDeliveryDate,
@@ -352,15 +357,11 @@ private fun ExpectedDeliveryText(
         modifier = modifier,
         style = extraLineHeightTextStyle,
         text = buildAnnotatedString {
-            val deliveryText = stringResource(R.string.cart_item_free_delivery)
-            val deliveryDate = DATE_FORMATTER.format(estDeliveryDate)
-            append("$deliveryText ")
-            addStyle(
-                SpanStyle(fontWeight = FontWeight.Bold),
-                length,
-                length + deliveryDate.length
-            )
-            append(deliveryDate)
+            val deliveryDate = estDeliveryDate.toRelativeDateString(LocalContext.current, false)
+            append(stringResource(R.string.cart_item_free_delivery) + " ")
+            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                append(deliveryDate)
+            }
         },
     )
 }
@@ -377,7 +378,11 @@ private fun ReturnPolicyText(extraLineHeightTextStyle: TextStyle, modifier: Modi
 }
 
 @Composable
-private fun PrimeDayText(extraLineHeightTextStyle: TextStyle, modifier: Modifier = Modifier) {
+private fun PrimeDayText(
+    extraLineHeightTextStyle: TextStyle,
+    modifier: Modifier = Modifier,
+    estDeliveryDate: LocalDate
+) {
     WithPrimeLogoText {
         Text(
             inlineContent = it.inlineContent,
@@ -386,7 +391,10 @@ private fun PrimeDayText(extraLineHeightTextStyle: TextStyle, modifier: Modifier
             style = extraLineHeightTextStyle.copy(fontWeight = FontWeight.Bold),
             text = buildAnnotatedString {
                 it.appendPrimeLogo(this)
-                append(" Two-Day")
+                val primeDeliveryText = estDeliveryDate.toPrimeDeliveryString(LocalContext.current)
+                primeDeliveryText?.let { primeDeliveryText ->
+                    append(" $primeDeliveryText")
+                }
             },
         )
     }
@@ -395,7 +403,7 @@ private fun PrimeDayText(extraLineHeightTextStyle: TextStyle, modifier: Modifier
 @Composable
 private fun InStockText(extraLineHeightTextStyle: TextStyle, modifier: Modifier = Modifier) {
     Text(
-        color = Color(0xFF347840),
+        color = Green60,
         maxLines = 1,
         modifier = modifier,
         style = extraLineHeightTextStyle,

@@ -23,6 +23,6 @@ fun ProductInfo.toCartItem(quantity: Int = 0): CartItem =
         quantity = quantity,
         priceUSD = priceUSD,
         deliveryCostUSD = 0f,
-        estDeliveryDate = LocalDate.now().plusDays(2),
+        estDeliveryDate = deliveryDate,
         isInStock = true,
     )

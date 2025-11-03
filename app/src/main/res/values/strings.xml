@@ -7,6 +7,8 @@
     <string name="cart_proceed_to_checkout">Proceed to checkout (0 items)</string>
     <string name="cart_subtotal">Subtotal $%1$s</string>
     <string name="cart_title">Shopping Cart</string>
+    <string name="datetime_tomorrow">Tomorrow</string>
+    <string name="datetime_two_day">Two-Day</string>
     <string name="delete">Delete</string>
     <string name="error_loading_content">Error loading content.</string>
     <string name="item_display_discount_off_label">%1$d%% off</string>
