@@ -2,7 +2,7 @@ package com.example.fakeamazon.features.product
 
 import com.example.fakeamazon.TestDispatcherProvider
 import com.example.fakeamazon.data.CartRepository
-import com.example.fakeamazon.data.ProductInMemoryDb
+import com.example.fakeamazon.data.ProductRepository
 import com.example.fakeamazon.shared.model.ProductInfo
 import com.example.fakeamazon.shared.model.fakeInfo
 import io.kotest.assertions.withClue
@@ -31,29 +31,29 @@ import org.junit.jupiter.api.Test
 @OptIn(ExperimentalCoroutinesApi::class) // advanceUntilIdle()
 class ProductViewModelTest {
 
-    companion object {
-        const val VALID_PRODUCT_ID: Int = 123
-        const val INVALID_PRODUCT_ID: Int = -321
+    private companion object {
+        private const val VALID_PRODUCT_ID: Int = 123
+        private const val INVALID_PRODUCT_ID: Int = -321
     }
 
-    val testDispatcherProvider = TestDispatcherProvider()
-    val dispatcher = testDispatcherProvider.default
-    val cartRepository = mockk<CartRepository>()
-    val expectedProductInfo = ProductInfo.fakeInfo(VALID_PRODUCT_ID)
+    private val testDispatcherProvider = TestDispatcherProvider()
+    private val dispatcher = testDispatcherProvider.default
+    private val cartRepository = mockk<CartRepository>()
+    private val expectedProductInfo = ProductInfo.fakeInfo(VALID_PRODUCT_ID)
 
-    lateinit var viewModel: ProductViewModel
+    private lateinit var viewModel: ProductViewModel
 
     @BeforeEach
     fun setUp() {
+        val productRepository = mockk<ProductRepository>()
+        coEvery { productRepository.getProductById(VALID_PRODUCT_ID) } returns expectedProductInfo
+        coEvery { productRepository.getProductById(INVALID_PRODUCT_ID) } returns null
         coEvery { cartRepository.addToCart(any()) } just Runs
-        val productInMemoryDb = mockk<ProductInMemoryDb>()
-        every { productInMemoryDb.getProductById(VALID_PRODUCT_ID) } returns expectedProductInfo
-        every { productInMemoryDb.getProductById(INVALID_PRODUCT_ID) } returns null
 
         viewModel = ProductViewModel(
             cartRepository = cartRepository,
             dispatcherProvider = testDispatcherProvider,
-            productInMemoryDb = productInMemoryDb,
+            productRepository = productRepository,
         )
     }
 

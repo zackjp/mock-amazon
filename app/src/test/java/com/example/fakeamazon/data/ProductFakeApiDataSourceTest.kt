@@ -1,0 +1,37 @@
+package com.example.fakeamazon.data
+
+import com.example.fakeamazon.shared.model.ProductInfo
+import com.example.fakeamazon.shared.model.fakeInfo
+import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
+class ProductFakeApiDataSourceTest {
+
+    private companion object {
+        private const val VALID_PRODUCT_ID = 123
+    }
+
+    private val expectedProductInfo = ProductInfo.fakeInfo(VALID_PRODUCT_ID)
+
+    private lateinit var dataSource: ProductFakeApiDataSource
+
+    @BeforeEach
+    fun setUp() {
+        val productInMemoryDb = mockk<ProductInMemoryDb>()
+        every { productInMemoryDb.getProductById(VALID_PRODUCT_ID) } returns expectedProductInfo
+
+        dataSource = ProductFakeApiDataSource(productInMemoryDb)
+    }
+
+    @Test
+    fun getProductById_ReturnsProductInfo() = runTest {
+        val actual = dataSource.getProductById(VALID_PRODUCT_ID)
+
+        actual shouldBe expectedProductInfo
+    }
+
+}
