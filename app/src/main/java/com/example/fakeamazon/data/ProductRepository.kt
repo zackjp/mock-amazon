@@ -10,4 +10,7 @@ class ProductRepository @Inject() constructor(
     suspend fun getProductById(productId: Int): ProductInfo? =
         productFakeApiDataSource.getProductById(productId)
 
+    suspend fun getSimilarProducts(productId: Int): List<ProductInfo> =
+        productFakeApiDataSource.getSimilarProducts(productId)
+
 }

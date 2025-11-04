@@ -7,6 +7,7 @@ sealed class ProductUiState {
     data class Loaded(
         val productInfo: ProductInfo,
         val addToCartState: AddToCartState = AddToCartState.Inactive,
+        val similarProducts: List<ProductInfo>,
     ) : ProductUiState()
     object Error : ProductUiState()
 }

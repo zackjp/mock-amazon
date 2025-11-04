@@ -16,7 +16,6 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -40,6 +39,10 @@ class ProductViewModelTest {
     private val dispatcher = testDispatcherProvider.default
     private val cartRepository = mockk<CartRepository>()
     private val expectedProductInfo = ProductInfo.fakeInfo(VALID_PRODUCT_ID)
+    private val expectedSimilarProducts = listOf(
+        ProductInfo.fakeInfo(VALID_PRODUCT_ID + 1),
+        ProductInfo.fakeInfo(VALID_PRODUCT_ID + 2),
+    )
 
     private lateinit var viewModel: ProductViewModel
 
@@ -48,6 +51,8 @@ class ProductViewModelTest {
         val productRepository = mockk<ProductRepository>()
         coEvery { productRepository.getProductById(VALID_PRODUCT_ID) } returns expectedProductInfo
         coEvery { productRepository.getProductById(INVALID_PRODUCT_ID) } returns null
+        coEvery { productRepository.getSimilarProducts(VALID_PRODUCT_ID) } returns expectedSimilarProducts
+        coEvery { productRepository.getSimilarProducts(INVALID_PRODUCT_ID) } returns emptyList()
         coEvery { cartRepository.addToCart(any()) } just Runs
 
         viewModel = ProductViewModel(
@@ -64,12 +69,15 @@ class ProductViewModelTest {
     }
 
     @Test
-    fun load_WithValidProductId_LoadsProductInfo() = runTest(dispatcher) {
+    fun load_WithValidProductId_LoadsProductInfoAndSimilarProducts() = runTest(dispatcher) {
         viewModel.load(VALID_PRODUCT_ID)
 
         viewModel.uiState.first() shouldNotBe instanceOf<ProductUiState.Loaded>()
         advanceUntilIdle()
-        viewModel.uiState.first() shouldBe ProductUiState.Loaded(expectedProductInfo)
+        viewModel.uiState.first() shouldBe ProductUiState.Loaded(
+            productInfo = expectedProductInfo,
+            similarProducts = expectedSimilarProducts,
+        )
     }
 
     @Test
@@ -113,10 +121,12 @@ class ProductViewModelTest {
         viewModel.addToCart()
         advanceUntilIdle()
 
-        withClue("Expected three state transitions: " +
-                "from ${AddToCartState.Inactive.name} " +
-                "-> ${AddToCartState.Adding.name} " +
-                "-> ${AddToCartState.Added.name}") {
+        withClue(
+            "Expected three state transitions: " +
+                    "from ${AddToCartState.Inactive.name} " +
+                    "-> ${AddToCartState.Adding.name} " +
+                    "-> ${AddToCartState.Added.name}"
+        ) {
             statesEmitted.size shouldBe 3
             statesEmitted[0].shouldBeInstanceOf<ProductUiState.Loaded> {
                 it.addToCartState shouldBe AddToCartState.Inactive

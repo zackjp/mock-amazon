@@ -13,4 +13,9 @@ class ProductFakeApiDataSource @Inject constructor(
         return productInMemoryDb.getProductById(productId)
     }
 
+    suspend fun getSimilarProducts(productId: Int): List<ProductInfo> {
+        delay(100)
+        return productInMemoryDb.getSimilarProducts(productId)
+    }
+
 }

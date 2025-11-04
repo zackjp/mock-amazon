@@ -13,7 +13,21 @@ data class ProductInfo(
     @param:DrawableRes val imageId: Int,
     val priceUSD: Float,
     val deliveryDate: LocalDate = LocalDate.now().plusDays(2),
+    val category: ProductCategory,
     val discount: Float? = null,
 ) {
     companion object
+}
+
+enum class ProductCategory() {
+    BAGS_AND_CASES,
+    BEVERAGES_TEA,
+    BEVERAGES_SOFT_DRINKS,
+    BOARD_GAMES,
+    HEADPHONES,
+    HOUSEHOLD_SUPPLIES,
+    SNACKS,
+    SNEAKERS,
+    TOILETRIES,
+    UNKNOWN,
 }

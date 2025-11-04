@@ -2,8 +2,10 @@ package com.example.fakeamazon.features.product
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -14,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.InlineTextContent
@@ -42,7 +46,9 @@ import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -51,6 +57,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
 import com.example.fakeamazon.app.ui.AMAZON_BEIGE
+import com.example.fakeamazon.shared.ignoreParentPadding
+import com.example.fakeamazon.shared.model.ProductInfo
 import com.example.fakeamazon.shared.toPrimeDeliveryString
 import com.example.fakeamazon.shared.toRelativeDateString
 import com.example.fakeamazon.shared.ui.PriceDisplaySize
@@ -135,6 +143,7 @@ private fun LoadedScreen(
     onCartAddedViewed: () -> Unit,
 ) {
     val productInfo = loadedState.productInfo
+    val similarProducts = loadedState.similarProducts
     val addToCartState = loadedState.addToCartState
     val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
 
@@ -186,6 +195,30 @@ private fun LoadedScreen(
                     modifier = Modifier.fillMaxWidth(),
                     onAddToCart = onAddToCart,
                     priceUSD = productInfo.priceUSD,
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Text(
+                    style = with(MaterialTheme.typography.bodyLarge) {
+                        copy(
+                            fontSize = fontSize * 1.15,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    },
+                    text = "You might also like",
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                SimilarProductsView(
+                    horizontalContentPadding = mainContentPadding,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .ignoreParentPadding(mainContentPadding),
+                    similarProducts = similarProducts,
                 )
             }
 
@@ -359,6 +392,37 @@ private fun PurchaseInfoView(
             onClick = { onAddToCart() },
             text = primaryCtaText,
         )
+    }
+}
+
+@Composable
+fun SimilarProductsView(
+    modifier: Modifier = Modifier,
+    similarProducts: List<ProductInfo>,
+    horizontalContentPadding: Dp,
+) {
+    LazyRow(
+        contentPadding = PaddingValues(horizontal = horizontalContentPadding),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier,
+    ) {
+        items(similarProducts) { product ->
+            Column(modifier = Modifier.width(150.dp)) {
+                Image(
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxWidth().aspectRatio(1f),
+                    painter = painterResource(product.imageId),
+                )
+
+                Spacer(modifier = Modifier.height(2.dp))
+
+                Text(
+                    maxLines = 2,
+                    text = product.title,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+        }
     }
 }
 

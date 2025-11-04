@@ -16,6 +16,10 @@ class ProductFakeApiDataSourceTest {
     }
 
     private val expectedProductInfo = ProductInfo.fakeInfo(VALID_PRODUCT_ID)
+    private val expectedSimilarProducts = listOf(
+        ProductInfo.fakeInfo(100),
+        ProductInfo.fakeInfo(200),
+    )
 
     private lateinit var dataSource: ProductFakeApiDataSource
 
@@ -23,6 +27,7 @@ class ProductFakeApiDataSourceTest {
     fun setUp() {
         val productInMemoryDb = mockk<ProductInMemoryDb>()
         every { productInMemoryDb.getProductById(VALID_PRODUCT_ID) } returns expectedProductInfo
+        every { productInMemoryDb.getSimilarProducts(VALID_PRODUCT_ID) } returns expectedSimilarProducts
 
         dataSource = ProductFakeApiDataSource(productInMemoryDb)
     }
@@ -32,6 +37,13 @@ class ProductFakeApiDataSourceTest {
         val actual = dataSource.getProductById(VALID_PRODUCT_ID)
 
         actual shouldBe expectedProductInfo
+    }
+
+    @Test
+    fun getSimilarProducts_ReturnsSimilarProducts() = runTest {
+        val actual = dataSource.getSimilarProducts(VALID_PRODUCT_ID)
+
+        actual shouldBe expectedSimilarProducts
     }
 
 }

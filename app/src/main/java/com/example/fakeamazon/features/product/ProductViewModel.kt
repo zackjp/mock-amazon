@@ -6,7 +6,6 @@ import com.example.fakeamazon.data.CartRepository
 import com.example.fakeamazon.data.ProductRepository
 import com.example.fakeamazon.shared.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -26,10 +25,17 @@ class ProductViewModel @Inject constructor(
     fun load(productId: Int) {
         viewModelScope.launch(dispatcherProvider.default) {
             val productInfo = productRepository.getProductById(productId)
+
             if (productInfo == null) {
                 _uiState.update { ProductUiState.Error }
             } else {
-                _uiState.update { ProductUiState.Loaded(productInfo) }
+                val similarProducts = productRepository.getSimilarProducts(productId)
+                _uiState.update {
+                    ProductUiState.Loaded(
+                        productInfo = productInfo,
+                        similarProducts = similarProducts,
+                    )
+                }
             }
         }
     }
