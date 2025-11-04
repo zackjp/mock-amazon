@@ -42,6 +42,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.SpanStyle
@@ -279,25 +280,16 @@ private fun StoreAndProductRatingHeader(
                     text = "Visit the Store",
                 )
 
-                val starCounts = calculateStarCounts(productRating)
-                val starString = buildAnnotatedString {
+                val ratingString = buildAnnotatedString {
                     append("$productRating ")
-                    repeat(starCounts.fullStarCount) {
-                        appendInlineContent("fullStar", "[*]")
-                    }
-                    repeat(starCounts.halfStarCount) {
-                        appendInlineContent("halfStar", "[/]")
-                    }
-                    repeat(starCounts.emptyStarCount) {
-                        appendInlineContent("emptyStar", "[-]")
-                    }
+                    append(buildProductStarsString(productRating))
                 }
 
                 Text(
                     inlineContent = starRatingsIconMap,
                     modifier = Modifier.align(Alignment.CenterVertically),
                     style = MaterialTheme.typography.bodySmall,
-                    text = starString,
+                    text = ratingString,
                 )
             }
         }
@@ -429,10 +421,19 @@ fun SimilarProductsView(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    maxLines = 2,
                     color = LinkBlue,
-                    text = product.title,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
+                    text = product.title,
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    maxLines = 1,
+                    fontSize = 20.sp,
+                    inlineContent = starRatingsIconMap,
+                    text = buildProductStarsString(product.productRating),
                 )
             }
         }
@@ -488,7 +489,7 @@ fun InteractionBlockingOverlay(modifier: Modifier, content: @Composable () -> Un
     }
 }
 
-private fun calculateStarCounts(rawProductRating: Float): StarCounts {
+private fun buildProductStarsString(rawProductRating: Float): AnnotatedString {
     val productRating = rawProductRating.coerceAtMost(5f)
     val ratingFraction = productRating - floor(productRating)
 
@@ -503,7 +504,17 @@ private fun calculateStarCounts(rawProductRating: Float): StarCounts {
 
     val emptyStarCount = 5 - fullStarCount - halfStarCount // fill remaining with empty-stars
 
-    return StarCounts(fullStarCount, halfStarCount, emptyStarCount)
+    return buildAnnotatedString {
+        repeat(fullStarCount) {
+            appendInlineContent("fullStar", "[*]")
+        }
+        repeat(halfStarCount) {
+            appendInlineContent("halfStar", "[/]")
+        }
+        repeat(emptyStarCount) {
+            appendInlineContent("emptyStar", "[-]")
+        }
+    }
 }
 
 private val starRatingsIconMap = mapOf(
@@ -528,10 +539,4 @@ private val starRatingsIconMap = mapOf(
             tint = AmazonOrange,
         )
     },
-)
-
-data class StarCounts(
-    val fullStarCount: Int,
-    val halfStarCount: Int,
-    val emptyStarCount: Int,
 )
