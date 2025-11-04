@@ -2,6 +2,7 @@ package com.example.fakeamazon.features.product
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -81,6 +82,7 @@ private const val CART_ADDED_OVERLAY_TIMEOUT = 2000L
 @Composable
 fun ProductScreenRoot(
     modifier: Modifier = Modifier,
+    onViewProduct: (Int) -> Unit,
     productId: Int,
     viewModel: ProductViewModel = hiltViewModel(),
 ) {
@@ -94,6 +96,7 @@ fun ProductScreenRoot(
         modifier = modifier,
         onAddToCart = { viewModel.addToCart() },
         onCartAddedViewed = { viewModel.onCartAddedViewed() },
+        onViewProduct = onViewProduct,
         uiState = uiState,
     )
 }
@@ -103,6 +106,7 @@ private fun ProductScreen(
     modifier: Modifier = Modifier,
     onAddToCart: () -> Unit = {},
     onCartAddedViewed: () -> Unit = {},
+    onViewProduct: (Int) -> Unit = {},
     uiState: ProductUiState,
 ) {
     when (uiState) {
@@ -113,6 +117,7 @@ private fun ProductScreen(
             modifier = modifier,
             onAddToCart = onAddToCart,
             onCartAddedViewed = onCartAddedViewed,
+            onViewProduct = onViewProduct,
         )
     }
 }
@@ -141,6 +146,7 @@ private fun LoadedScreen(
     modifier: Modifier,
     onAddToCart: () -> Unit,
     onCartAddedViewed: () -> Unit,
+    onViewProduct: (Int) -> Unit,
 ) {
     val productInfo = loadedState.productInfo
     val similarProducts = loadedState.similarProducts
@@ -218,6 +224,7 @@ private fun LoadedScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .ignoreParentPadding(mainContentPadding),
+                    onViewProduct = onViewProduct,
                     similarProducts = similarProducts,
                 )
             }
@@ -397,9 +404,10 @@ private fun PurchaseInfoView(
 
 @Composable
 fun SimilarProductsView(
-    modifier: Modifier = Modifier,
-    similarProducts: List<ProductInfo>,
     horizontalContentPadding: Dp,
+    modifier: Modifier = Modifier,
+    onViewProduct: (Int) -> Unit,
+    similarProducts: List<ProductInfo>,
 ) {
     LazyRow(
         contentPadding = PaddingValues(horizontal = horizontalContentPadding),
@@ -407,7 +415,11 @@ fun SimilarProductsView(
         modifier = modifier,
     ) {
         items(similarProducts) { product ->
-            Column(modifier = Modifier.width(150.dp)) {
+            Column(
+                modifier = Modifier
+                    .clickable(onClick = { onViewProduct(product.id) })
+                    .width(150.dp)
+            ) {
                 Image(
                     contentDescription = null,
                     modifier = Modifier.fillMaxWidth().aspectRatio(1f),
@@ -418,6 +430,7 @@ fun SimilarProductsView(
 
                 Text(
                     maxLines = 2,
+                    color = LinkBlue,
                     text = product.title,
                     overflow = TextOverflow.Ellipsis,
                 )

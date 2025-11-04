@@ -103,6 +103,7 @@ fun AmazonNavGraph(
                 modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxWidth(),
+                onViewProduct = onViewProduct,
                 productId = route.productId,
             )
         }
