@@ -206,28 +206,30 @@ private fun LoadedScreen(
             }
 
             item {
-                Spacer(modifier = Modifier.height(32.dp))
+                if (similarProducts.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(32.dp))
 
-                Text(
-                    style = with(MaterialTheme.typography.bodyLarge) {
-                        copy(
-                            fontSize = fontSize * 1.15,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    },
-                    text = stringResource(R.string.you_might_also_like),
-                )
+                    Text(
+                        style = with(MaterialTheme.typography.bodyLarge) {
+                            copy(
+                                fontSize = fontSize * 1.15,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        },
+                        text = stringResource(R.string.you_might_also_like),
+                    )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                SimilarProductsView(
-                    horizontalContentPadding = mainContentPadding,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .ignoreParentPadding(mainContentPadding),
-                    onViewProduct = onViewProduct,
-                    similarProducts = similarProducts,
-                )
+                    SimilarProductsView(
+                        horizontalContentPadding = mainContentPadding,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .ignoreParentPadding(mainContentPadding),
+                        onViewProduct = onViewProduct,
+                        similarProducts = similarProducts,
+                    )
+                }
             }
 
             item {
