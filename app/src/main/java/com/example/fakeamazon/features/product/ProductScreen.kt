@@ -66,7 +66,7 @@ import com.example.fakeamazon.shared.toRelativeDateString
 import com.example.fakeamazon.shared.ui.PriceDisplaySize
 import com.example.fakeamazon.shared.ui.PriceText
 import com.example.fakeamazon.shared.ui.PrimaryCta
-import com.example.fakeamazon.shared.ui.WithPrimeLogoText
+import com.example.fakeamazon.shared.ui.getPrimeLogoTextInfo
 import com.example.fakeamazon.ui.theme.AmazonGray
 import com.example.fakeamazon.ui.theme.AmazonOrange
 import com.example.fakeamazon.ui.theme.Green60
@@ -327,21 +327,20 @@ private fun PurchaseInfoView(
 
         val context = LocalContext.current
 
-        WithPrimeLogoText {
-            Text(
-                fontWeight = FontWeight.Bold,
-                inlineContent = it.inlineContent,
-                text = buildAnnotatedString {
-                    it.appendPrimeLogo(this)
+        val primeLogoTextInfo = getPrimeLogoTextInfo()
+        Text(
+            fontWeight = FontWeight.Bold,
+            inlineContent = primeLogoTextInfo.inlineContent,
+            text = buildAnnotatedString {
+                append(primeLogoTextInfo.primeLogoText)
 
-                    val primeDeliveryString =
-                        deliveryDate.toPrimeDeliveryString(context)
-                    primeDeliveryString?.let {
-                        append(" $primeDeliveryString")
-                    }
-                },
-            )
-        }
+                val primeDeliveryString =
+                    deliveryDate.toPrimeDeliveryString(context)
+                primeDeliveryString?.let {
+                    append(" $primeDeliveryString")
+                }
+            },
+        )
 
         Spacer(modifier.height(4.dp))
 

@@ -28,33 +28,27 @@ import java.util.Locale
 import kotlin.math.roundToInt
 
 private val primeLogoInlineContent = buildPrimeTextIconMap()
-
-@Composable
-fun WithPrimeLogoText(block: @Composable (primeLogoInfo: PrimeLogoInfo) -> Unit) {
-    val primeLogoAppender: AnnotatedString.Builder.() -> Unit = {
-        appendInlineContent("primeCheckmarkIcon", "[primeCheck]")
-        withStyle(
-            SpanStyle(
-                color = AmazonPrimeBlue,
-                fontFamily = AmazonEmber,
-                fontWeight = FontWeight.Bold,
-            )
-        ) {
-            append("prime")
-        }
+private val primeLogoText = buildAnnotatedString {
+    appendInlineContent("primeCheckmarkIcon", "[primeCheck]")
+    withStyle(
+        SpanStyle(
+            color = AmazonPrimeBlue,
+            fontFamily = AmazonEmber,
+            fontWeight = FontWeight.Bold,
+        )
+    ) {
+        append("prime")
     }
-
-    val primeLogoInfo = PrimeLogoInfo(
-        appendPrimeLogo = primeLogoAppender,
-        inlineContent = primeLogoInlineContent,
-    )
-
-    block(primeLogoInfo)
 }
 
-data class PrimeLogoInfo(
-    val appendPrimeLogo: AnnotatedString.Builder.() -> Unit,
+fun getPrimeLogoTextInfo(): PrimeLogoTextInfo = PrimeLogoTextInfo(
+        inlineContent = primeLogoInlineContent,
+        primeLogoText = primeLogoText,
+    )
+
+data class PrimeLogoTextInfo(
     val inlineContent: Map<String, InlineTextContent>,
+    val primeLogoText: AnnotatedString,
 )
 
 @Composable

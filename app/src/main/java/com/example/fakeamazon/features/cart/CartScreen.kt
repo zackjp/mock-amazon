@@ -55,7 +55,7 @@ import com.example.fakeamazon.shared.toRelativeDateString
 import com.example.fakeamazon.shared.ui.PriceDisplaySize
 import com.example.fakeamazon.shared.ui.PriceText
 import com.example.fakeamazon.shared.ui.PrimaryCta
-import com.example.fakeamazon.shared.ui.WithPrimeLogoText
+import com.example.fakeamazon.shared.ui.getPrimeLogoTextInfo
 import com.example.fakeamazon.ui.theme.AmazonOutlineMedium
 import com.example.fakeamazon.ui.theme.Gray90
 import com.example.fakeamazon.ui.theme.Green60
@@ -383,21 +383,20 @@ private fun PrimeDayText(
     modifier: Modifier = Modifier,
     estDeliveryDate: LocalDate
 ) {
-    WithPrimeLogoText {
-        Text(
-            inlineContent = it.inlineContent,
-            maxLines = 1,
-            modifier = modifier,
-            style = extraLineHeightTextStyle.copy(fontWeight = FontWeight.Bold),
-            text = buildAnnotatedString {
-                it.appendPrimeLogo(this)
-                val primeDeliveryText = estDeliveryDate.toPrimeDeliveryString(LocalContext.current)
-                primeDeliveryText?.let { primeDeliveryText ->
-                    append(" $primeDeliveryText")
-                }
-            },
-        )
-    }
+    val primeLogoTextInfo = getPrimeLogoTextInfo()
+    Text(
+        inlineContent = primeLogoTextInfo.inlineContent,
+        maxLines = 1,
+        modifier = modifier,
+        style = extraLineHeightTextStyle.copy(fontWeight = FontWeight.Bold),
+        text = buildAnnotatedString {
+            append(primeLogoTextInfo.primeLogoText)
+            val primeDeliveryText = estDeliveryDate.toPrimeDeliveryString(LocalContext.current)
+            primeDeliveryText?.let { primeDeliveryText ->
+                append(" $primeDeliveryText")
+            }
+        },
+    )
 }
 
 @Composable
