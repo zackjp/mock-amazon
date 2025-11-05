@@ -215,7 +215,7 @@ private fun LoadedScreen(
                             fontWeight = FontWeight.Bold,
                         )
                     },
-                    text = "You might also like",
+                    text = stringResource(R.string.you_might_also_like),
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
