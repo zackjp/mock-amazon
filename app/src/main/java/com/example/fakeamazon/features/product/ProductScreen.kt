@@ -1,5 +1,6 @@
 package com.example.fakeamazon.features.product
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,12 +14,15 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.InlineTextContent
@@ -32,13 +36,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -63,6 +74,7 @@ import com.example.fakeamazon.shared.ignoreParentPadding
 import com.example.fakeamazon.shared.model.ProductInfo
 import com.example.fakeamazon.shared.toPrimeDeliveryString
 import com.example.fakeamazon.shared.toRelativeDateString
+import com.example.fakeamazon.shared.ui.DotIndicators
 import com.example.fakeamazon.shared.ui.PriceDisplaySize
 import com.example.fakeamazon.shared.ui.PriceText
 import com.example.fakeamazon.shared.ui.PrimaryCta
@@ -73,6 +85,7 @@ import com.example.fakeamazon.ui.theme.Green60
 import com.example.fakeamazon.ui.theme.LinkBlue
 import com.example.fakeamazon.ui.theme.Teal60
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import kotlin.math.floor
 import kotlin.text.Typography.nbsp
@@ -185,11 +198,10 @@ private fun LoadedScreen(
             item {
                 Spacer(modifier = Modifier.height(16.dp))
 
-                ProductImage(
+                ProductImages(
+                    mainContentPadding = mainContentPadding,
                     imageId = productInfo.imageId,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f),
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
 
@@ -299,12 +311,45 @@ private fun StoreAndProductRatingHeader(
 }
 
 @Composable
-fun ProductImage(modifier: Modifier, imageId: Int) {
-    Box(modifier = modifier) {
-        Image(
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            painter = painterResource(imageId),
+fun ProductImages(
+    mainContentPadding: Dp,
+    modifier: Modifier = Modifier,
+    imageId: Int,
+) {
+    Column(modifier = modifier) {
+        val imageCount = 8
+        val pageState = rememberPagerState { imageCount }
+
+        HorizontalPager(
+            contentPadding = PaddingValues(horizontal = mainContentPadding),
+            pageSpacing = mainContentPadding,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f)
+                .ignoreParentPadding(mainContentPadding),
+            state = pageState,
+        ) { page ->
+            val colorFilter: ColorFilter? = when (page % 4) {
+                0 -> null
+                1 -> ColorFilter.tint(LinkBlue, BlendMode.Color)
+                2 -> ColorFilter.tint(AmazonOrange, BlendMode.Color)
+                else -> ColorFilter.tint(Teal60, BlendMode.Color)
+            }
+
+            Image(
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                painter = painterResource(imageId),
+                colorFilter = colorFilter
+            )
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        DotIndicators(
+            currentPage = pageState.currentPage,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            totalPageCount = imageCount,
         )
     }
 }
@@ -415,7 +460,9 @@ fun SimilarProductsView(
             ) {
                 Image(
                     contentDescription = null,
-                    modifier = Modifier.fillMaxWidth().aspectRatio(1f),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f),
                     painter = painterResource(product.imageId),
                 )
 
