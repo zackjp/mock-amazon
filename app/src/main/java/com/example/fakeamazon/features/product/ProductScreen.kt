@@ -1,93 +1,36 @@
 package com.example.fakeamazon.features.product
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.TextAutoSize
-import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.Placeholder
-import androidx.compose.ui.text.PlaceholderVerticalAlign
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
-import com.example.fakeamazon.app.ui.AMAZON_BEIGE
-import com.example.fakeamazon.shared.ignoreParentPadding
-import com.example.fakeamazon.shared.model.ProductInfo
-import com.example.fakeamazon.shared.toPrimeDeliveryString
-import com.example.fakeamazon.shared.toRelativeDateString
-import com.example.fakeamazon.shared.ui.DotIndicators
-import com.example.fakeamazon.shared.ui.PriceDisplaySize
-import com.example.fakeamazon.shared.ui.PriceText
-import com.example.fakeamazon.shared.ui.PrimaryCta
-import com.example.fakeamazon.shared.ui.getPrimeLogoTextInfo
+import com.example.fakeamazon.features.product.view.ProductImagesView
+import com.example.fakeamazon.features.product.view.PurchaseInfoView
+import com.example.fakeamazon.features.product.view.SimilarProductsView
+import com.example.fakeamazon.features.product.view.StoreNameAndProductRatingView
+import com.example.fakeamazon.shared.ui.InteractionBlockingOverlay
 import com.example.fakeamazon.ui.theme.AmazonGray
-import com.example.fakeamazon.ui.theme.AmazonOrange
-import com.example.fakeamazon.ui.theme.Green60
-import com.example.fakeamazon.ui.theme.LinkBlue
-import com.example.fakeamazon.ui.theme.Teal60
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.time.LocalDate
-import kotlin.math.floor
-import kotlin.text.Typography.nbsp
-import kotlin.time.ExperimentalTime
 
 private const val CART_ADDED_OVERLAY_TIMEOUT = 2000L
 
@@ -179,7 +122,7 @@ private fun LoadedScreen(
             item {
                 Spacer(modifier = Modifier.height(16.dp))
 
-                StoreAndProductRatingHeader(
+                StoreNameAndProductRatingView(
                     modifier = Modifier.fillMaxWidth(),
                     storeName = productInfo.storeName,
                     storeInitials = productInfo.storeInitials,
@@ -188,15 +131,13 @@ private fun LoadedScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    text = productInfo.title,
-                )
+                Text(productInfo.title)
             }
 
             item {
                 Spacer(modifier = Modifier.height(16.dp))
 
-                ProductImages(
+                ProductImagesView(
                     mainContentPadding = mainContentPadding,
                     imageId = productInfo.imageId,
                     modifier = Modifier.fillMaxWidth(),
@@ -219,23 +160,9 @@ private fun LoadedScreen(
                 if (similarProducts.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(32.dp))
 
-                    Text(
-                        style = with(MaterialTheme.typography.bodyLarge) {
-                            copy(
-                                fontSize = fontSize * 1.15,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        },
-                        text = stringResource(R.string.you_might_also_like),
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
                     SimilarProductsView(
                         horizontalContentPadding = mainContentPadding,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .ignoreParentPadding(mainContentPadding),
+                        modifier = Modifier.fillMaxWidth(),
                         onViewProduct = onViewProduct,
                         similarProducts = similarProducts,
                     )
@@ -243,282 +170,8 @@ private fun LoadedScreen(
             }
 
             item {
+                // Add bottom spacing
                 Spacer(Modifier.height(32.dp))
-            }
-        }
-    }
-}
-
-@Composable
-private fun StoreAndProductRatingHeader(
-    modifier: Modifier = Modifier,
-    storeName: String,
-    storeInitials: String,
-    productRating: Float,
-) {
-    Row(modifier = modifier) {
-        Box(
-            modifier = Modifier
-                .size(36.dp)
-                .clip(CircleShape)
-                .background(AMAZON_BEIGE)
-                .padding(6.dp)
-        ) {
-            BasicText(
-                autoSize = TextAutoSize.StepBased(
-                    minFontSize = 14.sp,
-                    maxFontSize = 22.sp,
-                ),
-                modifier = Modifier.align(Alignment.Center),
-                style = MaterialTheme.typography.displayMedium,
-                text = storeInitials,
-            )
-        }
-
-        Spacer(modifier = Modifier.width(8.dp))
-
-        Column {
-            Text(
-                text = storeName,
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
-            )
-
-            Row {
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .weight(1f),
-                    style = MaterialTheme.typography.bodyMedium,
-                    text = "Visit the Store",
-                )
-
-                val ratingString = buildAnnotatedString {
-                    append("$productRating ")
-                    append(buildProductStarsString(productRating))
-                }
-
-                Text(
-                    inlineContent = starRatingsIconMap,
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    style = MaterialTheme.typography.bodySmall,
-                    text = ratingString,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ProductImages(
-    mainContentPadding: Dp,
-    modifier: Modifier = Modifier,
-    imageId: Int,
-) {
-    Column(modifier = modifier) {
-        val imageCount = 8
-        val wrapAroundScrollPageCount = imageCount + 2 // 1 for each empty page at either end
-        val pageState = rememberPagerState(initialPage = 1) { wrapAroundScrollPageCount }
-        val coroutineScope = rememberCoroutineScope()
-        var isWrapping by remember { mutableStateOf(false) }
-        val lastPageIndex = wrapAroundScrollPageCount - 1
-
-        LaunchedEffect(pageState) {
-            snapshotFlow {
-                pageState.settledPage
-            }.collect { settledPage ->
-                // early return prevents infinite scroll loop. to properly animate the opposite
-                // end's image in from the left/right, we first need to settle on the opposite end's
-                // empty page. without this check, both empty pages would just scroll to each other
-                // indefinitely
-                if (isWrapping) return@collect
-
-                if (settledPage == 0) {
-                    isWrapping = true
-                    pageState.scrollToPage(lastPageIndex)
-                    coroutineScope.launch {
-                        pageState.animateScrollToPage(lastPageIndex - 1)
-                        isWrapping = false
-                    }
-                } else if (settledPage == lastPageIndex) {
-                    isWrapping = true
-                    pageState.scrollToPage(0)
-                    coroutineScope.launch {
-                        pageState.animateScrollToPage(1)
-                        isWrapping = false
-                    }
-                }
-            }
-        }
-
-        HorizontalPager(
-            contentPadding = PaddingValues(horizontal = mainContentPadding),
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f)
-                .ignoreParentPadding(mainContentPadding),
-            pageSpacing = mainContentPadding,
-            state = pageState,
-            userScrollEnabled = !isWrapping
-        ) { page ->
-            val filterWithWrapAroundScroll = (page - 1) % 4 // -1, since first image starts at index 1
-            val colorFilter: ColorFilter? = when (filterWithWrapAroundScroll) {
-                0 -> null
-                1 -> ColorFilter.tint(LinkBlue, BlendMode.Color)
-                2 -> ColorFilter.tint(AmazonOrange, BlendMode.Color)
-                else -> ColorFilter.tint(Teal60, BlendMode.Color)
-            }
-
-            // Leave the first and last page empty, which will automatically be scrolled away from
-            if (page in 1..lastPageIndex - 1) {
-                Image(
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    painter = painterResource(imageId),
-                    colorFilter = colorFilter
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        val currentPageExcludingEmptyPages = (pageState.currentPage - 1).coerceIn(0, imageCount - 1)
-        DotIndicators(
-            currentPage = currentPageExcludingEmptyPages,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            totalPageCount = imageCount,
-        )
-    }
-}
-
-@OptIn(ExperimentalTime::class)
-@Composable
-private fun PurchaseInfoView(
-    addToCartState: AddToCartState,
-    deliveryDate: LocalDate,
-    modifier: Modifier = Modifier,
-    onAddToCart: () -> Unit,
-    priceUSD: Float,
-) {
-    Column(modifier = modifier) {
-        PriceText(
-            displaySize = PriceDisplaySize.Large,
-            modifier = Modifier,
-            priceUSD = priceUSD,
-        )
-
-        Spacer(modifier.height(16.dp))
-
-        val context = LocalContext.current
-
-        val primeLogoTextInfo = getPrimeLogoTextInfo()
-        Text(
-            fontWeight = FontWeight.Bold,
-            inlineContent = primeLogoTextInfo.inlineContent,
-            text = buildAnnotatedString {
-                append(primeLogoTextInfo.primeLogoText)
-
-                val primeDeliveryString =
-                    deliveryDate.toPrimeDeliveryString(context)
-                primeDeliveryString?.let {
-                    append(" $primeDeliveryString")
-                }
-            },
-        )
-
-        Spacer(modifier.height(4.dp))
-
-        Text(
-            text = buildAnnotatedString {
-                append("FREE delivery ")
-                withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                    append(deliveryDate.toRelativeDateString(context, true))
-                }
-                append(" Order within ")
-                withStyle(SpanStyle(color = Teal60)) {
-                    append("4${nbsp}hrs${nbsp}29${nbsp}mins") // todo
-                }
-            }
-        )
-
-        Spacer(modifier.height(16.dp))
-
-        Text(
-            text = buildAnnotatedString {
-                withStyle(SpanStyle(color = LinkBlue)) {
-                    append("Deliver to John Doe - New York 10101")
-                }
-            }
-        )
-
-        Spacer(modifier.height(12.dp))
-
-        val bodyLarge = MaterialTheme.typography.bodyLarge
-        Text(
-            color = Green60,
-            style = bodyLarge.copy(fontSize = bodyLarge.fontSize * 1.12),
-            text = "In Stock",
-        )
-
-        Spacer(modifier.height(16.dp))
-
-        val primaryCtaText = if (addToCartState != AddToCartState.Adding) {
-            stringResource(R.string.add_to_cart)
-        } else {
-            "..."
-        }
-
-        PrimaryCta(
-            enabled = addToCartState != AddToCartState.Adding,
-            modifier = Modifier.fillMaxWidth(),
-            onClick = { onAddToCart() },
-            text = primaryCtaText,
-        )
-    }
-}
-
-@Composable
-fun SimilarProductsView(
-    horizontalContentPadding: Dp,
-    modifier: Modifier = Modifier,
-    onViewProduct: (Int) -> Unit,
-    similarProducts: List<ProductInfo>,
-) {
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = horizontalContentPadding),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier,
-    ) {
-        items(similarProducts) { product ->
-            Column(
-                modifier = Modifier
-                    .clickable(onClick = { onViewProduct(product.id) })
-                    .width(150.dp)
-            ) {
-                Image(
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f),
-                    painter = painterResource(product.imageId),
-                )
-
-                Spacer(modifier = Modifier.height(2.dp))
-
-                Text(
-                    color = LinkBlue,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    text = product.title,
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    maxLines = 1,
-                    fontSize = 20.sp,
-                    inlineContent = starRatingsIconMap,
-                    text = buildProductStarsString(product.productRating),
-                )
             }
         }
     }
@@ -554,73 +207,3 @@ private fun AddToCartBlockingOverlay(
         }
     }
 }
-
-@Composable
-fun InteractionBlockingOverlay(modifier: Modifier, content: @Composable () -> Unit) {
-    Box(
-        modifier = modifier
-            .zIndex(1f)
-            .pointerInput(Unit) {
-                awaitPointerEventScope {
-                    while (true) {
-                        awaitPointerEvent(pass = PointerEventPass.Initial)
-                    }
-                }
-            },
-        contentAlignment = Alignment.Center,
-    ) {
-        content()
-    }
-}
-
-private fun buildProductStarsString(rawProductRating: Float): AnnotatedString {
-    val productRating = rawProductRating.coerceAtMost(5f)
-    val ratingFraction = productRating - floor(productRating)
-
-    var fullStarCount = productRating.toInt()
-    var halfStarCount = 0
-
-    when {
-        ratingFraction >= 0.8f -> fullStarCount++ // .8+ = round up to full-star
-        ratingFraction >= 0.3f -> halfStarCount = 1 // .3+ = show half-star
-        else -> {} // do nothing
-    }
-
-    val emptyStarCount = 5 - fullStarCount - halfStarCount // fill remaining with empty-stars
-
-    return buildAnnotatedString {
-        repeat(fullStarCount) {
-            appendInlineContent("fullStar", "[*]")
-        }
-        repeat(halfStarCount) {
-            appendInlineContent("halfStar", "[/]")
-        }
-        repeat(emptyStarCount) {
-            appendInlineContent("emptyStar", "[-]")
-        }
-    }
-}
-
-private val starRatingsIconMap = mapOf(
-    "fullStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
-        Icon(
-            contentDescription = null,
-            painter = painterResource(R.drawable.ic_baseline_star_24),
-            tint = AmazonOrange,
-        )
-    },
-    "halfStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
-        Icon(
-            contentDescription = null,
-            painter = painterResource(R.drawable.ic_outline_star_half_24),
-            tint = AmazonOrange,
-        )
-    },
-    "emptyStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
-        Icon(
-            contentDescription = null,
-            painter = painterResource(R.drawable.ic_outline_star_24),
-            tint = AmazonOrange,
-        )
-    },
-)
