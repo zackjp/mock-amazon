@@ -176,10 +176,10 @@ private fun LoadedScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp, start = mainContentPadding, end = mainContentPadding)
+                .padding(start = mainContentPadding, end = mainContentPadding)
         ) {
             item {
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 StoreAndProductRatingHeader(
                     modifier = Modifier.fillMaxWidth(),
