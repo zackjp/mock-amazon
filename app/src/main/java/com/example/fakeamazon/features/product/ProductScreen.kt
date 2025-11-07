@@ -1,6 +1,5 @@
 package com.example.fakeamazon.features.product
 
-import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,10 +34,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,7 +48,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -318,36 +316,74 @@ fun ProductImages(
 ) {
     Column(modifier = modifier) {
         val imageCount = 8
-        val pageState = rememberPagerState { imageCount }
+        val wrapAroundScrollPageCount = imageCount + 2 // 1 for each empty page at either end
+        val pageState = rememberPagerState(initialPage = 1) { wrapAroundScrollPageCount }
+        val coroutineScope = rememberCoroutineScope()
+        var isWrapping by remember { mutableStateOf(false) }
+        val lastPageIndex = wrapAroundScrollPageCount - 1
+
+        LaunchedEffect(pageState) {
+            snapshotFlow {
+                pageState.settledPage
+            }.collect { settledPage ->
+                // early return prevents infinite scroll loop. to properly animate the opposite
+                // end's image in from the left/right, we first need to settle on the opposite end's
+                // empty page. without this check, both empty pages would just scroll to each other
+                // indefinitely
+                if (isWrapping) return@collect
+
+                if (settledPage == 0) {
+                    isWrapping = true
+                    pageState.scrollToPage(lastPageIndex)
+                    coroutineScope.launch {
+                        pageState.animateScrollToPage(lastPageIndex - 1)
+                        isWrapping = false
+                    }
+                } else if (settledPage == lastPageIndex) {
+                    isWrapping = true
+                    pageState.scrollToPage(0)
+                    coroutineScope.launch {
+                        pageState.animateScrollToPage(1)
+                        isWrapping = false
+                    }
+                }
+            }
+        }
 
         HorizontalPager(
             contentPadding = PaddingValues(horizontal = mainContentPadding),
-            pageSpacing = mainContentPadding,
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
                 .ignoreParentPadding(mainContentPadding),
+            pageSpacing = mainContentPadding,
             state = pageState,
+            userScrollEnabled = !isWrapping
         ) { page ->
-            val colorFilter: ColorFilter? = when (page % 4) {
+            val filterWithWrapAroundScroll = (page - 1) % 4 // -1, since first image starts at index 1
+            val colorFilter: ColorFilter? = when (filterWithWrapAroundScroll) {
                 0 -> null
                 1 -> ColorFilter.tint(LinkBlue, BlendMode.Color)
                 2 -> ColorFilter.tint(AmazonOrange, BlendMode.Color)
                 else -> ColorFilter.tint(Teal60, BlendMode.Color)
             }
 
-            Image(
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                painter = painterResource(imageId),
-                colorFilter = colorFilter
-            )
+            // Leave the first and last page empty, which will automatically be scrolled away from
+            if (page in 1..lastPageIndex - 1) {
+                Image(
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    painter = painterResource(imageId),
+                    colorFilter = colorFilter
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        val currentPageExcludingEmptyPages = (pageState.currentPage - 1).coerceIn(0, imageCount - 1)
         DotIndicators(
-            currentPage = pageState.currentPage,
+            currentPage = currentPageExcludingEmptyPages,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             totalPageCount = imageCount,
         )
