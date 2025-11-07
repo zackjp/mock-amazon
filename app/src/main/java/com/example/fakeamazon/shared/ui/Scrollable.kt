@@ -88,7 +88,8 @@ fun DotIndicators(
         modifier = modifier.offset(with(density) { dotsAnimator.value.toDp() }),
     ) {
         repeat(dotCount) { dotIndex ->
-            // corrects the dot-to-page mapping near edges, when there is no scrolling
+            // adjustment that keeps the black dot in the middle until the current page is near the
+            // start/end. at which point the dot shifts left/right instead of scrolling
             val pageAdjustment = (currentPage - 2).coerceIn(0, totalPageCount - dotCount)
             val dotToPage = pageAdjustment + dotIndex
 
