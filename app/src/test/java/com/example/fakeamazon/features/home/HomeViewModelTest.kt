@@ -7,7 +7,10 @@ import com.example.fakeamazon.shared.model.Item
 import com.example.fakeamazon.shared.model.ItemGroup
 import com.example.fakeamazon.shared.model.ItemSection
 import com.example.fakeamazon.shared.model.TopHomeGroup
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -78,28 +81,30 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun viewModel_Init_StartsWithEmptyHomeSections() = runTest {
-        advanceUntilIdle()
-
-        viewModel.homeSections.value shouldBe emptyList()
+    fun viewModel_Init_StartsAsLoading() = runTest {
+        viewModel.screenState.first() shouldBe HomeScreenState.Loading
     }
 
     @Test
-    fun viewModel_Load_LoadsHomeSectionsAsync() = runTest {
+    fun viewModel_Load_LoadsTopHomeAndHomeSectionsAsync() = runTest {
         viewModel.load()
 
-        viewModel.homeSections.first() shouldBe emptyList()
+        viewModel.screenState.first() shouldBe HomeScreenState.Loading
         advanceUntilIdle()
-        viewModel.homeSections.first { it.isNotEmpty() } shouldBe mockSections
+        viewModel.screenState.first().shouldBeInstanceOf<HomeScreenState.Loaded> {
+            it.topHomeGroups shouldBe mockTopHomeGroups
+            it.homeSections shouldNot beEmpty()
+        }
     }
 
     @Test
-    fun viewModel_Load_LoadsTopHomeGroupsAsync() = runTest {
+    fun viewModel_Load_EmitsErrorStateIfErred() = runTest {
+        coEvery { mockHomeRepository.getHomeSections() } throws Exception("cancellation test")
         viewModel.load()
 
-        viewModel.topHomeGroups.first() shouldBe emptyList()
+        viewModel.screenState.first() shouldBe HomeScreenState.Loading
         advanceUntilIdle()
-        viewModel.topHomeGroups.first { it.isNotEmpty() } shouldBe mockTopHomeGroups
+        viewModel.screenState.first { it != HomeScreenState.Loading } shouldBe HomeScreenState.Error
     }
 
 }

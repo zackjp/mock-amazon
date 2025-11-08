@@ -20,7 +20,7 @@ class HomeFakeApiDataSource @Inject constructor(
 ) {
 
     suspend fun fetchTopHomeGroups(): List<TopHomeGroup> = withContext(dispatcherProvider.default) {
-        delay(300) // simulate network delay
+        delay(1000) // simulate network delay
         createTopHomeGroups()
     }
 
