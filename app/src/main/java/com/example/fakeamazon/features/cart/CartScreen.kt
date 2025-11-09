@@ -143,7 +143,7 @@ private fun LoadedView(
                 )
             }
 
-            items(cartItems) { cartItem ->
+            items(cartItems, key = { cartItem -> cartItem.id }) { cartItem ->
                 CartItem(
                     cartItem = cartItem,
                     modifier = Modifier

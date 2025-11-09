@@ -66,7 +66,7 @@ fun SimilarProductsView(
                 .fillMaxWidth()
                 .ignoreParentPadding(horizontalContentPadding),
         ) {
-            items(similarProducts) { product ->
+            items(similarProducts, key = { product -> product.id }) { product ->
                 Column(
                     modifier = Modifier
                         .clickable(onClick = { onViewProduct(product.id) })
