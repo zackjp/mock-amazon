@@ -36,6 +36,9 @@ object ProfileStart
 object CartStart
 @Serializable
 object ShortcutsStart
+
+@Serializable
+object Search
 @Serializable
 data class ViewProduct(val productId: Int)
 

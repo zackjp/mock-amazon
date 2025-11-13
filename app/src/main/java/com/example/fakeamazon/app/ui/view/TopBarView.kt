@@ -3,7 +3,9 @@ package com.example.fakeamazon.app.ui.view
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,9 +28,12 @@ import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -70,6 +75,7 @@ fun AmazonTopAppBarWithNavChips(
     navChipsOffset: Float,
     @FloatRange(0.0, 1.0) offsetFraction: Float,
     onNavChipsSizeChange: (IntSize) -> Unit,
+    onOpenSearch: () -> Unit = {},
 ) {
     val paddingXXSmall = dimensionResource(R.dimen.padding_xxsmall)
     val paddingSmall = dimensionResource(R.dimen.padding_small)
@@ -96,12 +102,14 @@ fun AmazonTopAppBarWithNavChips(
 
         Column(modifier = Modifier) {
             SimpleSearchBar(
+                isSearchEditable = false,
                 modifier = Modifier
                     .padding(
                         start = paddingLarge,
                         end = paddingLarge,
                         bottom = paddingSmall
-                    )
+                    ),
+                onOpenSearch = onOpenSearch
             )
 
             NavChipsRow(
@@ -121,28 +129,49 @@ fun AmazonTopAppBarWithNavChips(
 
 @Composable
 fun AmazonTopAppBar(
+    isSearchEditable: Boolean,
     modifier: Modifier = Modifier,
+    onOpenSearch: () -> Unit = {},
 ) {
     val paddingLarge = dimensionResource(R.dimen.padding_large)
     val paddingSmall = dimensionResource(R.dimen.padding_small)
 
     Box(modifier = modifier) {
         SimpleSearchBar(
+            isSearchEditable = isSearchEditable,
             modifier = Modifier
                 .padding(
                     start = paddingLarge,
                     end = paddingLarge,
                     bottom = paddingSmall,
-                )
+                ),
+            onOpenSearch = onOpenSearch,
         )
     }
 }
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun SimpleSearchBar(modifier: Modifier = Modifier) {
-    val interactionSource = remember { MutableInteractionSource() }
+private fun SimpleSearchBar(
+    isSearchEditable: Boolean,
+    modifier: Modifier = Modifier,
+    onOpenSearch: () -> Unit = {},
+) {
     val textFieldShape = MaterialTheme.shapes.extraLarge
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect {
+            if (it is PressInteraction.Release) {
+                onOpenSearch()
+            }
+        }
+    }
+
+    LaunchedEffect(focusRequester) {
+        focusRequester.requestFocus()
+    }
 
     SearchBar(
         colors = SearchBarDefaults.colors(),
@@ -151,12 +180,16 @@ private fun SimpleSearchBar(modifier: Modifier = Modifier) {
         onExpandedChange = {},
         inputField = {
             BasicTextField(
+                interactionSource = interactionSource,
+                readOnly = !isSearchEditable,
                 value = "",
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(44.dp)
                     .clip(textFieldShape)
-                    .border(0.5.dp, AmazonOutlineMedium, textFieldShape),
+                    .border(0.5.dp, AmazonOutlineMedium, textFieldShape)
+                    .focusable()
+                    .focusRequester(focusRequester),
                 onValueChange = {},
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),

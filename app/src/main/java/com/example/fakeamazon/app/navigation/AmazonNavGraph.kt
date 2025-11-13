@@ -17,6 +17,7 @@ import androidx.navigation.toRoute
 import com.example.fakeamazon.features.cart.CartScreenRoot
 import com.example.fakeamazon.features.home.HomeScreenRoot
 import com.example.fakeamazon.features.product.ProductScreenRoot
+import com.example.fakeamazon.features.search.SearchScreenRoot
 import com.example.fakeamazon.shared.ui.ComingSoonScreen
 
 
@@ -105,6 +106,14 @@ fun AmazonNavGraph(
                     .fillMaxWidth(),
                 onViewProduct = onViewProduct,
                 productId = route.productId,
+            )
+        }
+
+        composable<Search> { destination ->
+            SearchScreenRoot(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxWidth()
             )
         }
     }

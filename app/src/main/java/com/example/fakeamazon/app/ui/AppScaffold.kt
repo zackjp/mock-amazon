@@ -25,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.fakeamazon.R
 import com.example.fakeamazon.app.navigation.AmazonNavGraph
 import com.example.fakeamazon.app.navigation.HomeStart
+import com.example.fakeamazon.app.navigation.Search
 import com.example.fakeamazon.app.navigation.TOP_ROUTES_SET
 import com.example.fakeamazon.app.navigation.TopRoute
 import com.example.fakeamazon.app.navigation.ViewProduct
@@ -66,6 +67,10 @@ fun App() {
     }
 
     val currentTab by tabbedNavController.currentTab.collectAsState()
+    val isInSearchMode = currentDestination?.destination?.hasRoute<Search>() == true
+    val onOpenSearch: () -> Unit = if (isInSearchMode) ({}) else ({
+        tabbedNavController.navigateToRoute(Search)
+    })
     val onViewProduct = { productId: Int ->
         tabbedNavController.navigateToRoute(ViewProduct(productId))
     }
@@ -77,7 +82,7 @@ fun App() {
         topBar = {
             val isHome = currentDestination?.destination?.hasRoute<HomeStart>() ?: false
 
-            if (isHome) {
+            if (isHome && !isInSearchMode) {
                 AmazonTopAppBarWithNavChips(
                     modifier = Modifier.fillMaxWidth(),
                     navChipsOffset = collapsibleState.currentOffsetPx.value,
@@ -85,23 +90,28 @@ fun App() {
                     onNavChipsSizeChange = { intSize ->
                         navChipsHeightPx = intSize.height.toFloat()
                     },
+                    onOpenSearch = onOpenSearch,
                 )
             } else {
                 AmazonTopAppBar(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(AMAZON_BEIGE)
+                        .background(AMAZON_BEIGE),
+                    onOpenSearch = onOpenSearch,
+                    isSearchEditable = isInSearchMode,
                 )
             }
         },
         bottomBar = {
-            AmazonBottomAppBar(
-                selectedTab = currentTab,
-                modifier = Modifier
-                    .height(80.dp)
-                    .topBorder(AmazonOutlineLight, 1.dp),
-                navItems = bottomNavItems
-            )
+            if (!isInSearchMode) {
+                AmazonBottomAppBar(
+                    selectedTab = currentTab,
+                    modifier = Modifier
+                        .height(80.dp)
+                        .topBorder(AmazonOutlineLight, 1.dp),
+                    navItems = bottomNavItems
+                )
+            }
         },
     ) { innerPadding ->
         AmazonNavGraph(
