@@ -1,5 +1,6 @@
 package com.example.fakeamazon.features.search
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,13 +22,20 @@ import androidx.compose.ui.unit.dp
 import com.example.fakeamazon.R
 
 @Composable
-fun SearchScreenRoot(modifier: Modifier = Modifier) {
+fun SearchScreenRoot(
+    modifier: Modifier = Modifier,
+    onPerformSearch: (searchString: String) -> Unit = {},
+) {
     val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
 
     Surface(modifier = modifier) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             itemsIndexed(searchItems) { index, searchItem ->
-                Column(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier
+                        .clickable(onClick = { onPerformSearch(searchItem) })
+                        .fillMaxWidth()
+                ) {
                     Row(
                         modifier = Modifier
                             .padding(horizontal = mainContentPadding, vertical = 4.dp)
@@ -58,4 +66,4 @@ fun SearchScreenRoot(modifier: Modifier = Modifier) {
     }
 }
 
-val searchItems = listOf("board games", "popcorn", "almonds low sodium", "adidas sneakers")
+val searchItems = listOf("mixed nuts", "popcorn", "snacks", "almonds low sodium", "pretzels")

@@ -40,6 +40,8 @@ object ShortcutsStart
 @Serializable
 object Search
 @Serializable
+data class SearchResults(val searchString: String)
+@Serializable
 data class ViewProduct(val productId: Int)
 
 fun List<NavBackStackEntry>.nearestTopRoute(): TopRoute? {

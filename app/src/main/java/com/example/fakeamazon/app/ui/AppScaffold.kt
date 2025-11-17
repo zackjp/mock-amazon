@@ -26,6 +26,7 @@ import com.example.fakeamazon.R
 import com.example.fakeamazon.app.navigation.AmazonNavGraph
 import com.example.fakeamazon.app.navigation.HomeStart
 import com.example.fakeamazon.app.navigation.Search
+import com.example.fakeamazon.app.navigation.SearchResults
 import com.example.fakeamazon.app.navigation.TOP_ROUTES_SET
 import com.example.fakeamazon.app.navigation.TopRoute
 import com.example.fakeamazon.app.navigation.ViewProduct
@@ -74,6 +75,13 @@ fun App() {
     val onViewProduct = { productId: Int ->
         tabbedNavController.navigateToRoute(ViewProduct(productId))
     }
+    val onPerformSearch = { searchString: String ->
+        // First, clear Search Screen from backstack
+        if (isInSearchMode) {
+            tabbedNavController.navController.popBackStack()
+        }
+        tabbedNavController.navigateToRoute(SearchResults(searchString))
+    }
 
     Scaffold(
         modifier = Modifier
@@ -120,6 +128,7 @@ fun App() {
             navController = tabbedNavController.navController,
             modifier = Modifier.fillMaxSize(),
             onViewProduct = onViewProduct,
+            onPerformSearch = onPerformSearch,
         )
 
     }

@@ -17,6 +17,7 @@ import androidx.navigation.toRoute
 import com.example.fakeamazon.features.cart.CartScreenRoot
 import com.example.fakeamazon.features.home.HomeScreenRoot
 import com.example.fakeamazon.features.product.ProductScreenRoot
+import com.example.fakeamazon.features.search.SearchResultsScreenRoot
 import com.example.fakeamazon.features.search.SearchScreenRoot
 import com.example.fakeamazon.shared.ui.ComingSoonScreen
 
@@ -27,6 +28,7 @@ fun AmazonNavGraph(
     modifier: Modifier = Modifier,
     backHandlerForTabs: @Composable () -> Unit = {},
     navController: NavHostController = rememberNavController(),
+    onPerformSearch: (String) -> Unit = {},
     onViewProduct: (Int) -> Unit = {},
 ) {
     NavHost(
@@ -114,6 +116,23 @@ fun AmazonNavGraph(
                 modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxWidth()
+            )
+        }
+
+        composable<Search> { destination ->
+            SearchScreenRoot(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxWidth(),
+                onPerformSearch = onPerformSearch,
+            )
+        }
+
+        composable<SearchResults> { destination ->
+            val route = destination.toRoute<SearchResults>()
+            SearchResultsScreenRoot(
+                modifier = Modifier.padding(innerPadding).fillMaxWidth(),
+                searchString = route.searchString,
             )
         }
     }
