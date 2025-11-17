@@ -20,7 +20,7 @@ class SearchResultsViewModel @Inject constructor(
 
     fun load(searchString: String) {
         viewModelScope.launch {
-            _searchResults.value = searchApiDataSource.getHardcodedSearchResults(searchString)
+            _searchResults.value = searchApiDataSource.getSearchResults(searchString)
         }
     }
 

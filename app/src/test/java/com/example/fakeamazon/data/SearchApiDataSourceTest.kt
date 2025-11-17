@@ -1,6 +1,5 @@
 package com.example.fakeamazon.data
 
-import com.example.fakeamazon.R
 import com.example.fakeamazon.shared.model.ProductInfo
 import com.example.fakeamazon.shared.model.fakeInfo
 import io.kotest.matchers.shouldBe
@@ -12,8 +11,12 @@ import org.junit.jupiter.api.Test
 
 class SearchApiDataSourceTest {
 
+    private companion object {
+        private const val VALID_SEARCH_STRING = "test search string"
+    }
+
     private val productInMemoryDb = mockk<ProductInMemoryDb>()
-    private val hardcodedResults = listOf(
+    private val expectedResults = listOf(
         ProductInfo.fakeInfo(123),
         ProductInfo.fakeInfo(456),
     )
@@ -23,16 +26,16 @@ class SearchApiDataSourceTest {
     @BeforeEach
     fun setUp() {
         every {
-            productInMemoryDb.getSimilarProducts(R.drawable.item_snack_amazon_pbpretzels)
-        } returns hardcodedResults
+            productInMemoryDb.findProducts(VALID_SEARCH_STRING)
+        } returns expectedResults
         dataSource = SearchApiDataSource(productInMemoryDb)
     }
 
     @Test
-    fun getHardcodedSearchResults_ReturnsResults() = runTest {
-        val actual = dataSource.getHardcodedSearchResults("ignored")
+    fun getSearchResults_ReturnsResults() = runTest {
+        val actual = dataSource.getSearchResults(VALID_SEARCH_STRING)
 
-        actual shouldBe hardcodedResults
+        actual shouldBe expectedResults
     }
 
 }

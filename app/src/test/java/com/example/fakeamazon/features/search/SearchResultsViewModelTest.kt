@@ -20,7 +20,7 @@ class SearchResultsViewModelTest {
             ProductInfo.fakeInfo(123),
             ProductInfo.fakeInfo(456),
         )
-        coEvery { searchApiDataSource.getHardcodedSearchResults(searchString) } returns expectedResults
+        coEvery { searchApiDataSource.getSearchResults(searchString) } returns expectedResults
         val viewModel = SearchResultsViewModel(searchApiDataSource)
 
         viewModel.load(searchString)

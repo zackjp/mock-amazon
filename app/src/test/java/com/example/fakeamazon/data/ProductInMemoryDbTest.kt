@@ -3,6 +3,7 @@ package com.example.fakeamazon.data
 import com.example.fakeamazon.shared.model.ProductCategory
 import com.example.fakeamazon.shared.model.ProductInfo
 import com.example.fakeamazon.shared.model.fakeInfo
+import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.withClue
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldContainOnly
@@ -12,6 +13,7 @@ import io.kotest.matchers.ints.shouldBeLessThan
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -28,10 +30,12 @@ class ProductInMemoryDbTest {
     private val snackProducts: List<ProductInfo> = createFakeProductList(
         productIds = SNACKS_PRODUCT_ID_RANGE,
         category = ProductCategory.SNACKS,
+        titlePrefix = "Peanut Butter Pretzels",
     )
     private val boardGameProducts: List<ProductInfo> = createFakeProductList(
         productIds = BOARD_GAMES_PRODUCT_ID_RANGE,
         category = ProductCategory.BOARD_GAMES,
+        titlePrefix = "Chess",
     )
     private val unknownCategoryProducts: List<ProductInfo> = createFakeProductList(
         productIds = UNKNOWN_CATEGORY_PRODUCT_ID_RANGE,
@@ -111,13 +115,61 @@ class ProductInMemoryDbTest {
         similarProducts shouldBe emptyList()
     }
 
+    @Test
+    fun findProducts_WhenMultiwordCategoryContainsSearchString_ReturnsCategoryResults() {
+        val categoryName = ProductCategory.BOARD_GAMES.name
+        withClue("Category name should involve an underscore to test multiwords: $categoryName") {
+            categoryName shouldContain "_"
+        }
+        val searchString = categoryName.split("_")[1].lowercase() // eg: BOARD_GAMES -> "games"
+
+        val foundProducts = database.findProducts(searchString)
+
+        foundProducts shouldContainOnly boardGameProducts
+    }
+
+    @Test
+    fun findProducts_WhenSearchStringMatchesUnknownCategory_ReturnsEmptyResults() {
+        val unknownCategoryName = "UNKNOWN"
+        withClue("This test requires a category name is \"$unknownCategoryName\"") {
+            shouldNotThrowAny {
+                ProductCategory.valueOf(unknownCategoryName)
+            }
+        }
+        val searchString = unknownCategoryName.lowercase()
+
+        val foundProducts = database.findProducts(searchString)
+
+        foundProducts shouldBe emptyList()
+    }
+
+    @Test
+    fun findProducts_WhenTitleContainsSearchString_ReturnsResults() {
+        val searchString = "pretzels"
+
+        val foundProducts = database.findProducts(searchString)
+
+        foundProducts shouldContainOnly snackProducts
+    }
+
+    @Test
+    fun findProducts_WhenNothingMatchesSearchString_ReturnsEmptyList() {
+        val searchString = "nothing"
+
+        val foundProducts = database.findProducts(searchString)
+
+        foundProducts shouldBe emptyList()
+    }
+
     private fun createFakeProductList(
         productIds: IntRange,
-        category: ProductCategory
+        category: ProductCategory,
+        titlePrefix: String = "",
     ): List<ProductInfo> = productIds.map {
         ProductInfo.fakeInfo(
             number = it,
-            category = category
+            category = category,
+            title = "$titlePrefix $it",
         )
     }
 

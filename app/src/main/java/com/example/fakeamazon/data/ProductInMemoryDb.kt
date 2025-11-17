@@ -12,7 +12,8 @@ class ProductInMemoryDb(
     private val products: List<ProductInfo>,
 ) {
 
-    @Inject constructor() : this(mockProducts)
+    @Inject
+    constructor() : this(mockProducts)
 
     private companion object {
         private const val MAX_SIMILAR_PRODUCTS_RESULTS = 7
@@ -386,6 +387,23 @@ class ProductInMemoryDb(
             .filter { it.category == productInfo.category && it.id != productId }
             .take(MAX_SIMILAR_PRODUCTS_RESULTS)
             .toList()
+    }
+
+    fun findProducts(searchString: String): List<ProductInfo> {
+        val uppercaseSearchString = searchString.uppercase()
+
+        val categoryMatcher: (ProductInfo) -> Boolean = {
+            it.category != ProductCategory.UNKNOWN
+            && it.category.name.contains(uppercaseSearchString)
+        }
+
+        val titleMatcher: (ProductInfo) -> Boolean = {
+            it.title.uppercase().contains(uppercaseSearchString)
+        }
+
+        return products.filter {
+            categoryMatcher(it) || titleMatcher(it)
+        }
     }
 
 }
