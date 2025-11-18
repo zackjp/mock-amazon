@@ -69,6 +69,7 @@ dependencies {
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.junit.platform.launcher)
+    testImplementation(libs.turbine)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.junit)

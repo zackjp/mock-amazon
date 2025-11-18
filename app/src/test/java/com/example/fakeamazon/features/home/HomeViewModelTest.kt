@@ -1,6 +1,7 @@
 package com.example.fakeamazon.features.home
 
 import androidx.compose.ui.graphics.Color
+import app.cash.turbine.test
 import com.example.fakeamazon.R
 import com.example.fakeamazon.data.HomeRepository
 import com.example.fakeamazon.shared.model.Item
@@ -14,8 +15,6 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -82,29 +81,35 @@ class HomeViewModelTest {
 
     @Test
     fun viewModel_Init_StartsAsLoading() = runTest {
-        viewModel.screenState.first() shouldBe HomeScreenState.Loading
+        viewModel.screenState.test {
+            awaitItem() shouldBe HomeScreenState.Loading
+        }
     }
 
     @Test
     fun viewModel_Load_LoadsTopHomeAndHomeSectionsAsync() = runTest {
-        viewModel.load()
+        viewModel.screenState.test {
+            awaitItem() shouldBe HomeScreenState.Loading
 
-        viewModel.screenState.first() shouldBe HomeScreenState.Loading
-        advanceUntilIdle()
-        viewModel.screenState.first().shouldBeInstanceOf<HomeScreenState.Loaded> {
-            it.topHomeGroups shouldBe mockTopHomeGroups
-            it.homeSections shouldNot beEmpty()
+            viewModel.load()
+
+            awaitItem().shouldBeInstanceOf<HomeScreenState.Loaded> {
+                it.topHomeGroups shouldBe mockTopHomeGroups
+                it.homeSections shouldNot beEmpty()
+            }
         }
+
     }
 
     @Test
     fun viewModel_Load_EmitsErrorStateIfErred() = runTest {
         coEvery { mockHomeRepository.getHomeSections() } throws Exception("cancellation test")
-        viewModel.load()
 
-        viewModel.screenState.first() shouldBe HomeScreenState.Loading
-        advanceUntilIdle()
-        viewModel.screenState.first { it != HomeScreenState.Loading } shouldBe HomeScreenState.Error
+        viewModel.screenState.test {
+            viewModel.load()
+            awaitItem() shouldBe HomeScreenState.Loading
+            awaitItem() shouldBe HomeScreenState.Error
+        }
     }
 
 }

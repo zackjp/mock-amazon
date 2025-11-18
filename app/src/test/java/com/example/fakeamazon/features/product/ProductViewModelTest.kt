@@ -1,16 +1,14 @@
 package com.example.fakeamazon.features.product
 
+import app.cash.turbine.test
+import app.cash.turbine.turbineScope
 import com.example.fakeamazon.TestDispatcherProvider
 import com.example.fakeamazon.data.CartRepository
 import com.example.fakeamazon.data.ProductRepository
 import com.example.fakeamazon.shared.model.ProductInfo
 import com.example.fakeamazon.shared.model.fakeInfo
-import io.kotest.assertions.withClue
-import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
 import io.kotest.matchers.shouldNotBe
-import io.kotest.matchers.types.beInstanceOf
 import io.kotest.matchers.types.instanceOf
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.Runs
@@ -19,9 +17,6 @@ import io.mockk.coVerify
 import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
@@ -65,32 +60,39 @@ class ProductViewModelTest {
     @Test
     fun init_StartsAsLoading() = runTest(dispatcher) {
         advanceUntilIdle()
-        viewModel.uiState.first() shouldBe ProductUiState.Loading
+        viewModel.uiState.test {
+            awaitItem() shouldBe ProductUiState.Loading
+        }
     }
 
     @Test
     fun load_WithValidProductId_LoadsProductInfoAndSimilarProducts() = runTest(dispatcher) {
-        viewModel.load(VALID_PRODUCT_ID)
+        viewModel.uiState.test {
+            viewModel.load(VALID_PRODUCT_ID)
 
-        viewModel.uiState.first() shouldNotBe instanceOf<ProductUiState.Loaded>()
-        advanceUntilIdle()
-        viewModel.uiState.first() shouldBe ProductUiState.Loaded(
-            productInfo = expectedProductInfo,
-            similarProducts = expectedSimilarProducts,
-        )
+            awaitItem() shouldNotBe instanceOf<ProductUiState.Loaded>()
+            awaitItem() shouldBe ProductUiState.Loaded(
+                productInfo = expectedProductInfo,
+                similarProducts = expectedSimilarProducts,
+            )
+        }
     }
 
     @Test
     fun load_WithInvalidProductId_EmitsError() = runTest(dispatcher) {
-        // Arrange: Init with non-null data
-        viewModel.load(VALID_PRODUCT_ID)
-        advanceUntilIdle()
+        turbineScope {
+            val uiStateTurbine = viewModel.uiState.testIn(backgroundScope)
+            // Arrange: Init with non-null data
+            uiStateTurbine.awaitItem() shouldBe ProductUiState.Loading
+            viewModel.load(VALID_PRODUCT_ID)
+            uiStateTurbine.awaitItem().shouldBeInstanceOf<ProductUiState.Loaded>()
 
-        viewModel.load(INVALID_PRODUCT_ID)
+            // Act
+            viewModel.load(INVALID_PRODUCT_ID)
 
-        viewModel.uiState.first() shouldNot beInstanceOf<ProductUiState.Error>()
-        advanceUntilIdle()
-        viewModel.uiState.first() shouldBe ProductUiState.Error
+            // Assert
+            uiStateTurbine.awaitItem() shouldBe ProductUiState.Error
+        }
     }
 
     @Test
@@ -111,30 +113,19 @@ class ProductViewModelTest {
 
     @Test
     fun addToCart_WhenLoaded_TransitionsAddToCartState() = runTest(dispatcher) {
-        viewModel.load(VALID_PRODUCT_ID)
-        advanceUntilIdle()
+        viewModel.uiState.test {
+            awaitItem() shouldBe ProductUiState.Loading
 
-        val statesEmitted = mutableListOf<ProductUiState>()
-        backgroundScope.launch(UnconfinedTestDispatcher(dispatcher.testCoroutineScheduler)) {
-            viewModel.uiState.collect { statesEmitted.add(it) }
-        }
-        viewModel.addToCart()
-        advanceUntilIdle()
-
-        withClue(
-            "Expected three state transitions: " +
-                    "from ${AddToCartState.Inactive.name} " +
-                    "-> ${AddToCartState.Adding.name} " +
-                    "-> ${AddToCartState.Added.name}"
-        ) {
-            statesEmitted.size shouldBe 3
-            statesEmitted[0].shouldBeInstanceOf<ProductUiState.Loaded> {
+            viewModel.load(VALID_PRODUCT_ID)
+            awaitItem().shouldBeInstanceOf<ProductUiState.Loaded> {
                 it.addToCartState shouldBe AddToCartState.Inactive
             }
-            statesEmitted[1].shouldBeInstanceOf<ProductUiState.Loaded> {
+
+            viewModel.addToCart()
+            awaitItem().shouldBeInstanceOf<ProductUiState.Loaded> {
                 it.addToCartState shouldBe AddToCartState.Adding
             }
-            statesEmitted[2].shouldBeInstanceOf<ProductUiState.Loaded> {
+            awaitItem().shouldBeInstanceOf<ProductUiState.Loaded> {
                 it.addToCartState shouldBe AddToCartState.Added
             }
         }
@@ -147,21 +138,15 @@ class ProductViewModelTest {
         viewModel.addToCart()
         advanceUntilIdle()
 
-        val statesEmitted = mutableListOf<ProductUiState>()
-        backgroundScope.launch(UnconfinedTestDispatcher(dispatcher.testCoroutineScheduler)) {
-            viewModel.uiState.collect { statesEmitted.add(it) }
-        }
-        viewModel.onCartAddedViewed()
+        viewModel.uiState.test {
+            viewModel.onCartAddedViewed()
 
-        withClue("Expected two state transitions: from ${AddToCartState.Added.name} -> ${AddToCartState.Inactive.name}") {
-            statesEmitted.size shouldBe 2
-            statesEmitted[0].shouldBeInstanceOf<ProductUiState.Loaded> {
+            awaitItem().shouldBeInstanceOf<ProductUiState.Loaded> {
                 it.addToCartState shouldBe AddToCartState.Added
             }
-            statesEmitted[1].shouldBeInstanceOf<ProductUiState.Loaded> {
+            awaitItem().shouldBeInstanceOf<ProductUiState.Loaded> {
                 it.addToCartState shouldBe AddToCartState.Inactive
             }
         }
     }
-
 }

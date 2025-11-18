@@ -1,5 +1,6 @@
 package com.example.fakeamazon.features.cart
 
+import app.cash.turbine.test
 import com.example.fakeamazon.TestDispatcherProvider
 import com.example.fakeamazon.data.CartRepository
 import com.example.fakeamazon.shared.model.CartItem
@@ -11,7 +12,6 @@ import io.mockk.coVerify
 import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
@@ -41,18 +41,19 @@ class CartViewModelTest {
 
     @Test
     fun init_StartsAsLoading() = runTest(scheduler) {
-        advanceUntilIdle()
-
-        viewModel.screenState.first() shouldBe CartScreenState.Loading
+        viewModel.screenState.test {
+            awaitItem() shouldBe CartScreenState.Loading
+        }
     }
 
     @Test
     fun load_LoadsDataFromRepository() = runTest(scheduler) {
-        viewModel.load()
+        viewModel.screenState.test {
+            viewModel.load()
 
-        viewModel.screenState.first() shouldBe CartScreenState.Loading
-        advanceUntilIdle()
-        viewModel.screenState.first() shouldBe CartScreenState.Loaded(expectedCartItems)
+            awaitItem() shouldBe CartScreenState.Loading
+            awaitItem() shouldBe CartScreenState.Loaded(expectedCartItems)
+        }
     }
 
     @Test
@@ -60,11 +61,15 @@ class CartViewModelTest {
         val newCartItems = listOf(mockk<CartItem>())
         coEvery { repository.getCartItems() } returns newCartItems
 
-        viewModel.removeByProductId(123)
-        advanceUntilIdle()
+        viewModel.screenState.test {
+            awaitItem() shouldBe CartScreenState.Loading
 
-        coVerify { repository.removeByProductId(123) }
-        viewModel.screenState.first() shouldBe CartScreenState.Loaded(newCartItems)
+            viewModel.removeByProductId(123)
+            advanceUntilIdle()
+
+            coVerify { repository.removeByProductId(123) }
+            awaitItem() shouldBe CartScreenState.Loaded(newCartItems)
+        }
     }
 
 }
