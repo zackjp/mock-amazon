@@ -157,6 +157,7 @@ fun SearchResultCard(
                 Image(
                     colorFilter = ColorFilter.tint(imageBackgroundColor, BlendMode.Multiply),
                     contentDescription = null,
+                    modifier = Modifier.fillMaxWidth(),
                     painter = painterResource(productInfo.imageId),
                 )
             }
