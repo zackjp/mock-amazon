@@ -29,7 +29,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
@@ -158,13 +160,14 @@ private fun SimpleSearchBar(
     onOpenSearch: () -> Unit = {},
 ) {
     val textFieldShape = MaterialTheme.shapes.extraLarge
+    val currentOnOpenSearch by rememberUpdatedState(onOpenSearch)
 
     val interactionSource = remember { MutableInteractionSource() }
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(interactionSource) {
         interactionSource.interactions.collect {
             if (it is PressInteraction.Release) {
-                onOpenSearch()
+                currentOnOpenSearch()
             }
         }
     }
