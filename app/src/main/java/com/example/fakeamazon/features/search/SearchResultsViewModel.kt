@@ -3,8 +3,8 @@ package com.example.fakeamazon.features.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fakeamazon.data.SearchApiDataSource
-import com.example.fakeamazon.shared.model.ProductInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -15,12 +15,19 @@ class SearchResultsViewModel @Inject constructor(
     private val searchApiDataSource: SearchApiDataSource
 ) : ViewModel() {
 
-    private val _searchResults = MutableStateFlow<List<ProductInfo>>(emptyList())
-    val searchResults = _searchResults.asStateFlow()
+    private val _screenState =
+        MutableStateFlow<SearchResultsScreenState>(SearchResultsScreenState.Loading)
+    val screenState = _screenState.asStateFlow()
 
     fun load(searchString: String) {
         viewModelScope.launch {
-            _searchResults.value = searchApiDataSource.getSearchResults(searchString)
+            try {
+                val searchResults = searchApiDataSource.getSearchResults(searchString)
+                _screenState.value = SearchResultsScreenState.Loaded(searchResults)
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                _screenState.value = SearchResultsScreenState.Error
+            }
         }
     }
 

@@ -4,21 +4,25 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
@@ -52,18 +56,51 @@ fun SearchResultsScreenRoot(
         viewModel.load(searchString)
     }
 
-    val searchResults by viewModel.searchResults.collectAsStateWithLifecycle()
+    val screenState by viewModel.screenState.collectAsStateWithLifecycle()
 
-    LoadedView(
+    SearchResultsScreen(
         modifier = modifier,
-        searchResults = searchResults,
+        screenState = screenState,
     )
+}
+
+@Composable
+private fun SearchResultsScreen(
+    modifier: Modifier = Modifier,
+    screenState: SearchResultsScreenState,
+) {
+    when (screenState) {
+        is SearchResultsScreenState.Loaded -> LoadedView(
+            modifier = modifier,
+            loadedState = screenState,
+        )
+        is SearchResultsScreenState.Loading -> LoadingScreen(modifier)
+        is SearchResultsScreenState.Error -> ErrorScreen(modifier)
+    }
+}
+
+@Composable
+private fun LoadingScreen(modifier: Modifier) {
+    Surface(modifier = modifier) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+    }
+}
+
+@Composable
+private fun ErrorScreen(modifier: Modifier) {
+    Surface(modifier = modifier) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(stringResource(R.string.error_loading_content))
+        }
+    }
 }
 
 @Composable
 private fun LoadedView(
     modifier: Modifier,
-    searchResults: List<ProductInfo>
+    loadedState: SearchResultsScreenState.Loaded,
 ) {
     val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
 
@@ -72,7 +109,7 @@ private fun LoadedView(
             contentPadding = PaddingValues(vertical = mainContentPadding),
             modifier = Modifier.padding(horizontal = mainContentPadding),
         ) {
-            items(searchResults) { productInfo ->
+            items(loadedState.searchResults) { productInfo ->
                 SearchResultCard(
                     modifier = Modifier.fillMaxWidth(),
                     productInfo = productInfo,
