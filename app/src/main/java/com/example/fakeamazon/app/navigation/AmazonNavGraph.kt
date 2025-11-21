@@ -115,14 +115,6 @@ fun AmazonNavGraph(
             SearchScreenRoot(
                 modifier = Modifier
                     .padding(innerPadding)
-                    .fillMaxWidth()
-            )
-        }
-
-        composable<Search> { destination ->
-            SearchScreenRoot(
-                modifier = Modifier
-                    .padding(innerPadding)
                     .fillMaxWidth(),
                 onPerformSearch = onPerformSearch,
             )

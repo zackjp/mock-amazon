@@ -30,8 +30,11 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
@@ -46,13 +49,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
+import com.example.fakeamazon.app.ui.view.SearchBarViewModel
 import com.example.fakeamazon.ui.theme.AmazonOutlineMedium
 
 val NAV_CHIPS = listOf(
@@ -104,6 +112,7 @@ fun AmazonTopAppBarWithNavChips(
 
         Column(modifier = Modifier) {
             SimpleSearchBar(
+                initialSearchText = "",
                 isSearchEditable = false,
                 modifier = Modifier
                     .padding(
@@ -131,15 +140,18 @@ fun AmazonTopAppBarWithNavChips(
 
 @Composable
 fun AmazonTopAppBar(
+    initialSearchText: String,
     isSearchEditable: Boolean,
     modifier: Modifier = Modifier,
     onOpenSearch: () -> Unit = {},
+    onPerformSearch: (String) -> Unit,
 ) {
     val paddingLarge = dimensionResource(R.dimen.padding_large)
     val paddingSmall = dimensionResource(R.dimen.padding_small)
 
     Box(modifier = modifier) {
         SimpleSearchBar(
+            initialSearchText = initialSearchText,
             isSearchEditable = isSearchEditable,
             modifier = Modifier
                 .padding(
@@ -148,6 +160,7 @@ fun AmazonTopAppBar(
                     bottom = paddingSmall,
                 ),
             onOpenSearch = onOpenSearch,
+            onPerformSearch = onPerformSearch,
         )
     }
 }
@@ -155,12 +168,32 @@ fun AmazonTopAppBar(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun SimpleSearchBar(
+    initialSearchText: String,
     isSearchEditable: Boolean,
     modifier: Modifier = Modifier,
     onOpenSearch: () -> Unit = {},
+    onPerformSearch: (String) -> Unit = {},
+    viewModel: SearchBarViewModel = hiltViewModel()
 ) {
     val textFieldShape = MaterialTheme.shapes.extraLarge
     val currentOnOpenSearch by rememberUpdatedState(onOpenSearch)
+
+    val currentSearchText by viewModel.searchText.collectAsStateWithLifecycle()
+    // Known bug: Non-empty initial text will overwrite user-entered text on rotation/config change.
+    // NavGraph won't have restored the backstack in time. Initial text will default to "", then the
+    // backstack + correct initial text comes in, which will update the VM and overwrite user text
+    var shouldInitializeText by rememberSaveable(initialSearchText) { mutableStateOf(true) }
+    LaunchedEffect(viewModel, initialSearchText) {
+        if (shouldInitializeText) {
+            shouldInitializeText = false
+            viewModel.updateSearchText(
+                TextFieldValue(
+                    initialSearchText,
+                    TextRange(initialSearchText.length)
+                )
+            )
+        }
+    }
 
     val interactionSource = remember { MutableInteractionSource() }
     val focusRequester = remember { FocusRequester() }
@@ -185,7 +218,7 @@ private fun SimpleSearchBar(
             BasicTextField(
                 interactionSource = interactionSource,
                 readOnly = !isSearchEditable,
-                value = "",
+                value = currentSearchText,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(44.dp)
@@ -193,10 +226,11 @@ private fun SimpleSearchBar(
                     .border(0.5.dp, AmazonOutlineMedium, textFieldShape)
                     .focusable()
                     .focusRequester(focusRequester),
-                onValueChange = {},
+                onValueChange = { viewModel.updateSearchText(it) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(onSearch = {}),
+                keyboardActions = KeyboardActions(onSearch = { onPerformSearch(currentSearchText.text) }),
+                textStyle = MaterialTheme.typography.bodyLarge,
                 decorationBox = @Composable { innerTextField ->
                     val colors = TextFieldDefaults.colors().copy(
                         focusedIndicatorColor = Color.Transparent,
@@ -224,7 +258,11 @@ private fun SimpleSearchBar(
                                 contentDescription = null
                             )
                         },
-                        placeholder = { Text(stringResource(R.string.search_bar_placeholder)) },
+                        placeholder = {
+                            if (currentSearchText.text.isEmpty()) {
+                                Text(stringResource(R.string.search_bar_placeholder))
+                            }
+                        },
                         singleLine = true,
                         visualTransformation = VisualTransformation.None,
                         interactionSource = interactionSource,

@@ -38,7 +38,7 @@ object CartStart
 object ShortcutsStart
 
 @Serializable
-object Search
+data class Search(val initialSearchText: String)
 @Serializable
 data class SearchResults(val searchString: String)
 @Serializable

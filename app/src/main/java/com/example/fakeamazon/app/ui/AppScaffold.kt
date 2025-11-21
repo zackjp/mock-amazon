@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.toRoute
 import com.example.fakeamazon.R
 import com.example.fakeamazon.app.navigation.AmazonNavGraph
 import com.example.fakeamazon.app.navigation.HomeStart
@@ -68,19 +69,25 @@ fun App() {
     }
 
     val currentTab by tabbedNavController.currentTab.collectAsState()
-    val isInSearchMode = currentDestination?.destination?.hasRoute<Search>() == true
-    val onOpenSearch: () -> Unit = if (isInSearchMode) ({}) else ({
-        tabbedNavController.navigateToRoute(Search)
+    val isInSearchSuggestionsMode = currentDestination?.destination?.hasRoute<Search>() == true
+    val isInSearchResultsMode = currentDestination?.destination?.hasRoute<SearchResults>() == true
+    val onOpenSearch: (String) -> Unit = if (isInSearchSuggestionsMode) ({}) else ({ initialSearchText ->
+        tabbedNavController.navigateToRoute(Search(initialSearchText))
     })
     val onViewProduct = { productId: Int ->
         tabbedNavController.navigateToRoute(ViewProduct(productId))
     }
     val onPerformSearch = { searchString: String ->
         // First, clear Search Screen from backstack
-        if (isInSearchMode) {
+        if (isInSearchSuggestionsMode) {
             tabbedNavController.navController.popBackStack()
         }
         tabbedNavController.navigateToRoute(SearchResults(searchString))
+    }
+    val currentSearchTextContext = when {
+        isInSearchSuggestionsMode -> currentDestination?.toRoute<Search>()?.initialSearchText ?: ""
+        isInSearchResultsMode -> currentDestination?.toRoute<SearchResults>()?.searchString ?: ""
+        else -> ""
     }
 
     Scaffold(
@@ -90,7 +97,7 @@ fun App() {
         topBar = {
             val isHome = currentDestination?.destination?.hasRoute<HomeStart>() ?: false
 
-            if (isHome && !isInSearchMode) {
+            if (isHome && !isInSearchSuggestionsMode) {
                 AmazonTopAppBarWithNavChips(
                     modifier = Modifier.fillMaxWidth(),
                     navChipsOffset = collapsibleState.currentOffsetPx.value,
@@ -98,20 +105,22 @@ fun App() {
                     onNavChipsSizeChange = { intSize ->
                         navChipsHeightPx = intSize.height.toFloat()
                     },
-                    onOpenSearch = onOpenSearch,
+                    onOpenSearch = { onOpenSearch("") },
                 )
             } else {
                 AmazonTopAppBar(
+                    initialSearchText = currentSearchTextContext,
+                    isSearchEditable = isInSearchSuggestionsMode,
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(AMAZON_BEIGE),
-                    onOpenSearch = onOpenSearch,
-                    isSearchEditable = isInSearchMode,
+                    onOpenSearch = { onOpenSearch(currentSearchTextContext) },
+                    onPerformSearch = onPerformSearch,
                 )
             }
         },
         bottomBar = {
-            if (!isInSearchMode) {
+            if (!isInSearchSuggestionsMode) {
                 AmazonBottomAppBar(
                     selectedTab = currentTab,
                     modifier = Modifier
