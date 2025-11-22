@@ -6,6 +6,7 @@ sealed class SearchResultsScreenState {
     object Loading : SearchResultsScreenState()
     object Error : SearchResultsScreenState()
     data class Loaded(
-        val searchResults: List<ProductInfo>
+        val requestedCartCounts: Map<Int, Int>,
+        val searchResults: List<ProductInfo>,
     ) : SearchResultsScreenState()
 }

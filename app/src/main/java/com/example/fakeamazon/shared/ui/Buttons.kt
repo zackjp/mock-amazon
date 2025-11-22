@@ -1,15 +1,12 @@
 package com.example.fakeamazon.shared.ui
 
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import com.example.fakeamazon.ui.theme.AmazonBlack
-import com.example.fakeamazon.ui.theme.AmazonGray
-import com.example.fakeamazon.ui.theme.Yellow40
 import com.example.fakeamazon.ui.theme.Yellow80
 
 
@@ -31,8 +28,14 @@ fun PrimaryCta(
         onClick = onClick,
         modifier = modifier,
     ) {
+        val bodySmall = MaterialTheme.typography.bodySmall
+        val bodyLarge = MaterialTheme.typography.bodyLarge
         Text(
-            style = MaterialTheme.typography.bodyLarge,
+            autoSize = TextAutoSize.StepBased(
+                minFontSize = bodySmall.fontSize,
+                maxFontSize = bodyLarge.fontSize,
+            ),
+            style = bodyLarge,
             text = text,
         )
     }

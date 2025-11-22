@@ -25,14 +25,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -61,6 +64,7 @@ fun SearchResultsScreenRoot(
 
     SearchResultsScreen(
         modifier = modifier,
+        onAddToCart = { productId -> viewModel.addToCart(productId) },
         screenState = screenState,
     )
 }
@@ -68,20 +72,22 @@ fun SearchResultsScreenRoot(
 @Composable
 private fun SearchResultsScreen(
     modifier: Modifier = Modifier,
+    onAddToCart: (Int) -> Unit,
     screenState: SearchResultsScreenState,
 ) {
     when (screenState) {
         is SearchResultsScreenState.Loaded -> LoadedView(
-            modifier = modifier,
             loadedState = screenState,
+            modifier = modifier,
+            onAddToCart = onAddToCart,
         )
-        is SearchResultsScreenState.Loading -> LoadingScreen(modifier)
-        is SearchResultsScreenState.Error -> ErrorScreen(modifier)
+        is SearchResultsScreenState.Loading -> LoadingView(modifier = modifier)
+        is SearchResultsScreenState.Error -> ErrorView(modifier)
     }
 }
 
 @Composable
-private fun LoadingScreen(modifier: Modifier) {
+private fun LoadingView(modifier: Modifier) {
     Surface(modifier = modifier) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
@@ -90,7 +96,7 @@ private fun LoadingScreen(modifier: Modifier) {
 }
 
 @Composable
-private fun ErrorScreen(modifier: Modifier) {
+private fun ErrorView(modifier: Modifier) {
     Surface(modifier = modifier) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(stringResource(R.string.error_loading_content))
@@ -100,10 +106,12 @@ private fun ErrorScreen(modifier: Modifier) {
 
 @Composable
 private fun LoadedView(
-    modifier: Modifier,
     loadedState: SearchResultsScreenState.Loaded,
+    modifier: Modifier,
+    onAddToCart: (Int) -> Unit,
 ) {
     val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
+    val cartCounts = loadedState.requestedCartCounts
 
     Surface(modifier = modifier) {
         LazyColumn(
@@ -111,9 +119,12 @@ private fun LoadedView(
             modifier = Modifier.padding(horizontal = mainContentPadding),
         ) {
             items(loadedState.searchResults) { productInfo ->
+                val cartCount = cartCounts[productInfo.id] ?: 0
                 SearchResultCard(
                     modifier = Modifier.fillMaxWidth(),
+                    onAddToCart = onAddToCart,
                     productInfo = productInfo,
+                    cartCount = cartCount,
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -123,8 +134,10 @@ private fun LoadedView(
 }
 
 @Composable
-fun SearchResultCard(
+private fun SearchResultCard(
+    cartCount: Int,
     modifier: Modifier = Modifier,
+    onAddToCart: (productId: Int) -> Unit,
     productInfo: ProductInfo,
 ) {
     val cardShape = MaterialTheme.shapes.extraSmall
@@ -192,13 +205,42 @@ fun SearchResultCard(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                PrimaryCta(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {},
-                    text = stringResource(R.string.add_to_cart),
-                )
+                val cartInteractorModifier = Modifier.fillMaxWidth().height(30.dp)
+                if (cartCount <= 0) {
+                    PrimaryCta(
+                        modifier = cartInteractorModifier,
+                        onClick = { onAddToCart(productInfo.id) },
+                        text = stringResource(R.string.add_to_cart),
+                    )
+                } else {
+                    CartItemQuantityChip(
+                        modifier = cartInteractorModifier,
+                        quantity = cartCount,
+                    )
+                }
             }
         }
     }
 
+}
+
+@Composable
+private fun CartItemQuantityChip(quantity: Int, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .background(Color.White, MaterialTheme.shapes.large)
+            .border(
+                width = 2.5.dp,
+                color = MaterialTheme.colorScheme.primary,
+                shape = MaterialTheme.shapes.large
+            )
+            .padding(horizontal = 12.dp, vertical = 4.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
+            text = "$quantity",
+            textAlign = TextAlign.Center,
+        )
+    }
 }

@@ -13,7 +13,9 @@ data class CartItem(
     val deliveryCostUSD: Float,
     val estDeliveryDate: LocalDate,
     val isInStock: Boolean,
-)
+) {
+    companion object
+}
 
 fun ProductInfo.toCartItem(quantity: Int = 0): CartItem =
     CartItem(
