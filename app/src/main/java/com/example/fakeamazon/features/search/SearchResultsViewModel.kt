@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fakeamazon.data.CartRepository
 import com.example.fakeamazon.data.SearchApiDataSource
+import com.example.fakeamazon.shared.model.CartItem
 import com.example.fakeamazon.shared.updateIf
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
@@ -22,10 +23,13 @@ class SearchResultsViewModel @Inject constructor(
         MutableStateFlow<SearchResultsScreenState>(SearchResultsScreenState.Loading)
     val screenState = _screenState.asStateFlow()
 
+    private var _cartItems = listOf<CartItem>()
+
     fun load(searchString: String) {
         viewModelScope.launch {
             try {
                 val searchResults = searchApiDataSource.getSearchResults(searchString)
+                _cartItems = cartRepository.getCartItems()
                 _screenState.value = SearchResultsScreenState.Loaded(
                     requestedCartCounts = emptyMap(),
                     searchResults = searchResults,
@@ -39,26 +43,29 @@ class SearchResultsViewModel @Inject constructor(
 
     fun addToCart(productId: Int) {
         viewModelScope.launch {
+            optimisticCartCountUpdate(productId)
             cartRepository.addToCart(productId)
+        }
+    }
 
-            val cartItems = cartRepository.getCartItems()
-
-            _screenState.updateIf<SearchResultsScreenState.Loaded> { original ->
-                val updatedRequestedCartCounts = original.requestedCartCounts.toMutableMap().apply {
-                    // add the product id as a requested item to our local map, then update
-                    // all previous requested items
-                    put(productId, 0)
-                    cartItems.forEach { cartItem ->
-                        if (containsKey(cartItem.id)) {
-                            put(cartItem.id, cartItem.quantity)
+    private fun optimisticCartCountUpdate(productId: Int) {
+        _screenState.updateIf<SearchResultsScreenState.Loaded> { current ->
+            current.copy(
+                requestedCartCounts = current.requestedCartCounts
+                    .toMutableMap()
+                    .apply {
+                        compute(productId) { _, value ->
+                            val cartCount = if (value == null) {
+                                val cartItem = _cartItems.find { it.id == productId }
+                                val baseCartCount = cartItem?.quantity
+                                baseCartCount ?: 0
+                            } else {
+                                value
+                            }
+                            cartCount + 1
                         }
                     }
-                }
-
-                original.copy(
-                    requestedCartCounts = updatedRequestedCartCounts,
-                )
-            }
+            )
         }
     }
 

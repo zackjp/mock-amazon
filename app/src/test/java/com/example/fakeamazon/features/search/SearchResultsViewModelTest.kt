@@ -7,7 +7,6 @@ import com.example.fakeamazon.shared.model.CartItem
 import com.example.fakeamazon.shared.model.ProductInfo
 import com.example.fakeamazon.shared.model.fakeInfo
 import com.example.fakeamazon.shared.model.fakeItem
-import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.instanceOf
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -41,9 +40,7 @@ class SearchResultsViewModelTest {
     fun setUp() {
         coEvery { searchApiDataSource.getSearchResults(VALID_SEARCH_STRING) } returns expectedSearchResults
         coEvery { searchApiDataSource.getSearchResults(THROWING_SEARCH_STRING) } throws Exception("search error exception")
-        expectedSearchResults.forEach {
-            coEvery { cartRepository.addToCart(it.id) } just runs
-        }
+        coEvery { cartRepository.addToCart(any()) } just runs
         coEvery { cartRepository.getCartItems() } returns emptyList()
 
         viewModel = SearchResultsViewModel(
@@ -93,34 +90,68 @@ class SearchResultsViewModelTest {
     }
 
     @Test
-    fun addToCart_WithValidProductId_EmitsNewCartCountForRequestedProductIdsOnly() = runTest {
-        val expectedProductId1 = expectedSearchResults[0].id
-        val expectedProductId2 = expectedSearchResults[1].id
-        val expectedCartItem1 = CartItem.fakeItem(expectedProductId1)
-        val expectedCartItem2 = CartItem.fakeItem(expectedProductId2)
-        val unexpectedCartItem3 = CartItem.fakeItem(expectedProductId1 + expectedProductId2)
+    fun addToCart_WithValidProductId_UpdatesCartCountsOptimisticallyForRequestedProductIdsOnly() = runTest {
+        val productId1 = expectedSearchResults[0].id
+        val productId2 = expectedSearchResults[1].id
+        val cartItem1 = CartItem.fakeItem(productId1)
+        val cartItem2 = CartItem.fakeItem(productId2)
+        val cartItem3 = CartItem.fakeItem(productId1 + productId2)
         coEvery { cartRepository.getCartItems() } returns listOf(
-            expectedCartItem1,
-            expectedCartItem2,
-            unexpectedCartItem3,
+            cartItem1,
+            cartItem2,
+            cartItem3,
         )
-        viewModel.load(VALID_SEARCH_STRING)
 
         viewModel.screenState.test {
+            viewModel.load(VALID_SEARCH_STRING)
+            awaitItem() shouldBe SearchResultsScreenState.Loading
             awaitItem() shouldBe instanceOf<SearchResultsScreenState.Loaded>()
 
-            viewModel.addToCart(expectedProductId1)
+            viewModel.addToCart(productId1)
             awaitItem().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
-                it.requestedCartCounts shouldHaveSize 1
-                it.requestedCartCounts[expectedCartItem1.id] shouldBe expectedCartItem1.quantity
+                it.requestedCartCounts shouldBe mapOf(cartItem1.id to cartItem1.quantity + 1)
             }
 
-            viewModel.addToCart(expectedProductId2)
+            viewModel.addToCart(productId2)
             awaitItem().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
-                it.requestedCartCounts shouldHaveSize 2
-                it.requestedCartCounts[expectedCartItem1.id] shouldBe expectedCartItem1.quantity
-                it.requestedCartCounts[expectedCartItem2.id] shouldBe expectedCartItem2.quantity
+                it.requestedCartCounts shouldBe mapOf(
+                    cartItem1.id to cartItem1.quantity + 1,
+                    cartItem2.id to cartItem2.quantity + 1,
+                )
             }
+
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun addToCart_WithProductNotAlreadyInCart_UpdatesCartCountOptimistically() = runTest {
+        val productId1 = expectedSearchResults[0].id
+        val productId2 = expectedSearchResults[1].id
+        val productIdNotInCart = productId1 + productId2
+        val cartItem1 = CartItem.fakeItem(productId1)
+        val cartItem2 = CartItem.fakeItem(productId2)
+        coEvery { cartRepository.getCartItems() } returns listOf(
+            cartItem1,
+            cartItem2,
+        )
+
+        viewModel.screenState.test {
+            viewModel.load(VALID_SEARCH_STRING)
+            awaitItem() shouldBe SearchResultsScreenState.Loading
+            awaitItem() shouldBe instanceOf<SearchResultsScreenState.Loaded>()
+
+            viewModel.addToCart(productIdNotInCart)
+            awaitItem().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
+                it.requestedCartCounts shouldBe mapOf(productIdNotInCart to 1)
+            }
+
+            viewModel.addToCart(productIdNotInCart)
+            awaitItem().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
+                it.requestedCartCounts shouldBe mapOf(productIdNotInCart to 2)
+            }
+
+            expectNoEvents()
         }
     }
 
