@@ -52,6 +52,7 @@ import com.example.fakeamazon.R
 import com.example.fakeamazon.shared.model.CartItem
 import com.example.fakeamazon.shared.toPrimeDeliveryString
 import com.example.fakeamazon.shared.toRelativeDateString
+import com.example.fakeamazon.shared.ui.CartItemQuantityChip
 import com.example.fakeamazon.shared.ui.PriceDisplaySize
 import com.example.fakeamazon.shared.ui.PriceText
 import com.example.fakeamazon.shared.ui.PrimaryCta
@@ -407,23 +408,6 @@ private fun InStockText(extraLineHeightTextStyle: TextStyle, modifier: Modifier 
         modifier = modifier,
         style = extraLineHeightTextStyle,
         text = stringResource(R.string.cart_item_in_stock),
-    )
-}
-
-@Composable
-private fun CartItemQuantityChip(quantity: Int, modifier: Modifier = Modifier) {
-    Text(
-        modifier = modifier
-            .background(Color.White, MaterialTheme.shapes.large)
-            .border(
-                width = 2.5.dp,
-                color = MaterialTheme.colorScheme.primary,
-                shape = MaterialTheme.shapes.large
-            )
-            .padding(horizontal = 12.dp, vertical = 8.dp),
-        style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
-        text = "$quantity",
-        textAlign = TextAlign.Center,
     )
 }
 

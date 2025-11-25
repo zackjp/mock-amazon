@@ -25,23 +25,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakeamazon.R
 import com.example.fakeamazon.shared.model.ProductInfo
+import com.example.fakeamazon.shared.ui.CartItemQuantityChip
 import com.example.fakeamazon.shared.ui.PriceDisplaySize
 import com.example.fakeamazon.shared.ui.PriceText
 import com.example.fakeamazon.shared.ui.PrimaryCta
@@ -222,25 +220,4 @@ private fun SearchResultCard(
         }
     }
 
-}
-
-@Composable
-private fun CartItemQuantityChip(quantity: Int, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .background(Color.White, MaterialTheme.shapes.large)
-            .border(
-                width = 2.5.dp,
-                color = MaterialTheme.colorScheme.primary,
-                shape = MaterialTheme.shapes.large
-            )
-            .padding(horizontal = 12.dp, vertical = 4.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            style = MaterialTheme.typography.labelMedium.copy(fontSize = 14.sp),
-            text = "$quantity",
-            textAlign = TextAlign.Center,
-        )
-    }
 }
