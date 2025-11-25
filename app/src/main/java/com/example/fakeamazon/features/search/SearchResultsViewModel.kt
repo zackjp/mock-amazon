@@ -48,6 +48,13 @@ class SearchResultsViewModel @Inject constructor(
         }
     }
 
+    fun removeFromCart(productId: Int) {
+        viewModelScope.launch {
+            optimisticCartRemove(productId)
+            cartRepository.removeByProductId(productId)
+        }
+    }
+
     private fun optimisticCartCountUpdate(productId: Int) {
         _screenState.updateIf<SearchResultsScreenState.Loaded> { current ->
             current.copy(
@@ -69,4 +76,13 @@ class SearchResultsViewModel @Inject constructor(
         }
     }
 
+    private fun optimisticCartRemove(productId: Int) {
+        _screenState.updateIf<SearchResultsScreenState.Loaded> { current ->
+            current.copy(
+                requestedCartCounts = current.requestedCartCounts
+                    .toMutableMap()
+                    .apply { remove(productId) }
+            )
+        }
+    }
 }

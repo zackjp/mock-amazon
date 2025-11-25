@@ -78,6 +78,7 @@ fun CartScreenRoot(
 
     CartScreen(
         modifier = modifier,
+        onIncrementCartItem = { productId -> cartViewModel.incrementCartItem(productId) },
         onRemoveCartItem = { productId -> cartViewModel.removeByProductId(productId) },
         onViewProduct = onViewProduct,
         screenState = screenState.value,
@@ -87,6 +88,7 @@ fun CartScreenRoot(
 @Composable
 private fun CartScreen(
     modifier: Modifier = Modifier,
+    onIncrementCartItem: (Int) -> Unit,
     onRemoveCartItem: (Int) -> Unit,
     onViewProduct: (Int) -> Unit = {},
     screenState: CartScreenState,
@@ -95,6 +97,7 @@ private fun CartScreen(
         is CartScreenState.Loading -> LoadingView(modifier)
         is CartScreenState.Loaded -> LoadedView(
             modifier = modifier,
+            onIncrementCartItem = onIncrementCartItem,
             onRemoveCartItem = onRemoveCartItem,
             onViewProduct = onViewProduct,
             screenState = screenState,
@@ -125,6 +128,7 @@ private fun ErrorView(modifier: Modifier) {
 @Composable
 private fun LoadedView(
     modifier: Modifier = Modifier,
+    onIncrementCartItem: (Int) -> Unit,
     onRemoveCartItem: (Int) -> Unit,
     onViewProduct: (Int) -> Unit,
     screenState: CartScreenState.Loaded,
@@ -150,6 +154,7 @@ private fun LoadedView(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
                         .fillMaxWidth(),
+                    onIncrementCartItem = onIncrementCartItem,
                     onRemoveCartItem = onRemoveCartItem,
                     onViewProduct = onViewProduct,
                 )
@@ -201,6 +206,7 @@ private fun CartListHeader(modifier: Modifier = Modifier) {
 private fun CartItem(
     cartItem: CartItem,
     modifier: Modifier = Modifier,
+    onIncrementCartItem: (Int) -> Unit,
     onRemoveCartItem: (Int) -> Unit,
     onViewProduct: (Int) -> Unit,
 ) {
@@ -247,6 +253,8 @@ private fun CartItem(
                             end.linkTo(leftPanel.end)
                             horizontalBias = 0f
                         },
+                    onIncrement = { onIncrementCartItem(cartItem.id) },
+                    onRemove = { onRemoveCartItem(cartItem.id) },
                     quantity = cartItem.quantity,
                 )
 

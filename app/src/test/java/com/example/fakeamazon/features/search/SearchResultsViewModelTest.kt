@@ -7,6 +7,7 @@ import com.example.fakeamazon.shared.model.CartItem
 import com.example.fakeamazon.shared.model.ProductInfo
 import com.example.fakeamazon.shared.model.fakeInfo
 import com.example.fakeamazon.shared.model.fakeItem
+import io.kotest.matchers.maps.shouldNotContainKey
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.instanceOf
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -41,6 +42,7 @@ class SearchResultsViewModelTest {
         coEvery { searchApiDataSource.getSearchResults(VALID_SEARCH_STRING) } returns expectedSearchResults
         coEvery { searchApiDataSource.getSearchResults(THROWING_SEARCH_STRING) } throws Exception("search error exception")
         coEvery { cartRepository.addToCart(any()) } just runs
+        coEvery { cartRepository.removeByProductId(any()) } just runs
         coEvery { cartRepository.getCartItems() } returns emptyList()
 
         viewModel = SearchResultsViewModel(
@@ -150,6 +152,51 @@ class SearchResultsViewModelTest {
             awaitItem().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
                 it.requestedCartCounts shouldBe mapOf(productIdNotInCart to 2)
             }
+
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun removeFromCart_WithValidProductId_RemovesFromCartFromRepository() = runTest {
+        val expectedProductId = expectedSearchResults[0].id
+        viewModel.load(VALID_SEARCH_STRING)
+
+        viewModel.removeFromCart(expectedProductId)
+
+        coVerify { cartRepository.removeByProductId(expectedProductId) }
+    }
+
+    @Test
+    fun removeFromCart_WithValidProductId_RemovesFromCartOptimistically() = runTest {
+        val expectedProductId = expectedSearchResults[0].id
+
+        viewModel.screenState.test {
+            viewModel.load(VALID_SEARCH_STRING)
+            awaitItem() shouldBe SearchResultsScreenState.Loading
+            awaitItem() shouldBe instanceOf<SearchResultsScreenState.Loaded>()
+
+            viewModel.addToCart(expectedProductId)
+            awaitItem() shouldBe instanceOf<SearchResultsScreenState.Loaded>()
+
+            viewModel.removeFromCart(expectedProductId)
+
+            awaitItem().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
+                it.requestedCartCounts shouldNotContainKey expectedProductId
+            }
+        }
+    }
+
+    @Test
+    fun removeFromCart_WithProductNotAlreadyInCart_DoesNotEmitNewState() = runTest {
+        val expectedProductId = expectedSearchResults[0].id
+
+        viewModel.screenState.test {
+            viewModel.load(VALID_SEARCH_STRING)
+            awaitItem() shouldBe SearchResultsScreenState.Loading
+            awaitItem() shouldBe instanceOf<SearchResultsScreenState.Loaded>()
+
+            viewModel.removeFromCart(expectedProductId)
 
             expectNoEvents()
         }
