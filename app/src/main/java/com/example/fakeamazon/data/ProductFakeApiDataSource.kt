@@ -1,21 +1,26 @@
 package com.example.fakeamazon.data
 
+import com.example.fakeamazon.shared.DispatcherProvider
 import com.example.fakeamazon.shared.model.ProductInfo
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ProductFakeApiDataSource @Inject constructor(
-    private val productInMemoryDb: ProductInMemoryDb
+    private val dispatcherProvider: DispatcherProvider,
+    private val productInMemoryDb: ProductInMemoryDb,
 ) {
 
-    suspend fun getProductById(productId: Int): ProductInfo? {
-        delay(500)
-        return productInMemoryDb.getProductById(productId)
-    }
+    suspend fun getProductById(productId: Int): ProductInfo? =
+        withContext(dispatcherProvider.default) {
+            delay(500)
+            productInMemoryDb.getProductById(productId)
+        }
 
-    suspend fun getSimilarProducts(productId: Int): List<ProductInfo> {
-        delay(100)
-        return productInMemoryDb.getSimilarProducts(productId)
-    }
+    suspend fun getSimilarProducts(productId: Int): List<ProductInfo> =
+        withContext(dispatcherProvider.default) {
+            delay(100)
+            productInMemoryDb.getSimilarProducts(productId)
+        }
 
 }

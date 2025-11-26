@@ -1,5 +1,6 @@
 package com.example.fakeamazon.data
 
+import com.example.fakeamazon.TestDispatcherProvider
 import com.example.fakeamazon.shared.model.ProductInfo
 import com.example.fakeamazon.shared.model.fakeInfo
 import io.kotest.matchers.shouldBe
@@ -15,6 +16,9 @@ class ProductFakeApiDataSourceTest {
         private const val VALID_PRODUCT_ID = 123
     }
 
+    private val testDispatcherProvider = TestDispatcherProvider()
+    private val testDispatcher = testDispatcherProvider.default
+
     private val expectedProductInfo = ProductInfo.fakeInfo(VALID_PRODUCT_ID)
     private val expectedSimilarProducts = listOf(
         ProductInfo.fakeInfo(100),
@@ -29,18 +33,21 @@ class ProductFakeApiDataSourceTest {
         every { productInMemoryDb.getProductById(VALID_PRODUCT_ID) } returns expectedProductInfo
         every { productInMemoryDb.getSimilarProducts(VALID_PRODUCT_ID) } returns expectedSimilarProducts
 
-        dataSource = ProductFakeApiDataSource(productInMemoryDb)
+        dataSource = ProductFakeApiDataSource(
+            dispatcherProvider = testDispatcherProvider,
+            productInMemoryDb = productInMemoryDb,
+        )
     }
 
     @Test
-    fun getProductById_ReturnsProductInfo() = runTest {
+    fun getProductById_ReturnsProductInfo() = runTest(testDispatcher) {
         val actual = dataSource.getProductById(VALID_PRODUCT_ID)
 
         actual shouldBe expectedProductInfo
     }
 
     @Test
-    fun getSimilarProducts_ReturnsSimilarProducts() = runTest {
+    fun getSimilarProducts_ReturnsSimilarProducts() = runTest(testDispatcher) {
         val actual = dataSource.getSimilarProducts(VALID_PRODUCT_ID)
 
         actual shouldBe expectedSimilarProducts
