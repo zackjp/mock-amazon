@@ -37,6 +37,13 @@ class CartViewModel @Inject constructor(
         }
     }
 
+    fun decrementCartItem(productId: Int) {
+        viewModelScope.launch {
+            cartRepository.decrementByProductId(productId)
+            reloadCartItems()
+        }
+    }
+
     private suspend fun reloadCartItems() {
         val updatedCartItems = cartRepository.getCartItems()
         _screenState.value = CartScreenState.Loaded(updatedCartItems)

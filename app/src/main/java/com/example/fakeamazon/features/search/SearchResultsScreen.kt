@@ -63,7 +63,7 @@ fun SearchResultsScreenRoot(
     SearchResultsScreen(
         modifier = modifier,
         onAddToCart = { productId -> viewModel.addToCart(productId) },
-        onRemoveFromCart = { productId -> viewModel.removeFromCart(productId) },
+        onDecrementFromCart = { productId -> viewModel.decrementFromCart(productId) },
         screenState = screenState,
     )
 }
@@ -72,7 +72,7 @@ fun SearchResultsScreenRoot(
 private fun SearchResultsScreen(
     modifier: Modifier = Modifier,
     onAddToCart: (Int) -> Unit,
-    onRemoveFromCart: (Int) -> Unit,
+    onDecrementFromCart: (Int) -> Unit,
     screenState: SearchResultsScreenState,
 ) {
     when (screenState) {
@@ -80,7 +80,7 @@ private fun SearchResultsScreen(
             loadedState = screenState,
             modifier = modifier,
             onAddToCart = onAddToCart,
-            onRemoveFromCart = onRemoveFromCart,
+            onDecrementFromCart = onDecrementFromCart,
         )
         is SearchResultsScreenState.Loading -> LoadingView(modifier = modifier)
         is SearchResultsScreenState.Error -> ErrorView(modifier)
@@ -110,7 +110,7 @@ private fun LoadedView(
     loadedState: SearchResultsScreenState.Loaded,
     modifier: Modifier,
     onAddToCart: (Int) -> Unit,
-    onRemoveFromCart: (Int) -> Unit,
+    onDecrementFromCart: (Int) -> Unit,
 ) {
     val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
     val cartCounts = loadedState.requestedCartCounts
@@ -125,7 +125,7 @@ private fun LoadedView(
                 SearchResultCard(
                     modifier = Modifier.fillMaxWidth(),
                     onAddToCart = onAddToCart,
-                    onRemoveFromCart = onRemoveFromCart,
+                    onDecrementFromCart = onDecrementFromCart,
                     productInfo = productInfo,
                     cartCount = cartCount,
                 )
@@ -141,7 +141,7 @@ private fun SearchResultCard(
     cartCount: Int,
     modifier: Modifier = Modifier,
     onAddToCart: (productId: Int) -> Unit,
-    onRemoveFromCart: (Int) -> Unit,
+    onDecrementFromCart: (Int) -> Unit,
     productInfo: ProductInfo,
 ) {
     val cardShape = MaterialTheme.shapes.extraSmall
@@ -220,7 +220,7 @@ private fun SearchResultCard(
                     CartItemQuantityChip(
                         modifier = cartInteractorModifier,
                         quantity = cartCount,
-                        onRemove = { onRemoveFromCart(productInfo.id) },
+                        onDecrement = { onDecrementFromCart(productInfo.id) },
                         onIncrement = { onAddToCart(productInfo.id) },
                     )
                 }

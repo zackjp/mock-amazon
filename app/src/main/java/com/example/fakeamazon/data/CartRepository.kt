@@ -20,4 +20,8 @@ class CartRepository @Inject constructor(
         cartFakeApiDataSource.removeByProductId(productId)
     }
 
+    fun decrementByProductId(productId: Int) {
+        cartFakeApiDataSource.decrementByProductId(productId)
+    }
+
 }

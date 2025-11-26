@@ -123,4 +123,48 @@ class CartFakeApiDataSourceTest {
         dataSource.getCartItems() shouldContainOnly emptyList()
     }
 
+    @Test
+    fun decrementByProductId_WhenReachesZero_RemovesAsCartItem() = runTest {
+        val productInfo = ProductInfo.fakeInfo(123)
+        every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
+
+        dataSource.addToCart(productInfo.id)
+        dataSource.addToCart(productInfo.id)
+        dataSource.addToCart(productInfo.id)
+
+        dataSource.getCartItems() shouldContainExactly listOf(productInfo.toCartItem(3))
+
+        dataSource.decrementByProductId(productInfo.id)
+        dataSource.decrementByProductId(productInfo.id)
+        dataSource.decrementByProductId(productInfo.id)
+
+        dataSource.getCartItems() shouldBe emptyList()
+    }
+
+    @Test
+    fun decrementByProductId_WhenNonZero_DecrementsCartItemQuantity() = runTest {
+        val productInfo = ProductInfo.fakeInfo(123)
+        every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
+
+        dataSource.addToCart(productInfo.id)
+        dataSource.addToCart(productInfo.id)
+        dataSource.addToCart(productInfo.id)
+
+        dataSource.getCartItems() shouldContainExactly listOf(productInfo.toCartItem(3))
+
+        dataSource.decrementByProductId(productInfo.id)
+
+        dataSource.getCartItems() shouldContainExactly listOf(productInfo.toCartItem(2))
+    }
+
+    @Test
+    fun decrementByProductId_WhenNotAlreadyInCart_DoesNothing() = runTest {
+        val productInfo = ProductInfo.fakeInfo(123)
+        every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
+
+        dataSource.decrementByProductId(productInfo.id)
+
+        dataSource.getCartItems() shouldBe emptyList()
+    }
+
 }

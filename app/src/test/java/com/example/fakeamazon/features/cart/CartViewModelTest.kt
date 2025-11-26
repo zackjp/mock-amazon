@@ -5,6 +5,7 @@ import com.example.fakeamazon.data.CartRepository
 import com.example.fakeamazon.shared.model.CartItem
 import com.example.fakeamazon.shared.model.fakeItem
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.instanceOf
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -28,6 +29,7 @@ class CartViewModelTest {
         coEvery { repository.getCartItems() } returns expectedCartItems
         coEvery { repository.addToCart(any()) } just Runs
         coEvery { repository.removeByProductId(any()) } just Runs
+        coEvery { repository.decrementByProductId(any()) } just Runs
 
         viewModel = CartViewModel(cartRepository = repository)
     }
@@ -80,6 +82,26 @@ class CartViewModelTest {
             viewModel.incrementCartItem(123)
 
             coVerify { repository.addToCart(123) }
+            awaitItem() shouldBe CartScreenState.Loaded(updatedCartItems)
+        }
+    }
+
+    @Test
+    fun decrementCartItem_DecrementsFromRepositoryAndUpdatesState() = runTest {
+        val updatedCartItems = listOf(
+            CartItem.fakeItem(987),
+            CartItem.fakeItem(654),
+        )
+
+        viewModel.screenState.test {
+            awaitItem() shouldBe CartScreenState.Loading
+            viewModel.load()
+            awaitItem() shouldBe instanceOf<CartScreenState.Loaded>()
+
+            coEvery { repository.getCartItems() } returns updatedCartItems
+            viewModel.decrementCartItem(123)
+
+            coVerify { repository.decrementByProductId(123) }
             awaitItem() shouldBe CartScreenState.Loaded(updatedCartItems)
         }
     }

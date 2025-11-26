@@ -41,4 +41,11 @@ class CartFakeApiDataSource @Inject constructor(
             .reversed()
     }
 
+    fun decrementByProductId(productId: Int) {
+        cartProductIdQuantityMap.compute(productId) { key, value ->
+            val updatedQuantity = (value ?: 0) - 1
+            if (updatedQuantity <= 0) null else updatedQuantity
+        }
+    }
+
 }

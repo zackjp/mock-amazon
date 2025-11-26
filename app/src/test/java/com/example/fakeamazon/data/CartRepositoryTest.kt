@@ -62,6 +62,15 @@ class CartRepositoryTest {
         coVerify { cartFakeApiDataSource.removeByProductId(123) }
     }
 
+    @Test
+    fun decrementByProductId_DecrementsProductIdFromCartApi() = runTest {
+        coEvery { cartFakeApiDataSource.decrementByProductId(123) } just Runs
+
+        repo.decrementByProductId(123)
+
+        coVerify { cartFakeApiDataSource.decrementByProductId(123) }
+    }
+
     private fun fakeCartItem(number: Int): CartItem =
         ProductInfo.fakeInfo(number).toCartItem()
 

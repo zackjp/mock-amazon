@@ -48,10 +48,10 @@ class SearchResultsViewModel @Inject constructor(
         }
     }
 
-    fun removeFromCart(productId: Int) {
+    fun decrementFromCart(productId: Int) {
         viewModelScope.launch {
-            optimisticCartRemove(productId)
-            cartRepository.removeByProductId(productId)
+            optimisticCartDecrement(productId)
+            cartRepository.decrementByProductId(productId)
         }
     }
 
@@ -76,12 +76,17 @@ class SearchResultsViewModel @Inject constructor(
         }
     }
 
-    private fun optimisticCartRemove(productId: Int) {
+    private fun optimisticCartDecrement(productId: Int) {
         _screenState.updateIf<SearchResultsScreenState.Loaded> { current ->
             current.copy(
                 requestedCartCounts = current.requestedCartCounts
                     .toMutableMap()
-                    .apply { remove(productId) }
+                    .apply {
+                        compute(productId) { key, value ->
+                            val updatedQuantity = (value ?: 0) - 1
+                            if (updatedQuantity <= 0) null else updatedQuantity
+                        }
+                    }
             )
         }
     }

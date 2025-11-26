@@ -78,6 +78,7 @@ fun CartScreenRoot(
 
     CartScreen(
         modifier = modifier,
+        onDecrementCartItem = { productId -> cartViewModel.decrementCartItem(productId) },
         onIncrementCartItem = { productId -> cartViewModel.incrementCartItem(productId) },
         onRemoveCartItem = { productId -> cartViewModel.removeByProductId(productId) },
         onViewProduct = onViewProduct,
@@ -88,6 +89,7 @@ fun CartScreenRoot(
 @Composable
 private fun CartScreen(
     modifier: Modifier = Modifier,
+    onDecrementCartItem: (Int) -> Unit,
     onIncrementCartItem: (Int) -> Unit,
     onRemoveCartItem: (Int) -> Unit,
     onViewProduct: (Int) -> Unit = {},
@@ -97,6 +99,7 @@ private fun CartScreen(
         is CartScreenState.Loading -> LoadingView(modifier)
         is CartScreenState.Loaded -> LoadedView(
             modifier = modifier,
+            onDecrementCartItem = onDecrementCartItem,
             onIncrementCartItem = onIncrementCartItem,
             onRemoveCartItem = onRemoveCartItem,
             onViewProduct = onViewProduct,
@@ -128,6 +131,7 @@ private fun ErrorView(modifier: Modifier) {
 @Composable
 private fun LoadedView(
     modifier: Modifier = Modifier,
+    onDecrementCartItem: (Int) -> Unit,
     onIncrementCartItem: (Int) -> Unit,
     onRemoveCartItem: (Int) -> Unit,
     onViewProduct: (Int) -> Unit,
@@ -154,6 +158,7 @@ private fun LoadedView(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
                         .fillMaxWidth(),
+                    onDecrementCartItem = onDecrementCartItem,
                     onIncrementCartItem = onIncrementCartItem,
                     onRemoveCartItem = onRemoveCartItem,
                     onViewProduct = onViewProduct,
@@ -206,6 +211,7 @@ private fun CartListHeader(modifier: Modifier = Modifier) {
 private fun CartItem(
     cartItem: CartItem,
     modifier: Modifier = Modifier,
+    onDecrementCartItem: (Int) -> Unit,
     onIncrementCartItem: (Int) -> Unit,
     onRemoveCartItem: (Int) -> Unit,
     onViewProduct: (Int) -> Unit,
@@ -253,8 +259,8 @@ private fun CartItem(
                             end.linkTo(leftPanel.end)
                             horizontalBias = 0f
                         },
+                    onDecrement = { onDecrementCartItem(cartItem.id) },
                     onIncrement = { onIncrementCartItem(cartItem.id) },
-                    onRemove = { onRemoveCartItem(cartItem.id) },
                     quantity = cartItem.quantity,
                 )
 

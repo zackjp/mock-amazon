@@ -60,8 +60,8 @@ fun PrimaryCta(
 @Composable
 fun CartItemQuantityChip(
     modifier: Modifier = Modifier,
+    onDecrement: () -> Unit = {},
     onIncrement: () -> Unit = {},
-    onRemove: () -> Unit = {},
     quantity: Int,
 ) {
     Row(
@@ -76,14 +76,16 @@ fun CartItemQuantityChip(
             .padding(horizontal = 12.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        val decrementIcon =
+            if (quantity <= 1) R.drawable.ic_outline_delete_24 else R.drawable.ic_sharp_remove_24
         val iconSize = 18.dp
         Icon(
             contentDescription = null,
             modifier = Modifier
                 .width(iconSize)
                 .aspectRatio(1f)
-                .clickable(onClick = onRemove),
-            painter = painterResource(R.drawable.ic_outline_delete_24),
+                .clickable(onClick = onDecrement),
+            painter = painterResource(decrementIcon),
         )
         Text(
             modifier = Modifier.weight(1f),
