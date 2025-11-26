@@ -1,5 +1,6 @@
 package com.example.fakeamazon.data
 
+import com.example.fakeamazon.TestDispatcherProvider
 import com.example.fakeamazon.shared.model.ProductInfo
 import com.example.fakeamazon.shared.model.fakeInfo
 import com.example.fakeamazon.shared.model.toCartItem
@@ -14,16 +15,22 @@ import org.junit.jupiter.api.Test
 
 class CartFakeApiDataSourceTest {
 
+    private val testDispatcherProvider = TestDispatcherProvider()
+    private val testDispatcher = testDispatcherProvider.default
+
     private val productInMemoryDb = mockk<ProductInMemoryDb>()
     private lateinit var dataSource: CartFakeApiDataSource
 
     @BeforeEach
     fun setUp() {
-        dataSource = CartFakeApiDataSource(productInMemoryDb)
+        dataSource = CartFakeApiDataSource(
+            dispatcherProvider = testDispatcherProvider,
+            productInMemoryDb = productInMemoryDb,
+        )
     }
 
     @Test
-    fun addToCart_WithValidProductId_ReturnsTrue() = runTest {
+    fun addToCart_WithValidProductId_ReturnsTrue() = runTest(testDispatcher) {
         val productInfo = ProductInfo.fakeInfo(123)
         every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
 
@@ -31,14 +38,14 @@ class CartFakeApiDataSourceTest {
     }
 
     @Test
-    fun addToCart_WithInvalidProductId_DoesNotReturnTrue() = runTest {
+    fun addToCart_WithInvalidProductId_ReturnsFalse() = runTest(testDispatcher) {
         every { productInMemoryDb.getProductById(0) } returns null
 
         dataSource.addToCart(0) shouldBe false
     }
 
     @Test
-    fun removeByProductId_RemovesProductFromCart() = runTest {
+    fun removeByProductId_RemovesProductFromCart() = runTest(testDispatcher) {
         val productInfo = ProductInfo.fakeInfo(123)
         every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
         repeat(3) { dataSource.addToCart(123) }
@@ -50,7 +57,7 @@ class CartFakeApiDataSourceTest {
     }
 
     @Test
-    fun getCartItems_WithDistinctValidProductIds_ReturnsCartItems() = runTest {
+    fun getCartItems_WithDistinctValidProductIds_ReturnsCartItems() = runTest(testDispatcher) {
         val products = listOf(
             ProductInfo.fakeInfo(123),
             ProductInfo.fakeInfo(456),
@@ -69,7 +76,7 @@ class CartFakeApiDataSourceTest {
     }
 
     @Test
-    fun getCartItems_WithDuplicateValidProductIds_ReturnsCartItemsWithQuantity() = runTest {
+    fun getCartItems_WithDuplicateValidProductIds_ReturnsCartItemsWithQuantity() = runTest(testDispatcher) {
         val products = listOf(
             ProductInfo.fakeInfo(123),
             ProductInfo.fakeInfo(456),
@@ -89,7 +96,7 @@ class CartFakeApiDataSourceTest {
     }
 
     @Test
-    fun getCartItems_ReturnsCartItemsInOrderWithMostRecentFirst() = runTest {
+    fun getCartItems_ReturnsCartItemsInOrderWithMostRecentFirst() = runTest(testDispatcher) {
         val products = listOf(
             ProductInfo.fakeInfo(123),
             ProductInfo.fakeInfo(456),
@@ -112,7 +119,7 @@ class CartFakeApiDataSourceTest {
     }
 
     @Test
-    fun getCartItems_WithValidProductIdThatBecameInvalidProductId_ReturnsNothing() = runTest {
+    fun getCartItems_WithValidProductIdThatBecameInvalidProductId_ReturnsNothing() = runTest(testDispatcher) {
         val productInfo = ProductInfo.fakeInfo(123)
 
         every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
@@ -124,7 +131,7 @@ class CartFakeApiDataSourceTest {
     }
 
     @Test
-    fun decrementByProductId_WhenReachesZero_RemovesAsCartItem() = runTest {
+    fun decrementByProductId_WhenReachesZero_RemovesAsCartItem() = runTest(testDispatcher) {
         val productInfo = ProductInfo.fakeInfo(123)
         every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
 
@@ -142,7 +149,7 @@ class CartFakeApiDataSourceTest {
     }
 
     @Test
-    fun decrementByProductId_WhenNonZero_DecrementsCartItemQuantity() = runTest {
+    fun decrementByProductId_WhenNonZero_DecrementsCartItemQuantity() = runTest(testDispatcher) {
         val productInfo = ProductInfo.fakeInfo(123)
         every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
 
@@ -158,7 +165,7 @@ class CartFakeApiDataSourceTest {
     }
 
     @Test
-    fun decrementByProductId_WhenNotAlreadyInCart_DoesNothing() = runTest {
+    fun decrementByProductId_WhenNotAlreadyInCart_DoesNothing() = runTest(testDispatcher) {
         val productInfo = ProductInfo.fakeInfo(123)
         every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
 
