@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fakeamazon.data.CartRepository
 import com.example.fakeamazon.data.ProductRepository
-import com.example.fakeamazon.shared.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +14,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductViewModel @Inject constructor(
     private val cartRepository: CartRepository,
-    private val dispatcherProvider: DispatcherProvider,
     private val productRepository: ProductRepository,
 ) : ViewModel() {
 
@@ -23,7 +21,7 @@ class ProductViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     fun load(productId: Int) {
-        viewModelScope.launch(dispatcherProvider.default) {
+        viewModelScope.launch {
             val productInfo = productRepository.getProductById(productId)
 
             if (productInfo == null) {
@@ -54,7 +52,7 @@ class ProductViewModel @Inject constructor(
             current.copy(addToCartState = AddToCartState.Adding)
         }
 
-        viewModelScope.launch(dispatcherProvider.default) {
+        viewModelScope.launch {
             cartRepository.addToCart(currentState.productInfo.id)
 
             _uiState.updateIf<ProductUiState.Loaded> { current ->
