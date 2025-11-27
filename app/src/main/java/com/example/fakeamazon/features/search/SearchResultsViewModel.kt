@@ -62,12 +62,14 @@ class SearchResultsViewModel @Inject constructor(
                     .toMutableMap()
                     .apply {
                         compute(productId) { _, value ->
-                            val cartCount = if (value == null) {
-                                val cartItem = _cartItems.find { it.id == productId }
-                                val baseCartCount = cartItem?.quantity
-                                baseCartCount ?: 0
-                            } else {
-                                value
+                            val cartCount = when (value) {
+                                null -> {
+                                    val cartItem = _cartItems.find { it.id == productId }
+                                    val baseCartCount = cartItem?.quantity
+                                    baseCartCount ?: 0
+                                }
+
+                                else -> value
                             }
                             cartCount + 1
                         }
@@ -82,8 +84,17 @@ class SearchResultsViewModel @Inject constructor(
                 requestedCartCounts = current.requestedCartCounts
                     .toMutableMap()
                     .apply {
-                        compute(productId) { key, value ->
-                            val updatedQuantity = (value ?: 0) - 1
+                        compute(productId) { _, value ->
+                            val cartQuantity = when (value) {
+                                null -> {
+                                    val cartItem = _cartItems.find { it.id == productId }
+                                    val baseCartCount = cartItem?.quantity
+                                    baseCartCount ?: 0
+                                }
+
+                                else -> value
+                            }
+                            val updatedQuantity = cartQuantity - 1
                             if (updatedQuantity <= 0) null else updatedQuantity
                         }
                     }
