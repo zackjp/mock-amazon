@@ -85,6 +85,30 @@ class SearchResultsViewModelTest {
     }
 
     @Test
+    fun load_WhenAlreadyLoaded_DoesNotReloadSearchResults() = runTest {
+        viewModel.screenState.test {
+            val searchResult1 = listOf(ProductInfo.fakeInfo(987))
+            val searchResult2 = listOf(ProductInfo.fakeInfo(654))
+            val expectedState = SearchResultsScreenState.Loaded(
+                requestedCartCounts = emptyMap(),
+                searchResults = searchResult1,
+            )
+
+            coEvery { searchApiDataSource.getSearchResults(VALID_SEARCH_STRING) } returns searchResult1
+            viewModel.load(VALID_SEARCH_STRING)
+            awaitItem() shouldBe SearchResultsScreenState.Loading
+            awaitItem() shouldBe expectedState
+
+            coEvery { searchApiDataSource.getSearchResults(VALID_SEARCH_STRING) } returns searchResult2
+            viewModel.load(VALID_SEARCH_STRING)
+            advanceUntilIdle()
+
+            expectNoEvents()
+            viewModel.screenState.value shouldBe expectedState
+        }
+    }
+
+    @Test
     fun load_WithSearchException_EmitsError() = runTest {
         viewModel.screenState.test {
             viewModel.load(THROWING_SEARCH_STRING)

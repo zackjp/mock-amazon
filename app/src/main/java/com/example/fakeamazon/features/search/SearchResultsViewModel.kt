@@ -27,6 +27,10 @@ class SearchResultsViewModel @Inject constructor(
 
     fun load(searchString: String) {
         viewModelScope.launch {
+            if (screenState.value is SearchResultsScreenState.Loaded) {
+                return@launch
+            }
+
             try {
                 val searchResults = searchApiDataSource.getSearchResults(searchString)
                 _cartItems = cartRepository.getCartItems()
