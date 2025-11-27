@@ -71,6 +71,37 @@ class CartRepositoryTest {
         coVerify { cartFakeApiDataSource.decrementByProductId(123) }
     }
 
+    @Test
+    fun setQuantity_WhenQuantityIsZero_setsQuantityFromCartApi() = runTest {
+        coEvery { cartFakeApiDataSource.setQuantity(123, 0) } just Runs
+
+        repo.setQuantity(123, 0)
+
+        coVerify { cartFakeApiDataSource.setQuantity(123, 0) }
+    }
+
+    @Test
+    fun setQuantity_WhenQuantityIsGreaterThanZero_setsQuantityFromCartApi() = runTest {
+        val productId = 123
+        val quantity = 5
+        coEvery { cartFakeApiDataSource.setQuantity(productId, quantity) } just Runs
+
+        repo.setQuantity(productId, quantity)
+
+        coVerify { cartFakeApiDataSource.setQuantity(productId, quantity) }
+    }
+
+    @Test
+    fun setQuantity_WhenQuantityIsNegative_setsQuantityFromCartApi() = runTest {
+        val productId = 123
+        val quantity = -5
+        coEvery { cartFakeApiDataSource.setQuantity(productId, quantity) } just Runs
+
+        repo.setQuantity(productId, quantity)
+
+        coVerify { cartFakeApiDataSource.setQuantity(productId, quantity) }
+    }
+
     private fun fakeCartItem(number: Int): CartItem =
         ProductInfo.fakeInfo(number).toCartItem()
 

@@ -29,6 +29,16 @@ class CartFakeApiDataSource @Inject constructor(
         return@withContext true
     }
 
+    suspend fun setQuantity(productId: Int, quantity: Int) {
+        delay(500)
+
+        if (quantity > 0) {
+            cartProductIdQuantityMap.put(productId, quantity)
+        } else {
+            cartProductIdQuantityMap.remove(productId)
+        }
+    }
+
     suspend fun removeByProductId(productId: Int): Unit = withContext(dispatcherProvider.default) {
         delay(1250)
         cartProductIdQuantityMap.remove(productId)
@@ -39,7 +49,7 @@ class CartFakeApiDataSource @Inject constructor(
 
         cartProductIdQuantityMap
             .map { productInMemoryDb.getProductById(it.key) to it.value }
-            .filter { (product, quantity) -> product != null && quantity > 0 }
+            .filter { (product, quantity) -> product != null }
             .map { (product, quantity) -> product!!.toCartItem(quantity) }
             .reversed()
     }

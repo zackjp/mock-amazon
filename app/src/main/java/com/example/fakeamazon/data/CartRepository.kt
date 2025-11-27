@@ -1,6 +1,7 @@
 package com.example.fakeamazon.data
 
 import com.example.fakeamazon.shared.model.CartItem
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 
@@ -10,6 +11,10 @@ class CartRepository @Inject constructor(
 
     suspend fun getCartItems(): List<CartItem> {
         return cartFakeApiDataSource.getCartItems()
+    }
+
+    suspend fun setQuantity(productId: Int, quantity: Int) {
+        cartFakeApiDataSource.setQuantity(productId, quantity)
     }
 
     suspend fun addToCart(productId: Int) {

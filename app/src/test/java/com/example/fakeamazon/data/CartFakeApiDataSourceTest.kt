@@ -104,6 +104,63 @@ class CartFakeApiDataSourceTest {
         }
 
     @Test
+    fun setQuantity_WithZeroQuantityWhenProductNotInCart_DoesNothing() = runTest(testDispatcher) {
+        val product = PRODUCT_NOT_IN_CART
+
+        dataSource.setQuantity(product.id, 0)
+
+        dataSource.getCartItems() shouldBe EXISTING_CART_ITEMS
+    }
+
+    @Test
+    fun setQuantity_WithZeroQuantityWhenProductInCart_RemovesItem() = runTest(testDispatcher) {
+        val product = PRODUCT_IN_CART
+
+        dataSource.setQuantity(product.id, 0)
+
+        dataSource.getCartItems() shouldBe emptyList()
+    }
+
+    @Test
+    fun setQuantity_WithPositiveQuantityWhenProductNotInCart_SetsQuantity() = runTest(testDispatcher) {
+        val product = PRODUCT_NOT_IN_CART
+        val quantity = 13
+
+        dataSource.setQuantity(product.id, quantity)
+
+        dataSource.getCartItems() shouldContainExactly listOf(product.toCartItem(quantity = quantity)) + EXISTING_CART_ITEMS
+    }
+
+    @Test
+    fun setQuantity_WithPositiveQuantityWhenProductInCart_SetsQuantity() = runTest(testDispatcher) {
+        val product = PRODUCT_IN_CART
+        val newQuantity = PRODUCT_IN_CART_QUANTITY * 10
+
+        dataSource.setQuantity(product.id, newQuantity)
+
+        dataSource.getCartItems() shouldContainExactly listOf(product.toCartItem(quantity = newQuantity))
+    }
+
+    @Test
+    fun setQuantity_WithNegativeQuantityWhenProductNotInCart_DoesNothing() = runTest(testDispatcher) {
+        val product = PRODUCT_NOT_IN_CART
+        val quantity = -3
+
+        dataSource.setQuantity(product.id, quantity)
+
+        dataSource.getCartItems() shouldContainExactly EXISTING_CART_ITEMS
+    }
+
+    @Test
+    fun setQuantity_WithNegativeQuantityWhenProductInCart_RemovesItem() = runTest(testDispatcher) {
+        val product = PRODUCT_IN_CART
+
+        dataSource.setQuantity(product.id, 0)
+
+        dataSource.getCartItems() shouldBe emptyList()
+    }
+
+    @Test
     fun removeByProductId_RemovesProductFromCart() = runTest(testDispatcher) {
         val product = PRODUCT_IN_CART
         dataSource.getCartItems() shouldBe listOf(product.toCartItem(PRODUCT_IN_CART_QUANTITY))

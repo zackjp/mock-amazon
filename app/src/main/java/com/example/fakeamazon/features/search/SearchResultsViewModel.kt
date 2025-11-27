@@ -47,19 +47,27 @@ class SearchResultsViewModel @Inject constructor(
 
     fun addToCart(productId: Int) {
         viewModelScope.launch {
-            optimisticCartCountUpdate(productId)
-            cartRepository.addToCart(productId)
+            optimisticCartCountUpdate(productId, 1)
+
+            _screenState.value.runIf<SearchResultsScreenState.Loaded> {
+                val currentLocalQuantity = requestedCartCounts[productId]
+                cartRepository.setQuantity(productId, currentLocalQuantity ?: 1)
+            }
         }
     }
 
     fun decrementFromCart(productId: Int) {
         viewModelScope.launch {
-            optimisticCartDecrement(productId)
-            cartRepository.decrementByProductId(productId)
+            optimisticCartCountUpdate(productId, -1)
+
+            _screenState.value.runIf<SearchResultsScreenState.Loaded> {
+                val currentLocalQuantity = requestedCartCounts[productId]
+                cartRepository.setQuantity(productId, currentLocalQuantity ?: 0)
+            }
         }
     }
 
-    private fun optimisticCartCountUpdate(productId: Int) {
+    private fun optimisticCartCountUpdate(productId: Int, quantityChange: Int) {
         _screenState.updateIf<SearchResultsScreenState.Loaded> { current ->
             current.copy(
                 requestedCartCounts = current.requestedCartCounts
@@ -75,34 +83,17 @@ class SearchResultsViewModel @Inject constructor(
 
                                 else -> value
                             }
-                            cartCount + 1
+                            return@compute maxOf(0, cartCount + quantityChange)
                         }
                     }
             )
         }
     }
 
-    private fun optimisticCartDecrement(productId: Int) {
-        _screenState.updateIf<SearchResultsScreenState.Loaded> { current ->
-            current.copy(
-                requestedCartCounts = current.requestedCartCounts
-                    .toMutableMap()
-                    .apply {
-                        compute(productId) { _, value ->
-                            val cartQuantity = when (value) {
-                                null -> {
-                                    val cartItem = _cartItems.find { it.id == productId }
-                                    val baseCartCount = cartItem?.quantity
-                                    baseCartCount ?: 0
-                                }
+}
 
-                                else -> value
-                            }
-                            val updatedQuantity = cartQuantity - 1
-                            if (updatedQuantity <= 0) null else updatedQuantity
-                        }
-                    }
-            )
-        }
+private inline fun <reified T> Any.runIf(block: T.() -> Unit) {
+    if (this is T) {
+        block()
     }
 }
