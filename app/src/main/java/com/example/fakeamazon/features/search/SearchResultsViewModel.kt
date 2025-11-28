@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.fakeamazon.data.CartRepository
 import com.example.fakeamazon.data.SearchApiDataSource
 import com.example.fakeamazon.shared.model.CartItem
+import com.example.fakeamazon.shared.runIf
 import com.example.fakeamazon.shared.updateIf
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
@@ -90,10 +91,4 @@ class SearchResultsViewModel @Inject constructor(
         }
     }
 
-}
-
-private inline fun <reified T> Any.runIf(block: T.() -> Unit) {
-    if (this is T) {
-        block()
-    }
 }

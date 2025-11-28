@@ -3,6 +3,7 @@ package com.example.fakeamazon.features.cart
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fakeamazon.data.CartRepository
+import com.example.fakeamazon.shared.runIf
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,15 +33,25 @@ class CartViewModel @Inject constructor(
 
     fun incrementCartItem(productId: Int) {
         viewModelScope.launch {
-            cartRepository.addToCart(productId)
+            setRepositoryQuantity(productId, 1)
             reloadCartItems()
         }
     }
 
     fun decrementCartItem(productId: Int) {
         viewModelScope.launch {
-            cartRepository.decrementByProductId(productId)
+            setRepositoryQuantity(productId, -1)
             reloadCartItems()
+        }
+    }
+
+    private suspend fun setRepositoryQuantity(productId: Int, quantityChange: Int) {
+        _screenState.value.runIf<CartScreenState.Loaded> {
+            val currentCartItem = cartItems.find { it.id == productId }
+            currentCartItem?.let {
+                val currentQuantity = it.quantity
+                cartRepository.setQuantity(productId, currentQuantity + quantityChange)
+            }
         }
     }
 
