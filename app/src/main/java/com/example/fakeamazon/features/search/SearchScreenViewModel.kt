@@ -8,6 +8,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchScreenViewModel @Inject constructor() : ViewModel() {
 
-    val searchItems = listOf("mixed nuts", "popcorn", "snacks", "almonds low sodium", "pretzels")
+    val searchItems = listOf("mixed nuts", "popcorn", "snacks", "sneakers", "household")
 
 }
