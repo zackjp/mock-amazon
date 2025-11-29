@@ -19,13 +19,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.fakeamazon.R
 
 @Composable
 fun SearchScreenRoot(
     modifier: Modifier = Modifier,
     onPerformSearch: (searchString: String) -> Unit = {},
+    viewModel: SearchScreenViewModel = hiltViewModel(),
 ) {
+    val searchItems = viewModel.searchItems
+
     val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
 
     Surface(modifier = modifier) {
@@ -64,6 +68,5 @@ fun SearchScreenRoot(
             }
         }
     }
-}
 
-val searchItems = listOf("mixed nuts", "popcorn", "snacks", "almonds low sodium", "pretzels")
+}
