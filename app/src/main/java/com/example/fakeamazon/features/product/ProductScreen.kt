@@ -1,25 +1,20 @@
 package com.example.fakeamazon.features.product
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,6 +24,8 @@ import com.example.fakeamazon.features.product.view.PurchaseInfoView
 import com.example.fakeamazon.features.product.view.SimilarProductsView
 import com.example.fakeamazon.features.product.view.StoreNameAndProductRatingView
 import com.example.fakeamazon.shared.ui.InteractionBlockingOverlay
+import com.example.fakeamazon.shared.ui.screen.ErrorScreen
+import com.example.fakeamazon.shared.ui.screen.LoadingScreen
 import com.example.fakeamazon.ui.theme.AmazonGray
 import kotlinx.coroutines.delay
 
@@ -74,24 +71,6 @@ private fun ProductScreen(
             onCartAddedViewed = onCartAddedViewed,
             onViewProduct = onViewProduct,
         )
-    }
-}
-
-@Composable
-private fun LoadingScreen(modifier: Modifier) {
-    Surface(modifier = modifier) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
-    }
-}
-
-@Composable
-private fun ErrorScreen(modifier: Modifier) {
-    Surface(modifier = modifier) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(stringResource(R.string.error_loading_content))
-        }
     }
 }
 

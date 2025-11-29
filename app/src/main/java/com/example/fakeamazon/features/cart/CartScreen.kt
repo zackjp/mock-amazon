@@ -7,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,7 +22,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.BlendMode
@@ -58,6 +56,8 @@ import com.example.fakeamazon.shared.ui.PriceDisplaySize
 import com.example.fakeamazon.shared.ui.PriceText
 import com.example.fakeamazon.shared.ui.PrimaryCta
 import com.example.fakeamazon.shared.ui.getPrimeLogoTextInfo
+import com.example.fakeamazon.shared.ui.screen.ErrorScreen
+import com.example.fakeamazon.shared.ui.screen.LoadingScreen
 import com.example.fakeamazon.ui.theme.AmazonOutlineMedium
 import com.example.fakeamazon.ui.theme.Gray90
 import com.example.fakeamazon.ui.theme.Green60
@@ -97,7 +97,7 @@ private fun CartScreen(
     screenState: CartScreenState,
 ) {
     when (screenState) {
-        is CartScreenState.Loading -> LoadingView(modifier)
+        is CartScreenState.Loading -> LoadingScreen(modifier)
         is CartScreenState.Loaded -> LoadedView(
             modifier = modifier,
             onDecrementCartItem = onDecrementCartItem,
@@ -107,25 +107,7 @@ private fun CartScreen(
             screenState = screenState,
         )
 
-        is CartScreenState.Error -> ErrorView(modifier)
-    }
-}
-
-@Composable
-private fun LoadingView(modifier: Modifier) {
-    Surface(modifier = modifier) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
-    }
-}
-
-@Composable
-private fun ErrorView(modifier: Modifier) {
-    Surface(modifier = modifier) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(stringResource(R.string.error_loading_content))
-        }
+        is CartScreenState.Error -> ErrorScreen(modifier)
     }
 }
 

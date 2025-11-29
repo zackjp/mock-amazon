@@ -11,15 +11,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,7 +23,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -35,7 +30,6 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -43,6 +37,8 @@ import com.example.fakeamazon.R
 import com.example.fakeamazon.features.home.view.HomeSectionView
 import com.example.fakeamazon.features.home.view.TopHomeSection
 import com.example.fakeamazon.shared.ignoreParentPadding
+import com.example.fakeamazon.shared.ui.screen.ErrorScreen
+import com.example.fakeamazon.shared.ui.screen.LoadingScreen
 
 @Composable
 fun HomeScreenRoot(
@@ -73,32 +69,14 @@ private fun HomeScreen(
     screenState: HomeScreenState,
 ) {
     when (screenState) {
-        is HomeScreenState.Loading -> LoadingView(modifier = modifier.padding(innerPadding))
+        is HomeScreenState.Loading -> LoadingScreen(modifier = modifier.padding(innerPadding))
         is HomeScreenState.Loaded -> LoadedView(
             innerPadding = innerPadding,
             modifier = modifier,
             onViewProduct = onViewProduct,
             screenState = screenState,
         )
-        is HomeScreenState.Error -> ErrorView(modifier = modifier.padding(innerPadding))
-    }
-}
-
-@Composable
-private fun LoadingView(modifier: Modifier) {
-    Surface(modifier = modifier) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
-    }
-}
-
-@Composable
-private fun ErrorView(modifier: Modifier) {
-    Surface(modifier = modifier) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(stringResource(R.string.error_loading_content))
-        }
+        is HomeScreenState.Error -> ErrorScreen(modifier = modifier.padding(innerPadding))
     }
 }
 
