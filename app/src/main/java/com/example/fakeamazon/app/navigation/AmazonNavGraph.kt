@@ -124,6 +124,7 @@ fun AmazonNavGraph(
             val route = destination.toRoute<SearchResults>()
             SearchResultsScreenRoot(
                 modifier = Modifier.padding(innerPadding).fillMaxWidth(),
+                onViewProduct = onViewProduct,
                 searchString = route.searchString,
             )
         }

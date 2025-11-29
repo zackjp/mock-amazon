@@ -3,6 +3,7 @@ package com.example.fakeamazon.features.search
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,6 +51,7 @@ import com.example.fakeamazon.ui.theme.Gray90
 @Composable
 fun SearchResultsScreenRoot(
     modifier: Modifier = Modifier,
+    onViewProduct: (Int) -> Unit,
     searchString: String,
     viewModel: SearchResultsViewModel = hiltViewModel<SearchResultsViewModel>(),
 ) {
@@ -64,6 +66,7 @@ fun SearchResultsScreenRoot(
         modifier = modifier,
         onAddToCart = { productId -> viewModel.addToCart(productId) },
         onDecrementFromCart = { productId -> viewModel.decrementFromCart(productId) },
+        onViewProduct = onViewProduct,
         screenState = screenState,
     )
 }
@@ -73,6 +76,7 @@ private fun SearchResultsScreen(
     modifier: Modifier = Modifier,
     onAddToCart: (Int) -> Unit,
     onDecrementFromCart: (Int) -> Unit,
+    onViewProduct: (Int) -> Unit,
     screenState: SearchResultsScreenState,
 ) {
     when (screenState) {
@@ -81,6 +85,7 @@ private fun SearchResultsScreen(
             modifier = modifier,
             onAddToCart = onAddToCart,
             onDecrementFromCart = onDecrementFromCart,
+            onViewProduct = onViewProduct,
         )
         is SearchResultsScreenState.Loading -> LoadingView(modifier = modifier)
         is SearchResultsScreenState.Error -> ErrorView(modifier)
@@ -111,6 +116,7 @@ private fun LoadedView(
     modifier: Modifier,
     onAddToCart: (Int) -> Unit,
     onDecrementFromCart: (Int) -> Unit,
+    onViewProduct: (Int) -> Unit,
 ) {
     val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
     val cartCounts = loadedState.requestedCartCounts
@@ -126,6 +132,7 @@ private fun LoadedView(
                     modifier = Modifier.fillMaxWidth(),
                     onAddToCart = onAddToCart,
                     onDecrementFromCart = onDecrementFromCart,
+                    onViewProduct = onViewProduct,
                     productInfo = productInfo,
                     cartCount = cartCount,
                 )
@@ -142,6 +149,7 @@ private fun SearchResultCard(
     modifier: Modifier = Modifier,
     onAddToCart: (productId: Int) -> Unit,
     onDecrementFromCart: (Int) -> Unit,
+    onViewProduct: (Int) -> Unit,
     productInfo: ProductInfo,
 ) {
     val cardShape = MaterialTheme.shapes.extraSmall
@@ -150,7 +158,9 @@ private fun SearchResultCard(
 
     Card(
         shape = cardShape,
-        modifier = modifier.border(Dp.Hairline, AmazonOutlineLight, cardShape),
+        modifier = modifier
+            .clickable { onViewProduct(productInfo.id) }
+            .border(Dp.Hairline, AmazonOutlineLight, cardShape),
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
             val (leftPanel, rightPanel) = createRefs()
@@ -209,7 +219,9 @@ private fun SearchResultCard(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                val cartInteractorModifier = Modifier.fillMaxWidth().height(30.dp)
+                val cartInteractorModifier = Modifier
+                    .fillMaxWidth()
+                    .height(30.dp)
                 if (cartCount <= 0) {
                     PrimaryCta(
                         modifier = cartInteractorModifier,
