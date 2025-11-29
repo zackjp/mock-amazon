@@ -47,12 +47,29 @@ class CartViewModelTest {
     }
 
     @Test
-    fun load_LoadsDataFromRepository() = runTest {
+    fun load_WhenNotLoaded_LoadsDataFromRepository() = runTest {
         viewModel.screenState.test {
             viewModel.load()
 
             awaitItem() shouldBe CartScreenState.Loading
             awaitItem() shouldBe CartScreenState.Loaded(expectedCartItems)
+        }
+    }
+
+    @Test
+    fun load_WhenAlreadyLoaded_EmitsReloadingStateAndReloadsDataFromRepository() = runTest {
+        val updatedCartItems = listOf(CartItem.fakeItem(987), CartItem.fakeItem(654))
+
+        viewModel.screenState.test {
+            viewModel.load()
+
+            awaitItem() shouldBe CartScreenState.Loading
+            awaitItem() shouldBe CartScreenState.Loaded(expectedCartItems)
+
+            coEvery { repository.getCartItems() } returns updatedCartItems
+            viewModel.load()
+            awaitItem() shouldBe CartScreenState.Loaded(expectedCartItems, isReloading = true)
+            awaitItem() shouldBe CartScreenState.Loaded(updatedCartItems, isReloading = false)
         }
     }
 

@@ -53,6 +53,7 @@ import com.example.fakeamazon.shared.model.CartItem
 import com.example.fakeamazon.shared.toPrimeDeliveryString
 import com.example.fakeamazon.shared.toRelativeDateString
 import com.example.fakeamazon.shared.ui.CartItemQuantityChip
+import com.example.fakeamazon.shared.ui.InteractionBlockingOverlay
 import com.example.fakeamazon.shared.ui.PriceDisplaySize
 import com.example.fakeamazon.shared.ui.PriceText
 import com.example.fakeamazon.shared.ui.PrimaryCta
@@ -139,6 +140,13 @@ private fun LoadedView(
 ) {
     val cartItems = screenState.cartItems
     Surface(modifier = modifier) {
+        val isReloading = screenState.isReloading
+        if (isReloading) {
+            InteractionBlockingOverlay(modifier = Modifier.fillMaxWidth()) {
+                CircularProgressIndicator()
+            }
+        }
+
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
         ) {

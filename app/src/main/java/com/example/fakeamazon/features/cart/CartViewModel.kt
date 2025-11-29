@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fakeamazon.data.CartRepository
 import com.example.fakeamazon.shared.runIf
+import com.example.fakeamazon.shared.updateIf
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,6 +21,9 @@ class CartViewModel @Inject constructor(
 
     fun load() {
         viewModelScope.launch {
+            _screenState.updateIf<CartScreenState.Loaded> { current ->
+                current.copy(isReloading = true)
+            }
             reloadCartItems()
         }
     }
