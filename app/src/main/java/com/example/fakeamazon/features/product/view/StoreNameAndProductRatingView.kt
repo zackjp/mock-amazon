@@ -70,7 +70,7 @@ fun StoreNameAndProductRatingView(
 
                 val ratingStarsTextInfo = getRatingStarsTextInfo(productRating)
                 val ratingString = buildAnnotatedString {
-                    append("$productRating ")
+                    append("${ratingStarsTextInfo.normalizedRating} ")
                     append(ratingStarsTextInfo.text)
                 }
 

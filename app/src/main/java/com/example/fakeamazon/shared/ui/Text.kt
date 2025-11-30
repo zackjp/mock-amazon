@@ -25,6 +25,7 @@ import com.example.fakeamazon.ui.theme.AmazonEmber
 import com.example.fakeamazon.ui.theme.AmazonOrange
 import com.example.fakeamazon.ui.theme.AmazonPrimeBlue
 import com.example.fakeamazon.ui.theme.Orange80
+import java.math.RoundingMode
 import java.util.Locale
 import kotlin.math.floor
 import kotlin.math.roundToInt
@@ -55,7 +56,14 @@ data class PrimeLogoTextInfo(
 
 fun getRatingStarsTextInfo(productRating: Float): RatingStarsTextInfo = RatingStarsTextInfo(
     inlineContent = starRatingsIconMap,
+    normalizedRating = productRating.toBigDecimal().setScale(1, RoundingMode.HALF_UP).toFloat(),
     text = buildProductStarsString(productRating),
+)
+
+data class RatingStarsTextInfo(
+    val inlineContent: Map<String, InlineTextContent>,
+    val normalizedRating: Float,
+    val text: AnnotatedString,
 )
 
 private fun buildProductStarsString(rawProductRating: Float): AnnotatedString {
@@ -108,11 +116,6 @@ private val starRatingsIconMap = mapOf(
             tint = AmazonOrange,
         )
     },
-)
-
-data class RatingStarsTextInfo(
-    val inlineContent: Map<String, InlineTextContent>,
-    val text: AnnotatedString,
 )
 
 @Composable
