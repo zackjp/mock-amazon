@@ -41,6 +41,7 @@ import com.example.fakeamazon.shared.ui.PriceDisplaySize
 import com.example.fakeamazon.shared.ui.PriceText
 import com.example.fakeamazon.shared.ui.PrimaryCta
 import com.example.fakeamazon.shared.ui.getPrimeLogoTextInfo
+import com.example.fakeamazon.shared.ui.getRatingStarsTextInfo
 import com.example.fakeamazon.shared.ui.screen.ErrorScreen
 import com.example.fakeamazon.shared.ui.screen.LoadingScreen
 import com.example.fakeamazon.ui.theme.AmazonOutlineLight
@@ -184,6 +185,18 @@ private fun SearchResultCard(
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
                     text = productInfo.title,
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                val ratingStarsTextInfo = getRatingStarsTextInfo(productInfo.productRating)
+                Text(
+                    inlineContent = ratingStarsTextInfo.inlineContent,
+                    text = buildAnnotatedString {
+                        append("${ratingStarsTextInfo.normalizedRating} ")
+                        append(ratingStarsTextInfo.text)
+                    },
+                    style = MaterialTheme.typography.bodySmall,
                 )
 
                 PriceText(modifier = Modifier, 43.99f, PriceDisplaySize.Medium)
