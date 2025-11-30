@@ -22,9 +22,11 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.example.fakeamazon.R
 import com.example.fakeamazon.ui.theme.AmazonEmber
+import com.example.fakeamazon.ui.theme.AmazonOrange
 import com.example.fakeamazon.ui.theme.AmazonPrimeBlue
 import com.example.fakeamazon.ui.theme.Orange80
 import java.util.Locale
+import kotlin.math.floor
 import kotlin.math.roundToInt
 
 private val primeLogoInlineContent = buildPrimeTextIconMap()
@@ -49,6 +51,68 @@ fun getPrimeLogoTextInfo(): PrimeLogoTextInfo = PrimeLogoTextInfo(
 data class PrimeLogoTextInfo(
     val inlineContent: Map<String, InlineTextContent>,
     val primeLogoText: AnnotatedString,
+)
+
+fun getRatingStarsTextInfo(productRating: Float): RatingStarsTextInfo = RatingStarsTextInfo(
+    inlineContent = starRatingsIconMap,
+    text = buildProductStarsString(productRating),
+)
+
+private fun buildProductStarsString(rawProductRating: Float): AnnotatedString {
+    val productRating = rawProductRating.coerceAtMost(5f)
+    val ratingFraction = productRating - floor(productRating)
+
+    var fullStarCount = productRating.toInt()
+    var halfStarCount = 0
+
+    when {
+        ratingFraction >= 0.8f -> fullStarCount++ // .8+ = round up to full-star
+        ratingFraction >= 0.3f -> halfStarCount = 1 // .3+ = show half-star
+        else -> {} // do nothing
+    }
+
+    val emptyStarCount = 5 - fullStarCount - halfStarCount // fill remaining with empty-stars
+
+    return buildAnnotatedString {
+        repeat(fullStarCount) {
+            appendInlineContent("fullStar", "[*]")
+        }
+        repeat(halfStarCount) {
+            appendInlineContent("halfStar", "[/]")
+        }
+        repeat(emptyStarCount) {
+            appendInlineContent("emptyStar", "[-]")
+        }
+    }
+}
+
+private val starRatingsIconMap = mapOf(
+    "fullStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
+        Icon(
+            contentDescription = null,
+            painter = painterResource(R.drawable.ic_baseline_star_24),
+            tint = AmazonOrange,
+        )
+    },
+    "halfStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
+        Icon(
+            contentDescription = null,
+            painter = painterResource(R.drawable.ic_outline_star_half_24),
+            tint = AmazonOrange,
+        )
+    },
+    "emptyStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
+        Icon(
+            contentDescription = null,
+            painter = painterResource(R.drawable.ic_outline_star_24),
+            tint = AmazonOrange,
+        )
+    },
+)
+
+data class RatingStarsTextInfo(
+    val inlineContent: Map<String, InlineTextContent>,
+    val text: AnnotatedString,
 )
 
 @Composable
