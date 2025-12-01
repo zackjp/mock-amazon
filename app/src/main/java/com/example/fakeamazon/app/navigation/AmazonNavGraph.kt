@@ -2,6 +2,7 @@ package com.example.fakeamazon.app.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,7 +37,7 @@ fun AmazonNavGraph(
         enterTransition = { EnterTransition.None },
         popEnterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
-        popExitTransition = { ExitTransition.None },
+        popExitTransition = { slideOutHorizontally { it } },
         navController = navController,
         route = RootGraph::class,
         startDestination = TopRoute.HomeGraph,
