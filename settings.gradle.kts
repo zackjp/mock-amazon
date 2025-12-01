@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Fake Amazon"
+rootProject.name = "Mock Amazon"
 include(":app")
  

@@ -1,6 +1,6 @@
 <resources>
     <string name="add_to_cart">Add to Cart</string>
-    <string name="app_name">Fake Amazon</string>
+    <string name="app_name">Mock Amazon</string>
     <string name="cart_item_free_delivery">FREE delivery</string>
     <string name="cart_item_free_returns">FREE Returns</string>
     <string name="cart_item_in_stock">In Stock</string>
