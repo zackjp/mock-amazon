@@ -28,17 +28,12 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -48,20 +43,18 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mockamazon.R
 import com.example.mockamazon.shared.model.CartItem
-import com.example.mockamazon.shared.toPrimeDeliveryString
-import com.example.mockamazon.shared.toRelativeDateString
 import com.example.mockamazon.shared.ui.CartItemQuantityChip
 import com.example.mockamazon.shared.ui.InteractionBlockingOverlay
 import com.example.mockamazon.shared.ui.PriceDisplaySize
 import com.example.mockamazon.shared.ui.PriceText
 import com.example.mockamazon.shared.ui.PrimaryCta
-import com.example.mockamazon.shared.ui.getPrimeLogoTextInfo
+import com.example.mockamazon.shared.ui.component.ExpectedDeliveryText
+import com.example.mockamazon.shared.ui.component.PrimeDayText
 import com.example.mockamazon.shared.ui.screen.ErrorScreen
 import com.example.mockamazon.shared.ui.screen.LoadingScreen
 import com.example.mockamazon.ui.theme.AmazonOutlineMedium
 import com.example.mockamazon.ui.theme.Gray90
 import com.example.mockamazon.ui.theme.Green60
-import java.time.LocalDate
 
 private val CART_CONTAINER_COLOR = Gray90
 
@@ -314,11 +307,11 @@ private fun RightPanel(
 
         Spacer(modifier = Modifier.height(2.dp))
         PrimeDayText(
-            extraLineHeightTextStyle = extraLineHeightTextStyle,
+            style = extraLineHeightTextStyle,
             estDeliveryDate = cartItem.estDeliveryDate,
         )
         ExpectedDeliveryText(
-            extraLineHeightTextStyle = extraLineHeightTextStyle,
+            style = extraLineHeightTextStyle,
             estDeliveryDate = cartItem.estDeliveryDate,
             modifier = Modifier.fillMaxWidth(),
         )
@@ -352,26 +345,6 @@ private fun ProductTitle(
 }
 
 @Composable
-private fun ExpectedDeliveryText(
-    extraLineHeightTextStyle: TextStyle,
-    estDeliveryDate: LocalDate,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        maxLines = 1,
-        modifier = modifier,
-        style = extraLineHeightTextStyle,
-        text = buildAnnotatedString {
-            val deliveryDate = estDeliveryDate.toRelativeDateString(LocalContext.current, false)
-            append(stringResource(R.string.cart_item_free_delivery) + " ")
-            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                append(deliveryDate)
-            }
-        },
-    )
-}
-
-@Composable
 private fun ReturnPolicyText(extraLineHeightTextStyle: TextStyle, modifier: Modifier = Modifier) {
     Text(
         color = Color(0xFF245CD5),
@@ -379,28 +352,6 @@ private fun ReturnPolicyText(extraLineHeightTextStyle: TextStyle, modifier: Modi
         modifier = modifier,
         style = extraLineHeightTextStyle,
         text = stringResource(R.string.cart_item_free_returns),
-    )
-}
-
-@Composable
-private fun PrimeDayText(
-    extraLineHeightTextStyle: TextStyle,
-    modifier: Modifier = Modifier,
-    estDeliveryDate: LocalDate
-) {
-    val primeLogoTextInfo = getPrimeLogoTextInfo()
-    Text(
-        inlineContent = primeLogoTextInfo.inlineContent,
-        maxLines = 1,
-        modifier = modifier,
-        style = extraLineHeightTextStyle.copy(fontWeight = FontWeight.Bold),
-        text = buildAnnotatedString {
-            append(primeLogoTextInfo.primeLogoText)
-            val primeDeliveryText = estDeliveryDate.toPrimeDeliveryString(LocalContext.current)
-            primeDeliveryText?.let { primeDeliveryText ->
-                append(" $primeDeliveryText")
-            }
-        },
     )
 }
 

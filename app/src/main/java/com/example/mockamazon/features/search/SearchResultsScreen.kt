@@ -14,10 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -30,6 +32,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -40,7 +43,8 @@ import com.example.mockamazon.shared.ui.CartItemQuantityChip
 import com.example.mockamazon.shared.ui.PriceDisplaySize
 import com.example.mockamazon.shared.ui.PriceText
 import com.example.mockamazon.shared.ui.PrimaryCta
-import com.example.mockamazon.shared.ui.getPrimeLogoTextInfo
+import com.example.mockamazon.shared.ui.component.ExpectedDeliveryText
+import com.example.mockamazon.shared.ui.component.PrimeDayText
 import com.example.mockamazon.shared.ui.getRatingStarsTextInfo
 import com.example.mockamazon.shared.ui.screen.ErrorScreen
 import com.example.mockamazon.shared.ui.screen.LoadingScreen
@@ -181,53 +185,60 @@ private fun SearchResultCard(
                     }
                     .padding(cardContentPadding)
             ) {
-                Text(
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis,
-                    text = productInfo.title,
-                )
+                val textStyle = MaterialTheme.typography.bodyMedium.copy(lineHeight = 1.35.em)
+                CompositionLocalProvider(LocalTextStyle provides textStyle) {
+                    Text(
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis,
+                        text = productInfo.title,
+                    )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                    val ratingStarsTextInfo = getRatingStarsTextInfo(productInfo.productRating)
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        inlineContent = ratingStarsTextInfo.inlineContent,
+                        text = buildAnnotatedString {
+                            append("${ratingStarsTextInfo.normalizedRating} ")
+                            append(ratingStarsTextInfo.text)
+                        },
+                    )
 
-                val ratingStarsTextInfo = getRatingStarsTextInfo(productInfo.productRating)
-                Text(
-                    inlineContent = ratingStarsTextInfo.inlineContent,
-                    text = buildAnnotatedString {
-                        append("${ratingStarsTextInfo.normalizedRating} ")
-                        append(ratingStarsTextInfo.text)
-                    },
-                    style = MaterialTheme.typography.bodySmall,
-                )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    PriceText(modifier = Modifier, 43.99f, PriceDisplaySize.Medium)
 
-                PriceText(modifier = Modifier, 43.99f, PriceDisplaySize.Medium)
+                    Spacer(modifier = Modifier.height(4.dp))
+                    val estDeliveryDate = productInfo.deliveryDate
+                    PrimeDayText(
+                        estDeliveryDate = estDeliveryDate,
+                        modifier = Modifier,
+                        style = LocalTextStyle.current,
+                    )
 
-                val primeLogoInfo = getPrimeLogoTextInfo()
-                Text(
-                    inlineContent = primeLogoInfo.inlineContent,
-                    text = buildAnnotatedString {
-                        append(primeLogoInfo.primeLogoText)
-                        append(" Tomorrow")
+                    Spacer(modifier = Modifier.height(4.dp))
+                    ExpectedDeliveryText(
+                        estDeliveryDate = estDeliveryDate,
+                        modifier = Modifier,
+                        style = LocalTextStyle.current,
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+                    val cartInteractorModifier = Modifier
+                        .fillMaxWidth()
+                        .height(30.dp)
+                    if (cartCount <= 0) {
+                        PrimaryCta(
+                            modifier = cartInteractorModifier,
+                            onClick = { onAddToCart(productInfo.id) },
+                            text = stringResource(R.string.add_to_cart),
+                        )
+                    } else {
+                        CartItemQuantityChip(
+                            modifier = cartInteractorModifier,
+                            quantity = cartCount,
+                            onDecrement = { onDecrementFromCart(productInfo.id) },
+                            onIncrement = { onAddToCart(productInfo.id) },
+                        )
                     }
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                val cartInteractorModifier = Modifier
-                    .fillMaxWidth()
-                    .height(30.dp)
-                if (cartCount <= 0) {
-                    PrimaryCta(
-                        modifier = cartInteractorModifier,
-                        onClick = { onAddToCart(productInfo.id) },
-                        text = stringResource(R.string.add_to_cart),
-                    )
-                } else {
-                    CartItemQuantityChip(
-                        modifier = cartInteractorModifier,
-                        quantity = cartCount,
-                        onDecrement = { onDecrementFromCart(productInfo.id) },
-                        onIncrement = { onAddToCart(productInfo.id) },
-                    )
                 }
             }
         }
