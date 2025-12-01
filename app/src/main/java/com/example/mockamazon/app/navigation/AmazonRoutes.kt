@@ -13,6 +13,13 @@ val TOP_ROUTES_SET = setOfNotNull(
     TopRoute.ShortcutsGraph,
 )
 
+val START_ROUTES_SET = setOfNotNull(
+    HomeStart,
+    ProfileStart,
+    CartStart,
+    ShortcutsStart,
+)
+
 @Serializable
 object RootGraph
 
@@ -64,4 +71,8 @@ fun NavDestination.topDestination(): NavDestination? {
 fun NavDestination.findTopRoute(): TopRoute? {
     val topDestination = topDestination()
     return TOP_ROUTES_SET.firstOrNull { topDestination?.hasRoute(it::class) == true }
+}
+
+fun <R : Any> NavDestination.hasRoute(routeCandidates: Collection<R>): R? {
+    return routeCandidates.firstOrNull { hasRoute(it::class) }
 }

@@ -9,7 +9,13 @@ import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,6 +28,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
@@ -35,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
@@ -43,6 +51,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -85,6 +94,7 @@ fun AmazonTopAppBarWithNavChips(
     @FloatRange(0.0, 1.0) offsetFraction: Float,
     onNavChipsSizeChange: (IntSize) -> Unit,
     onOpenSearch: () -> Unit = {},
+    windowPadding: PaddingValues,
 ) {
     val paddingXXSmall = dimensionResource(R.dimen.padding_xxsmall)
     val paddingSmall = dimensionResource(R.dimen.padding_small)
@@ -92,6 +102,8 @@ fun AmazonTopAppBarWithNavChips(
 
     val topBarBackgroundColorStart = Color.White.copy(alpha = offsetFraction)
     val topBarBackgroundColorEnd = Color.White.copy(alpha = .75f * offsetFraction)
+
+    val layoutDirection = LocalLayoutDirection.current
 
     Box(modifier = modifier) {
         Box(
@@ -109,7 +121,14 @@ fun AmazonTopAppBarWithNavChips(
                 )
         )
 
-        Column(modifier = Modifier) {
+        Column(
+            modifier = Modifier
+                .padding(
+                    end = windowPadding.calculateEndPadding(layoutDirection),
+                    start = windowPadding.calculateStartPadding(layoutDirection),
+                    top = windowPadding.calculateTopPadding(),
+                )
+        ) {
             SimpleSearchBar(
                 initialSearchText = "",
                 isSearchEditable = false,
@@ -144,17 +163,43 @@ fun AmazonTopAppBar(
     modifier: Modifier = Modifier,
     onOpenSearch: () -> Unit = {},
     onPerformSearch: (String) -> Unit,
+    onUpNavigation: (() -> Unit)?,
+    windowPadding: PaddingValues,
 ) {
     val paddingLarge = dimensionResource(R.dimen.padding_large)
     val paddingSmall = dimensionResource(R.dimen.padding_small)
+    val layoutDirection = LocalLayoutDirection.current
 
-    Box(modifier = modifier) {
+    Row(
+        modifier = modifier
+            .padding(
+                end = windowPadding.calculateEndPadding(layoutDirection),
+                start = windowPadding.calculateStartPadding(layoutDirection),
+                top = windowPadding.calculateTopPadding()
+            )
+            .height(IntrinsicSize.Min)
+    ) {
+        val showUpNavigation = onUpNavigation != null
+        if (showUpNavigation) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxHeight()) {
+                IconButton(
+                    onClick = onUpNavigation,
+                    modifier = Modifier.fillMaxHeight(),
+                ) {
+                    Icon(
+                        contentDescription = null,
+                        painter = painterResource(R.drawable.ic_sharp_arrow_left_alt_24),
+                    )
+                }
+            }
+        }
+
         SimpleSearchBar(
             initialSearchText = initialSearchText,
             isSearchEditable = isSearchEditable,
             modifier = Modifier
                 .padding(
-                    start = paddingLarge,
+                    start = if (showUpNavigation) 0.dp else paddingLarge,
                     end = paddingLarge,
                     bottom = paddingSmall,
                 ),
@@ -213,6 +258,7 @@ private fun SimpleSearchBar(
         expanded = false,
         modifier = modifier,
         onExpandedChange = {},
+        windowInsets = WindowInsets(0), // control the window padding in top app bar ourselves
         inputField = {
             BasicTextField(
                 interactionSource = interactionSource,

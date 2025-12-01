@@ -1,9 +1,15 @@
 package com.example.mockamazon.app.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -17,6 +23,7 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -26,11 +33,13 @@ import androidx.navigation.toRoute
 import com.example.mockamazon.R
 import com.example.mockamazon.app.navigation.AmazonNavGraph
 import com.example.mockamazon.app.navigation.HomeStart
+import com.example.mockamazon.app.navigation.START_ROUTES_SET
 import com.example.mockamazon.app.navigation.Search
 import com.example.mockamazon.app.navigation.SearchResults
 import com.example.mockamazon.app.navigation.TOP_ROUTES_SET
 import com.example.mockamazon.app.navigation.TopRoute
 import com.example.mockamazon.app.navigation.ViewProduct
+import com.example.mockamazon.app.navigation.hasRoute
 import com.example.mockamazon.app.navigation.rememberTabbedRouteController
 import com.example.mockamazon.app.ui.view.AmazonBottomAppBar
 import com.example.mockamazon.app.ui.view.AmazonTopAppBar
@@ -69,11 +78,17 @@ fun App() {
     }
 
     val currentTab by tabbedNavController.currentTab.collectAsState()
+    val startRouteCandidate = currentDestination?.destination?.hasRoute(START_ROUTES_SET)
+    val isStartRoute = startRouteCandidate != null
     val isInSearchSuggestionsMode = currentDestination?.destination?.hasRoute<Search>() == true
     val isInSearchResultsMode = currentDestination?.destination?.hasRoute<SearchResults>() == true
-    val onOpenSearch: (String) -> Unit = if (isInSearchSuggestionsMode) ({}) else ({ initialSearchText ->
-        tabbedNavController.navigateToRoute(Search(initialSearchText))
-    })
+    val onUpNavigation: (() -> Unit)? =
+        if (isStartRoute) null else ({ tabbedNavController.navController.navigateUp() })
+
+    val onOpenSearch: (String) -> Unit =
+        if (isInSearchSuggestionsMode) ({}) else ({ initialSearchText ->
+            tabbedNavController.navigateToRoute(Search(initialSearchText))
+        })
     val onViewProduct = { productId: Int ->
         tabbedNavController.navigateToRoute(ViewProduct(productId))
     }
@@ -95,7 +110,8 @@ fun App() {
             .fillMaxSize()
             .nestedScroll(collapsibleState.scrollObserver),
         topBar = {
-            val isHome = currentDestination?.destination?.hasRoute<HomeStart>() ?: false
+            val isHome = startRouteCandidate == HomeStart
+            val windowPadding = WindowInsets.systemBars.asPaddingValues()
 
             if (isHome && !isInSearchSuggestionsMode) {
                 AmazonTopAppBarWithNavChips(
@@ -106,6 +122,7 @@ fun App() {
                         navChipsHeightPx = intSize.height.toFloat()
                     },
                     onOpenSearch = { onOpenSearch("") },
+                    windowPadding = windowPadding,
                 )
             } else {
                 AmazonTopAppBar(
@@ -116,6 +133,8 @@ fun App() {
                         .background(AMAZON_BEIGE),
                     onOpenSearch = { onOpenSearch(currentSearchTextContext) },
                     onPerformSearch = onPerformSearch,
+                    onUpNavigation = onUpNavigation,
+                    windowPadding = windowPadding,
                 )
             }
         },
