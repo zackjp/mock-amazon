@@ -17,38 +17,42 @@ val AmazonEmber = FontFamily(
 )
 
 val AmazonEmberDisplay = FontFamily(
+    Font(R.font.amazon_ember_display_lt, FontWeight.Light),
+    Font(R.font.amazon_ember_display_rg, FontWeight.Normal),
+    Font(R.font.amazon_ember_display_md, FontWeight.Medium),
+    Font(R.font.amazon_ember_display_bd, FontWeight.Bold),
     Font(R.font.amazon_ember_display_he, FontWeight.ExtraBold),
 )
 
 val Typography = Typography(
     labelSmall = TextStyle(
         fontSize = 12.sp,
-        fontFamily = AmazonEmber,
+        fontFamily = AmazonEmberDisplay,
         fontWeight = FontWeight.Bold,
     ),
     labelMedium = TextStyle(
         fontSize = 16.sp,
-        fontFamily = AmazonEmber,
+        fontFamily = AmazonEmberDisplay,
         fontWeight = FontWeight.Bold,
     ),
     labelLarge = TextStyle(
         fontSize = 18.sp,
-        fontFamily = AmazonEmber,
+        fontFamily = AmazonEmberDisplay,
         fontWeight = FontWeight.Bold,
     ),
     bodySmall = TextStyle(
         fontSize = 12.sp,
-        fontFamily = AmazonEmber,
+        fontFamily = AmazonEmberDisplay,
         fontWeight = FontWeight.Normal,
     ),
     bodyMedium = TextStyle(
         fontSize = 14.sp,
-        fontFamily = AmazonEmber,
+        fontFamily = AmazonEmberDisplay,
         fontWeight = FontWeight.Normal,
     ),
     bodyLarge = TextStyle(
         fontSize = 16.sp,
-        fontFamily = AmazonEmber,
+        fontFamily = AmazonEmberDisplay,
         fontWeight = FontWeight.Normal,
     ),
     titleSmall = TextStyle(
