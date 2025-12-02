@@ -187,7 +187,7 @@ private fun CartListHeader(
         PrimaryCta(
             modifier = Modifier.fillMaxWidth(),
             onClick = {},
-            text = stringResource(R.string.cart_proceed_to_checkout),
+            text = pluralStringResource(R.plurals.cart_proceed_to_checkout, itemCount, itemCount),
         )
 
         HorizontalDivider(
