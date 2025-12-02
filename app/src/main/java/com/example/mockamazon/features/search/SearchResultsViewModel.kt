@@ -34,7 +34,7 @@ class SearchResultsViewModel @Inject constructor(
 
             try {
                 val searchResults = searchApiDataSource.getSearchResults(searchString)
-                _cartItems = cartRepository.getCartItems()
+                _cartItems = cartRepository.getCart().cartItems
                 _screenState.value = SearchResultsScreenState.Loaded(
                     requestedCartCounts = emptyMap(),
                     searchResults = searchResults,

@@ -6,6 +6,7 @@ sealed class CartScreenState {
     object Loading : CartScreenState()
     data class Loaded(
         val cartItems: List<CartItem>,
+        val totalPriceUSD: Float,
         val isReloading: Boolean = false,
     ) : CartScreenState()
     object Error : CartScreenState()

@@ -60,8 +60,11 @@ class CartViewModel @Inject constructor(
     }
 
     private suspend fun reloadCartItems() {
-        val updatedCartItems = cartRepository.getCartItems()
-        _screenState.value = CartScreenState.Loaded(updatedCartItems)
+        val updatedCart = cartRepository.getCart()
+        _screenState.value = CartScreenState.Loaded(
+            cartItems = updatedCart.cartItems,
+            totalPriceUSD = updatedCart.totalPriceUSD,
+        )
     }
 
 }

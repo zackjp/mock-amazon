@@ -1,10 +1,11 @@
 package com.example.mockamazon.data
 
 import com.example.mockamazon.shared.DispatcherProvider
-import com.example.mockamazon.shared.model.CartItem
+import com.example.mockamazon.shared.model.Cart
 import com.example.mockamazon.shared.model.toCartItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import java.math.RoundingMode
 import java.util.Collections
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -44,14 +45,21 @@ class CartFakeApiDataSource @Inject constructor(
         cartProductIdQuantityMap.remove(productId)
     }
 
-    suspend fun getCartItems(): List<CartItem> = withContext(dispatcherProvider.default) {
+    suspend fun getCart(): Cart = withContext(dispatcherProvider.default) {
         delay(300)
 
-        cartProductIdQuantityMap
+        val cartItems = cartProductIdQuantityMap
             .map { productInMemoryDb.getProductById(it.key) to it.value }
             .filter { (product, quantity) -> product != null }
             .map { (product, quantity) -> product!!.toCartItem(quantity) }
             .reversed()
+
+        Cart(
+            cartItems = cartItems,
+            totalPriceUSD = cartItems.sumOf {
+                it.priceUSD.toDouble() * it.quantity
+            }.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toFloat(),
+        )
     }
 
     suspend fun decrementByProductId(productId: Int): Unit = withContext(dispatcherProvider.default) {

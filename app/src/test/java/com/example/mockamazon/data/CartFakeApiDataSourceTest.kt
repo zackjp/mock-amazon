@@ -22,6 +22,9 @@ class CartFakeApiDataSourceTest {
         private const val PRODUCT_IN_CART_QUANTITY = 7
         private val EXISTING_CART_ITEMS =
             listOf(PRODUCT_IN_CART.toCartItem(quantity = PRODUCT_IN_CART_QUANTITY))
+        private val EXISTING_CART_PRICE_USD = EXISTING_CART_ITEMS.sumOf {
+            (it.priceUSD.toDouble() * it.quantity)
+        }.toFloat()
     }
 
     private val testDispatcherProvider = TestDispatcherProvider()
@@ -78,7 +81,7 @@ class CartFakeApiDataSourceTest {
         dataSource.addToCart(products[1].id)
         dataSource.addToCart(products[2].id)
 
-        val cartItems = dataSource.getCartItems()
+        val cartItems = dataSource.getCart().cartItems
         cartItems shouldContainExactlyInAnyOrder products.map { it.toCartItem(1) } + EXISTING_CART_ITEMS
     }
 
@@ -96,7 +99,7 @@ class CartFakeApiDataSourceTest {
             repeat(3) { dataSource.addToCart(products[0].id) }
             repeat(7) { dataSource.addToCart(products[1].id) }
 
-            val cartItems = dataSource.getCartItems()
+            val cartItems = dataSource.getCart().cartItems
             cartItems shouldContainExactlyInAnyOrder listOf(
                 products[0].toCartItem(3),
                 products[1].toCartItem(7),
@@ -109,7 +112,7 @@ class CartFakeApiDataSourceTest {
 
         dataSource.setQuantity(product.id, 0)
 
-        dataSource.getCartItems() shouldBe EXISTING_CART_ITEMS
+        dataSource.getCart().cartItems shouldBe EXISTING_CART_ITEMS
     }
 
     @Test
@@ -118,7 +121,7 @@ class CartFakeApiDataSourceTest {
 
         dataSource.setQuantity(product.id, 0)
 
-        dataSource.getCartItems() shouldBe emptyList()
+        dataSource.getCart().cartItems shouldBe emptyList()
     }
 
     @Test
@@ -128,7 +131,7 @@ class CartFakeApiDataSourceTest {
 
         dataSource.setQuantity(product.id, quantity)
 
-        dataSource.getCartItems() shouldContainExactly listOf(product.toCartItem(quantity = quantity)) + EXISTING_CART_ITEMS
+        dataSource.getCart().cartItems shouldContainExactly listOf(product.toCartItem(quantity = quantity)) + EXISTING_CART_ITEMS
     }
 
     @Test
@@ -138,7 +141,7 @@ class CartFakeApiDataSourceTest {
 
         dataSource.setQuantity(product.id, newQuantity)
 
-        dataSource.getCartItems() shouldContainExactly listOf(product.toCartItem(quantity = newQuantity))
+        dataSource.getCart().cartItems shouldContainExactly listOf(product.toCartItem(quantity = newQuantity))
     }
 
     @Test
@@ -148,7 +151,7 @@ class CartFakeApiDataSourceTest {
 
         dataSource.setQuantity(product.id, quantity)
 
-        dataSource.getCartItems() shouldContainExactly EXISTING_CART_ITEMS
+        dataSource.getCart().cartItems shouldContainExactly EXISTING_CART_ITEMS
     }
 
     @Test
@@ -157,21 +160,21 @@ class CartFakeApiDataSourceTest {
 
         dataSource.setQuantity(product.id, 0)
 
-        dataSource.getCartItems() shouldBe emptyList()
+        dataSource.getCart().cartItems shouldBe emptyList()
     }
 
     @Test
     fun removeByProductId_RemovesProductFromCart() = runTest(testDispatcher) {
         val product = PRODUCT_IN_CART
-        dataSource.getCartItems() shouldBe listOf(product.toCartItem(PRODUCT_IN_CART_QUANTITY))
+        dataSource.getCart().cartItems shouldBe listOf(product.toCartItem(PRODUCT_IN_CART_QUANTITY))
 
         dataSource.removeByProductId(product.id)
 
-        dataSource.getCartItems() shouldBe emptyList()
+        dataSource.getCart().cartItems shouldBe emptyList()
     }
 
     @Test
-    fun getCartItems_ReturnsCartItemsInOrderWithMostRecentFirst() = runTest(testDispatcher) {
+    fun getCart_ReturnsCartItemsInOrderWithMostRecentFirst() = runTest(testDispatcher) {
         val products = listOf(
             ProductInfo.fakeInfo(11),
             ProductInfo.fakeInfo(13),
@@ -185,7 +188,7 @@ class CartFakeApiDataSourceTest {
         repeat(2) { dataSource.addToCart(products[1].id) }
         repeat(3) { dataSource.addToCart(products[2].id) }
 
-        val cartItems = dataSource.getCartItems()
+        val cartItems = dataSource.getCart().cartItems
         cartItems shouldContainExactly listOf(
             products[2].toCartItem(3),
             products[1].toCartItem(2),
@@ -194,16 +197,23 @@ class CartFakeApiDataSourceTest {
     }
 
     @Test
-    fun getCartItems_WithValidProductThatBecameInvalidProduct_ReturnsValidProductsOnly() =
+    fun getCart_WithValidProductThatBecameInvalidProduct_ReturnsValidProductsOnly() =
         runTest(testDispatcher) {
             val productInfo = PRODUCT_NOT_IN_CART
 
             dataSource.addToCart(productInfo.id)
-            dataSource.getCartItems() shouldContainExactly listOf(productInfo.toCartItem(1)) + EXISTING_CART_ITEMS
+            dataSource.getCart().cartItems shouldContainExactly listOf(productInfo.toCartItem(1)) + EXISTING_CART_ITEMS
 
             every { productInMemoryDb.getProductById(productInfo.id) } returns null
-            dataSource.getCartItems() shouldContainExactly EXISTING_CART_ITEMS
+            dataSource.getCart().cartItems shouldContainExactly EXISTING_CART_ITEMS
         }
+
+    @Test
+    fun getCart_CalculatesTotalPriceUSD() = runTest(testDispatcher) {
+        val totalPriceUSD = dataSource.getCart().totalPriceUSD
+
+        totalPriceUSD shouldBe EXISTING_CART_PRICE_USD
+    }
 
     @Test
     fun decrementByProductId_WhenReachesZero_RemovesAsCartItem() = runTest(testDispatcher) {
@@ -213,13 +223,13 @@ class CartFakeApiDataSourceTest {
         dataSource.addToCart(productInfo.id)
         dataSource.addToCart(productInfo.id)
 
-        dataSource.getCartItems() shouldContainExactly listOf(productInfo.toCartItem(3)) + EXISTING_CART_ITEMS
+        dataSource.getCart().cartItems shouldContainExactly listOf(productInfo.toCartItem(3)) + EXISTING_CART_ITEMS
 
         dataSource.decrementByProductId(productInfo.id)
         dataSource.decrementByProductId(productInfo.id)
         dataSource.decrementByProductId(productInfo.id)
 
-        dataSource.getCartItems() shouldBe EXISTING_CART_ITEMS
+        dataSource.getCart().cartItems shouldBe EXISTING_CART_ITEMS
     }
 
     @Test
@@ -230,11 +240,11 @@ class CartFakeApiDataSourceTest {
         dataSource.addToCart(productInfo.id)
         dataSource.addToCart(productInfo.id)
 
-        dataSource.getCartItems() shouldContainExactly listOf(productInfo.toCartItem(3)) + EXISTING_CART_ITEMS
+        dataSource.getCart().cartItems shouldContainExactly listOf(productInfo.toCartItem(3)) + EXISTING_CART_ITEMS
 
         dataSource.decrementByProductId(productInfo.id)
 
-        dataSource.getCartItems() shouldContainExactly listOf(productInfo.toCartItem(2)) + EXISTING_CART_ITEMS
+        dataSource.getCart().cartItems shouldContainExactly listOf(productInfo.toCartItem(2)) + EXISTING_CART_ITEMS
     }
 
     @Test
@@ -243,7 +253,7 @@ class CartFakeApiDataSourceTest {
 
         dataSource.decrementByProductId(productInfo.id)
 
-        dataSource.getCartItems() shouldBe EXISTING_CART_ITEMS
+        dataSource.getCart().cartItems shouldBe EXISTING_CART_ITEMS
     }
 
 }

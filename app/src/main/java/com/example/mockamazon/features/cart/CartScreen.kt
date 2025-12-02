@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -113,6 +114,7 @@ private fun LoadedView(
     onViewProduct: (Int) -> Unit,
     screenState: CartScreenState.Loaded,
 ) {
+    val totalPriceUSD = screenState.totalPriceUSD
     val cartItems = screenState.cartItems
     Surface(modifier = modifier) {
         val isReloading = screenState.isReloading
@@ -129,9 +131,11 @@ private fun LoadedView(
                 Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
 
                 CartListHeader(
+                    itemCount = cartItems.sumOf { it.quantity },
                     modifier = Modifier
                         .padding(horizontal = dimensionResource(R.dimen.main_content_padding_horizontal))
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    totalPriceUSD = totalPriceUSD,
                 )
             }
 
@@ -154,7 +158,11 @@ private fun LoadedView(
 }
 
 @Composable
-private fun CartListHeader(modifier: Modifier = Modifier) {
+private fun CartListHeader(
+    itemCount: Int,
+    modifier: Modifier = Modifier,
+    totalPriceUSD: Float,
+) {
     Column(
         modifier = modifier
     ) {
@@ -170,7 +178,7 @@ private fun CartListHeader(modifier: Modifier = Modifier) {
         )
 
         Text(
-            text = stringResource(R.string.cart_subtotal, "0"),
+            text = stringResource(R.string.cart_subtotal, totalPriceUSD),
             style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp)
         )
 

@@ -4,8 +4,10 @@ import app.cash.turbine.test
 import com.example.mockamazon.SetMainCoroutineDispatcher
 import com.example.mockamazon.data.CartRepository
 import com.example.mockamazon.data.SearchApiDataSource
+import com.example.mockamazon.shared.model.Cart
 import com.example.mockamazon.shared.model.CartItem
 import com.example.mockamazon.shared.model.ProductInfo
+import com.example.mockamazon.shared.model.fakeCart
 import com.example.mockamazon.shared.model.fakeInfo
 import com.example.mockamazon.shared.model.fakeItem
 import com.example.mockamazon.shared.model.toCartItem
@@ -55,7 +57,7 @@ class SearchResultsViewModelTest {
         coEvery { searchApiDataSource.getSearchResults(THROWING_SEARCH_STRING) } throws Exception("search error exception")
         coEvery { cartRepository.addToCart(any()) } just runs
         coEvery { cartRepository.decrementByProductId(any()) } just runs
-        coEvery { cartRepository.getCartItems() } returns listOf(CART_ITEM)
+        coEvery { cartRepository.getCart() } returns Cart.fakeCart(listOf(CART_ITEM))
         coEvery { cartRepository.setQuantity(any(), any()) } just runs
 
         viewModel = SearchResultsViewModel(
@@ -163,10 +165,12 @@ class SearchResultsViewModelTest {
             val cartItem1 = CartItem.fakeItem(product1.id)
             val cartItem2 = CartItem.fakeItem(product2.id)
             val cartItem3 = CartItem.fakeItem(product1.id + product2.id)
-            coEvery { cartRepository.getCartItems() } returns listOf(
-                cartItem1,
-                cartItem2,
-                cartItem3,
+            coEvery { cartRepository.getCart() } returns Cart.fakeCart(
+                listOf(
+                    cartItem1,
+                    cartItem2,
+                    cartItem3,
+                )
             )
 
             viewModel.screenState.test {
@@ -220,16 +224,17 @@ class SearchResultsViewModelTest {
     }
 
     @Test
-    fun decrementFromCart_MultipleTimesWithProductNotAlreadyInCart_SetsRepositoryQuantityToZero() = runTest {
-        val expectedProduct = PRODUCT_NOT_IN_CART
+    fun decrementFromCart_MultipleTimesWithProductNotAlreadyInCart_SetsRepositoryQuantityToZero() =
+        runTest {
+            val expectedProduct = PRODUCT_NOT_IN_CART
 
-        viewModel.load(VALID_SEARCH_STRING)
-        viewModel.decrementFromCart(expectedProduct.id)
-        viewModel.decrementFromCart(expectedProduct.id)
-        advanceUntilIdle()
+            viewModel.load(VALID_SEARCH_STRING)
+            viewModel.decrementFromCart(expectedProduct.id)
+            viewModel.decrementFromCart(expectedProduct.id)
+            advanceUntilIdle()
 
-        coVerify(exactly = 2) { cartRepository.setQuantity(expectedProduct.id, 0) }
-    }
+            coVerify(exactly = 2) { cartRepository.setQuantity(expectedProduct.id, 0) }
+        }
 
     @Test
     fun decrementFromCart_WithProductAlreadyInCart_DecrementsFromCartOptimistically() = runTest {

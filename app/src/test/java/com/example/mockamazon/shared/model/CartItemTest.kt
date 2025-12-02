@@ -2,6 +2,10 @@ package com.example.mockamazon.shared.model
 
 import java.time.LocalDate
 
+fun Cart.Companion.fakeCart(cartItems: List<CartItem>) = Cart(
+    cartItems = cartItems,
+    totalPriceUSD = cartItems.sumOf { it.priceUSD.toDouble() }.toFloat(),
+)
 
 fun CartItem.Companion.fakeItem(
     number: Int,

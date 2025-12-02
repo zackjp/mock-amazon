@@ -1,5 +1,6 @@
 package com.example.mockamazon.data
 
+import com.example.mockamazon.shared.model.Cart
 import com.example.mockamazon.shared.model.CartItem
 import com.example.mockamazon.shared.model.ProductInfo
 import com.example.mockamazon.shared.model.fakeInfo
@@ -26,22 +27,19 @@ class CartRepositoryTest {
     }
 
     @Test
-    fun getCartItems_HavingMultipleCartItemsFromApi_ReturnsItems() = runTest {
+    fun getCart_ReturnsCartInfo() = runTest {
         val cartItem1 = fakeCartItem(123)
         val cartItem2 = fakeCartItem(456)
-        coEvery { cartFakeApiDataSource.getCartItems() } returns listOf(
-            cartItem1,
-            cartItem2,
+        val expectedCart = Cart(
+            cartItems = listOf(
+                cartItem1,
+                cartItem2,
+            ),
+            totalPriceUSD = 1234.56f,
         )
+        coEvery { cartFakeApiDataSource.getCart() } returns expectedCart
 
-        repo.getCartItems() shouldBe listOf(cartItem1, cartItem2)
-    }
-
-    @Test
-    fun getCartItems_HavingNoCartItemsFromApi_ReturnsEmptyList() = runTest {
-        coEvery { cartFakeApiDataSource.getCartItems() } returns emptyList()
-
-        repo.getCartItems() shouldBe emptyList()
+        repo.getCart() shouldBe expectedCart
     }
 
     @Test

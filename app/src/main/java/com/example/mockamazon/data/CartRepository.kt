@@ -1,5 +1,6 @@
 package com.example.mockamazon.data
 
+import com.example.mockamazon.shared.model.Cart
 import com.example.mockamazon.shared.model.CartItem
 import javax.inject.Inject
 
@@ -8,8 +9,8 @@ class CartRepository @Inject constructor(
     private val cartFakeApiDataSource: CartFakeApiDataSource,
 ) {
 
-    suspend fun getCartItems(): List<CartItem> {
-        return cartFakeApiDataSource.getCartItems()
+    suspend fun getCart(): Cart {
+        return cartFakeApiDataSource.getCart()
     }
 
     suspend fun setQuantity(productId: Int, quantity: Int) {

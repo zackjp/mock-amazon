@@ -3,6 +3,12 @@ package com.example.mockamazon.shared.model
 import androidx.annotation.DrawableRes
 import java.time.LocalDate
 
+data class Cart(
+    val cartItems: List<CartItem>,
+    val totalPriceUSD: Float,
+) {
+    companion object
+}
 
 data class CartItem(
     val id: Int,
