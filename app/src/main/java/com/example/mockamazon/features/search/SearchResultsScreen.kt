@@ -103,13 +103,13 @@ private fun LoadedView(
     onDecrementFromCart: (Int) -> Unit,
     onViewProduct: (Int) -> Unit,
 ) {
-    val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
+    val contentPadding = dimensionResource(R.dimen.padding_small)
     val cartCounts = loadedState.requestedCartCounts
 
     Surface(modifier = modifier) {
         LazyColumn(
-            contentPadding = PaddingValues(vertical = mainContentPadding),
-            modifier = Modifier.padding(horizontal = mainContentPadding),
+            contentPadding = PaddingValues(vertical = contentPadding),
+            modifier = Modifier.padding(horizontal = contentPadding),
         ) {
             items(loadedState.searchResults) { productInfo ->
                 val cartCount = cartCounts[productInfo.id] ?: 0

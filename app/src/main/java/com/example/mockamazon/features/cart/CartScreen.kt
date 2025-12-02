@@ -116,6 +116,8 @@ private fun LoadedView(
 ) {
     val totalPriceUSD = screenState.totalPriceUSD
     val cartItems = screenState.cartItems
+    val paddingSmall = dimensionResource(R.dimen.padding_small)
+
     Surface(modifier = modifier) {
         val isReloading = screenState.isReloading
         if (isReloading) {
@@ -143,7 +145,7 @@ private fun LoadedView(
                 CartItem(
                     cartItem = cartItem,
                     modifier = Modifier
-                        .padding(horizontal = 8.dp)
+                        .padding(horizontal = paddingSmall)
                         .fillMaxWidth(),
                     onDecrementCartItem = onDecrementCartItem,
                     onIncrementCartItem = onIncrementCartItem,
