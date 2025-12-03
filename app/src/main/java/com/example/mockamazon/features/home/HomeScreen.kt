@@ -47,7 +47,7 @@ fun HomeScreenRoot(
     onViewProduct: (Int) -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel) {
         viewModel.load()
     }
 

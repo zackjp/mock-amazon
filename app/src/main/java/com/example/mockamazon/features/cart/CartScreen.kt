@@ -65,7 +65,7 @@ fun CartScreenRoot(
     cartViewModel: CartViewModel = hiltViewModel<CartViewModel>(),
     onViewProduct: (Int) -> Unit,
 ) {
-    LaunchedEffect(Unit) {
+    LaunchedEffect(cartViewModel) {
         cartViewModel.load()
     }
 

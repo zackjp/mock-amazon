@@ -59,7 +59,7 @@ fun SearchResultsScreenRoot(
     viewModel: SearchResultsViewModel = hiltViewModel<SearchResultsViewModel>(),
 ) {
 
-    LaunchedEffect(searchString) {
+    LaunchedEffect(viewModel, searchString) {
         viewModel.load(searchString)
     }
 

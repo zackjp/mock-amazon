@@ -39,7 +39,7 @@ fun ProductScreenRoot(
     productId: Int,
     viewModel: ProductViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(productId) {
+    LaunchedEffect(viewModel, productId) {
         viewModel.load(productId)
     }
 
