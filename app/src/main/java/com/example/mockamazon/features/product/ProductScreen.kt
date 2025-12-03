@@ -2,6 +2,7 @@ package com.example.mockamazon.features.product
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -90,6 +91,7 @@ private fun LoadedScreen(
     Surface(modifier = modifier) {
         AddToCartBlockingOverlay(
             addToCartState = addToCartState,
+            modifier = Modifier.fillMaxSize(),
             onCartAddedViewed = onCartAddedViewed,
         )
 
@@ -159,13 +161,14 @@ private fun LoadedScreen(
 @Composable
 private fun AddToCartBlockingOverlay(
     addToCartState: AddToCartState,
+    modifier: Modifier = Modifier,
     onCartAddedViewed: () -> Unit
 ) {
     if (addToCartState == AddToCartState.Inactive) {
         return
     }
 
-    InteractionBlockingOverlay(modifier = Modifier.fillMaxWidth()) {
+    InteractionBlockingOverlay(modifier = modifier) {
         if (addToCartState == AddToCartState.Added) {
             Text(
                 color = Color.White,
