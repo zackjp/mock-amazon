@@ -34,6 +34,7 @@ import com.example.mockamazon.app.navigation.HomeStart
 import com.example.mockamazon.app.navigation.Search
 import com.example.mockamazon.app.navigation.SearchResults
 import com.example.mockamazon.app.navigation.TAB_ROUTES_SET
+import com.example.mockamazon.app.navigation.TabbedNavController
 import com.example.mockamazon.app.navigation.ViewProduct
 import com.example.mockamazon.app.navigation.rememberNav2Controller
 import com.example.mockamazon.app.navigation.rememberNav3Controller
@@ -60,48 +61,32 @@ fun App() {
     }
 
     val bottomNavItems = remember(amazonNavController) {
-        listOf(
-            BottomNavItem(R.drawable.ic_outline_home_24, BottomTab.Home) {
-                amazonNavController.navigateTo(BottomTab.Home)
-            },
-            BottomNavItem(R.drawable.ic_outline_person_24, BottomTab.Profile) {
-                amazonNavController.navigateTo(BottomTab.Profile)
-            },
-            BottomNavItem(R.drawable.ic_outline_shopping_cart_24, BottomTab.Cart) {
-                amazonNavController.navigateTo(BottomTab.Cart)
-            },
-            BottomNavItem(R.drawable.ic_outline_menu_24, BottomTab.Shortcuts) {
-                amazonNavController.navigateTo(BottomTab.Shortcuts)
-            },
-        )
+        createBottomNavItems(amazonNavController)
     }
 
     val backStackState: BackStackState by amazonNavController.currentBackStack.collectAsStateWithLifecycle()
     val currentRoute = backStackState.backStack.lastOrNull()
     val isStartRoute = currentRoute?.isStartRoute() == true
-    val isInSearchSuggestionsMode = currentRoute?.isRoute<Search>() == true
-    val isInSearchResultsMode = currentRoute?.isRoute<SearchResults>() == true
-    val onUpNavigation: (() -> Unit)? =
-        if (isStartRoute) null else ({ amazonNavController.navigateUp() })
+    val searchMode = when (currentRoute) {
+        is Search -> SearchMode.Suggestions(currentRoute.initialSearchText)
+        is SearchResults -> SearchMode.Results(currentRoute.searchString)
+        else -> SearchMode.None("")
+    }
 
-    val onOpenSearch: (String) -> Unit =
-        if (isInSearchSuggestionsMode) ({}) else ({ initialSearchText ->
-            amazonNavController.navigateTo(Search(initialSearchText))
-        })
+    val onUpNavigation: (() -> Unit)? = if (isStartRoute) null else amazonNavController::navigateUp
+    val onOpenSearch: (String) -> Unit = when (searchMode) {
+        is SearchMode.Suggestions -> ({})
+        else -> ({ initialSearchText -> amazonNavController.navigateTo(Search(initialSearchText)) })
+    }
     val onViewProduct = { productId: Int ->
         amazonNavController.navigateTo(ViewProduct(productId))
     }
     val onPerformSearch = { searchString: String ->
         // First, clear Search Screen from backstack
-        if (isInSearchSuggestionsMode) {
+        if (currentRoute is Search) {
             amazonNavController.popBackStack()
         }
         amazonNavController.navigateTo(SearchResults(searchString))
-    }
-    val currentSearchTextContext = when {
-        isInSearchSuggestionsMode -> (currentRoute as? Search)?.initialSearchText ?: ""
-        isInSearchResultsMode -> (currentRoute as? SearchResults)?.searchString ?: ""
-        else -> ""
     }
 
     Scaffold(
@@ -109,10 +94,10 @@ fun App() {
             .fillMaxSize()
             .nestedScroll(collapsibleState.scrollObserver),
         topBar = {
-            val isHome = currentRoute?.isRoute<HomeStart>() == true
+            val isHome = currentRoute is HomeStart
             val windowPadding = WindowInsets.systemBars.asPaddingValues()
 
-            if (isHome && !isInSearchSuggestionsMode) {
+            if (isHome) {
                 AmazonTopAppBarWithNavChips(
                     modifier = Modifier.fillMaxWidth(),
                     navChipsOffset = collapsibleState.currentOffsetPx.value,
@@ -125,12 +110,12 @@ fun App() {
                 )
             } else {
                 AmazonTopAppBar(
-                    initialSearchText = currentSearchTextContext,
-                    isSearchEditable = isInSearchSuggestionsMode,
+                    initialSearchText = searchMode.searchText,
+                    isSearchEditable = searchMode is SearchMode.Suggestions,
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(AMAZON_BEIGE),
-                    onOpenSearch = { onOpenSearch(currentSearchTextContext) },
+                    onOpenSearch = { onOpenSearch(searchMode.searchText) },
                     onPerformSearch = onPerformSearch,
                     onUpNavigation = onUpNavigation,
                     windowPadding = windowPadding,
@@ -138,7 +123,7 @@ fun App() {
             }
         },
         bottomBar = {
-            if (!isInSearchSuggestionsMode) {
+            if (searchMode !is SearchMode.Suggestions) {
                 AmazonBottomAppBar(
                     selectedTab = backStackState.currentGroup,
                     modifier = Modifier
@@ -172,6 +157,22 @@ fun App() {
     }
 }
 
+private fun createBottomNavItems(amazonNavController: TabbedNavController): List<BottomNavItem> =
+    listOf(
+        BottomNavItem(R.drawable.ic_outline_home_24, BottomTab.Home) {
+            amazonNavController.navigateTo(BottomTab.Home)
+        },
+        BottomNavItem(R.drawable.ic_outline_person_24, BottomTab.Profile) {
+            amazonNavController.navigateTo(BottomTab.Profile)
+        },
+        BottomNavItem(R.drawable.ic_outline_shopping_cart_24, BottomTab.Cart) {
+            amazonNavController.navigateTo(BottomTab.Cart)
+        },
+        BottomNavItem(R.drawable.ic_outline_menu_24, BottomTab.Shortcuts) {
+            amazonNavController.navigateTo(BottomTab.Shortcuts)
+        },
+    )
+
 private fun Modifier.topBorder(color: Color, borderWidth: Dp): Modifier {
     return drawWithContent {
         drawContent()
@@ -187,4 +188,12 @@ fun AppPreview() {
     MockAmazonTheme {
         HomeScreenRoot(modifier = Modifier.fillMaxSize())
     }
+}
+
+private sealed class SearchMode {
+    abstract val searchText: String
+
+    data class None(override val searchText: String) : SearchMode()
+    data class Suggestions(override val searchText: String) : SearchMode()
+    data class Results(override val searchText: String) : SearchMode()
 }

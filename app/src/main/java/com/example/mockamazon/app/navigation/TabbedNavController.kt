@@ -24,7 +24,6 @@ sealed interface Nav {
          */
         abstract fun tabOwner(): Tab?
 
-        inline fun <reified R : Route> isRoute(): Boolean = R::class == this::class
         fun isStartRoute(): Boolean {
             val tabOwner = tabOwner()
             if (tabOwner == null) return false
