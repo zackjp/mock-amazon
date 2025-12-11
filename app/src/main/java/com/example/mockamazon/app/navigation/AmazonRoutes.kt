@@ -5,55 +5,95 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
-val TOP_ROUTES_SET = setOfNotNull(
-    TopRoute.HomeGraph,
-    TopRoute.ProfileGraph,
-    TopRoute.CartGraph,
-    TopRoute.ShortcutsGraph,
+
+val TAB_ROUTES_SET = setOfNotNull(
+    BottomTab.Home,
+    BottomTab.Profile,
+    BottomTab.Cart,
+    BottomTab.Shortcuts,
 )
 
-val START_ROUTES_SET = setOfNotNull(
-    HomeStart,
-    ProfileStart,
-    CartStart,
-    ShortcutsStart,
+val VALID_ROUTES_SET = setOf<KClass<out Nav.Route>>(
+    HomeStart::class,
+    ProfileStart::class,
+    CartStart::class,
+    ShortcutsStart::class,
+    ViewProduct::class,
+    Search::class,
+    SearchResults::class
 )
 
 @Serializable
-object RootGraph
+sealed class BottomTab : Nav.Tab() {
 
-@Serializable
-sealed interface TopRoute {
     @Serializable
-    object HomeGraph: TopRoute
+    data object Home : BottomTab() {
+        override val startRouteFactory = { HomeStart }
+    }
+
     @Serializable
-    object ProfileGraph: TopRoute
+    data object Profile : BottomTab() {
+        override val startRouteFactory = { ProfileStart }
+    }
+
     @Serializable
-    object CartGraph: TopRoute
+    data object Cart : BottomTab() {
+        override val startRouteFactory = { CartStart }
+    }
+
     @Serializable
-    object ShortcutsGraph: TopRoute
+    data object Shortcuts : BottomTab() {
+        override val startRouteFactory = { ShortcutsStart }
+    }
+
 }
 
 @Serializable
-object HomeStart
-@Serializable
-object ProfileStart
-@Serializable
-object CartStart
-@Serializable
-object ShortcutsStart
+data object RootGraph
 
 @Serializable
-data class Search(val initialSearchText: String)
-@Serializable
-data class SearchResults(val searchString: String)
-@Serializable
-data class ViewProduct(val productId: Int)
+abstract class AmazonRoute : Nav.Route()
 
-fun List<NavBackStackEntry>.nearestTopRoute(): TopRoute? {
+@Serializable
+data object HomeStart : AmazonRoute() {
+    override fun tabOwner() = BottomTab.Home
+}
+
+@Serializable
+data object ProfileStart : AmazonRoute() {
+    override fun tabOwner() = BottomTab.Profile
+}
+
+@Serializable
+data object CartStart : AmazonRoute() {
+    override fun tabOwner() = BottomTab.Cart
+}
+
+@Serializable
+data object ShortcutsStart : AmazonRoute() {
+    override fun tabOwner() = BottomTab.Home
+}
+
+@Serializable
+data class Search(val initialSearchText: String) : AmazonRoute() {
+    override fun tabOwner() = null
+}
+
+@Serializable
+data class SearchResults(val searchString: String) : AmazonRoute() {
+    override fun tabOwner() = null
+}
+
+@Serializable
+data class ViewProduct(val productId: Int) : AmazonRoute() {
+    override fun tabOwner() = null
+}
+
+fun List<NavBackStackEntry>.nearestTopRoute(): BottomTab? {
     for (entry in reversed()) {
-        val candidate = TOP_ROUTES_SET.firstOrNull { topRoute ->
+        val candidate = TAB_ROUTES_SET.firstOrNull { topRoute ->
             entry.destination.topDestination()?.hasRoute(topRoute::class) == true
         }
         if (candidate != null) {
@@ -65,12 +105,12 @@ fun List<NavBackStackEntry>.nearestTopRoute(): TopRoute? {
 }
 
 fun NavDestination.topDestination(): NavDestination? {
-    return hierarchy.firstOrNull { destination -> TOP_ROUTES_SET.any { destination.hasRoute(it::class) } }
+    return hierarchy.firstOrNull { destination -> TAB_ROUTES_SET.any { destination.hasRoute(it::class) } }
 }
 
-fun NavDestination.findTopRoute(): TopRoute? {
+fun NavDestination.findTopRoute(): BottomTab? {
     val topDestination = topDestination()
-    return TOP_ROUTES_SET.firstOrNull { topDestination?.hasRoute(it::class) == true }
+    return TAB_ROUTES_SET.firstOrNull { topDestination?.hasRoute(it::class) == true }
 }
 
 fun <R : Any> NavDestination.hasRoute(routeCandidates: Collection<R>): R? {

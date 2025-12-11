@@ -7,19 +7,19 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import com.example.mockamazon.app.navigation.TopRoute
+import com.example.mockamazon.app.navigation.Nav
 
 
 @Composable
 fun AmazonBottomAppBar(
-    selectedTab: TopRoute?,
+    selectedTab: Nav.Tab,
     modifier: Modifier = Modifier,
     navItems: List<BottomNavItem>,
 ) {
     NavigationBar(modifier) {
         navItems.forEach { navItem ->
             NavigationBarItem(
-                selected = navItem.topRoute == selectedTab,
+                selected = navItem.bottomTab == selectedTab,
                 onClick = navItem.onClick,
                 icon = { Icon(contentDescription = null, painter = painterResource(navItem.iconId)) },
             )
@@ -29,6 +29,6 @@ fun AmazonBottomAppBar(
 
 data class BottomNavItem(
     @param:DrawableRes val iconId: Int,
-    val topRoute: TopRoute,
+    val bottomTab: Nav.Tab,
     val onClick: () -> Unit
 )

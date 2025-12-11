@@ -7,37 +7,42 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import androidx.savedstate.SavedState
 import androidx.savedstate.read
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import kotlin.reflect.KClass
 
 private const val KEY_TAB_HISTORY = "amazon-nav:controller:tabHistory"
 
 @Composable
-fun rememberTabbedRouteController(topRoutes: Set<TopRoute>): TabbedRouteController {
+fun rememberNav2Controller(): AmazonNav2Controller {
     val coroutineScope = rememberCoroutineScope()
     val navController = rememberNavController()
 
-    val tabbedRouteController = rememberSaveable(
+    val amazonNav2Controller = rememberSaveable(
         navController,
-        topRoutes,
         coroutineScope,
         saver = tabbedRouteControllerSaver(coroutineScope, navController),
     ) {
-        TabbedRouteController(
+        AmazonNav2Controller(
             coroutineScope = coroutineScope,
             navController = navController,
+            validRoutes = VALID_ROUTES_SET,
         )
     }
 
-    return tabbedRouteController
+    return amazonNav2Controller
 }
 
 /**
@@ -50,17 +55,24 @@ fun rememberTabbedRouteController(topRoutes: Set<TopRoute>): TabbedRouteControll
  * one of the start destinations, it will navigate back in the same order the user
  * visited each tab and restore that tab's backstack.
  */
-class TabbedRouteController(
+class AmazonNav2Controller(
     coroutineScope: CoroutineScope,
     val navController: NavHostController,
-) {
-    private val tabHistory = MutableStateFlow(emptyList<TopRoute>())
+    private val validRoutes: Set<KClass<out Nav.Route>>,
+) : TabbedNavController {
+
+    private val tabHistory = MutableStateFlow(emptyList<BottomTab>())
 
     private val _backHandlerForTabs = MutableStateFlow<@Composable () -> Unit>({})
     val backHandlerForTabs = _backHandlerForTabs.asStateFlow()
 
-    private val _currentTab = MutableStateFlow<TopRoute?>(null)
-    val currentTab = _currentTab.asStateFlow()
+    private val _currentBackStack = MutableStateFlow(
+        BackStackState(
+            backStack = emptyList(),
+            currentGroup = BottomTab.Home,
+        )
+    )
+    override val currentBackStack: StateFlow<BackStackState> = _currentBackStack.asStateFlow()
 
     init {
         coroutineScope.launch {
@@ -70,23 +82,42 @@ class TabbedRouteController(
             @SuppressLint("RestrictedApi") // NavController.currentBackStack
             navController.currentBackStack.collect { backstack ->
                 processTabChanges(backstack)
+                _currentBackStack.update {
+                    BackStackState(
+                        // Map NavDestination routes into Nav.Routes. Ignore NavGraphDestinations,
+                        // which aren't part of the displayed backstack.
+                        backStack = backstack
+                            .filter { entry -> validRoutes.any { entry.destination.hasRoute(it) } }
+                            .map { entry ->
+                                validRoutes.forEach { routeType ->
+                                    if (entry.destination.hasRoute(routeType)) {
+                                        return@map entry.toRoute<Nav.Route>(routeType)
+                                    }
+                                }
+                                error("Unrecognized route: ${entry.destination.route}")
+                            },
+                        currentGroup = tabHistory.value.last(),
+                    )
+                }
             }
         }
 
         coroutineScope.launch {
             tabHistory.collect { history ->
-                _currentTab.value = history.lastOrNull()
+                _currentBackStack.update { current ->
+                    current.copy(currentGroup = history.last<BottomTab>())
+                }
                 _backHandlerForTabs.value = calculateBackHandler(history)
             }
         }
     }
 
     @SuppressLint("RestrictedApi") // NavController.currentBackStack, NavGraph.matchRouteComprehensive()
-    fun <T : Any> navigateToRoute(targetRoute: T) {
+    override fun navigateTo(target: Nav) {
         navController.apply {
             val currentTopRoute = currentBackStack.value.nearestTopRoute()
             val targetDestination = graph.matchRouteComprehensive(
-                route = targetRoute::class.qualifiedName!!,
+                route = target::class.qualifiedName!!,
                 searchChildren = true,
                 searchParent = false,
                 graph
@@ -96,7 +127,7 @@ class TabbedRouteController(
             if (targetTopRoute == null) {
                 // If the target's tab route is null (ie, the target route does not belong to a
                 // particular bottom tab's navgraph), then just open it in the current tab.
-                navigate(targetRoute as Object)
+                navigate(target as Object)
                 return
             }
 
@@ -109,7 +140,7 @@ class TabbedRouteController(
                     inclusive = true,
                     saveState = false,
                 )
-                navigate(targetRoute)
+                navigate(target)
             } else {
                 // If we are navigating to a new tab, save current tab and restore the new one
                 popBackStack(
@@ -124,13 +155,21 @@ class TabbedRouteController(
                 }
             }
 
-            val isDestinationATopRoute = targetRoute == targetTopRoute
+            val isDestinationATopRoute = target == targetTopRoute
             // In any case, as long as the destination is not itself a
             // tab route, we launch a new instance of it on top
             if (!isDestinationATopRoute) {
-                navigate(targetRoute)
+                navigate(target)
             }
         }
+    }
+
+    override fun navigateUp() {
+        navController.navigateUp()
+    }
+
+    override fun popBackStack() {
+        navController.popBackStack()
     }
 
     fun saveState(): SavedState {
@@ -141,13 +180,13 @@ class TabbedRouteController(
 
     fun restoreState(savedState: SavedState) {
         val restoredHistory = savedState.read {
-            Json.decodeFromString<List<TopRoute>>(getString(KEY_TAB_HISTORY))
+            Json.decodeFromString<List<BottomTab>>(getString(KEY_TAB_HISTORY))
         }
         tabHistory.value = restoredHistory
     }
 
     private fun processTabChanges(backstack: List<NavBackStackEntry>) {
-        val nearestTopRoute: TopRoute? = backstack.nearestTopRoute()
+        val nearestTopRoute: BottomTab? = backstack.nearestTopRoute()
 
         nearestTopRoute?.let {
             val isTabChanged = tabHistory.value.lastOrNull() != nearestTopRoute
@@ -161,21 +200,21 @@ class TabbedRouteController(
         }
     }
 
-    private fun calculateBackHandler(currentTabHistory: List<TopRoute>): @Composable () -> Unit =
+    private fun calculateBackHandler(currentTabHistory: List<BottomTab>): @Composable () -> Unit =
         @Composable {
             BackHandler(enabled = currentTabHistory.size > 1) {
                 var newHistory = currentTabHistory.dropLast(1)
                 val removedTopRoute = currentTabHistory.last()
                 // Home should always be the last remaining item. So if
                 // navigating away from Home, prepend it instead
-                if (removedTopRoute == TopRoute.HomeGraph) {
-                    newHistory = listOf(TopRoute.HomeGraph) + newHistory
+                if (removedTopRoute == BottomTab.Home) {
+                    newHistory = listOf(BottomTab.Home) + newHistory
                 }
                 tabHistory.value = newHistory
 
                 if (newHistory.isNotEmpty()) {
                     val prevTopRoute = newHistory.last()
-                    navigateToRoute(prevTopRoute)
+                    navigateTo(prevTopRoute)
                 }
             }
         }
@@ -185,13 +224,14 @@ class TabbedRouteController(
 private fun tabbedRouteControllerSaver(
     coroutineScope: CoroutineScope,
     navController: NavHostController
-): Saver<TabbedRouteController, *> =
+): Saver<AmazonNav2Controller, *> =
     Saver(
         save = { it.saveState() },
         restore = {
-            TabbedRouteController(
+            AmazonNav2Controller(
                 coroutineScope,
-                navController
+                navController,
+                VALID_ROUTES_SET,
             ).apply { restoreState(it) }
         },
     )

@@ -40,10 +40,10 @@ fun AmazonNavGraph(
         popExitTransition = { slideOutHorizontally { it } },
         navController = navController,
         route = RootGraph::class,
-        startDestination = TopRoute.HomeGraph,
+        startDestination = BottomTab.Home,
     ) {
         navigation(
-            route = TopRoute.HomeGraph::class,
+            route = BottomTab.Home::class,
             startDestination = HomeStart,
         ) {
             composable<HomeStart> {
@@ -57,7 +57,7 @@ fun AmazonNavGraph(
         }
 
         navigation(
-            route = TopRoute.ProfileGraph::class,
+            route = BottomTab.Profile::class,
             startDestination = ProfileStart,
         ) {
             composable<ProfileStart> {
@@ -72,7 +72,7 @@ fun AmazonNavGraph(
         }
 
         navigation(
-            route = TopRoute.CartGraph::class,
+            route = BottomTab.Cart::class,
             startDestination = CartStart,
         ) {
             composable<CartStart> {
@@ -87,7 +87,7 @@ fun AmazonNavGraph(
         }
 
         navigation(
-            route = TopRoute.ShortcutsGraph::class,
+            route = BottomTab.Shortcuts::class,
             startDestination = ShortcutsStart
         ) {
             composable<ShortcutsStart> {
