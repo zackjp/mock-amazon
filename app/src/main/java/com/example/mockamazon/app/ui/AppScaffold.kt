@@ -12,7 +12,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -26,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mockamazon.R
 import com.example.mockamazon.app.navigation.AmazonNav2Controller
+import com.example.mockamazon.app.navigation.AmazonNav3Controller
 import com.example.mockamazon.app.navigation.AmazonNav3Display
 import com.example.mockamazon.app.navigation.AmazonNavGraph
 import com.example.mockamazon.app.navigation.BackStackState
@@ -43,6 +43,7 @@ import com.example.mockamazon.app.ui.view.AmazonTopAppBar
 import com.example.mockamazon.app.ui.view.AmazonTopAppBarWithNavChips
 import com.example.mockamazon.app.ui.view.BottomNavItem
 import com.example.mockamazon.features.home.HomeScreenRoot
+import com.example.mockamazon.shared.model.FeatureFlags
 import com.example.mockamazon.ui.theme.AmazonOutlineLight
 import com.example.mockamazon.ui.theme.MockAmazonTheme
 
@@ -54,8 +55,7 @@ fun App() {
     var navChipsHeightPx by remember { mutableFloatStateOf(0f) }
     val collapsibleState = rememberCollapsibleState(maxCollapseHeightPx = -navChipsHeightPx)
 
-    val useNav3 by remember { mutableStateOf(false) }
-    val amazonNavController = when (useNav3) {
+    val amazonNavController = when (FeatureFlags.USE_NAV3) {
         true -> rememberNav3Controller(TAB_ROUTES_SET, BottomTab.Home)
         false -> rememberNav2Controller()
     }
@@ -134,7 +134,7 @@ fun App() {
             }
         },
     ) { innerPadding ->
-        if (useNav3) {
+        if (amazonNavController is AmazonNav3Controller) {
             AmazonNav3Display(
                 backStackState = amazonNavController.currentBackStack.collectAsStateWithLifecycle().value,
                 innerPadding = innerPadding,
