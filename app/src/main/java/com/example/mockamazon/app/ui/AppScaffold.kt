@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -24,14 +25,18 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mockamazon.R
+import com.example.mockamazon.app.navigation.AmazonNav2Controller
+import com.example.mockamazon.app.navigation.AmazonNav3Display
 import com.example.mockamazon.app.navigation.AmazonNavGraph
 import com.example.mockamazon.app.navigation.BackStackState
 import com.example.mockamazon.app.navigation.BottomTab
 import com.example.mockamazon.app.navigation.HomeStart
 import com.example.mockamazon.app.navigation.Search
 import com.example.mockamazon.app.navigation.SearchResults
+import com.example.mockamazon.app.navigation.TAB_ROUTES_SET
 import com.example.mockamazon.app.navigation.ViewProduct
 import com.example.mockamazon.app.navigation.rememberNav2Controller
+import com.example.mockamazon.app.navigation.rememberNav3Controller
 import com.example.mockamazon.app.ui.view.AmazonBottomAppBar
 import com.example.mockamazon.app.ui.view.AmazonTopAppBar
 import com.example.mockamazon.app.ui.view.AmazonTopAppBarWithNavChips
@@ -48,7 +53,11 @@ fun App() {
     var navChipsHeightPx by remember { mutableFloatStateOf(0f) }
     val collapsibleState = rememberCollapsibleState(maxCollapseHeightPx = -navChipsHeightPx)
 
-    val amazonNavController = rememberNav2Controller()
+    val useNav3 by remember { mutableStateOf(false) }
+    val amazonNavController = when (useNav3) {
+        true -> rememberNav3Controller(TAB_ROUTES_SET, BottomTab.Home)
+        false -> rememberNav2Controller()
+    }
 
     val bottomNavItems = remember(amazonNavController) {
         listOf(
@@ -140,14 +149,26 @@ fun App() {
             }
         },
     ) { innerPadding ->
-        AmazonNavGraph(
-            backHandlerForTabs = amazonNavController.backHandlerForTabs.collectAsStateWithLifecycle().value,
-            innerPadding = innerPadding,
-            navController = amazonNavController.navController,
-            modifier = Modifier.fillMaxSize(),
-            onViewProduct = onViewProduct,
-            onPerformSearch = onPerformSearch,
-        )
+        if (useNav3) {
+            AmazonNav3Display(
+                backStackState = amazonNavController.currentBackStack.collectAsStateWithLifecycle().value,
+                innerPadding = innerPadding,
+                modifier = Modifier.fillMaxSize(),
+                onBack = { amazonNavController.popBackStack() },
+                onViewProduct = onViewProduct,
+                onPerformSearch = onPerformSearch,
+            )
+        } else {
+            val amazonNav2Controller = (amazonNavController as AmazonNav2Controller)
+            AmazonNavGraph(
+                backHandlerForTabs = amazonNav2Controller.backHandlerForTabs.collectAsStateWithLifecycle().value,
+                innerPadding = innerPadding,
+                navController = amazonNav2Controller.navController,
+                modifier = Modifier.fillMaxSize(),
+                onViewProduct = onViewProduct,
+                onPerformSearch = onPerformSearch,
+            )
+        }
     }
 }
 
