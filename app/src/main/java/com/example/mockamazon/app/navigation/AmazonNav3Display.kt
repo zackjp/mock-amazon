@@ -1,9 +1,9 @@
 package com.example.mockamazon.app.navigation
 
-import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
-import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.mockamazon.features.cart.CartScreenRoot
@@ -39,79 +39,42 @@ fun AmazonNav3Display(
         ),
         modifier = modifier,
         onBack = onBack,
-        transitionSpec = {
-            ContentTransform(
-                EnterTransition.None,
-                ExitTransition.None,
-            )
-        },
-        popTransitionSpec = {
-            ContentTransform(
-                EnterTransition.None,
-                slideOutHorizontally { it },
-            )
-        },
-        predictivePopTransitionSpec = {
-            ContentTransform(
-                EnterTransition.None,
-                slideOutHorizontally { it },
-            )
-        },
-    ) { key ->
-        when (key) {
-            HomeStart -> {
-                NavEntry(
-                    key,
-                    metadata = NO_BACK_TRANSITION,
-                ) {
-                    HomeScreenRoot(
-                        innerPadding = innerPadding,
-                        modifier = Modifier,
-                        onViewProduct = onViewProduct,
-                    )
-                }
+        transitionSpec = { EnterTransition.None togetherWith ExitTransition.None },
+        popTransitionSpec = { EnterTransition.None togetherWith slideOutHorizontally { it } },
+        predictivePopTransitionSpec = { EnterTransition.None togetherWith slideOutHorizontally { it } },
+        entryProvider = entryProvider {
+            entry<HomeStart>(metadata = NO_BACK_TRANSITION) {
+                HomeScreenRoot(
+                    innerPadding = innerPadding,
+                    modifier = Modifier,
+                    onViewProduct = onViewProduct,
+                )
             }
-
-            ProfileStart ->
-                NavEntry(
-                    key,
-                    metadata = NO_BACK_TRANSITION,
-                ) {
-                    ComingSoonScreen(
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize(),
-                        title = "Profile",
-                    )
-                }
-
-            CartStart ->
-                NavEntry(
-                    key,
-                    metadata = NO_BACK_TRANSITION,
-                ) {
-                    CartScreenRoot(
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize(),
-                        onViewProduct = onViewProduct,
-                    )
-                }
-
-            ShortcutsStart ->
-                NavEntry(
-                    key,
-                    metadata = NO_BACK_TRANSITION,
-                ) {
-                    ComingSoonScreen(
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize(),
-                        title = "Shortcuts",
-                    )
-                }
-
-            is ViewProduct -> NavEntry(key) {
+            entry<ProfileStart>(metadata = NO_BACK_TRANSITION) {
+                ComingSoonScreen(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize(),
+                    title = "Profile",
+                )
+            }
+            entry<CartStart>(metadata = NO_BACK_TRANSITION) {
+                CartScreenRoot(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize(),
+                    onViewProduct = onViewProduct,
+                )
+            }
+            entry<ShortcutsStart>(metadata = NO_BACK_TRANSITION) {
+                ComingSoonScreen(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize(),
+                    title = "Shortcuts",
+                )
+            }
+            entry<ViewProduct> { key ->
                 ProductScreenRoot(
                     modifier = Modifier
                         .padding(innerPadding)
@@ -120,8 +83,7 @@ fun AmazonNav3Display(
                     productId = key.productId,
                 )
             }
-
-            is Search -> NavEntry(key) {
+            entry<Search> {
                 SearchScreenRoot(
                     modifier = Modifier
                         .padding(innerPadding)
@@ -129,8 +91,7 @@ fun AmazonNav3Display(
                     onPerformSearch = onPerformSearch,
                 )
             }
-
-            is SearchResults -> NavEntry(key) {
+            entry<SearchResults> { key ->
                 SearchResultsScreenRoot(
                     modifier = Modifier
                         .padding(innerPadding)
@@ -139,17 +100,10 @@ fun AmazonNav3Display(
                     searchString = key.searchString,
                 )
             }
-
-
-            else -> NavEntry(key) {
-                error("Route not recognized: $key")
-            }
         }
-    }
+    )
 }
 
-private val NO_BACK_TRANSITION = NavDisplay.popTransitionSpec {
-    ContentTransform(EnterTransition.None, ExitTransition.None)
-} + NavDisplay.predictivePopTransitionSpec {
-    ContentTransform(EnterTransition.None, ExitTransition.None)
-}
+private val NO_BACK_TRANSITION =
+    NavDisplay.popTransitionSpec { EnterTransition.None togetherWith ExitTransition.None } +
+    NavDisplay.predictivePopTransitionSpec { EnterTransition.None togetherWith ExitTransition.None }
