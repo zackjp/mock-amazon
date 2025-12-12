@@ -44,10 +44,10 @@ import com.example.mockamazon.app.ui.view.AmazonTopAppBarWithNavChips
 import com.example.mockamazon.app.ui.view.BottomNavItem
 import com.example.mockamazon.features.home.HomeScreenRoot
 import com.example.mockamazon.shared.model.FeatureFlags
+import com.example.mockamazon.ui.theme.AmazonBeige
 import com.example.mockamazon.ui.theme.AmazonOutlineLight
 import com.example.mockamazon.ui.theme.MockAmazonTheme
 
-val AMAZON_BEIGE = Color(0xFFF5BE89)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -114,7 +114,7 @@ fun App() {
                     isSearchEditable = searchMode is SearchMode.Suggestions,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(AMAZON_BEIGE),
+                        .background(AmazonBeige),
                     onOpenSearch = { onOpenSearch(searchMode.searchText) },
                     onPerformSearch = onPerformSearch,
                     onUpNavigation = onUpNavigation,

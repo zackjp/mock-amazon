@@ -2,6 +2,7 @@ package com.example.mockamazon.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val AmazonBeige = Color(0xFFF5BE89)
 val AmazonBlack = Color(0xFF0F1111)
 val AmazonGray = Color(0xFF464949)
 val AmazonOrange = Color(0xFFFF6101)

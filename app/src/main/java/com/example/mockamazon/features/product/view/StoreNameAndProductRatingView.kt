@@ -21,8 +21,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mockamazon.app.ui.AMAZON_BEIGE
 import com.example.mockamazon.shared.ui.getRatingStarsTextInfo
+import com.example.mockamazon.ui.theme.AmazonBeige
 
 
 @Composable
@@ -37,7 +37,7 @@ fun StoreNameAndProductRatingView(
             modifier = Modifier
                 .size(36.dp)
                 .clip(CircleShape)
-                .background(AMAZON_BEIGE)
+                .background(AmazonBeige)
                 .padding(6.dp)
         ) {
             BasicText(
