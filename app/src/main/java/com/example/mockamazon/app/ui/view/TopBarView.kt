@@ -163,7 +163,7 @@ fun AmazonTopAppBar(
     modifier: Modifier = Modifier,
     onOpenSearch: () -> Unit = {},
     onPerformSearch: (String) -> Unit,
-    onUpNavigation: (() -> Unit)?,
+    onNavigateUp: (() -> Unit)?,
     windowPadding: PaddingValues,
 ) {
     val paddingLarge = dimensionResource(R.dimen.padding_large)
@@ -179,11 +179,11 @@ fun AmazonTopAppBar(
             )
             .height(IntrinsicSize.Min)
     ) {
-        val showUpNavigation = onUpNavigation != null
+        val showUpNavigation = onNavigateUp != null
         if (showUpNavigation) {
             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxHeight()) {
                 IconButton(
-                    onClick = onUpNavigation,
+                    onClick = onNavigateUp,
                     modifier = Modifier.fillMaxHeight(),
                 ) {
                     Icon(

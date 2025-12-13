@@ -73,10 +73,11 @@ fun App() {
         else -> SearchMode.None("")
     }
 
-    val onUpNavigation: (() -> Unit)? = if (isStartRoute) null else amazonNavController::navigateUp
-    val onOpenSearch: (String) -> Unit = when (searchMode) {
-        is SearchMode.Suggestions -> ({})
-        else -> ({ initialSearchText -> amazonNavController.navigateTo(Search(initialSearchText)) })
+    val onNavigateUp: (() -> Unit)? = { if (!isStartRoute) amazonNavController.navigateUp() }
+    val onOpenSearch: (String) -> Unit = { searchText: String ->
+        if (searchMode !is SearchMode.Suggestions) {
+            amazonNavController.navigateTo(Search(searchText))
+        }
     }
     val onViewProduct = { productId: Int ->
         amazonNavController.navigateTo(ViewProduct(productId))
@@ -117,7 +118,7 @@ fun App() {
                         .background(AmazonBeige),
                     onOpenSearch = { onOpenSearch(searchMode.searchText) },
                     onPerformSearch = onPerformSearch,
-                    onUpNavigation = onUpNavigation,
+                    onNavigateUp = if (isStartRoute) null else onNavigateUp,
                     windowPadding = windowPadding,
                 )
             }
