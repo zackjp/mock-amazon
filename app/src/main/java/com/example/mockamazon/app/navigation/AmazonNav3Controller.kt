@@ -39,7 +39,7 @@ class AmazonNav3Controller(
     )
     override val currentBackStack = _currentBackStack.asStateFlow()
 
-    private val groupStacks = tabs.associateWithTo(mutableMapOf()) { emptyList<Nav.Route>() }
+    private val groupStacks = tabs.associateWith { mutableListOf<Nav.Route>() }
     private val groupOrder = ArrayDeque<Nav.Tab>()
     private val currentGroup: Nav.Tab
         get() = groupOrder.lastOrNull()!!
@@ -74,25 +74,24 @@ class AmazonNav3Controller(
 
         // Add routes to appropriate stacks
         if (isGroupChange) {
-            groupStacks.compute(currentGroup) { group, value ->
-                val currentStack = value ?: listOf()
-                if (target is Nav.Tab && currentStack.isNotEmpty()) {
-                    currentStack
-                } else {
-                    currentStack + targetRouteCandidate
+            groupStacks[currentGroup]?.run {
+                // Always add the route if navigation wasn't targeting
+                // a tab, or if the new tab has no routes yet
+                if (target !is Nav.Tab || isEmpty()) {
+                    add(targetRouteCandidate)
                 }
             }
         } else {
-            groupStacks.compute(currentGroup) { group, value ->
+            groupStacks[currentGroup]?.run {
                 val isTargetingGroupStart =
                     targetRouteCandidate::class == targetGroup.startRouteFactory()::class
                 val resetGroupStack = isTargetingGroupStart
 
                 if (resetGroupStack) {
-                    listOf(targetGroup.startRouteFactory())
+                    clear()
+                    add(targetGroup.startRouteFactory())
                 } else {
-                    val currentStack = value ?: listOf()
-                    currentStack + targetRouteCandidate
+                    add(targetRouteCandidate)
                 }
             }
         }
@@ -115,28 +114,24 @@ class AmazonNav3Controller(
         }
 
         // Then pop the most recent group's stack and if necessary pop the group as well
-        groupStacks.compute(prePopGroup) { group, stack ->
-            // Pop from current group stack
-            val updatedStack = stack?.dropLast(1)
+        groupStacks[prePopGroup]?.run {
+            // Pop route from current group stack
+            if (isNotEmpty()) removeAt(size - 1)
 
             // Pop group if current group stack is now empty
-            if (updatedStack?.isEmpty() == true) {
-                popMostRecentGroup()
-            }
-
-            updatedStack
+            if (isEmpty()) popMostRecentGroup()
         }
 
         // After popping, if we only have one final item, and it is not the default start route,
         // then prepend the default group & start route so that it is
         if (groupOrder.size == 1) {
             val postPopGroup = currentGroup
-            val postPopStack = groupStacks.getOrDefault(postPopGroup, emptyList())
+            val postPopStack = groupStacks[postPopGroup]
 
-            if (postPopStack.size == 1 && postPopStack != listOf(defaultGroup.startRouteFactory())) {
+            if (postPopStack?.size == 1 && postPopStack != listOf(defaultGroup.startRouteFactory())) {
                 groupOrder.addFirst(defaultGroup)
-                groupStacks.compute(defaultGroup) { group, stack ->
-                    (stack ?: emptyList()) + defaultGroup.startRouteFactory()
+                groupStacks[defaultGroup]?.run {
+                    add(defaultGroup.startRouteFactory())
                 }
             }
         }
