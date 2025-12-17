@@ -5,7 +5,6 @@ import com.example.mockamazon.SetMainCoroutineDispatcher
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -44,12 +43,80 @@ class AmazonNav3ControllerTest {
 
     @Test
     fun init_WithNonMatchingDefaultTab_ThrowsError() = runTest {
-        shouldThrowExactly<IllegalArgumentException> {
+        shouldThrowExactly<IllegalStateException> {
             AmazonNav3Controller(
                 defaultGroup = NON_MATCHING_DEFAULT_TAB,
                 tabs = BOTTOM_TABS,
             )
         }
+    }
+
+    @Test
+    fun init_WithNavStatePopulatedAndValid_InitializesWithNavState() = runTest {
+        val validNavState = NavState(
+            defaultGroup = FakeGroupA,
+            groupHistory = listOf(FakeGroupA, FakeGroupB),
+            groupStacks = mapOf(
+                FakeGroupA to listOf(FakeRouteA1, FakeRouteA2),
+                FakeGroupB to listOf(FakeRouteB1),
+                FakeGroupC to emptyList()
+            )
+        )
+
+        val navController = AmazonNav3Controller(validNavState)
+
+        navController.getNavState() shouldBe validNavState
+    }
+
+    @Test
+    fun init_WithNavStateHavingNonMatchingDefaultGroup_ThrowsError() = runTest {
+        shouldThrowExactly<IllegalStateException> {
+            val invalidDefaultGroupNavState = NavState(
+                defaultGroup = FakeGroupC,
+                groupHistory = listOf(FakeGroupA),
+                groupStacks = mapOf(
+                    FakeGroupA to listOf(FakeRouteA1, FakeRouteA2),
+                    FakeGroupB to listOf(FakeRouteB1),
+                )
+            )
+
+            AmazonNav3Controller(invalidDefaultGroupNavState)
+        }
+    }
+
+    @Test
+    fun init_WithNavStateHavingNonMatchingGroupHistory_ThrowsError() = runTest {
+        shouldThrowExactly<IllegalStateException> {
+            val invalidGroupHistoryNavState = NavState(
+                defaultGroup = FakeGroupA,
+                groupHistory = listOf(FakeGroupA, FakeGroupC),
+                groupStacks = mapOf(
+                    FakeGroupA to listOf(FakeRouteA1, FakeRouteA2),
+                    FakeGroupB to listOf(FakeRouteB1),
+                )
+            )
+
+            AmazonNav3Controller(invalidGroupHistoryNavState)
+        }
+    }
+
+    @Test
+    fun init_WithNavStateHavingEmptyBackStackForCurrentGroup_AddsTheStartRoute() = runTest {
+        val emptyDefaultGroupStackNavState = NavState(
+            defaultGroup = FakeGroupA,
+            groupHistory = listOf(FakeGroupA, FakeGroupB),
+            groupStacks = mapOf(
+                FakeGroupA to listOf(FakeRouteA1),
+                FakeGroupB to emptyList(),
+            )
+        )
+
+        val navController = AmazonNav3Controller(emptyDefaultGroupStackNavState)
+
+        navController.currentBackStack.value shouldBe BackStackState(
+            backStack = listOf(FakeRouteA1, FakeRouteB1),
+            currentGroup = FakeGroupB
+        )
     }
 
     @Test
@@ -138,7 +205,7 @@ class AmazonNav3ControllerTest {
 
     @Test
     fun navigateTo_RouteBelongingToInvalidGroup_ThrowsException() = runTest {
-        shouldThrowExactly<IllegalArgumentException> {
+        shouldThrowExactly<IllegalStateException> {
             navController.navigateTo(FakeRouteInvalidGroup1)
         }
     }

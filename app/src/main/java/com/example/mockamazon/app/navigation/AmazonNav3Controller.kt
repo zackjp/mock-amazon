@@ -1,17 +1,47 @@
 package com.example.mockamazon.app.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.savedstate.read
+import androidx.savedstate.savedState
+import androidx.savedstate.serialization.SavedStateConfiguration
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.plus
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.serializer
+import java.util.Collections
 
-
+@OptIn(InternalSerializationApi::class)
 @Composable
 fun rememberNav3Controller(
     tabs: Set<BottomTab>,
     initialTab: BottomTab,
 ): TabbedNavController {
-    val tabbedNavController = remember {
+    val tabbedNavController = rememberSaveable(
+        tabs,
+        initialTab,
+        saver = Saver(
+            save = {
+                val navState = it.getNavState()
+                savedState {
+                    putString("nav3:navState", jsonSerializer.encodeToString(navState))
+                }
+            },
+            restore = { savedState ->
+                val restoredNavState = jsonSerializer.decodeFromString<NavState>(
+                    savedState.read { getString("nav3:navState") }
+                )
+                AmazonNav3Controller(restoredNavState)
+            },
+        )
+    ) {
         AmazonNav3Controller(
             defaultGroup = initialTab,
             tabs = tabs,
@@ -27,26 +57,44 @@ fun rememberNav3Controller(
  * from the top of the current tab's stack until it is empty.
  */
 class AmazonNav3Controller(
-    val defaultGroup: Nav.Tab,
-    private val tabs: Set<Nav.Tab>,
+    navState: NavState,
 ) : TabbedNavController {
 
-    private val _currentBackStack = MutableStateFlow(
-        BackStackState(
-            backStack = emptyList(),
-            currentGroup = defaultGroup,
+    constructor(
+        defaultGroup: Nav.Tab,
+        tabs: Set<Nav.Tab>,
+    ) : this(
+        navState = NavState(
+            defaultGroup = defaultGroup,
+            groupHistory = listOf(defaultGroup),
+            groupStacks = tabs.associateWith { emptyList() },
         )
     )
-    override val currentBackStack = _currentBackStack.asStateFlow()
 
-    private val groupStacks = tabs.associateWith { mutableListOf<Nav.Route>() }
-    private val groupOrder = ArrayDeque<Nav.Tab>()
+    private val defaultGroup: Nav.Tab
+
+    private val groupStacks: Map<Nav.Tab, MutableList<Nav.Route>>
+    private val groupOrder: ArrayDeque<Nav.Tab>
     private val currentGroup: Nav.Tab
         get() = groupOrder.lastOrNull()!!
 
+    private val _currentBackStack: MutableStateFlow<BackStackState>
+    override val currentBackStack: StateFlow<BackStackState>
+
     init {
-        validateGroup(defaultGroup) // todo: not needed? validation in navigateTo()
-        navigateTo(defaultGroup)
+        defaultGroup = navState.defaultGroup
+        groupOrder = ArrayDeque(navState.groupHistory)
+        groupStacks = navState.groupStacks.mapValues { (group, stack) ->
+            stack.toMutableList().apply {
+                if (group == groupOrder.last() && isEmpty()) {
+                    add(group.startRouteFactory())
+                }
+            }
+        }
+        validateState()
+
+        _currentBackStack = MutableStateFlow(createSingleBackStack())
+        currentBackStack = _currentBackStack.asStateFlow()
     }
 
     override fun navigateTo(target: Nav) {
@@ -69,7 +117,7 @@ class AmazonNav3Controller(
         val priorGroup = groupOrder.lastOrNull() ?: defaultGroup
         val isGroupChange = targetGroup != priorGroup // TODO: targetGroup != null &&...
         val currentGroup = targetGroup ?: priorGroup
-        validateGroup(currentGroup)
+        check(currentGroup in groupStacks.keys) { "Cannot navigate to invalid group: $currentGroup" }
         moveGroupToMostRecent(currentGroup)
 
         // Add routes to appropriate stacks
@@ -96,7 +144,7 @@ class AmazonNav3Controller(
             }
         }
 
-        notifyBackStackChanges()
+        _currentBackStack.value = createSingleBackStack()
     }
 
     override fun navigateUp() {
@@ -136,15 +184,16 @@ class AmazonNav3Controller(
             }
         }
 
-        notifyBackStackChanges()
+        _currentBackStack.value = createSingleBackStack()
     }
 
-    private fun notifyBackStackChanges() {
+    private fun createSingleBackStack(): BackStackState {
+        validateState()
         val updatedBackStack = groupOrder.fold(listOf<Nav.Route>()) { backStackAccumulator, group ->
             backStackAccumulator + groupStacks.getOrDefault(group, emptyList())
         }
 
-        _currentBackStack.value = BackStackState(
+        return BackStackState(
             backStack = updatedBackStack,
             currentGroup = currentGroup,
         )
@@ -161,8 +210,57 @@ class AmazonNav3Controller(
         }
     }
 
-    private fun validateGroup(tab: Nav.Tab) {
-        require(tabs.contains(tab)) { "Invalid tab: ${tab::class.simpleName}" }
+    private fun validateState() {
+        check(groupStacks.containsKey(defaultGroup)) {
+            "Default group is not a valid key in group stacks: $defaultGroup"
+        }
+        val validGroups = groupStacks.keys
+        val invalidGroups = groupOrder.filter { it !in validGroups }
+        check(invalidGroups.isEmpty()) {
+            "Group history contains group keys not found in group stacks: $invalidGroups"
+        }
     }
 
+    fun getNavState() = NavState(
+        defaultGroup = defaultGroup,
+        groupHistory = groupOrder.toList(),
+        groupStacks = groupStacks.mapValues { (_, stack) ->
+            Collections.unmodifiableList(stack) // TODO: consider toImmutableList from Jetbrains immutable library
+        },
+    )
+
+}
+
+@Serializable
+data class NavState(
+    val defaultGroup: Nav.Tab,
+    val groupHistory: List<Nav.Tab>,
+    val groupStacks: Map<Nav.Tab, List<Nav.Route>>,
+)
+
+@OptIn(InternalSerializationApi::class)
+private val savedNavStateConfiguration = SavedStateConfiguration {
+    val jsonModule = SerializersModule {
+        polymorphic(Nav.Tab::class) {
+            subclass(BottomTab.Home::class, BottomTab.Home::class.serializer())
+            subclass(BottomTab.Profile::class, BottomTab.Profile::class.serializer())
+            subclass(BottomTab.Cart::class, BottomTab.Cart::class.serializer())
+            subclass(BottomTab.Shortcuts::class, BottomTab.Shortcuts::class.serializer())
+        }
+        polymorphic(Nav.Route::class) {
+            subclass(HomeStart::class, HomeStart::class.serializer())
+            subclass(ProfileStart::class, ProfileStart::class.serializer())
+            subclass(CartStart::class, CartStart::class.serializer())
+            subclass(ShortcutsStart::class, ShortcutsStart::class.serializer())
+            subclass(ViewProduct::class, ViewProduct::class.serializer())
+            subclass(Search::class, Search::class.serializer())
+            subclass(SearchResults::class, SearchResults::class.serializer())
+        }
+    }
+    serializersModule += jsonModule
+}
+
+private val jsonSerializer = Json {
+    allowStructuredMapKeys = true
+    serializersModule = savedNavStateConfiguration.serializersModule
 }

@@ -1,6 +1,8 @@
 package com.example.mockamazon.app.navigation
 
+import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.Serializable
 
 interface TabbedNavController {
 
@@ -15,9 +17,12 @@ interface TabbedNavController {
 }
 
 sealed interface Nav {
+    @Serializable
     abstract class Tab : Nav {
         abstract val startRouteFactory: () -> Route
     }
+
+    @Serializable
     abstract class Route : Nav {
         /**
          * Returns the tab owner. Providing via function avoids serializing this data.
