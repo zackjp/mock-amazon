@@ -16,7 +16,7 @@ interface TabbedNavController {
 
 }
 
-sealed interface Nav {
+sealed interface Nav: NavKey {
     @Serializable
     abstract class Tab : Nav {
         abstract val startRouteFactory: () -> Route
@@ -27,17 +27,11 @@ sealed interface Nav {
         /**
          * Returns the tab owner. Providing via function avoids serializing this data.
          */
-        abstract fun tabOwner(): Tab?
-
-        fun isStartRoute(): Boolean {
-            val tabOwner = tabOwner()
-            if (tabOwner == null) return false
-            return tabOwner.startRouteFactory()::class == this::class
-        }
+        open fun groupOwner(): Tab? = null
     }
 }
 
 data class BackStackState(
-    val backStack: List<Nav.Route>,
-    val currentGroup: Nav.Tab,
+    val backStack: List<NavKey>,
+    val currentGroup: NavKey,
 )

@@ -8,11 +8,18 @@ import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
 
-val TAB_ROUTES_SET = setOfNotNull(
+val TAB_ROUTES_SET = setOf(
     BottomTab.Home,
     BottomTab.Profile,
     BottomTab.Cart,
     BottomTab.Shortcuts,
+)
+
+val TOP_ROUTES_SET = setOf<Nav.Route>(
+    HomeStart,
+    ProfileStart,
+    CartStart,
+    ShortcutsStart,
 )
 
 val VALID_ROUTES_SET = setOf<KClass<out Nav.Route>>(
@@ -58,38 +65,32 @@ abstract class AmazonRoute : Nav.Route()
 
 @Serializable
 data object HomeStart : AmazonRoute() {
-    override fun tabOwner() = BottomTab.Home
+    override fun groupOwner() = BottomTab.Home
 }
 
 @Serializable
 data object ProfileStart : AmazonRoute() {
-    override fun tabOwner() = BottomTab.Profile
+    override fun groupOwner() = BottomTab.Profile
 }
 
 @Serializable
 data object CartStart : AmazonRoute() {
-    override fun tabOwner() = BottomTab.Cart
+    override fun groupOwner() = BottomTab.Cart
 }
 
 @Serializable
 data object ShortcutsStart : AmazonRoute() {
-    override fun tabOwner() = BottomTab.Home
+    override fun groupOwner() = BottomTab.Shortcuts
 }
 
 @Serializable
-data class Search(val initialSearchText: String) : AmazonRoute() {
-    override fun tabOwner() = null
-}
+data class Search(val initialSearchText: String) : AmazonRoute()
 
 @Serializable
-data class SearchResults(val searchString: String) : AmazonRoute() {
-    override fun tabOwner() = null
-}
+data class SearchResults(val searchString: String) : AmazonRoute()
 
 @Serializable
-data class ViewProduct(val productId: Int) : AmazonRoute() {
-    override fun tabOwner() = null
-}
+data class ViewProduct(val productId: Int) : AmazonRoute()
 
 fun List<NavBackStackEntry>.nearestTopRoute(): BottomTab? {
     for (entry in reversed()) {

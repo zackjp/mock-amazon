@@ -33,7 +33,7 @@ import com.example.mockamazon.app.navigation.BottomTab
 import com.example.mockamazon.app.navigation.HomeStart
 import com.example.mockamazon.app.navigation.Search
 import com.example.mockamazon.app.navigation.SearchResults
-import com.example.mockamazon.app.navigation.TAB_ROUTES_SET
+import com.example.mockamazon.app.navigation.TOP_ROUTES_SET
 import com.example.mockamazon.app.navigation.TabbedNavController
 import com.example.mockamazon.app.navigation.ViewProduct
 import com.example.mockamazon.app.navigation.rememberNav2Controller
@@ -56,7 +56,7 @@ fun App() {
     val collapsibleState = rememberCollapsibleState(maxCollapseHeightPx = -navChipsHeightPx)
 
     val amazonNavController = when (FeatureFlags.USE_NAV3) {
-        true -> rememberNav3Controller(TAB_ROUTES_SET, BottomTab.Home)
+        true -> rememberNav3Controller(TOP_ROUTES_SET, HomeStart)
         false -> rememberNav2Controller()
     }
 
@@ -66,7 +66,7 @@ fun App() {
 
     val backStackState: BackStackState by amazonNavController.currentBackStack.collectAsStateWithLifecycle()
     val currentRoute = backStackState.backStack.lastOrNull()
-    val isStartRoute = currentRoute?.isStartRoute() == true
+    val isStartRoute = currentRoute != null && TOP_ROUTES_SET.contains(currentRoute)
     val searchMode = when (currentRoute) {
         is Search -> SearchMode.Suggestions(currentRoute.initialSearchText)
         is SearchResults -> SearchMode.Results(currentRoute.searchString)
