@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import com.example.mockamazon.R
 import com.example.mockamazon.shared.ignoreParentPadding
-import com.example.mockamazon.features.home.component.ItemDisplayWindow
 import com.example.mockamazon.shared.model.TopHomeGroup
+import com.example.mockamazon.features.home.component.ItemDisplayWindow
 import kotlin.math.abs
 
 @OptIn(ExperimentalLayoutApi::class)

@@ -2,7 +2,7 @@ package com.example.mockamazon.app.navigation
 
 import androidx.navigation3.runtime.NavKey
 import app.cash.turbine.test
-import com.example.mockamazon.SetMainCoroutineDispatcher
+import com.example.mockamazon.shared.testutils.SetMainCoroutineDispatcher
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -26,10 +26,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.mockamazon.shared.ignoreParentPadding
+import com.example.mockamazon.shared.theme.AmazonOrange
+import com.example.mockamazon.shared.theme.LinkBlue
+import com.example.mockamazon.shared.theme.Teal60
 import com.example.mockamazon.shared.ui.DotIndicators
-import com.example.mockamazon.ui.theme.AmazonOrange
-import com.example.mockamazon.ui.theme.LinkBlue
-import com.example.mockamazon.ui.theme.Teal60
 import kotlinx.coroutines.launch
 
 

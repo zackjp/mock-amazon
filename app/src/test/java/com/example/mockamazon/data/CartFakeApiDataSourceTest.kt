@@ -1,9 +1,9 @@
 package com.example.mockamazon.data
 
-import com.example.mockamazon.TestDispatcherProvider
+import com.example.mockamazon.shared.testutils.TestDispatcherProvider
 import com.example.mockamazon.shared.model.ProductInfo
-import com.example.mockamazon.shared.model.fakeInfo
 import com.example.mockamazon.shared.model.toCartItem
+import com.example.mockamazon.shared.testutils.model.fakeInfo
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe

@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.mockamazon.R
 import com.example.mockamazon.app.navigation.AmazonNav2Controller
 import com.example.mockamazon.app.navigation.AmazonNav3Controller
 import com.example.mockamazon.app.navigation.AmazonNav3Display
@@ -42,11 +41,12 @@ import com.example.mockamazon.app.ui.view.AmazonBottomAppBar
 import com.example.mockamazon.app.ui.view.AmazonTopAppBar
 import com.example.mockamazon.app.ui.view.AmazonTopAppBarWithNavChips
 import com.example.mockamazon.app.ui.view.BottomNavItem
-import com.example.mockamazon.features.home.HomeScreenRoot
 import com.example.mockamazon.shared.model.FeatureFlags
-import com.example.mockamazon.ui.theme.AmazonBeige
-import com.example.mockamazon.ui.theme.AmazonOutlineLight
+import com.example.mockamazon.shared.theme.AmazonBeige
+import com.example.mockamazon.shared.theme.AmazonOutlineLight
+import com.example.mockamazon.features.home.HomeScreenRoot
 import com.example.mockamazon.ui.theme.MockAmazonTheme
+import com.example.mockamazon.shared.R as SharedR
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -160,16 +160,16 @@ fun App() {
 
 private fun createBottomNavItems(amazonNavController: TabbedNavController): List<BottomNavItem> =
     listOf(
-        BottomNavItem(R.drawable.ic_outline_home_24, BottomTab.Home) {
+        BottomNavItem(SharedR.drawable.ic_outline_home_24, BottomTab.Home) {
             amazonNavController.navigateTo(BottomTab.Home)
         },
-        BottomNavItem(R.drawable.ic_outline_person_24, BottomTab.Profile) {
+        BottomNavItem(SharedR.drawable.ic_outline_person_24, BottomTab.Profile) {
             amazonNavController.navigateTo(BottomTab.Profile)
         },
-        BottomNavItem(R.drawable.ic_outline_shopping_cart_24, BottomTab.Cart) {
+        BottomNavItem(SharedR.drawable.ic_outline_shopping_cart_24, BottomTab.Cart) {
             amazonNavController.navigateTo(BottomTab.Cart)
         },
-        BottomNavItem(R.drawable.ic_outline_menu_24, BottomTab.Shortcuts) {
+        BottomNavItem(SharedR.drawable.ic_outline_menu_24, BottomTab.Shortcuts) {
             amazonNavController.navigateTo(BottomTab.Shortcuts)
         },
     )

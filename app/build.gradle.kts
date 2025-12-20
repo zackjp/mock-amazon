@@ -50,6 +50,9 @@ tasks.withType<Test> {
 dependencies {
     ksp(libs.hilt.compiler)
 
+    implementation(project(":lib:shared"))
+    testImplementation(project(":lib:shared-test-utils"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -66,14 +69,14 @@ dependencies {
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.serialization.json)
+    testRuntimeOnly(libs.junit.jupiter.engine)
     testImplementation(libs.junit)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.kotest.runner.junit5)
-    testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.junit.platform.launcher)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
-    testRuntimeOnly(libs.junit.jupiter.engine)
     testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

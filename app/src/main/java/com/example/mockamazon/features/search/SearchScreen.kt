@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.mockamazon.R
+import com.example.mockamazon.shared.R as SharedR
 
 @Composable
 fun SearchScreenRoot(
@@ -48,7 +49,7 @@ fun SearchScreenRoot(
                     ) {
                         Icon(
                             contentDescription = null,
-                            painter = painterResource(R.drawable.ic_sharp_history_24)
+                            painter = painterResource(SharedR.drawable.ic_sharp_history_24)
                         )
 
                         Spacer(modifier = Modifier.width(mainContentPadding))

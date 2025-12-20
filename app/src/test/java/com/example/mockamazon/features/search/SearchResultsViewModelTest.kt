@@ -1,16 +1,16 @@
 package com.example.mockamazon.features.search
 
 import app.cash.turbine.test
-import com.example.mockamazon.SetMainCoroutineDispatcher
+import com.example.mockamazon.shared.testutils.SetMainCoroutineDispatcher
 import com.example.mockamazon.data.CartRepository
 import com.example.mockamazon.data.SearchApiDataSource
 import com.example.mockamazon.shared.model.Cart
 import com.example.mockamazon.shared.model.CartItem
 import com.example.mockamazon.shared.model.ProductInfo
-import com.example.mockamazon.shared.model.fakeCart
-import com.example.mockamazon.shared.model.fakeInfo
-import com.example.mockamazon.shared.model.fakeItem
 import com.example.mockamazon.shared.model.toCartItem
+import com.example.mockamazon.shared.testutils.model.fakeCart
+import com.example.mockamazon.shared.testutils.model.fakeInfo
+import com.example.mockamazon.shared.testutils.model.fakeItem
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.instanceOf

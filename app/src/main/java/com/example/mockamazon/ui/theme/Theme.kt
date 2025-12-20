@@ -4,6 +4,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.example.mockamazon.shared.theme.AmazonBlack
+import com.example.mockamazon.shared.theme.AmazonGray
+import com.example.mockamazon.shared.theme.Yellow40
 
 private val LightColorScheme = lightColorScheme(
     background = Color.White,

@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Mock Amazon"
 include(":app")
- 
+include(":lib:shared")
+include(":lib:shared-test-utils")

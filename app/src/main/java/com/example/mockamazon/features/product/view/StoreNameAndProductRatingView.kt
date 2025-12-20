@@ -21,8 +21,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mockamazon.shared.theme.AmazonBeige
 import com.example.mockamazon.shared.ui.getRatingStarsTextInfo
-import com.example.mockamazon.ui.theme.AmazonBeige
 
 
 @Composable

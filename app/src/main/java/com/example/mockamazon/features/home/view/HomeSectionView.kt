@@ -28,11 +28,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.mockamazon.R
-import com.example.mockamazon.features.home.component.ItemDisplayWindow
 import com.example.mockamazon.shared.ignoreParentPadding
 import com.example.mockamazon.shared.model.ItemGroup
 import com.example.mockamazon.shared.model.ItemSection
-import com.example.mockamazon.ui.theme.AmazonOutlineLight
+import com.example.mockamazon.shared.theme.AmazonOutlineLight
+import com.example.mockamazon.features.home.component.ItemDisplayWindow
+import com.example.mockamazon.shared.R as SharedR
 
 @Composable
 fun HomeSectionView(
@@ -139,7 +140,7 @@ private fun CardHeader(
         )
         Icon(
             contentDescription = null,
-            painter = painterResource(R.drawable.ic_sharp_chevron_forward_24),
+            painter = painterResource(SharedR.drawable.ic_sharp_chevron_forward_24),
             modifier = Modifier.size(28.dp)
         )
     }

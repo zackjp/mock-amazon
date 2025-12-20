@@ -1,7 +1,7 @@
 package com.example.mockamazon.data
 
 import com.example.mockamazon.shared.model.ProductInfo
-import com.example.mockamazon.shared.model.fakeInfo
+import com.example.mockamazon.shared.testutils.model.fakeInfo
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk

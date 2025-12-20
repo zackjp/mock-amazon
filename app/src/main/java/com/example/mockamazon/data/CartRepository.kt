@@ -1,7 +1,6 @@
 package com.example.mockamazon.data
 
 import com.example.mockamazon.shared.model.Cart
-import com.example.mockamazon.shared.model.CartItem
 import javax.inject.Inject
 
 

@@ -39,6 +39,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mockamazon.R
 import com.example.mockamazon.shared.model.ProductInfo
+import com.example.mockamazon.shared.theme.AmazonOutlineLight
+import com.example.mockamazon.shared.theme.Gray90
 import com.example.mockamazon.shared.ui.CartItemQuantityChip
 import com.example.mockamazon.shared.ui.PriceDisplaySize
 import com.example.mockamazon.shared.ui.PriceText
@@ -48,8 +50,6 @@ import com.example.mockamazon.shared.ui.component.PrimeDayText
 import com.example.mockamazon.shared.ui.getRatingStarsTextInfo
 import com.example.mockamazon.shared.ui.screen.ErrorScreen
 import com.example.mockamazon.shared.ui.screen.LoadingScreen
-import com.example.mockamazon.ui.theme.AmazonOutlineLight
-import com.example.mockamazon.ui.theme.Gray90
 
 @Composable
 fun SearchResultsScreenRoot(

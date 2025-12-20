@@ -30,9 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.example.mockamazon.R
+import com.example.mockamazon.shared.model.Item
 import com.example.mockamazon.features.home.model.DisplayableItem
 import com.example.mockamazon.features.home.model.toDisplayableItem
-import com.example.mockamazon.shared.model.Item
 import kotlin.math.roundToInt
 
 val DISCOUNT_RED: Color = Color(0xFFC60B37)

@@ -16,16 +16,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.example.mockamazon.R
-import com.example.mockamazon.features.product.AddToCartState
+import com.example.mockamazon.shared.theme.Green60
+import com.example.mockamazon.shared.theme.LinkBlue
+import com.example.mockamazon.shared.theme.Teal60
 import com.example.mockamazon.shared.toPrimeDeliveryString
 import com.example.mockamazon.shared.toRelativeDateString
 import com.example.mockamazon.shared.ui.PriceDisplaySize
 import com.example.mockamazon.shared.ui.PriceText
 import com.example.mockamazon.shared.ui.PrimaryCta
 import com.example.mockamazon.shared.ui.getPrimeLogoTextInfo
-import com.example.mockamazon.ui.theme.Green60
-import com.example.mockamazon.ui.theme.LinkBlue
-import com.example.mockamazon.ui.theme.Teal60
+import com.example.mockamazon.features.product.AddToCartState
 import java.time.LocalDate
 import kotlin.text.Typography.nbsp
 

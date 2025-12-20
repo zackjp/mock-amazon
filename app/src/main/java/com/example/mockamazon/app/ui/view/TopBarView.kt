@@ -69,7 +69,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mockamazon.R
-import com.example.mockamazon.ui.theme.AmazonOutlineMedium
+import com.example.mockamazon.shared.theme.AmazonOutlineMedium
+import com.example.mockamazon.shared.R as SharedR
 
 val NAV_CHIPS = listOf(
     "Early Prime Deals",
@@ -188,7 +189,7 @@ fun AmazonTopAppBar(
                 ) {
                     Icon(
                         contentDescription = null,
-                        painter = painterResource(R.drawable.ic_sharp_arrow_left_alt_24),
+                        painter = painterResource(SharedR.drawable.ic_sharp_arrow_left_alt_24),
                     )
                 }
             }
@@ -299,7 +300,7 @@ private fun SimpleSearchBar(
                         enabled = true,
                         leadingIcon = {
                             Icon(
-                                painter = painterResource(R.drawable.ic_outline_search_24),
+                                painter = painterResource(SharedR.drawable.ic_outline_search_24),
                                 contentDescription = null
                             )
                         },
@@ -392,10 +393,10 @@ private fun createLocationIconData(font: TextStyle): LocationIconData {
 
     val inlineContent = mapOf(
         locationIconId to InlineTextContent(placeholder = placeholder) {
-            Icon(painterResource(R.drawable.ic_outline_location_on_24), null)
+            Icon(painterResource(SharedR.drawable.ic_outline_location_on_24), null)
         },
         downIconId to InlineTextContent(placeholder = placeholder) {
-            Icon(painterResource(R.drawable.ic_outline_keyboard_arrow_down_24), null)
+            Icon(painterResource(SharedR.drawable.ic_outline_keyboard_arrow_down_24), null)
         }
     )
 

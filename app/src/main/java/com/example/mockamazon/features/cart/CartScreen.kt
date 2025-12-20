@@ -44,6 +44,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mockamazon.R
 import com.example.mockamazon.shared.model.CartItem
+import com.example.mockamazon.shared.theme.AmazonOutlineMedium
+import com.example.mockamazon.shared.theme.Gray90
+import com.example.mockamazon.shared.theme.Green60
 import com.example.mockamazon.shared.ui.CartItemQuantityChip
 import com.example.mockamazon.shared.ui.InteractionBlockingOverlay
 import com.example.mockamazon.shared.ui.PriceDisplaySize
@@ -53,9 +56,6 @@ import com.example.mockamazon.shared.ui.component.ExpectedDeliveryText
 import com.example.mockamazon.shared.ui.component.PrimeDayText
 import com.example.mockamazon.shared.ui.screen.ErrorScreen
 import com.example.mockamazon.shared.ui.screen.LoadingScreen
-import com.example.mockamazon.ui.theme.AmazonOutlineMedium
-import com.example.mockamazon.ui.theme.Gray90
-import com.example.mockamazon.ui.theme.Green60
 
 private val CART_CONTAINER_COLOR = Gray90
 

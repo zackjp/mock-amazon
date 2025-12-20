@@ -3,8 +3,8 @@ package com.example.mockamazon.data
 import com.example.mockamazon.shared.model.Cart
 import com.example.mockamazon.shared.model.CartItem
 import com.example.mockamazon.shared.model.ProductInfo
-import com.example.mockamazon.shared.model.fakeInfo
 import com.example.mockamazon.shared.model.toCartItem
+import com.example.mockamazon.shared.testutils.model.fakeInfo
 import io.kotest.matchers.shouldBe
 import io.mockk.Runs
 import io.mockk.coEvery

@@ -34,11 +34,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mockamazon.R
-import com.example.mockamazon.features.home.view.HomeSectionView
-import com.example.mockamazon.features.home.view.TopHomeSection
 import com.example.mockamazon.shared.ignoreParentPadding
 import com.example.mockamazon.shared.ui.screen.ErrorScreen
 import com.example.mockamazon.shared.ui.screen.LoadingScreen
+import com.example.mockamazon.features.home.view.HomeSectionView
+import com.example.mockamazon.features.home.view.TopHomeSection
 
 @Composable
 fun HomeScreenRoot(

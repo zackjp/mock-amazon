@@ -20,14 +20,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mockamazon.R
+import com.example.mockamazon.shared.theme.AmazonGray
+import com.example.mockamazon.shared.ui.InteractionBlockingOverlay
+import com.example.mockamazon.shared.ui.screen.ErrorScreen
+import com.example.mockamazon.shared.ui.screen.LoadingScreen
 import com.example.mockamazon.features.product.view.ProductImagesView
 import com.example.mockamazon.features.product.view.PurchaseInfoView
 import com.example.mockamazon.features.product.view.SimilarProductsView
 import com.example.mockamazon.features.product.view.StoreNameAndProductRatingView
-import com.example.mockamazon.shared.ui.InteractionBlockingOverlay
-import com.example.mockamazon.shared.ui.screen.ErrorScreen
-import com.example.mockamazon.shared.ui.screen.LoadingScreen
-import com.example.mockamazon.ui.theme.AmazonGray
 import kotlinx.coroutines.delay
 
 private const val CART_ADDED_OVERLAY_TIMEOUT = 2000L

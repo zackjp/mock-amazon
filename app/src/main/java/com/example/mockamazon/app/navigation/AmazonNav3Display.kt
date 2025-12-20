@@ -19,7 +19,7 @@ import com.example.mockamazon.features.home.HomeScreenRoot
 import com.example.mockamazon.features.product.ProductScreenRoot
 import com.example.mockamazon.features.search.SearchResultsScreenRoot
 import com.example.mockamazon.features.search.SearchScreenRoot
-import com.example.mockamazon.shared.ui.ComingSoonScreen
+import com.example.mockamazon.shared.ui.screen.ComingSoonScreen
 
 
 @Composable

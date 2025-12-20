@@ -1,6 +1,6 @@
 package com.example.mockamazon.data
 
-import com.example.mockamazon.TestDispatcherProvider
+import com.example.mockamazon.shared.testutils.TestDispatcherProvider
 import io.kotest.matchers.comparables.shouldBeGreaterThan
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach

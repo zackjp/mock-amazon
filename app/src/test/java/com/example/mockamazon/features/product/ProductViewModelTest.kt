@@ -1,11 +1,11 @@
 package com.example.mockamazon.features.product
 
 import app.cash.turbine.test
-import com.example.mockamazon.SetMainCoroutineDispatcher
+import com.example.mockamazon.shared.testutils.SetMainCoroutineDispatcher
 import com.example.mockamazon.data.CartRepository
 import com.example.mockamazon.data.ProductRepository
 import com.example.mockamazon.shared.model.ProductInfo
-import com.example.mockamazon.shared.model.fakeInfo
+import com.example.mockamazon.shared.testutils.model.fakeInfo
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.Runs

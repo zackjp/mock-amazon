@@ -1,7 +1,6 @@
 <resources>
     <string name="add_to_cart">Add to Cart</string>
     <string name="app_name">Mock Amazon</string>
-    <string name="cart_item_free_delivery">FREE delivery</string>
     <string name="cart_item_free_returns">FREE Returns</string>
     <string name="cart_item_in_stock">In Stock</string>
     <plurals name="cart_proceed_to_checkout">
@@ -10,10 +9,7 @@
     </plurals>
     <string name="cart_subtotal">Subtotal $%1$s</string>
     <string name="cart_title">Shopping Cart</string>
-    <string name="datetime_tomorrow">Tomorrow</string>
-    <string name="datetime_two_day">Two-Day</string>
     <string name="delete">Delete</string>
-    <string name="error_loading_content">Error loading content.</string>
     <string name="item_display_discount_off_label">%1$d%% off</string>
     <string name="item_display_discount_limited_time">Limited time deal</string>
     <string name="search_bar_placeholder">Search or ask a question</string>

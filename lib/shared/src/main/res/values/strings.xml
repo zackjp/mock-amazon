@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cart_item_free_delivery">FREE delivery</string>
+    <string name="datetime_tomorrow">Tomorrow</string>
+    <string name="datetime_two_day">Two-Day</string>
+    <string name="error_loading_content">Error loading content.</string>
+</resources>

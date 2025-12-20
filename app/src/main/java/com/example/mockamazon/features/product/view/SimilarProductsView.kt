@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.sp
 import com.example.mockamazon.R
 import com.example.mockamazon.shared.ignoreParentPadding
 import com.example.mockamazon.shared.model.ProductInfo
+import com.example.mockamazon.shared.theme.LinkBlue
 import com.example.mockamazon.shared.ui.getRatingStarsTextInfo
-import com.example.mockamazon.ui.theme.LinkBlue
 
 
 @Composable
