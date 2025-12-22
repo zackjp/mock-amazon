@@ -1,7 +1,5 @@
 package com.example.mockamazon.features.search
 
-import app.cash.turbine.test
-import com.example.mockamazon.shared.testutils.SetMainCoroutineDispatcher
 import com.example.mockamazon.data.CartRepository
 import com.example.mockamazon.data.SearchApiDataSource
 import com.example.mockamazon.shared.model.Cart
@@ -20,16 +18,13 @@ import io.mockk.coVerify
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import org.orbitmvi.orbit.test.TestSettings
+import org.orbitmvi.orbit.test.test
 
 
-@OptIn(ExperimentalCoroutinesApi::class) // advanceUntilIdle()
-@ExtendWith(SetMainCoroutineDispatcher::class)
 class SearchResultsViewModelTest {
 
     private companion object {
@@ -42,6 +37,12 @@ class SearchResultsViewModelTest {
         private val expectedSearchResults = listOf(
             ProductInfo.fakeInfo(123),
             ProductInfo.fakeInfo(456),
+        )
+
+        private val LOADED_STATE = SearchResultsScreenState.Loaded(
+            cartItems = listOf(CART_ITEM),
+            requestedCartCounts = emptyMap(),//mapOf(PRODUCT_IN_CART.id to CART_ITEM.quantity)
+            searchResults = expectedSearchResults,
         )
     }
 
@@ -68,18 +69,18 @@ class SearchResultsViewModelTest {
 
     @Test
     fun init_StartsAsLoading() = runTest {
-        viewModel.screenState.test {
-            awaitItem() shouldBe SearchResultsScreenState.Loading
+        viewModel.test(this, settings = TestSettings(autoCheckInitialState = false)) {
+            awaitState() shouldBe SearchResultsScreenState.Loading
         }
     }
 
     @Test
-    fun load_WithValidSearch_LoadsSearchResults() = runTest {
-        viewModel.screenState.test {
-            viewModel.load(VALID_SEARCH_STRING)
+    fun load_WithValidSearchWhenLoading_LoadsSearchResults() = runTest {
+        viewModel.test(this, SearchResultsScreenState.Loading) {
+            containerHost.load(VALID_SEARCH_STRING)
 
-            awaitItem() shouldBe SearchResultsScreenState.Loading
-            awaitItem() shouldBe SearchResultsScreenState.Loaded(
+            awaitState() shouldBe SearchResultsScreenState.Loaded(
+                cartItems = listOf(CART_ITEM),
                 requestedCartCounts = emptyMap(),
                 searchResults = expectedSearchResults,
             )
@@ -88,35 +89,22 @@ class SearchResultsViewModelTest {
 
     @Test
     fun load_WhenAlreadyLoaded_DoesNotReloadSearchResults() = runTest {
-        viewModel.screenState.test {
-            val searchResult1 = listOf(ProductInfo.fakeInfo(987))
-            val searchResult2 = listOf(ProductInfo.fakeInfo(654))
-            val expectedState = SearchResultsScreenState.Loaded(
-                requestedCartCounts = emptyMap(),
-                searchResults = searchResult1,
-            )
+        viewModel.test(this, LOADED_STATE) {
+            val newSearchResults = listOf(ProductInfo.fakeInfo(987))
+            coEvery { searchApiDataSource.getSearchResults(VALID_SEARCH_STRING) } returns newSearchResults
 
-            coEvery { searchApiDataSource.getSearchResults(VALID_SEARCH_STRING) } returns searchResult1
-            viewModel.load(VALID_SEARCH_STRING)
-            awaitItem() shouldBe SearchResultsScreenState.Loading
-            awaitItem() shouldBe expectedState
+            containerHost.load(VALID_SEARCH_STRING)
 
-            coEvery { searchApiDataSource.getSearchResults(VALID_SEARCH_STRING) } returns searchResult2
-            viewModel.load(VALID_SEARCH_STRING)
-            advanceUntilIdle()
-
-            expectNoEvents()
-            viewModel.screenState.value shouldBe expectedState
+            expectNoItems()
         }
     }
 
     @Test
     fun load_WithSearchException_EmitsError() = runTest {
-        viewModel.screenState.test {
-            viewModel.load(THROWING_SEARCH_STRING)
+        viewModel.test(this) {
+            containerHost.load(THROWING_SEARCH_STRING)
 
-            awaitItem() shouldBe SearchResultsScreenState.Loading
-            awaitItem() shouldBe SearchResultsScreenState.Error
+            awaitState() shouldBe SearchResultsScreenState.Error
         }
     }
 
@@ -124,23 +112,26 @@ class SearchResultsViewModelTest {
     fun addToCart_WhenNotLoaded_DoesNotSetRepositoryQuantity() = runTest {
         val expectedProduct = PRODUCT_IN_CART
 
-        viewModel.addToCart(expectedProduct.id)
-        advanceUntilIdle()
+        viewModel.test(this) {
+            containerHost.addToCart(expectedProduct.id)
 
-        coVerify(exactly = 0) { cartRepository.setQuantity(expectedProduct.id, 1) }
+            coVerify(exactly = 0) { cartRepository.setQuantity(expectedProduct.id, 1) }
+        }
     }
 
     @Test
     fun addToCart_MultipleTimesWithProductNotAlreadyInCart_SetsRepositoryQuantity() = runTest {
         val expectedProduct = PRODUCT_NOT_IN_CART
 
-        viewModel.load(VALID_SEARCH_STRING)
-        viewModel.addToCart(expectedProduct.id)
-        viewModel.addToCart(expectedProduct.id)
-        advanceUntilIdle()
+        viewModel.test(this, LOADED_STATE) {
+            containerHost.addToCart(expectedProduct.id)
+            containerHost.addToCart(expectedProduct.id)
 
-        coVerify { cartRepository.setQuantity(expectedProduct.id, 1) }
-        coVerify { cartRepository.setQuantity(expectedProduct.id, 2) }
+            awaitState()
+            coVerify { cartRepository.setQuantity(expectedProduct.id, 1) }
+            awaitState()
+            coVerify { cartRepository.setQuantity(expectedProduct.id, 2) }
+        }
     }
 
     @Test
@@ -148,13 +139,15 @@ class SearchResultsViewModelTest {
         val expectedProduct = PRODUCT_IN_CART
         val cartItem = CART_ITEM
 
-        viewModel.load(VALID_SEARCH_STRING)
-        viewModel.addToCart(expectedProduct.id)
-        viewModel.addToCart(expectedProduct.id)
-        advanceUntilIdle()
+        viewModel.test(this, LOADED_STATE) {
+            containerHost.addToCart(expectedProduct.id)
+            containerHost.addToCart(expectedProduct.id)
 
-        coVerify { cartRepository.setQuantity(expectedProduct.id, cartItem.quantity + 1) }
-        coVerify { cartRepository.setQuantity(expectedProduct.id, cartItem.quantity + 2) }
+            awaitState()
+            coVerify { cartRepository.setQuantity(expectedProduct.id, cartItem.quantity + 1) }
+            awaitState()
+            coVerify { cartRepository.setQuantity(expectedProduct.id, cartItem.quantity + 2) }
+        }
     }
 
     @Test
@@ -165,33 +158,25 @@ class SearchResultsViewModelTest {
             val cartItem1 = CartItem.fakeItem(product1.id)
             val cartItem2 = CartItem.fakeItem(product2.id)
             val cartItem3 = CartItem.fakeItem(product1.id + product2.id)
-            coEvery { cartRepository.getCart() } returns Cart.fakeCart(
-                listOf(
-                    cartItem1,
-                    cartItem2,
-                    cartItem3,
-                )
+            val loadedMultiCartState = SearchResultsScreenState.Loaded(
+                cartItems = listOf(cartItem1, cartItem2, cartItem3),
+                requestedCartCounts = emptyMap(),
+                searchResults = listOf(product1, product2)
             )
 
-            viewModel.screenState.test {
-                viewModel.load(VALID_SEARCH_STRING)
-                awaitItem() shouldBe SearchResultsScreenState.Loading
-                awaitItem() shouldBe instanceOf<SearchResultsScreenState.Loaded>()
-
-                viewModel.addToCart(product1.id)
-                awaitItem().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
+            viewModel.test(this, loadedMultiCartState) {
+                containerHost.addToCart(product1.id)
+                awaitState().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
                     it.requestedCartCounts shouldBe mapOf(cartItem1.id to cartItem1.quantity + 1)
                 }
 
-                viewModel.addToCart(product2.id)
-                awaitItem().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
+                containerHost.addToCart(product2.id)
+                awaitState().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
                     it.requestedCartCounts shouldBe mapOf(
                         cartItem1.id to cartItem1.quantity + 1,
                         cartItem2.id to cartItem2.quantity + 1,
                     )
                 }
-
-                expectNoEvents()
             }
         }
 
@@ -199,13 +184,16 @@ class SearchResultsViewModelTest {
     fun addToCart_WithProductNotAlreadyInCart_UpdatesCartCountOptimistically() = runTest {
         val productNotAlreadyInCart = PRODUCT_NOT_IN_CART
 
-        viewModel.load(VALID_SEARCH_STRING)
-        viewModel.addToCart(productNotAlreadyInCart.id)
-        viewModel.addToCart(productNotAlreadyInCart.id)
-        advanceUntilIdle()
+        viewModel.test(this, LOADED_STATE) {
+            containerHost.addToCart(productNotAlreadyInCart.id)
+            containerHost.addToCart(productNotAlreadyInCart.id)
 
-        viewModel.screenState.value.shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
-            it.requestedCartCounts shouldBe mapOf(productNotAlreadyInCart.id to 2)
+            awaitState().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
+                it.requestedCartCounts shouldBe mapOf(productNotAlreadyInCart.id to 1)
+            }
+            awaitState().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
+                it.requestedCartCounts shouldBe mapOf(productNotAlreadyInCart.id to 2)
+            }
         }
     }
 
@@ -214,13 +202,15 @@ class SearchResultsViewModelTest {
         val expectedProduct = PRODUCT_IN_CART
         val cartItem = CART_ITEM
 
-        viewModel.load(VALID_SEARCH_STRING)
-        viewModel.decrementFromCart(expectedProduct.id)
-        viewModel.decrementFromCart(expectedProduct.id)
-        advanceUntilIdle()
+        viewModel.test(this, LOADED_STATE) {
+            containerHost.decrementFromCart(expectedProduct.id)
+            containerHost.decrementFromCart(expectedProduct.id)
 
-        coVerify { cartRepository.setQuantity(expectedProduct.id, cartItem.quantity - 1) }
-        coVerify { cartRepository.setQuantity(expectedProduct.id, cartItem.quantity - 2) }
+            awaitState()
+            awaitState()
+            coVerify { cartRepository.setQuantity(expectedProduct.id, cartItem.quantity - 1) }
+            coVerify { cartRepository.setQuantity(expectedProduct.id, cartItem.quantity - 2) }
+        }
     }
 
     @Test
@@ -228,12 +218,14 @@ class SearchResultsViewModelTest {
         runTest {
             val expectedProduct = PRODUCT_NOT_IN_CART
 
-            viewModel.load(VALID_SEARCH_STRING)
-            viewModel.decrementFromCart(expectedProduct.id)
-            viewModel.decrementFromCart(expectedProduct.id)
-            advanceUntilIdle()
+            viewModel.test(this, LOADED_STATE) {
+                containerHost.decrementFromCart(expectedProduct.id)
+                containerHost.decrementFromCart(expectedProduct.id)
 
-            coVerify(exactly = 2) { cartRepository.setQuantity(expectedProduct.id, 0) }
+                awaitState() shouldBe instanceOf<SearchResultsScreenState.Loaded>()
+                expectNoItems() // Second decrement = no state change
+                coVerify(exactly = 2) { cartRepository.setQuantity(expectedProduct.id, 0) }
+            }
         }
 
     @Test
@@ -241,21 +233,14 @@ class SearchResultsViewModelTest {
         val expectedProduct = PRODUCT_IN_CART
         val cartItem = CART_ITEM
 
-        viewModel.load(VALID_SEARCH_STRING)
-        advanceUntilIdle()
-
-        viewModel.screenState.test {
-            awaitItem().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
-                it.requestedCartCounts shouldContainExactly emptyMap()
-            }
-
-            viewModel.decrementFromCart(expectedProduct.id)
-            awaitItem().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
+        viewModel.test(this, LOADED_STATE) {
+            containerHost.decrementFromCart(expectedProduct.id)
+            awaitState().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
                 it.requestedCartCounts shouldContainExactly mapOf(expectedProduct.id to cartItem.quantity - 1)
             }
 
-            viewModel.decrementFromCart(expectedProduct.id)
-            awaitItem().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
+            containerHost.decrementFromCart(expectedProduct.id)
+            awaitState().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
                 it.requestedCartCounts shouldContainExactly mapOf(expectedProduct.id to cartItem.quantity - 2)
             }
         }
@@ -263,18 +248,11 @@ class SearchResultsViewModelTest {
 
     @Test
     fun decrementFromCart_WithProductNotAlreadyInCart_SetsCountToZeroOptimistically() = runTest {
-        val expectedProduct = PRODUCT_NOT_IN_CART
+        viewModel.test(this, LOADED_STATE) {
+            containerHost.decrementFromCart(PRODUCT_NOT_IN_CART.id)
 
-        viewModel.screenState.test {
-            viewModel.load(VALID_SEARCH_STRING)
-            awaitItem() shouldBe SearchResultsScreenState.Loading
-            awaitItem() shouldBe instanceOf<SearchResultsScreenState.Loaded>()
-
-            viewModel.decrementFromCart(expectedProduct.id)
-            advanceUntilIdle()
-
-            awaitItem().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
-                it.requestedCartCounts shouldBe mapOf(expectedProduct.id to 0)
+            awaitState().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
+                it.requestedCartCounts shouldBe mapOf(PRODUCT_NOT_IN_CART.id to 0)
             }
         }
     }
@@ -283,14 +261,18 @@ class SearchResultsViewModelTest {
     fun decrementFromCart_WhenQuantityIsAlreadyZero_ReturnsZeroInsteadOfRemoving() = runTest {
         val expectedProduct = PRODUCT_NOT_IN_CART
 
-        viewModel.load(VALID_SEARCH_STRING)
-        viewModel.addToCart(expectedProduct.id)
-        viewModel.decrementFromCart(expectedProduct.id)
-        viewModel.decrementFromCart(expectedProduct.id)
-        advanceUntilIdle()
+        viewModel.test(this, LOADED_STATE) {
+            containerHost.addToCart(expectedProduct.id)
+            containerHost.decrementFromCart(expectedProduct.id)
+            containerHost.decrementFromCart(expectedProduct.id)
 
-        viewModel.screenState.value.shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
-            it.requestedCartCounts shouldBe mapOf(expectedProduct.id to 0)
+            awaitState().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
+                it.requestedCartCounts shouldBe mapOf(expectedProduct.id to 1)
+            }
+            awaitState().shouldBeInstanceOf<SearchResultsScreenState.Loaded> {
+                it.requestedCartCounts shouldBe mapOf(expectedProduct.id to 0)
+            }
+            expectNoItems() // Last decrement = no state change
         }
     }
 

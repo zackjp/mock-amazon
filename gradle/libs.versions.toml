@@ -23,6 +23,7 @@ material = "1.13.0"
 mockk = "1.14.5"
 nav3Core = "1.0.0"
 navigationCompose = "2.9.5"
+orbitMvi = "11.0.0"
 turbine = "1.2.1"
 
 [libraries]
@@ -58,6 +59,10 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+orbit-compose = { module = "org.orbit-mvi:orbit-compose", version.ref = "orbitMvi" }
+orbit-core = { module = "org.orbit-mvi:orbit-core", version.ref = "orbitMvi" }
+orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbitMvi" }
+orbit-viewmodel = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbitMvi" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [bundles]

@@ -1,91 +1,100 @@
 package com.example.mockamazon.features.search
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.mockamazon.shared.model.CartItem
-import com.example.mockamazon.shared.runIf
-import com.example.mockamazon.shared.updateIf
 import com.example.mockamazon.data.CartRepository
 import com.example.mockamazon.data.SearchApiDataSource
+import com.example.mockamazon.shared.model.CartItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.syntax.Syntax
+import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchResultsViewModel @Inject constructor(
     private val cartRepository: CartRepository,
     private val searchApiDataSource: SearchApiDataSource,
-) : ViewModel() {
+) : ContainerHost<SearchResultsScreenState, SearchResultsEffect>, ViewModel() {
 
-    private val _screenState =
-        MutableStateFlow<SearchResultsScreenState>(SearchResultsScreenState.Loading)
-    val screenState = _screenState.asStateFlow()
+    override val container = container<SearchResultsScreenState, SearchResultsEffect>(
+        SearchResultsScreenState.Loading
+    )
 
-    private var _cartItems = listOf<CartItem>()
+    fun load(searchString: String) = intent {
+        if (state is SearchResultsScreenState.Loaded) {
+            return@intent
+        }
 
-    fun load(searchString: String) {
-        viewModelScope.launch {
-            if (screenState.value is SearchResultsScreenState.Loaded) {
-                return@launch
-            }
+        try {
+            val searchResults = searchApiDataSource.getSearchResults(searchString)
+            val cartItems = cartRepository.getCart().cartItems
 
-            try {
-                val searchResults = searchApiDataSource.getSearchResults(searchString)
-                _cartItems = cartRepository.getCart().cartItems
-                _screenState.value = SearchResultsScreenState.Loaded(
+            reduce {
+                SearchResultsScreenState.Loaded(
+                    cartItems = cartItems,
                     requestedCartCounts = emptyMap(),
                     searchResults = searchResults,
                 )
-            } catch (e: Exception) {
-                if (e is CancellationException) throw e
-                _screenState.value = SearchResultsScreenState.Error
             }
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
+            reduce { SearchResultsScreenState.Error }
         }
     }
 
-    fun addToCart(productId: Int) {
-        viewModelScope.launch {
-            optimisticCartCountUpdate(productId, 1)
-
-            _screenState.value.runIf<SearchResultsScreenState.Loaded> {
-                val currentLocalQuantity = requestedCartCounts[productId]
-                cartRepository.setQuantity(productId, currentLocalQuantity ?: 1)
-            }
+    fun addToCart(productId: Int) = intent {
+        val intentState = state
+        if (intentState !is SearchResultsScreenState.Loaded) {
+            return@intent
         }
+
+        val newQuantity = determineCartCount(intentState, productId, 1)
+        updateCartCountOptimistically(productId, newQuantity)
+
+        cartRepository.setQuantity(productId, newQuantity)
     }
 
-    fun decrementFromCart(productId: Int) {
-        viewModelScope.launch {
-            optimisticCartCountUpdate(productId, -1)
-
-            _screenState.value.runIf<SearchResultsScreenState.Loaded> {
-                val currentLocalQuantity = requestedCartCounts[productId]
-                cartRepository.setQuantity(productId, currentLocalQuantity ?: 0)
-            }
+    fun decrementFromCart(productId: Int) = intent {
+        val intentState = state
+        if (intentState !is SearchResultsScreenState.Loaded) {
+            return@intent
         }
+
+        val newQuantity = determineCartCount(intentState, productId, -1)
+        updateCartCountOptimistically(productId, newQuantity)
+
+        cartRepository.setQuantity(productId, newQuantity)
     }
 
-    private fun optimisticCartCountUpdate(productId: Int, quantityChange: Int) {
-        _screenState.updateIf<SearchResultsScreenState.Loaded> { current ->
-            current.copy(
-                requestedCartCounts = current.requestedCartCounts
+    private fun determineCartCount(
+        loadedState: SearchResultsScreenState.Loaded,
+        productId: Int,
+        quantityChange: Int,
+    ): Int {
+        val storedValue = loadedState.requestedCartCounts[productId]
+        val baseCount = when (storedValue) {
+            null -> loadedState.cartItems.find { it.id == productId }?.quantity ?: 0
+            else -> storedValue
+        }
+        return maxOf(0, baseCount + quantityChange)
+    }
+
+    private suspend fun Syntax<SearchResultsScreenState, SearchResultsEffect>.updateCartCountOptimistically(
+        productId: Int,
+        newQuantity: Int,
+    ) {
+        reduce {
+            val preReduceState = state
+            if (preReduceState !is SearchResultsScreenState.Loaded) {
+                return@reduce preReduceState
+            }
+
+            preReduceState.copy(
+                requestedCartCounts = preReduceState.requestedCartCounts
                     .toMutableMap()
                     .apply {
-                        compute(productId) { _, value ->
-                            val cartCount = when (value) {
-                                null -> {
-                                    val cartItem = _cartItems.find { it.id == productId }
-                                    val baseCartCount = cartItem?.quantity
-                                    baseCartCount ?: 0
-                                }
-
-                                else -> value
-                            }
-                            return@compute maxOf(0, cartCount + quantityChange)
-                        }
+                        put(productId, newQuantity)
                     }
             )
         }

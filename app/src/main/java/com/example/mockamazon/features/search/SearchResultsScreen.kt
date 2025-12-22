@@ -50,6 +50,7 @@ import com.example.mockamazon.shared.ui.component.PrimeDayText
 import com.example.mockamazon.shared.ui.getRatingStarsTextInfo
 import com.example.mockamazon.shared.ui.screen.ErrorScreen
 import com.example.mockamazon.shared.ui.screen.LoadingScreen
+import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun SearchResultsScreenRoot(
@@ -63,7 +64,7 @@ fun SearchResultsScreenRoot(
         viewModel.load(searchString)
     }
 
-    val screenState by viewModel.screenState.collectAsStateWithLifecycle()
+    val screenState = viewModel.collectAsState().value
 
     SearchResultsScreen(
         modifier = modifier,

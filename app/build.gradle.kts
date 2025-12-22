@@ -69,6 +69,10 @@ dependencies {
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.orbit.core)
+    implementation(libs.orbit.viewmodel)
+    implementation(libs.orbit.compose)
+
     testRuntimeOnly(libs.junit.jupiter.engine)
     testImplementation(libs.junit)
     testImplementation(libs.junit.jupiter.api)
@@ -76,8 +80,10 @@ dependencies {
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.orbit.test)
     testImplementation(libs.turbine)
     testImplementation(libs.mockk)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
