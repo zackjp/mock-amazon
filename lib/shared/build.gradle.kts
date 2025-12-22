@@ -43,7 +43,7 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    implementation(libs.core.ktx)
+    implementation(libs.androidx.core.ktx)
     ksp(libs.hilt.compiler)
 
     testImplementation(project(":lib:shared-test-utils"))
