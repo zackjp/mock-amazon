@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -196,4 +198,44 @@ private fun buildPrimeTextIconMap(): Map<String, InlineTextContent> {
             )
         }
     )
+}
+
+@Preview
+@Composable
+private fun PriceTextPreview() {
+    Surface {
+        PriceText(
+            modifier = Modifier,
+            priceUSD = 13.99f,
+            displaySize = PriceDisplaySize.SP38
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PrimeLogoTextPreview() {
+    val primeTextInfo = getPrimeLogoTextInfo()
+
+    Surface {
+        Text(
+            inlineContent = primeTextInfo.inlineContent,
+            text = primeTextInfo.primeLogoText,
+            fontSize = 38.sp,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun RatingStarsPreview() {
+    val ratingTextInfo = getRatingStarsTextInfo(4.35f)
+
+    Surface {
+        Text(
+            inlineContent = ratingTextInfo.inlineContent,
+            text = ratingTextInfo.text,
+            fontSize = 38.sp,
+        )
+    }
 }
