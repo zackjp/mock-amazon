@@ -150,17 +150,23 @@ fun PriceText(
                 spanStyle = SpanStyle(
                     baselineShift = BaselineShift(superscriptShift),
                     fontSize = superscriptSize,
+                    fontWeight = FontWeight.Bold,
                 ),
                 text = "$",
             )
         )
-        append("$wholePart")
+        append(
+            AnnotatedString(
+                spanStyle = SpanStyle(fontWeight = FontWeight.Bold),
+                text = "$wholePart",
+            )
+        )
         append(
             AnnotatedString(
                 spanStyle = SpanStyle(
                     baselineShift = BaselineShift(superscriptShift),
-                    fontWeight = FontWeight.Bold,
                     fontSize = superscriptSize,
+                    fontWeight = FontWeight.Bold,
                 ),
                 text = String.format(Locale.getDefault(), "%02d", fractionalPart),
             )
