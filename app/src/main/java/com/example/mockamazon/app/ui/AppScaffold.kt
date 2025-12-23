@@ -41,10 +41,10 @@ import com.example.mockamazon.app.ui.view.AmazonBottomAppBar
 import com.example.mockamazon.app.ui.view.AmazonTopAppBar
 import com.example.mockamazon.app.ui.view.AmazonTopAppBarWithNavChips
 import com.example.mockamazon.app.ui.view.BottomNavItem
+import com.example.mockamazon.features.home.HomeScreenRoot
 import com.example.mockamazon.shared.model.FeatureFlags
 import com.example.mockamazon.shared.theme.AmazonBeige
 import com.example.mockamazon.shared.theme.AmazonOutlineLight
-import com.example.mockamazon.features.home.HomeScreenRoot
 import com.example.mockamazon.ui.theme.MockAmazonTheme
 import com.example.mockamazon.shared.R as SharedR
 
@@ -52,9 +52,6 @@ import com.example.mockamazon.shared.R as SharedR
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
-    var navChipsHeightPx by remember { mutableFloatStateOf(0f) }
-    val collapsibleState = rememberCollapsibleState(maxCollapseHeightPx = -navChipsHeightPx)
-
     val amazonNavController = when (FeatureFlags.USE_NAV3) {
         true -> rememberNav3Controller(TOP_ROUTES_SET, HomeStart)
         false -> rememberNav2Controller()
@@ -67,11 +64,15 @@ fun App() {
     val backStackState: BackStackState by amazonNavController.currentBackStack.collectAsStateWithLifecycle()
     val currentRoute = backStackState.backStack.lastOrNull()
     val isStartRoute = currentRoute != null && TOP_ROUTES_SET.contains(currentRoute)
+    val isHome = currentRoute is HomeStart
     val searchMode = when (currentRoute) {
         is Search -> SearchMode.Suggestions(currentRoute.initialSearchText)
         is SearchResults -> SearchMode.Results(currentRoute.searchString)
         else -> SearchMode.None("")
     }
+
+    var navChipsHeightPx by remember { mutableFloatStateOf(0f) }
+    val collapsibleState = rememberCollapsibleState(maxCollapseHeightPx = -navChipsHeightPx)
 
     val onNavigateUp: (() -> Unit)? = { if (!isStartRoute) amazonNavController.navigateUp() }
     val onOpenSearch: (String) -> Unit = { searchText: String ->
@@ -93,9 +94,14 @@ fun App() {
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .nestedScroll(collapsibleState.scrollObserver),
+            .let {
+                // Keep track of the scroll position just for Home
+                if (isHome)
+                    it.nestedScroll(collapsibleState.scrollObserver)
+                else
+                    it
+            },
         topBar = {
-            val isHome = currentRoute is HomeStart
             val windowPadding = WindowInsets.systemBars.asPaddingValues()
 
             if (isHome) {
