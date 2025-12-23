@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.mockamazon.shared.testutils"
+    namespace = "com.zackjp.mockamazon.shared.testutils"
     compileSdk = 36
 
     defaultConfig {

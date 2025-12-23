@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.mockamazon"
+    namespace = "com.zackjp.mockamazon"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.mockamazon"
+        applicationId = "com.zackjp.mockamazon"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

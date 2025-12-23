@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.mockamazon.shared"
+    namespace = "com.zackjp.mockamazon.shared"
     compileSdk = 36
 
     defaultConfig {
