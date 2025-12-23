@@ -99,6 +99,7 @@ private val starRatingsIconMap = mapOf(
     "fullStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
         Icon(
             contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
             painter = painterResource(R.drawable.ic_baseline_star_24),
             tint = AmazonOrange,
         )
@@ -106,6 +107,7 @@ private val starRatingsIconMap = mapOf(
     "halfStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
         Icon(
             contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
             painter = painterResource(R.drawable.ic_outline_star_half_24),
             tint = AmazonOrange,
         )
@@ -113,6 +115,7 @@ private val starRatingsIconMap = mapOf(
     "emptyStar" to InlineTextContent(Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center)) {
         Icon(
             contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
             painter = painterResource(R.drawable.ic_outline_star_24),
             tint = AmazonOrange,
         )
