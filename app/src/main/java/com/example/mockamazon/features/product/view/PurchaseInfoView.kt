@@ -40,7 +40,7 @@ fun PurchaseInfoView(
 ) {
     Column(modifier = modifier) {
         PriceText(
-            displaySize = PriceDisplaySize.Large,
+            displaySize = PriceDisplaySize.SP38,
             modifier = Modifier,
             priceUSD = priceUSD,
         )

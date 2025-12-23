@@ -7,7 +7,7 @@
         <item quantity="one">Proceed to checkout (%d item)</item>
         <item quantity="other">Proceed to checkout (%d items)</item>
     </plurals>
-    <string name="cart_subtotal">Subtotal $%1$s</string>
+    <string name="cart_subtotal">Subtotal</string>
     <string name="cart_title">Shopping Cart</string>
     <string name="delete">Delete</string>
     <string name="item_display_discount_off_label">%1$d%% off</string>

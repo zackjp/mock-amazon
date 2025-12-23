@@ -205,7 +205,7 @@ private fun SearchResultCard(
                     )
 
                     Spacer(modifier = Modifier.height(2.dp))
-                    PriceText(modifier = Modifier, productInfo.priceUSD, PriceDisplaySize.Medium)
+                    PriceText(modifier = Modifier, productInfo.priceUSD, PriceDisplaySize.SP22)
 
                     Spacer(modifier = Modifier.height(4.dp))
                     val estDeliveryDate = productInfo.deliveryDate

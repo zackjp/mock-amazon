@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -179,10 +180,18 @@ private fun CartListHeader(
                 .padding(top = 2.dp, bottom = 12.dp)
         )
 
-        Text(
-            text = stringResource(R.string.cart_subtotal, totalPriceUSD),
-            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp)
-        )
+        Row {
+            Text(
+                text = stringResource(R.string.cart_subtotal) + " ",
+                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 22.sp)
+            )
+
+            PriceText(
+                modifier = Modifier,
+                priceUSD = totalPriceUSD,
+                displaySize = PriceDisplaySize.SP22
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -310,7 +319,7 @@ private fun RightPanel(
 
         Spacer(modifier = Modifier.height(4.dp))
         PriceText(
-            displaySize = PriceDisplaySize.Medium,
+            displaySize = PriceDisplaySize.SP22,
             modifier = Modifier,
             priceUSD = cartItem.priceUSD,
         )

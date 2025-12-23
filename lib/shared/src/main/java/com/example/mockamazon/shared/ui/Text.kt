@@ -121,20 +121,20 @@ private val starRatingsIconMap = mapOf(
 fun PriceText(
     modifier: Modifier = Modifier,
     priceUSD: Float,
-    displaySize: PriceDisplaySize = PriceDisplaySize.Medium,
+    displaySize: PriceDisplaySize = PriceDisplaySize.SP22,
 ) {
     val superscriptSize: TextUnit
     val superscriptShift: Float
     val wholeTextSize: TextUnit
 
     when (displaySize) {
-        PriceDisplaySize.Medium -> {
+        PriceDisplaySize.SP22 -> {
             superscriptSize = 13.sp
             superscriptShift = 0.3f
             wholeTextSize = 22.sp
         }
 
-        PriceDisplaySize.Large -> {
+        PriceDisplaySize.SP38 -> {
             superscriptSize = 15.sp
             superscriptShift = 0.42f
             wholeTextSize = 38.sp
@@ -175,8 +175,8 @@ fun PriceText(
 }
 
 enum class PriceDisplaySize {
-    Medium,
-    Large,
+    SP22,
+    SP38,
 }
 
 private fun buildPrimeTextIconMap(): Map<String, InlineTextContent> {
