@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -44,46 +45,41 @@ fun OrderReviewScreenRoot(
                 TosAndPlaceOrderCta(modifier = Modifier.fillMaxWidth())
             }
 
-            item {
-                SectionWithDivider {
-                    OrderTotalSummary(modifier = Modifier.fillMaxWidth())
-                }
+            itemSectionWithDivider {
+                OrderCostSummary(modifier = Modifier.fillMaxWidth())
             }
 
-            item {
-                SectionWithDivider {
-                    PaymentMethodOverview(
-                        modifier = Modifier.fillMaxWidth(),
-                        orderInfo = orderInfo,
-                    )
-                }
+            itemSectionWithDivider {
+                PaymentMethodOverview(
+                    modifier = Modifier.fillMaxWidth(),
+                    orderInfo = orderInfo,
+                )
             }
 
-            item {
-                SectionWithDivider {
-                    DeliveryOverview(
-                        modifier = Modifier.fillMaxWidth(),
-                        orderInfo = orderInfo,
-                    )
-                }
+            itemSectionWithDivider {
+                DeliveryOverview(
+                    modifier = Modifier.fillMaxWidth(),
+                    orderInfo = orderInfo,
+                )
             }
         }
     }
 }
 
-@Composable
-private fun SectionWithDivider(section: @Composable () -> Unit) {
-    Column {
-        HorizontalDivider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 2.dp
-        )
+private fun LazyListScope.itemSectionWithDivider(section: @Composable () -> Unit) {
+    item {
+        Column {
+            HorizontalDivider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 2.dp
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        section()
+            section()
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+        }
     }
 }
 
@@ -111,33 +107,47 @@ private fun TosAndPlaceOrderCta(
 }
 
 @Composable
-private fun OrderTotalSummary(
+private fun OrderCostSummary(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        val priceBreakdownMap = mapOf(
-            R.string.checkout_subtotal_label to "$-",
-            R.string.checkout_shipping_and_handling_label to "$-",
-            R.string.checkout_estimated_tax_label to "$-",
-            R.string.checkout_order_total_label to "$-",
+        OrderCostLineItem(
+            label = stringResource(R.string.checkout_subtotal_label),
+            value = "$-",
         )
+        OrderCostLineItem(
+            label = stringResource(R.string.checkout_shipping_and_handling_label),
+            value = "$-",
+        )
+        OrderCostLineItem(
+            label = stringResource(R.string.checkout_estimated_tax_label),
+            value = "$-",
+        )
+        OrderCostLineItem(
+            label = stringResource(R.string.checkout_order_total_label),
+            value = "$-",
+        )
+    }
+}
 
-        priceBreakdownMap.forEach { (stringResId, costUSD) ->
-            Row(
-                modifier = Modifier
-                    .padding(vertical = 2.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = stringResource(stringResId),
-                )
-                Text(
-                    modifier = Modifier,
-                    text = costUSD,
-                )
-            }
-        }
+@Composable
+private fun OrderCostLineItem(
+    label: String,
+    value: String,
+) {
+    Row(
+        modifier = Modifier
+            .padding(vertical = 2.dp)
+            .fillMaxWidth()
+    ) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = label,
+        )
+        Text(
+            modifier = Modifier,
+            text = value,
+        )
     }
 }
 
