@@ -3,7 +3,7 @@
     <string name="checkout_add_delivery_instructions">Add delivery instructions</string>
     <string name="checkout_change_delivery_address">Change delivery address</string>
     <string name="checkout_change_payment_method">Change payment method</string>
-    <string name="checkout_deliver_to">Deliver to %s</string>
+    <string name="checkout_deliver_to">Delivering to %s</string>
     <string name="checkout_estimated_tax_label">Estimated tax to be collected:</string>
     <string name="checkout_free_pickup_near_address">Free Pickup near this address</string>
     <string name="checkout_order_review_place_order_cta">Place your order</string>

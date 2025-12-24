@@ -9,13 +9,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -125,6 +128,7 @@ private fun OrderCostSummary(
         )
         OrderCostLineItem(
             label = stringResource(R.string.checkout_order_total_label),
+            style = MaterialTheme.typography.labelLarge,
             value = "$-",
         )
     }
@@ -133,6 +137,7 @@ private fun OrderCostSummary(
 @Composable
 private fun OrderCostLineItem(
     label: String,
+    style: TextStyle? = null,
     value: String,
 ) {
     Row(
@@ -140,14 +145,16 @@ private fun OrderCostLineItem(
             .padding(vertical = 2.dp)
             .fillMaxWidth()
     ) {
-        Text(
-            modifier = Modifier.weight(1f),
-            text = label,
-        )
-        Text(
-            modifier = Modifier,
-            text = value,
-        )
+        CompositionLocalProvider(LocalTextStyle provides (style ?: LocalTextStyle.current)) {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = label,
+            )
+            Text(
+                modifier = Modifier,
+                text = value,
+            )
+        }
     }
 }
 
