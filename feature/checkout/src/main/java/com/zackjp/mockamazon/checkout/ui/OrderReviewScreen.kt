@@ -15,17 +15,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zackjp.mockamazon.checkout.R
 import com.zackjp.mockamazon.shared.ui.PrimaryCta
+import com.zackjp.mockamazon.shared.ui.text.appendLink
 
 
 @Composable
 fun OrderReviewScreenRoot(
     modifier: Modifier = Modifier,
 ) {
+    val orderInfo = OrderInfo(
+        fullAddress = "123 Example St., Apt. 867, New York, NY 10101, United States",
+        fullName = "John Doe",
+        paymentMethodText = "Visa 1234",
+    )
+
     val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
+
     Surface(
         modifier = modifier
             .padding(horizontal = mainContentPadding, vertical = 16.dp),
@@ -36,9 +45,45 @@ fun OrderReviewScreenRoot(
             }
 
             item {
-                OrderTotalSummary(modifier = Modifier.fillMaxWidth())
+                SectionWithDivider {
+                    OrderTotalSummary(modifier = Modifier.fillMaxWidth())
+                }
+            }
+
+            item {
+                SectionWithDivider {
+                    PaymentMethodOverview(
+                        modifier = Modifier.fillMaxWidth(),
+                        orderInfo = orderInfo,
+                    )
+                }
+            }
+
+            item {
+                SectionWithDivider {
+                    DeliveryOverview(
+                        modifier = Modifier.fillMaxWidth(),
+                        orderInfo = orderInfo,
+                    )
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun SectionWithDivider(section: @Composable () -> Unit) {
+    Column {
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 2.dp
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        section()
+
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
@@ -70,13 +115,6 @@ private fun OrderTotalSummary(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        HorizontalDivider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 2.dp
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
         val priceBreakdownMap = mapOf(
             R.string.checkout_subtotal_label to "$-",
             R.string.checkout_shipping_and_handling_label to "$-",
@@ -103,6 +141,78 @@ private fun OrderTotalSummary(
     }
 }
 
+@Composable
+private fun PaymentMethodOverview(
+    modifier: Modifier = Modifier,
+    orderInfo: OrderInfo,
+) {
+    Column(modifier = modifier) {
+        Text(
+            style = MaterialTheme.typography.labelLarge,
+            text = stringResource(R.string.checkout_paying_with, orderInfo.paymentMethodText),
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = buildAnnotatedString {
+                appendLink(stringResource(R.string.checkout_change_payment_method))
+            },
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = buildAnnotatedString {
+                appendLink(stringResource(R.string.checkout_use_alternate_payments))
+            },
+        )
+    }
+}
+
+@Composable
+private fun DeliveryOverview(
+    modifier: Modifier = Modifier,
+    orderInfo: OrderInfo,
+) {
+    Column(modifier = modifier) {
+        val verticalSpacing = 16.dp
+
+        Text(
+            style = MaterialTheme.typography.labelLarge,
+            text = stringResource(R.string.checkout_deliver_to, orderInfo.fullName),
+        )
+
+        Text(
+            text = orderInfo.fullAddress,
+        )
+
+        Spacer(modifier = Modifier.height(verticalSpacing))
+
+        Text(
+            text = buildAnnotatedString {
+                appendLink(stringResource(R.string.checkout_change_delivery_address))
+            },
+        )
+
+        Spacer(modifier = Modifier.height(verticalSpacing))
+
+        Text(
+            text = buildAnnotatedString {
+                appendLink(stringResource(R.string.checkout_add_delivery_instructions))
+            },
+        )
+
+        Spacer(modifier = Modifier.height(verticalSpacing))
+
+        Text(
+            text = buildAnnotatedString {
+                appendLink(stringResource(R.string.checkout_free_pickup_near_address))
+            },
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun OrderReviewPreview() {
@@ -110,3 +220,9 @@ private fun OrderReviewPreview() {
         OrderReviewScreenRoot(modifier = Modifier)
     }
 }
+
+private data class OrderInfo(
+    val fullAddress: String,
+    val fullName: String,
+    val paymentMethodText: String,
+)
