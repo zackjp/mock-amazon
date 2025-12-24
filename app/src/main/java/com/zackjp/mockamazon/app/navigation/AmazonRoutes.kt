@@ -79,6 +79,11 @@ data object CartStart : AmazonRoute() {
 }
 
 @Serializable
+data object OrderReview : AmazonRoute() {
+    override fun groupOwner() = BottomTab.Cart
+}
+
+@Serializable
 data object ShortcutsStart : AmazonRoute() {
     override fun groupOwner() = BottomTab.Shortcuts
 }

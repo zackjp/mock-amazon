@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import com.zackjp.mockamazon.checkout.ui.OrderReviewScreenRoot
 import com.zackjp.mockamazon.features.cart.CartScreenRoot
 import com.zackjp.mockamazon.features.home.HomeScreenRoot
 import com.zackjp.mockamazon.features.product.ProductScreenRoot
@@ -29,6 +30,7 @@ fun AmazonNavGraph(
     modifier: Modifier = Modifier,
     backHandlerForTabs: @Composable () -> Unit = {},
     navController: NavHostController = rememberNavController(),
+    onStartCheckout: () -> Unit = {},
     onPerformSearch: (String) -> Unit = {},
     onViewProduct: (Int) -> Unit = {},
 ) {
@@ -81,7 +83,15 @@ fun AmazonNavGraph(
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize(),
+                    onStartCheckout = onStartCheckout,
                     onViewProduct = onViewProduct,
+                )
+            }
+            composable<OrderReview> {
+                OrderReviewScreenRoot(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize(),
                 )
             }
         }

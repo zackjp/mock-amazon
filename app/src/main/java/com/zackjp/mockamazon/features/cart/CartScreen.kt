@@ -64,6 +64,7 @@ private val CART_CONTAINER_COLOR = Gray90
 fun CartScreenRoot(
     modifier: Modifier = Modifier,
     cartViewModel: CartViewModel = hiltViewModel<CartViewModel>(),
+    onStartCheckout: () -> Unit = {},
     onViewProduct: (Int) -> Unit,
 ) {
     LaunchedEffect(cartViewModel) {
@@ -74,6 +75,7 @@ fun CartScreenRoot(
 
     CartScreen(
         modifier = modifier,
+        onStartCheckout = onStartCheckout,
         onDecrementCartItem = { productId -> cartViewModel.decrementCartItem(productId) },
         onIncrementCartItem = { productId -> cartViewModel.incrementCartItem(productId) },
         onRemoveCartItem = { productId -> cartViewModel.removeByProductId(productId) },
@@ -88,6 +90,7 @@ private fun CartScreen(
     onDecrementCartItem: (Int) -> Unit,
     onIncrementCartItem: (Int) -> Unit,
     onRemoveCartItem: (Int) -> Unit,
+    onStartCheckout: () -> Unit,
     onViewProduct: (Int) -> Unit = {},
     screenState: CartScreenState,
 ) {
@@ -98,6 +101,7 @@ private fun CartScreen(
             onDecrementCartItem = onDecrementCartItem,
             onIncrementCartItem = onIncrementCartItem,
             onRemoveCartItem = onRemoveCartItem,
+            onStartCheckout = onStartCheckout,
             onViewProduct = onViewProduct,
             screenState = screenState,
         )
@@ -112,6 +116,7 @@ private fun LoadedView(
     onDecrementCartItem: (Int) -> Unit,
     onIncrementCartItem: (Int) -> Unit,
     onRemoveCartItem: (Int) -> Unit,
+    onStartCheckout: () -> Unit,
     onViewProduct: (Int) -> Unit,
     screenState: CartScreenState.Loaded,
 ) {
@@ -138,6 +143,7 @@ private fun LoadedView(
                     modifier = Modifier
                         .padding(horizontal = dimensionResource(R.dimen.main_content_padding_horizontal))
                         .fillMaxWidth(),
+                    onStartCheckout = onStartCheckout,
                     totalPriceUSD = totalPriceUSD,
                 )
             }
@@ -164,6 +170,7 @@ private fun LoadedView(
 private fun CartListHeader(
     itemCount: Int,
     modifier: Modifier = Modifier,
+    onStartCheckout: () -> Unit,
     totalPriceUSD: Float,
 ) {
     Column(
@@ -197,7 +204,7 @@ private fun CartListHeader(
 
         PrimaryCta(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {},
+            onClick = onStartCheckout,
             text = pluralStringResource(R.plurals.cart_proceed_to_checkout, itemCount, itemCount),
         )
 

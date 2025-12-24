@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="checkout_estimated_tax_label">Estimated tax to be collected:</string>
+    <string name="checkout_order_review_place_order_cta">Place your order</string>
+    <string name="checkout_order_review_tos_label">By placing your order, you agree to Amazon\'s privacy notice and conditions of use.</string>
+    <string name="checkout_shipping_and_handling_label"><![CDATA[Shipping & handling:]]></string>
+    <string name="checkout_subtotal_label">Items:</string>
+    <string name="checkout_order_total_label">Order total:</string>
+</resources>

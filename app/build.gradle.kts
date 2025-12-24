@@ -50,6 +50,7 @@ tasks.withType<Test> {
 dependencies {
     ksp(libs.hilt.compiler)
 
+    implementation(project(":feature:checkout"))
     implementation(project(":lib:shared"))
     testImplementation(project(":lib:shared-test-utils"))
 
