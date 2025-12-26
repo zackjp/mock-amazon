@@ -18,11 +18,16 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zackjp.mockamazon.checkout.R
+import com.zackjp.mockamazon.shared.theme.LinkBlue
 import com.zackjp.mockamazon.shared.ui.PrimaryCta
 import com.zackjp.mockamazon.shared.ui.text.appendLink
 
@@ -65,6 +70,12 @@ fun OrderReviewScreenRoot(
                     orderInfo = orderInfo,
                 )
             }
+
+            itemSectionWithDivider {
+                PlaceOrderCtaAndFinalTos(
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
         }
     }
 }
@@ -102,7 +113,7 @@ private fun TosAndPlaceOrderCta(
         PrimaryCta(
             modifier = Modifier.fillMaxWidth(),
             onClick = {},
-            text = stringResource(R.string.checkout_order_review_place_order_cta),
+            text = stringResource(R.string.checkout_place_order_cta),
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -226,6 +237,27 @@ private fun DeliveryOverview(
             text = buildAnnotatedString {
                 appendLink(stringResource(R.string.checkout_free_pickup_near_address))
             },
+        )
+    }
+}
+
+@Composable
+fun PlaceOrderCtaAndFinalTos(modifier: Modifier) {
+    Column(modifier = modifier) {
+        PrimaryCta(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {},
+            text = stringResource(R.string.checkout_place_order_cta),
+        )
+
+
+        val disclaimerHtml = AnnotatedString.fromHtml(
+            htmlString = stringResource(R.string.checkout_final_disclaimer_html),
+            linkStyles = TextLinkStyles(style = SpanStyle(color = LinkBlue)),
+        )
+        Text(
+            style = MaterialTheme.typography.bodyMedium,
+            text = disclaimerHtml,
         )
     }
 }

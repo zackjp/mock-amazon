@@ -5,11 +5,32 @@
     <string name="checkout_change_payment_method">Change payment method</string>
     <string name="checkout_deliver_to">Delivering to %s</string>
     <string name="checkout_estimated_tax_label">Estimated tax to be collected:</string>
+    <string name="checkout_final_disclaimer_html">
+        <![CDATA[<div>By placing your order, you agree to Amazon\'s <a href="#">privacy notice</a> and
+        <a href="#">conditions of use</a>.</div>
+
+        <br />
+        <div>Why has sales tax been applied? <a href="#">See tax and seller information</a>.</div>
+
+        <div>For an item sold by Amazon.com: When you click the \"Place your order\" button, we\'ll
+        send you an email message acknowledging receipt of your order. Your contract to purchase an
+        item will not be complete until we send you an email notifying that the item has been shipped.
+        Colorado purchasers: <a href="#">Important information regarding sales tax you may owe in
+        your State</a></div>
+
+        <div>Most new, unused items sold by Amazon, or millions of third-party sellers are eligible for
+        Free Returns, within 30 days of delivery. For the 2025 holiday season, most items purchased
+        between November 1 and December 31, 2025 can be returned through January 31, 2026.
+        Apple-branded products purchased between November 1 and December 31, 2025 can be returned
+        through January 15, 2026. For exceptions see Amazon.com\'s <a href="#">Return Policy</a></div>
+
+        <div><a href="#">Back to cart</a></div>]]>
+    </string>
     <string name="checkout_free_pickup_near_address">Free Pickup near this address</string>
-    <string name="checkout_order_review_place_order_cta">Place your order</string>
     <string name="checkout_order_review_tos_label">By placing your order, you agree to Amazon\'s privacy notice and conditions of use.</string>
     <string name="checkout_order_total_label">Order total:</string>
     <string name="checkout_paying_with">Paying with %s</string>
+    <string name="checkout_place_order_cta">Place your order</string>
     <string name="checkout_shipping_and_handling_label"><![CDATA[Shipping & handling:]]></string>
     <string name="checkout_subtotal_label">Items:</string>
     <string name="checkout_use_alternate_payments">Use a gift card, voucher, or promo code</string>
