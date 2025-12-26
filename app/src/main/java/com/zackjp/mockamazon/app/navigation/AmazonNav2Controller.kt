@@ -131,7 +131,7 @@ class AmazonNav2Controller(
                 return
             }
 
-            val isDestinationCurrentTab = currentTopRoute == targetTopRoute
+            val isDestinationCurrentTab = currentTopRoute == target
             if (isDestinationCurrentTab) { // User is reloading current tab
                 // Clear the backstack, inclusive, for the current tab
                 // before navigating to and reloading it
