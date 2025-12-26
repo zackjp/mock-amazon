@@ -29,8 +29,8 @@ import com.zackjp.mockamazon.app.navigation.AmazonNav3Display
 import com.zackjp.mockamazon.app.navigation.AmazonNavGraph
 import com.zackjp.mockamazon.app.navigation.BackStackState
 import com.zackjp.mockamazon.app.navigation.BottomTab
+import com.zackjp.mockamazon.app.navigation.CheckoutReview
 import com.zackjp.mockamazon.app.navigation.HomeStart
-import com.zackjp.mockamazon.app.navigation.OrderReview
 import com.zackjp.mockamazon.app.navigation.Search
 import com.zackjp.mockamazon.app.navigation.SearchResults
 import com.zackjp.mockamazon.app.navigation.TOP_ROUTES_SET
@@ -91,7 +91,7 @@ fun App() {
         }
         amazonNavController.navigateTo(SearchResults(searchString))
     }
-    val onStartCheckout = { amazonNavController.navigateTo(OrderReview) }
+    val onStartCheckout = { amazonNavController.navigateTo(CheckoutReview) }
 
     Scaffold(
         modifier = Modifier

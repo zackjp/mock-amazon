@@ -33,7 +33,7 @@ import com.zackjp.mockamazon.shared.ui.text.appendLink
 
 
 @Composable
-fun OrderReviewScreenRoot(
+fun CheckoutReviewScreenRoot(
     modifier: Modifier = Modifier,
 ) {
     val orderInfo = OrderInfo(
@@ -105,7 +105,7 @@ private fun TosAndPlaceOrderCta(
         Text(
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.bodyMedium,
-            text = stringResource(R.string.checkout_order_review_tos_label)
+            text = stringResource(R.string.checkout_review_tos_label)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -113,7 +113,7 @@ private fun TosAndPlaceOrderCta(
         PrimaryCta(
             modifier = Modifier.fillMaxWidth(),
             onClick = {},
-            text = stringResource(R.string.checkout_place_order_cta),
+            text = stringResource(R.string.checkout_review_place_order_cta),
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -126,19 +126,19 @@ private fun OrderCostSummary(
 ) {
     Column(modifier = modifier) {
         OrderCostLineItem(
-            label = stringResource(R.string.checkout_subtotal_label),
+            label = stringResource(R.string.checkout_review_order_subtotal_label),
             value = "$-",
         )
         OrderCostLineItem(
-            label = stringResource(R.string.checkout_shipping_and_handling_label),
+            label = stringResource(R.string.checkout_review_shipping_and_handling_label),
             value = "$-",
         )
         OrderCostLineItem(
-            label = stringResource(R.string.checkout_estimated_tax_label),
+            label = stringResource(R.string.checkout_review_estimated_tax),
             value = "$-",
         )
         OrderCostLineItem(
-            label = stringResource(R.string.checkout_order_total_label),
+            label = stringResource(R.string.checkout_review_order_total),
             style = MaterialTheme.typography.labelLarge,
             value = "$-",
         )
@@ -177,14 +177,14 @@ private fun PaymentMethodOverview(
     Column(modifier = modifier) {
         Text(
             style = MaterialTheme.typography.labelLarge,
-            text = stringResource(R.string.checkout_paying_with, orderInfo.paymentMethodText),
+            text = stringResource(R.string.checkout_review_paying_with, orderInfo.paymentMethodText),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = buildAnnotatedString {
-                appendLink(stringResource(R.string.checkout_change_payment_method))
+                appendLink(stringResource(R.string.checkout_review_change_payment_method))
             },
         )
 
@@ -192,7 +192,7 @@ private fun PaymentMethodOverview(
 
         Text(
             text = buildAnnotatedString {
-                appendLink(stringResource(R.string.checkout_use_alternate_payments))
+                appendLink(stringResource(R.string.checkout_review_use_alternate_payments))
             },
         )
     }
@@ -208,7 +208,7 @@ private fun DeliveryOverview(
 
         Text(
             style = MaterialTheme.typography.labelLarge,
-            text = stringResource(R.string.checkout_deliver_to, orderInfo.fullName),
+            text = stringResource(R.string.checkout_review_deliver_to, orderInfo.fullName),
         )
 
         Text(
@@ -219,7 +219,7 @@ private fun DeliveryOverview(
 
         Text(
             text = buildAnnotatedString {
-                appendLink(stringResource(R.string.checkout_change_delivery_address))
+                appendLink(stringResource(R.string.checkout_review_change_delivery_address))
             },
         )
 
@@ -227,7 +227,7 @@ private fun DeliveryOverview(
 
         Text(
             text = buildAnnotatedString {
-                appendLink(stringResource(R.string.checkout_add_delivery_instructions))
+                appendLink(stringResource(R.string.checkout_review_add_delivery_instructions))
             },
         )
 
@@ -235,7 +235,7 @@ private fun DeliveryOverview(
 
         Text(
             text = buildAnnotatedString {
-                appendLink(stringResource(R.string.checkout_free_pickup_near_address))
+                appendLink(stringResource(R.string.checkout_review_free_pickup_near_address))
             },
         )
     }
@@ -247,12 +247,12 @@ fun PlaceOrderCtaAndFinalTos(modifier: Modifier) {
         PrimaryCta(
             modifier = Modifier.fillMaxWidth(),
             onClick = {},
-            text = stringResource(R.string.checkout_place_order_cta),
+            text = stringResource(R.string.checkout_review_place_order_cta),
         )
 
 
         val disclaimerHtml = AnnotatedString.fromHtml(
-            htmlString = stringResource(R.string.checkout_final_disclaimer_html),
+            htmlString = stringResource(R.string.checkout_review_final_disclaimer_html),
             linkStyles = TextLinkStyles(style = SpanStyle(color = LinkBlue)),
         )
         Text(
@@ -264,9 +264,9 @@ fun PlaceOrderCtaAndFinalTos(modifier: Modifier) {
 
 @Preview
 @Composable
-private fun OrderReviewPreview() {
+private fun CheckoutReviewPreview() {
     Surface {
-        OrderReviewScreenRoot(modifier = Modifier)
+        CheckoutReviewScreenRoot(modifier = Modifier)
     }
 }
 

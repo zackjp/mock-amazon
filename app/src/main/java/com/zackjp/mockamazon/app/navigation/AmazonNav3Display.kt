@@ -14,7 +14,7 @@ import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDe
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.zackjp.mockamazon.checkout.ui.OrderReviewScreenRoot
+import com.zackjp.mockamazon.checkout.ui.CheckoutReviewScreenRoot
 import com.zackjp.mockamazon.features.cart.CartScreenRoot
 import com.zackjp.mockamazon.features.home.HomeScreenRoot
 import com.zackjp.mockamazon.features.product.ProductScreenRoot
@@ -69,8 +69,8 @@ fun AmazonNav3Display(
                     onViewProduct = onViewProduct,
                 )
             }
-            entry<OrderReview> {
-                OrderReviewScreenRoot(
+            entry<CheckoutReview> {
+                CheckoutReviewScreenRoot(
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize()

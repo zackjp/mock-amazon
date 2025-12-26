@@ -15,7 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
-import com.zackjp.mockamazon.checkout.ui.OrderReviewScreenRoot
+import com.zackjp.mockamazon.checkout.ui.CheckoutReviewScreenRoot
 import com.zackjp.mockamazon.features.cart.CartScreenRoot
 import com.zackjp.mockamazon.features.home.HomeScreenRoot
 import com.zackjp.mockamazon.features.product.ProductScreenRoot
@@ -87,8 +87,8 @@ fun AmazonNavGraph(
                     onViewProduct = onViewProduct,
                 )
             }
-            composable<OrderReview> {
-                OrderReviewScreenRoot(
+            composable<CheckoutReview> {
+                CheckoutReviewScreenRoot(
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize(),

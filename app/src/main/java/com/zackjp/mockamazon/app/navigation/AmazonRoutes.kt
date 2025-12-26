@@ -79,7 +79,7 @@ data object CartStart : AmazonRoute() {
 }
 
 @Serializable
-data object OrderReview : AmazonRoute() {
+data object CheckoutReview : AmazonRoute() {
     override fun groupOwner() = BottomTab.Cart
 }
 
