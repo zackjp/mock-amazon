@@ -2,9 +2,9 @@ package com.zackjp.mockamazon.features.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zackjp.mockamazon.shared.data.HomeRepository
 import com.zackjp.mockamazon.shared.model.ItemSection
 import com.zackjp.mockamazon.shared.model.TopHomeGroup
-import com.zackjp.mockamazon.data.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Deferred

@@ -1,7 +1,7 @@
 package com.zackjp.mockamazon.features.search
 
-import com.zackjp.mockamazon.data.CartRepository
-import com.zackjp.mockamazon.data.SearchApiDataSource
+import com.zackjp.mockamazon.shared.data.CartRepository
+import com.zackjp.mockamazon.shared.data.SearchApiDataSource
 import com.zackjp.mockamazon.shared.model.Cart
 import com.zackjp.mockamazon.shared.model.CartItem
 import com.zackjp.mockamazon.shared.model.ProductInfo

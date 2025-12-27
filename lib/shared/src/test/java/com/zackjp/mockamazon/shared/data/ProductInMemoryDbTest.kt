@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.data
+package com.zackjp.mockamazon.shared.data
 
 import com.zackjp.mockamazon.shared.model.ProductCategory
 import com.zackjp.mockamazon.shared.model.ProductInfo

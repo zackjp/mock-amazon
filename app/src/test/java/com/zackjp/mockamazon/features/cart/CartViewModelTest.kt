@@ -1,10 +1,10 @@
 package com.zackjp.mockamazon.features.cart
 
 import app.cash.turbine.test
-import com.zackjp.mockamazon.shared.testutils.SetMainCoroutineDispatcher
-import com.zackjp.mockamazon.data.CartRepository
+import com.zackjp.mockamazon.shared.data.CartRepository
 import com.zackjp.mockamazon.shared.model.Cart
 import com.zackjp.mockamazon.shared.model.CartItem
+import com.zackjp.mockamazon.shared.testutils.SetMainCoroutineDispatcher
 import com.zackjp.mockamazon.shared.testutils.model.fakeCart
 import com.zackjp.mockamazon.shared.testutils.model.fakeItem
 import io.kotest.matchers.shouldBe

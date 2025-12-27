@@ -1,7 +1,6 @@
-package com.zackjp.mockamazon.data
+package com.zackjp.mockamazon.shared.data
 
 import androidx.compose.ui.graphics.Color
-import com.zackjp.mockamazon.R
 import com.zackjp.mockamazon.shared.DispatcherProvider
 import com.zackjp.mockamazon.shared.model.Item
 import com.zackjp.mockamazon.shared.model.ItemGroup
@@ -12,6 +11,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import com.zackjp.mockamazon.shared.R as SharedR
 
 @Singleton
 class HomeFakeApiDataSource @Inject constructor(
@@ -44,33 +44,33 @@ class HomeFakeApiDataSource @Inject constructor(
             "More top\npicks for you",
             Color(0xFF3A6DB1),
             listOf(
-                getProductAsItem(R.drawable.item_sneaker_allbirds_treeglider),
-                getProductAsItem(R.drawable.item_sneaker_adidas_ubounce),
-                getProductAsItem(R.drawable.item_sneaker_allbirds_treedasher2),
-                getProductAsItem(R.drawable.item_sneaker_underarmour_chargedassert9),
-                getProductAsItem(R.drawable.item_sneaker_adidas_swiftrun1),
+                getProductAsItem(SharedR.drawable.item_sneaker_allbirds_treeglider),
+                getProductAsItem(SharedR.drawable.item_sneaker_adidas_ubounce),
+                getProductAsItem(SharedR.drawable.item_sneaker_allbirds_treedasher2),
+                getProductAsItem(SharedR.drawable.item_sneaker_underarmour_chargedassert9),
+                getProductAsItem(SharedR.drawable.item_sneaker_adidas_swiftrun1),
             )
         ),
         TopHomeGroup(
             "Snack time\nfor everyone",
             Color(0xFF6AD17D),
             listOf(
-                getProductAsItem(R.drawable.item_snack_larabar_pbchocolatechip),
-                getProductAsItem(R.drawable.item_snack_wonderful_pistachios),
-                getProductAsItem(R.drawable.item_snack_bluediamond_almonds),
-                getProductAsItem(R.drawable.item_snack_dots_originalpretzels),
-                getProductAsItem(R.drawable.item_snack_popsecret_popcorn),
+                getProductAsItem(SharedR.drawable.item_snack_larabar_pbchocolatechip),
+                getProductAsItem(SharedR.drawable.item_snack_wonderful_pistachios),
+                getProductAsItem(SharedR.drawable.item_snack_bluediamond_almonds),
+                getProductAsItem(SharedR.drawable.item_snack_dots_originalpretzels),
+                getProductAsItem(SharedR.drawable.item_snack_popsecret_popcorn),
             )
         ),
         TopHomeGroup(
             "Amazon picks\nfor you",
             Color(0xFFED7571),
             listOf(
-                getProductAsItem(R.drawable.item_game_monopoly_deal),
-                getProductAsItem(R.drawable.item_game_catan),
-                getProductAsItem(R.drawable.item_game_ra),
-                getProductAsItem(R.drawable.item_game_lost_cities),
-                getProductAsItem(R.drawable.item_game_forest_shuffle),
+                getProductAsItem(SharedR.drawable.item_game_monopoly_deal),
+                getProductAsItem(SharedR.drawable.item_game_catan),
+                getProductAsItem(SharedR.drawable.item_game_ra),
+                getProductAsItem(SharedR.drawable.item_game_lost_cities),
+                getProductAsItem(SharedR.drawable.item_game_forest_shuffle),
             )
         )
     )
@@ -81,17 +81,17 @@ class HomeFakeApiDataSource @Inject constructor(
             listOf(
                 ItemGroup(
                     "Deals for you",
-                    getProductAsItem(R.drawable.item_backpack),
-                    getProductAsItem(R.drawable.item_headphones),
-                    getProductAsItem(R.drawable.item_detergent),
-                    getProductAsItem(R.drawable.item_dishwash_detergent),
+                    getProductAsItem(SharedR.drawable.item_backpack),
+                    getProductAsItem(SharedR.drawable.item_headphones),
+                    getProductAsItem(SharedR.drawable.item_detergent),
+                    getProductAsItem(SharedR.drawable.item_dishwash_detergent),
                 ),
                 ItemGroup(
                     "Inspired by your recent history",
-                    getProductAsItem(R.drawable.item_handsoap),
-                    getProductAsItem(R.drawable.item_sandwich_bags),
-                    getProductAsItem(R.drawable.item_matcha),
-                    getProductAsItem(R.drawable.item_kitchen_sponge),
+                    getProductAsItem(SharedR.drawable.item_handsoap),
+                    getProductAsItem(SharedR.drawable.item_sandwich_bags),
+                    getProductAsItem(SharedR.drawable.item_matcha),
+                    getProductAsItem(SharedR.drawable.item_kitchen_sponge),
                 )
             )
         ),
@@ -100,17 +100,17 @@ class HomeFakeApiDataSource @Inject constructor(
             listOf(
                 ItemGroup(
                     "Reorder soon",
-                    getProductAsItem(R.drawable.item_deodorant),
-                    getProductAsItem(R.drawable.item_soda),
-                    getProductAsItem(R.drawable.item_water_filter),
-                    getProductAsItem(R.drawable.item_cleaning_gloves),
+                    getProductAsItem(SharedR.drawable.item_deodorant),
+                    getProductAsItem(SharedR.drawable.item_soda),
+                    getProductAsItem(SharedR.drawable.item_water_filter),
+                    getProductAsItem(SharedR.drawable.item_cleaning_gloves),
                 ),
                 ItemGroup(
                     "Home & Kitchen",
-                    getProductAsItem(R.drawable.item_kitchen_sponge),
-                    getProductAsItem(R.drawable.item_dishwash_detergent),
-                    getProductAsItem(R.drawable.item_handsoap),
-                    getProductAsItem(R.drawable.item_sandwich_bags),
+                    getProductAsItem(SharedR.drawable.item_kitchen_sponge),
+                    getProductAsItem(SharedR.drawable.item_dishwash_detergent),
+                    getProductAsItem(SharedR.drawable.item_handsoap),
+                    getProductAsItem(SharedR.drawable.item_sandwich_bags),
                 )
             )
         ),

@@ -2,8 +2,8 @@ package com.zackjp.mockamazon.features.product
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zackjp.mockamazon.data.CartRepository
-import com.zackjp.mockamazon.data.ProductRepository
+import com.zackjp.mockamazon.shared.data.CartRepository
+import com.zackjp.mockamazon.shared.data.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

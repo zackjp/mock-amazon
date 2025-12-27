@@ -70,9 +70,9 @@ dependencies {
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.orbit.compose)
     implementation(libs.orbit.core)
     implementation(libs.orbit.viewmodel)
-    implementation(libs.orbit.compose)
 
     testRuntimeOnly(libs.junit.jupiter.engine)
     testImplementation(libs.junit)

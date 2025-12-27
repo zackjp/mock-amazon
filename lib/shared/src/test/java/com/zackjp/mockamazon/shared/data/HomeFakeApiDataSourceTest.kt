@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.data
+package com.zackjp.mockamazon.shared.data
 
 import com.zackjp.mockamazon.shared.testutils.TestDispatcherProvider
 import io.kotest.matchers.comparables.shouldBeGreaterThan

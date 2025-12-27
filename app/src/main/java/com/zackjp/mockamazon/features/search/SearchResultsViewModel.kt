@@ -1,8 +1,8 @@
 package com.zackjp.mockamazon.features.search
 
 import androidx.lifecycle.ViewModel
-import com.zackjp.mockamazon.data.CartRepository
-import com.zackjp.mockamazon.data.SearchApiDataSource
+import com.zackjp.mockamazon.shared.data.CartRepository
+import com.zackjp.mockamazon.shared.data.SearchApiDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import org.orbitmvi.orbit.ContainerHost
