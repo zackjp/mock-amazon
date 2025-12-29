@@ -15,6 +15,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -26,22 +27,55 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.zackjp.mockamazon.checkout.R
+import com.zackjp.mockamazon.checkout.ui.model.CheckoutState
+import com.zackjp.mockamazon.shared.model.Cart
+import com.zackjp.mockamazon.shared.model.User
 import com.zackjp.mockamazon.shared.theme.LinkBlue
 import com.zackjp.mockamazon.shared.ui.PrimaryCta
+import com.zackjp.mockamazon.shared.ui.screen.ErrorScreen
+import com.zackjp.mockamazon.shared.ui.screen.LoadingScreen
 import com.zackjp.mockamazon.shared.ui.text.appendLink
+import org.orbitmvi.orbit.compose.collectAsState
 
 
 @Composable
 fun CheckoutReviewScreenRoot(
     modifier: Modifier = Modifier,
+    viewModel: CheckoutReviewViewModel = hiltViewModel(),
 ) {
-    val orderInfo = OrderInfo(
-        fullAddress = "123 Example St., Apt. 867, New York, NY 10101, United States",
-        fullName = "John Doe",
-        paymentMethodText = "Visa 1234",
-    )
+    LaunchedEffect(viewModel) {
+        viewModel.load()
+    }
 
+    val state = viewModel.collectAsState().value
+
+    CheckoutReviewScreen(
+        modifier = modifier,
+        state = state,
+    )
+}
+
+@Composable
+private fun CheckoutReviewScreen(
+    modifier: Modifier = Modifier,
+    state: CheckoutState,
+) {
+    when (state) {
+        is CheckoutState.Loaded -> Loaded(
+            modifier = modifier,
+            state = state,
+        )
+        is CheckoutState.Loading -> LoadingScreen(modifier)
+    }
+}
+
+@Composable
+private fun Loaded(
+    modifier: Modifier,
+    state: CheckoutState.Loaded,
+) {
     val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
 
     Surface(
@@ -54,20 +88,23 @@ fun CheckoutReviewScreenRoot(
             }
 
             itemSectionWithDivider {
-                OrderCostSummary(modifier = Modifier.fillMaxWidth())
+                OrderCostSummary(
+                    cart = state.cart,
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
 
             itemSectionWithDivider {
                 PaymentMethodOverview(
                     modifier = Modifier.fillMaxWidth(),
-                    orderInfo = orderInfo,
+                    user = state.user,
                 )
             }
 
             itemSectionWithDivider {
                 DeliveryOverview(
                     modifier = Modifier.fillMaxWidth(),
-                    orderInfo = orderInfo,
+                    user = state.user,
                 )
             }
 
@@ -122,12 +159,13 @@ private fun TosAndPlaceOrderCta(
 
 @Composable
 private fun OrderCostSummary(
+    cart: Cart,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         OrderCostLineItem(
             label = stringResource(R.string.checkout_review_order_subtotal_label),
-            value = "$-",
+            value = "$${cart.totalPriceUSD}",
         )
         OrderCostLineItem(
             label = stringResource(R.string.checkout_review_shipping_and_handling_label),
@@ -172,12 +210,12 @@ private fun OrderCostLineItem(
 @Composable
 private fun PaymentMethodOverview(
     modifier: Modifier = Modifier,
-    orderInfo: OrderInfo,
+    user: User,
 ) {
     Column(modifier = modifier) {
         Text(
             style = MaterialTheme.typography.labelLarge,
-            text = stringResource(R.string.checkout_review_paying_with, orderInfo.paymentMethodText),
+            text = stringResource(R.string.checkout_review_paying_with, user.paymentMethodText),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -201,18 +239,18 @@ private fun PaymentMethodOverview(
 @Composable
 private fun DeliveryOverview(
     modifier: Modifier = Modifier,
-    orderInfo: OrderInfo,
+    user: User,
 ) {
     Column(modifier = modifier) {
         val verticalSpacing = 16.dp
 
         Text(
             style = MaterialTheme.typography.labelLarge,
-            text = stringResource(R.string.checkout_review_deliver_to, orderInfo.fullName),
+            text = stringResource(R.string.checkout_review_deliver_to, user.deliveryFullName),
         )
 
         Text(
-            text = orderInfo.fullAddress,
+            text = user.deliveryAddress,
         )
 
         Spacer(modifier = Modifier.height(verticalSpacing))
@@ -269,9 +307,3 @@ private fun CheckoutReviewPreview() {
         CheckoutReviewScreenRoot(modifier = Modifier)
     }
 }
-
-private data class OrderInfo(
-    val fullAddress: String,
-    val fullName: String,
-    val paymentMethodText: String,
-)

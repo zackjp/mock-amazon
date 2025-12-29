@@ -80,6 +80,14 @@ debug-compose = [
     "androidx-compose-ui-tooling",
     "androidx-compose-ui-test-manifest"
 ]
+orbit-production = [
+    "orbit-compose",
+    "orbit-core",
+    "orbit-viewmodel",
+]
+orbit-test = [
+    "orbit-test"
+]
 test-unit = [
     "junit-jupiter-api",
     "junit-platform-launcher",

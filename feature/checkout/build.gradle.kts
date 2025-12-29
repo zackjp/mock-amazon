@@ -50,6 +50,7 @@ dependencies {
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.production.compose)
+    implementation(libs.bundles.orbit.production)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
@@ -60,6 +61,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.material) // needed for pre-canned material themes.xml until replaced by material3
     testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.bundles.orbit.test)
     testImplementation(libs.bundles.test.unit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.bundles.androidtest.common)
