@@ -1,6 +1,7 @@
 package com.zackjp.mockamazon.checkout.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -79,11 +80,10 @@ private fun Loaded(
 ) {
     val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
 
-    Surface(
-        modifier = modifier
-            .padding(horizontal = mainContentPadding, vertical = 16.dp),
-    ) {
-        LazyColumn {
+    Surface(modifier = modifier) {
+        LazyColumn(
+            contentPadding = PaddingValues(horizontal = mainContentPadding, vertical = 16.dp)
+        ) {
             item {
                 TosAndPlaceOrderCta(modifier = Modifier.fillMaxWidth())
             }
