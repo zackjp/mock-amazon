@@ -5,6 +5,7 @@ import com.zackjp.mockamazon.shared.model.User
 
 
 sealed class CheckoutState {
+    data object Error : CheckoutState()
     data class Loaded(
         val cart: Cart,
         val user: User,

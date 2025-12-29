@@ -69,24 +69,24 @@ class CheckoutReviewViewModelTest {
     }
 
     @Test
-    fun load_WhenCartLoadingFailsWithNonCancellation_DoesNothing() = runTest {
+    fun load_WhenCartLoadingFailsWithNonCancellation_SetsErrorState() = runTest {
         coEvery { cartRepository.getCart() } throws Exception("exception test")
 
         viewModel.test(this) {
             viewModel.load()
 
-            expectNoItems()
+            awaitState() shouldBe CheckoutState.Error
         }
     }
 
     @Test
-    fun load_WhenUserLoadingFailsWithNonCancellation_DoesNothing() = runTest {
+    fun load_WhenUserLoadingFailsWithNonCancellation_SetsErrorState() = runTest {
         coEvery { userRepository.getUser() } throws Exception("exception test")
 
         viewModel.test(this) {
             viewModel.load()
 
-            expectNoItems()
+            awaitState() shouldBe CheckoutState.Error
         }
     }
 

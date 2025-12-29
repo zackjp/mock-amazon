@@ -27,14 +27,19 @@ class CheckoutReviewViewModel @Inject constructor(
         val cartDeferred = viewModelScope.async { cartRepository.getCart() }
         val userDeferred = viewModelScope.async { userRepository.getUser() }
 
-        val cart = cartDeferred.await()
-        val user = userDeferred.await()
+        try {
+            val cart = cartDeferred.await()
+            val user = userDeferred.await()
 
-        reduce {
-            CheckoutState.Loaded(
-                cart = cart,
-                user = user,
-            )
+            reduce {
+                CheckoutState.Loaded(
+                    cart = cart,
+                    user = user,
+                )
+            }
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
+            reduce { CheckoutState.Error }
         }
     }
 

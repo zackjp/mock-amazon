@@ -63,6 +63,7 @@ private fun CheckoutReviewScreen(
     state: CheckoutState,
 ) {
     when (state) {
+        is CheckoutState.Error -> ErrorScreen(modifier)
         is CheckoutState.Loaded -> Loaded(
             modifier = modifier,
             state = state,
