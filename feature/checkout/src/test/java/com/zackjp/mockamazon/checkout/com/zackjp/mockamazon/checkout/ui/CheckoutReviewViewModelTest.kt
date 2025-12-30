@@ -57,6 +57,24 @@ class CheckoutReviewViewModelTest {
     }
 
     @Test
+    fun load_WhenAlreadyLoaded_ResetsToLoadingThenLoads() = runTest {
+        val loadedState = CheckoutState.Loaded(
+            cart = Cart.fakeCart(emptyList()),
+            user = expectedUser,
+        )
+
+        viewModel.test(this, loadedState) {
+            viewModel.load()
+
+            awaitState() shouldBe CheckoutState.Loading
+            awaitState() shouldBe CheckoutState.Loaded(
+                cart = expectedCart,
+                user = expectedUser,
+            )
+        }
+    }
+
+    @Test
     fun load_WhenCartAndUserLoads_SetsLoadedState() = runTest {
         viewModel.test(this) {
             viewModel.load()

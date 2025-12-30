@@ -24,6 +24,9 @@ class CheckoutReviewViewModel @Inject constructor(
     )
 
     fun load() = intent {
+        // Show loading screen when re-requested
+        reduce { CheckoutState.Loading }
+
         val cartDeferred = viewModelScope.async { cartRepository.getCart() }
         val userDeferred = viewModelScope.async { userRepository.getUser() }
 
