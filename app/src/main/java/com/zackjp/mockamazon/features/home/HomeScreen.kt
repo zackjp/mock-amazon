@@ -4,7 +4,6 @@ import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
@@ -34,11 +34,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zackjp.mockamazon.R
+import com.zackjp.mockamazon.features.home.view.HomeSectionView
+import com.zackjp.mockamazon.features.home.view.TopHomeSection
 import com.zackjp.mockamazon.shared.ignoreParentPadding
 import com.zackjp.mockamazon.shared.ui.screen.ErrorScreen
 import com.zackjp.mockamazon.shared.ui.screen.LoadingScreen
-import com.zackjp.mockamazon.features.home.view.HomeSectionView
-import com.zackjp.mockamazon.features.home.view.TopHomeSection
 
 @Composable
 fun HomeScreenRoot(
@@ -76,6 +76,7 @@ private fun HomeScreen(
             onViewProduct = onViewProduct,
             screenState = screenState,
         )
+
         is HomeScreenState.Error -> ErrorScreen(modifier = modifier.padding(innerPadding))
     }
 }
@@ -122,9 +123,15 @@ private fun LoadedView(
             Box {
                 Box(
                     modifier = Modifier
-                        .background(
-                            Brush.verticalGradient(listOf(currentTopColor, Color.Transparent))
-                        )
+                        .drawWithCache {
+                            val verticalGradient =
+                                Brush.verticalGradient(listOf(currentTopColor, Color.Transparent))
+                            onDrawBehind {
+                                drawRect(
+                                    brush = verticalGradient,
+                                )
+                            }
+                        }
                         .ignoreParentPadding(mainContentPadding)
                         .fillMaxWidth()
                         .height(innerPadding.calculateTopPadding() + endGradientHeight)
