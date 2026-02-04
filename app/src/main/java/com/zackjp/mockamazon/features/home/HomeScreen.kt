@@ -86,12 +86,8 @@ private fun LoadedView(
     innerPadding: PaddingValues,
     modifier: Modifier,
     onViewProduct: (Int) -> Unit,
-    screenState: HomeScreenState,
+    screenState: HomeScreenState.Loaded,
 ) {
-    if (screenState !is HomeScreenState.Loaded) {
-        return
-    }
-
     val paddingXLarge = dimensionResource(R.dimen.padding_xlarge)
     val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
 
