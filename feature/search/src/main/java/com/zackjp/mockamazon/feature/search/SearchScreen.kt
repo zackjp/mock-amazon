@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.search
+package com.zackjp.mockamazon.feature.search
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.zackjp.mockamazon.R
 import com.zackjp.mockamazon.shared.R as SharedR
 
 @Composable
@@ -31,7 +30,7 @@ fun SearchScreenRoot(
 ) {
     val searchItems = viewModel.searchItems
 
-    val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
+    val mainContentPadding = dimensionResource(SharedR.dimen.main_content_padding_horizontal)
 
     Surface(modifier = modifier) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {

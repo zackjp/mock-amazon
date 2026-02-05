@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.search
+package com.zackjp.mockamazon.feature.search
 
 import androidx.lifecycle.ViewModel
 import com.zackjp.mockamazon.shared.data.CartRepository

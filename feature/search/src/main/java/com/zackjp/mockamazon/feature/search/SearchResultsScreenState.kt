@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.search
+package com.zackjp.mockamazon.feature.search
 
 import com.zackjp.mockamazon.shared.model.CartItem
 import com.zackjp.mockamazon.shared.model.ProductInfo

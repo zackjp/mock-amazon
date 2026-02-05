@@ -54,6 +54,7 @@ dependencies {
     implementation(project(":feature:checkout"))
     implementation(project(":feature:home"))
     implementation(project(":feature:product"))
+    implementation(project(":feature:search"))
     implementation(project(":lib:shared"))
     testImplementation(project(":lib:shared-test-utils"))
 

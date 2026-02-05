@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.search
+package com.zackjp.mockamazon.feature.search
 
 import com.zackjp.mockamazon.shared.data.CartRepository
 import com.zackjp.mockamazon.shared.data.SearchApiDataSource
@@ -24,19 +24,18 @@ import org.junit.jupiter.api.Test
 import org.orbitmvi.orbit.test.TestSettings
 import org.orbitmvi.orbit.test.test
 
-
 class SearchResultsViewModelTest {
 
     private companion object {
         private const val VALID_SEARCH_STRING = "valid search string"
         private const val THROWING_SEARCH_STRING = "throwing search string"
-        private val PRODUCT_IN_CART = ProductInfo.fakeInfo(123)
-        private val PRODUCT_NOT_IN_CART = ProductInfo.fakeInfo(456)
+        private val PRODUCT_IN_CART = ProductInfo.Companion.fakeInfo(123)
+        private val PRODUCT_NOT_IN_CART = ProductInfo.Companion.fakeInfo(456)
         private val CART_ITEM = PRODUCT_IN_CART.toCartItem(quantity = 7)
 
         private val expectedSearchResults = listOf(
-            ProductInfo.fakeInfo(123),
-            ProductInfo.fakeInfo(456),
+            ProductInfo.Companion.fakeInfo(123),
+            ProductInfo.Companion.fakeInfo(456),
         )
 
         private val LOADED_STATE = SearchResultsScreenState.Loaded(
@@ -58,7 +57,7 @@ class SearchResultsViewModelTest {
         coEvery { searchApiDataSource.getSearchResults(THROWING_SEARCH_STRING) } throws Exception("search error exception")
         coEvery { cartRepository.addToCart(any()) } just runs
         coEvery { cartRepository.decrementByProductId(any()) } just runs
-        coEvery { cartRepository.getCart() } returns Cart.fakeCart(listOf(CART_ITEM))
+        coEvery { cartRepository.getCart() } returns Cart.Companion.fakeCart(listOf(CART_ITEM))
         coEvery { cartRepository.setQuantity(any(), any()) } just runs
 
         viewModel = SearchResultsViewModel(
@@ -90,7 +89,7 @@ class SearchResultsViewModelTest {
     @Test
     fun load_WhenAlreadyLoaded_DoesNotReloadSearchResults() = runTest {
         viewModel.test(this, LOADED_STATE) {
-            val newSearchResults = listOf(ProductInfo.fakeInfo(987))
+            val newSearchResults = listOf(ProductInfo.Companion.fakeInfo(987))
             coEvery { searchApiDataSource.getSearchResults(VALID_SEARCH_STRING) } returns newSearchResults
 
             containerHost.load(VALID_SEARCH_STRING)
@@ -153,11 +152,11 @@ class SearchResultsViewModelTest {
     @Test
     fun addToCart_UpdatesCartCountsOptimisticallyForRequestedProductIdsOnly() =
         runTest {
-            val product1 = ProductInfo.fakeInfo(11)
-            val product2 = ProductInfo.fakeInfo(23)
-            val cartItem1 = CartItem.fakeItem(product1.id)
-            val cartItem2 = CartItem.fakeItem(product2.id)
-            val cartItem3 = CartItem.fakeItem(product1.id + product2.id)
+            val product1 = ProductInfo.Companion.fakeInfo(11)
+            val product2 = ProductInfo.Companion.fakeInfo(23)
+            val cartItem1 = CartItem.Companion.fakeItem(product1.id)
+            val cartItem2 = CartItem.Companion.fakeItem(product2.id)
+            val cartItem3 = CartItem.Companion.fakeItem(product1.id + product2.id)
             val loadedMultiCartState = SearchResultsScreenState.Loaded(
                 cartItems = listOf(cartItem1, cartItem2, cartItem3),
                 requestedCartCounts = emptyMap(),
