@@ -51,6 +51,7 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(project(":feature:checkout"))
+    implementation(project(":feature:home"))
     implementation(project(":lib:shared"))
     testImplementation(project(":lib:shared-test-utils"))
 

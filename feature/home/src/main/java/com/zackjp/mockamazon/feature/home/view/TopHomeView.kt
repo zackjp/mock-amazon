@@ -31,11 +31,12 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
-import com.zackjp.mockamazon.R
+import com.zackjp.mockamazon.feature.home.R
+import com.zackjp.mockamazon.feature.home.component.ItemDisplayWindow
 import com.zackjp.mockamazon.shared.ignoreParentPadding
 import com.zackjp.mockamazon.shared.model.TopHomeGroup
-import com.zackjp.mockamazon.features.home.component.ItemDisplayWindow
 import kotlin.math.abs
+import com.zackjp.mockamazon.shared.R as SharedR
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -48,7 +49,7 @@ fun TopHomeSection(
 ) {
     val cardWidth = dimensionResource(R.dimen.top_home_card_width)
     val cardHeight = dimensionResource(R.dimen.top_home_card_height)
-    val paddingSmall = dimensionResource(R.dimen.padding_small)
+    val paddingSmall = dimensionResource(SharedR.dimen.padding_small)
 
     val lazyListState = rememberLazyListState()
     val groups by rememberUpdatedState(topHomeGroups)
@@ -95,8 +96,8 @@ private fun TopHomeCard(
     onViewProduct: (Int) -> Unit = {},
     topHomeGroup: TopHomeGroup,
 ) {
-    val paddingMedium = dimensionResource(R.dimen.padding_medium)
-    val itemSpacing = dimensionResource(R.dimen.padding_small)
+    val paddingMedium = dimensionResource(SharedR.dimen.padding_medium)
+    val itemSpacing = dimensionResource(SharedR.dimen.padding_small)
     val cardPadding = paddingMedium
 
     val cardBackground = topHomeGroup.background

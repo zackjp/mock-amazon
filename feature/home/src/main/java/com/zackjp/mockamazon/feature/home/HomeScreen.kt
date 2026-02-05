@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.home
+package com.zackjp.mockamazon.feature.home
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.LinearEasing
@@ -33,12 +33,12 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.zackjp.mockamazon.R
-import com.zackjp.mockamazon.features.home.view.HomeSectionView
+import com.zackjp.mockamazon.feature.home.view.HomeSectionView
 import com.zackjp.mockamazon.features.home.view.TopHomeSection
 import com.zackjp.mockamazon.shared.ignoreParentPadding
 import com.zackjp.mockamazon.shared.ui.screen.ErrorScreen
 import com.zackjp.mockamazon.shared.ui.screen.LoadingScreen
+import com.zackjp.mockamazon.shared.R as SharedR
 
 @Composable
 fun HomeScreenRoot(
@@ -88,8 +88,8 @@ private fun LoadedView(
     onViewProduct: (Int) -> Unit,
     screenState: HomeScreenState.Loaded,
 ) {
-    val paddingXLarge = dimensionResource(R.dimen.padding_xlarge)
-    val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
+    val paddingXLarge = dimensionResource(SharedR.dimen.padding_xlarge)
+    val mainContentPadding = dimensionResource(SharedR.dimen.main_content_padding_horizontal)
 
     val currentLayoutDirection = LocalLayoutDirection.current
 
@@ -136,7 +136,7 @@ private fun LoadedView(
                 Column {
                     Spacer(modifier = Modifier.height(innerPadding.calculateTopPadding()))
 
-                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
+                    Spacer(modifier = Modifier.height(dimensionResource(SharedR.dimen.padding_medium)))
 
                     TopHomeSection(
                         mainContentHorizontalPadding = mainContentPadding,

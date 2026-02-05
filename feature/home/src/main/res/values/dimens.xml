@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="item_section_group_card_width">312dp</dimen>
+    <dimen name="item_section_group_card_height">448dp</dimen>
+    <dimen name="top_home_card_width">288dp</dimen>
+    <dimen name="top_home_card_height">460dp</dimen>
+</resources>

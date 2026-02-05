@@ -1,7 +1,8 @@
-package com.zackjp.mockamazon.features.home
+package com.zackjp.mockamazon.feature.home
 
 import androidx.compose.ui.graphics.Color
 import app.cash.turbine.test
+import com.zackjp.mockamazon.shared.R
 import com.zackjp.mockamazon.shared.data.HomeRepository
 import com.zackjp.mockamazon.shared.model.Item
 import com.zackjp.mockamazon.shared.model.ItemGroup
@@ -17,7 +18,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import com.zackjp.mockamazon.shared.R as SharedR
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModelTest {
@@ -53,18 +53,21 @@ class HomeViewModelTest {
     private val mockTopHomeGroups: List<TopHomeGroup> = listOf(
         TopHomeGroup(
             "TopHome Title 1",
-            Color.Black,
+            Color.Companion.Black,
             listOf(
-                Item(id = SharedR.drawable.item_headphones, imageRes = SharedR.drawable.item_headphones),
-                Item(id = SharedR.drawable.item_backpack, imageRes = SharedR.drawable.item_backpack),
+                Item(id = R.drawable.item_headphones, imageRes = R.drawable.item_headphones),
+                Item(id = R.drawable.item_backpack, imageRes = R.drawable.item_backpack),
             )
         ),
         TopHomeGroup(
             "TopHome Title 2",
-            Color.White,
+            Color.Companion.White,
             listOf(
-                Item(id = SharedR.drawable.item_kitchen_sponge, imageRes = SharedR.drawable.item_kitchen_sponge),
-                Item(id = SharedR.drawable.item_matcha, imageRes = SharedR.drawable.item_matcha),
+                Item(
+                    id = R.drawable.item_kitchen_sponge,
+                    imageRes = R.drawable.item_kitchen_sponge
+                ),
+                Item(id = R.drawable.item_matcha, imageRes = R.drawable.item_matcha),
             )
         ),
     )

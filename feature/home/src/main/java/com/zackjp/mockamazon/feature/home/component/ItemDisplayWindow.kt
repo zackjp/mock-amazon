@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.home.component
+package com.zackjp.mockamazon.feature.home.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,11 +29,11 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.zackjp.mockamazon.R
+import com.zackjp.mockamazon.feature.home.model.DisplayableItem
+import com.zackjp.mockamazon.feature.home.model.toDisplayableItem
 import com.zackjp.mockamazon.shared.model.Item
-import com.zackjp.mockamazon.features.home.model.DisplayableItem
-import com.zackjp.mockamazon.features.home.model.toDisplayableItem
 import kotlin.math.roundToInt
+import com.zackjp.mockamazon.shared.R as SharedR
 
 val DISCOUNT_RED: Color = Color(0xFFC60B37)
 val ITEM_BG_COLOR: Color = Color(0xFFF7F7F7)
@@ -102,10 +102,10 @@ private fun ItemDisplay(
         modifier = modifier
             .clip(RoundedCornerShape(4.dp))
             .background(ITEM_BG_COLOR)
-            .padding(dimensionResource(R.dimen.padding_xxsmall))
+            .padding(dimensionResource(SharedR.dimen.padding_xxsmall))
     ) {
-        val paddingSmall = dimensionResource(R.dimen.padding_small)
-        val paddingXSmall = dimensionResource(R.dimen.padding_xsmall)
+        val paddingSmall = dimensionResource(SharedR.dimen.padding_small)
+        val paddingXSmall = dimensionResource(SharedR.dimen.padding_xsmall)
 
         val (imageRef, discountTextRef, discountRef) = createRefs()
         var showDiscount = item.discount != null
@@ -116,7 +116,7 @@ private fun ItemDisplay(
 
             Text(
                 color = DISCOUNT_RED,
-                text = stringResource(R.string.item_display_discount_limited_time),
+                text = stringResource(SharedR.string.item_display_discount_limited_time),
                 modifier = Modifier.constrainAs(discountTextRef) {
                     start.linkTo(parent.start)
                     bottom.linkTo(parent.bottom)
@@ -135,7 +135,7 @@ private fun ItemDisplay(
                         bottom.linkTo(discountTextRef.top, margin = paddingXSmall)
                     },
                 text = stringResource(
-                    R.string.item_display_discount_off_label, discountPercent
+                    SharedR.string.item_display_discount_off_label, discountPercent
                 ),
                 style = MaterialTheme.typography.bodySmall
             )

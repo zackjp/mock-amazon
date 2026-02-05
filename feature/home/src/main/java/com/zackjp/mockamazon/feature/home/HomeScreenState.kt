@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.home
+package com.zackjp.mockamazon.feature.home
 
 import com.zackjp.mockamazon.shared.model.ItemSection
 import com.zackjp.mockamazon.shared.model.TopHomeGroup

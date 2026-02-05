@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.home.view
+package com.zackjp.mockamazon.feature.home.view
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -27,12 +27,12 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.zackjp.mockamazon.R
+import com.zackjp.mockamazon.feature.home.R
+import com.zackjp.mockamazon.feature.home.component.ItemDisplayWindow
 import com.zackjp.mockamazon.shared.ignoreParentPadding
 import com.zackjp.mockamazon.shared.model.ItemGroup
 import com.zackjp.mockamazon.shared.model.ItemSection
 import com.zackjp.mockamazon.shared.theme.AmazonOutlineLight
-import com.zackjp.mockamazon.features.home.component.ItemDisplayWindow
 import com.zackjp.mockamazon.shared.R as SharedR
 
 @Composable
@@ -47,7 +47,7 @@ fun HomeSectionView(
     ) {
         val cardWidth = dimensionResource(R.dimen.item_section_group_card_width)
         val cardHeight = dimensionResource(R.dimen.item_section_group_card_height)
-        val paddingSmall = dimensionResource(R.dimen.padding_small)
+        val paddingSmall = dimensionResource(SharedR.dimen.padding_small)
 
         Text(
             text = itemSection.title,
@@ -83,9 +83,9 @@ private fun ItemSectionCard(
     modifier: Modifier = Modifier,
     onViewProduct: (Int) -> Unit,
 ) {
-    val paddingXXSmall = dimensionResource(R.dimen.padding_xxsmall)
-    val paddingXSmall = dimensionResource(R.dimen.padding_xsmall)
-    val paddingMedium = dimensionResource(R.dimen.padding_medium)
+    val paddingXXSmall = dimensionResource(SharedR.dimen.padding_xxsmall)
+    val paddingXSmall = dimensionResource(SharedR.dimen.padding_xsmall)
+    val paddingMedium = dimensionResource(SharedR.dimen.padding_medium)
     val cardPadding = paddingMedium
     val itemSpacing = paddingXSmall
     val items = remember(itemGroup) {
@@ -128,7 +128,7 @@ private fun CardHeader(
 ) {
     Row(
         horizontalArrangement =
-            Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
+            Arrangement.spacedBy(dimensionResource(SharedR.dimen.padding_small)),
         modifier = modifier.fillMaxWidth()
     ) {
         Text(

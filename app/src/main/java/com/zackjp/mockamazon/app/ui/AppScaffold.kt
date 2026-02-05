@@ -42,7 +42,7 @@ import com.zackjp.mockamazon.app.ui.view.AmazonBottomAppBar
 import com.zackjp.mockamazon.app.ui.view.AmazonTopAppBar
 import com.zackjp.mockamazon.app.ui.view.AmazonTopAppBarWithNavChips
 import com.zackjp.mockamazon.app.ui.view.BottomNavItem
-import com.zackjp.mockamazon.features.home.HomeScreenRoot
+import com.zackjp.mockamazon.feature.home.HomeScreenRoot
 import com.zackjp.mockamazon.shared.model.FeatureFlags
 import com.zackjp.mockamazon.shared.theme.AmazonBeige
 import com.zackjp.mockamazon.shared.theme.AmazonOutlineLight

@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.home
+package com.zackjp.mockamazon.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

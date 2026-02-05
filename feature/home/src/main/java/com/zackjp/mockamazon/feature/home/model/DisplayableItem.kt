@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.home.model
+package com.zackjp.mockamazon.feature.home.model
 
 import androidx.annotation.DrawableRes
 import com.zackjp.mockamazon.shared.model.Item
