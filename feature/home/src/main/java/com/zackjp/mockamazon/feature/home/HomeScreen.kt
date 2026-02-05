@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -47,10 +46,6 @@ fun HomeScreenRoot(
     onViewProduct: (Int) -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(viewModel) {
-        viewModel.load()
-    }
-
     val screenState: HomeScreenState by viewModel.screenState.collectAsStateWithLifecycle()
 
     HomeScreen(

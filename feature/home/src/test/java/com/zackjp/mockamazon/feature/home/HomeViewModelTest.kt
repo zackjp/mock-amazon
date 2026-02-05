@@ -94,14 +94,11 @@ class HomeViewModelTest {
         viewModel.screenState.test {
             awaitItem() shouldBe HomeScreenState.Loading
 
-            viewModel.load()
-
             awaitItem().shouldBeInstanceOf<HomeScreenState.Loaded> {
                 it.topHomeGroups shouldBe mockTopHomeGroups
                 it.homeSections shouldNot beEmpty()
             }
         }
-
     }
 
     @Test
@@ -109,7 +106,6 @@ class HomeViewModelTest {
         coEvery { mockHomeRepository.getHomeSections() } throws Exception("cancellation test")
 
         viewModel.screenState.test {
-            viewModel.load()
             awaitItem() shouldBe HomeScreenState.Loading
             awaitItem() shouldBe HomeScreenState.Error
         }

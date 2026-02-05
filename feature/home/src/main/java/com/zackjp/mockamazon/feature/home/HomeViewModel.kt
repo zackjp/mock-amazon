@@ -11,7 +11,9 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,10 +23,18 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _screenState = MutableStateFlow<HomeScreenState>(HomeScreenState.Loading)
-    val screenState = _screenState.asStateFlow()
+    val screenState = _screenState
+        .onStart { load() }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            HomeScreenState.Loading
+        )
 
-    fun load() {
+    private fun load() {
         viewModelScope.launch {
+            _screenState.value = HomeScreenState.Loading
+
             try {
                 val topHomeDeferred: Deferred<List<TopHomeGroup>> = viewModelScope.async {
                     homeRepository.getTopHomeGroups()
