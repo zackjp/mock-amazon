@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="add_to_cart">Add to Cart</string>
     <string name="cart_item_free_delivery">FREE delivery</string>
     <string name="datetime_tomorrow">Tomorrow</string>
     <string name="datetime_two_day">Two-Day</string>

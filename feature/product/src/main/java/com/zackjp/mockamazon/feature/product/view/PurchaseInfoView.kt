@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.product.view
+package com.zackjp.mockamazon.feature.product.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +15,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.zackjp.mockamazon.R
+import com.zackjp.mockamazon.feature.product.AddToCartState
 import com.zackjp.mockamazon.shared.theme.Green60
 import com.zackjp.mockamazon.shared.theme.LinkBlue
 import com.zackjp.mockamazon.shared.theme.Teal60
@@ -25,9 +25,9 @@ import com.zackjp.mockamazon.shared.ui.PriceDisplaySize
 import com.zackjp.mockamazon.shared.ui.PriceText
 import com.zackjp.mockamazon.shared.ui.PrimaryCta
 import com.zackjp.mockamazon.shared.ui.getPrimeLogoTextInfo
-import com.zackjp.mockamazon.features.product.AddToCartState
 import java.time.LocalDate
 import kotlin.text.Typography.nbsp
+import com.zackjp.mockamazon.shared.R as SharedR
 
 
 @Composable
@@ -101,7 +101,7 @@ fun PurchaseInfoView(
         Spacer(modifier.height(16.dp))
 
         val primaryCtaText = if (addToCartState != AddToCartState.Adding) {
-            stringResource(R.string.add_to_cart)
+            stringResource(SharedR.string.add_to_cart)
         } else {
             "..."
         }

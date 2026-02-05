@@ -1,5 +1,4 @@
 <resources>
-    <string name="add_to_cart">Add to Cart</string>
     <string name="app_name">Mock Amazon</string>
     <string name="cart_item_free_returns">FREE Returns</string>
     <string name="cart_item_in_stock">In Stock</string>
@@ -11,5 +10,4 @@
     <string name="cart_title">Shopping Cart</string>
     <string name="delete">Delete</string>
     <string name="search_bar_placeholder">Search or ask a question</string>
-    <string name="you_might_also_like">You might also like</string>
 </resources>

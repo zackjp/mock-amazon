@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.product
+package com.zackjp.mockamazon.feature.product
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
@@ -19,16 +19,16 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.zackjp.mockamazon.R
+import com.zackjp.mockamazon.feature.product.view.ProductImagesView
+import com.zackjp.mockamazon.feature.product.view.PurchaseInfoView
+import com.zackjp.mockamazon.feature.product.view.SimilarProductsView
+import com.zackjp.mockamazon.feature.product.view.StoreNameAndProductRatingView
 import com.zackjp.mockamazon.shared.theme.AmazonGray
 import com.zackjp.mockamazon.shared.ui.InteractionBlockingOverlay
 import com.zackjp.mockamazon.shared.ui.screen.ErrorScreen
 import com.zackjp.mockamazon.shared.ui.screen.LoadingScreen
-import com.zackjp.mockamazon.features.product.view.ProductImagesView
-import com.zackjp.mockamazon.features.product.view.PurchaseInfoView
-import com.zackjp.mockamazon.features.product.view.SimilarProductsView
-import com.zackjp.mockamazon.features.product.view.StoreNameAndProductRatingView
 import kotlinx.coroutines.delay
+import com.zackjp.mockamazon.shared.R as SharedR
 
 private const val CART_ADDED_OVERLAY_TIMEOUT = 2000L
 
@@ -86,7 +86,7 @@ private fun LoadedScreen(
     val productInfo = loadedState.productInfo
     val similarProducts = loadedState.similarProducts
     val addToCartState = loadedState.addToCartState
-    val mainContentPadding = dimensionResource(R.dimen.main_content_padding_horizontal)
+    val mainContentPadding = dimensionResource(SharedR.dimen.main_content_padding_horizontal)
 
     Surface(modifier = modifier) {
         AddToCartBlockingOverlay(

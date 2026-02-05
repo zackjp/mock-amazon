@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.zackjp.mockamazon.feature.home"
+    namespace = "com.zackjp.mockamazon.feature.product"
     compileSdk = 36
 
     defaultConfig {

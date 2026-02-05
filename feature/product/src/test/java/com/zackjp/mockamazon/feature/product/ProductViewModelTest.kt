@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.product
+package com.zackjp.mockamazon.feature.product
 
 import app.cash.turbine.test
 import com.zackjp.mockamazon.shared.data.CartRepository
@@ -30,10 +30,10 @@ class ProductViewModelTest {
     }
 
     private val cartRepository = mockk<CartRepository>()
-    private val expectedProductInfo = ProductInfo.fakeInfo(VALID_PRODUCT_ID)
+    private val expectedProductInfo = ProductInfo.Companion.fakeInfo(VALID_PRODUCT_ID)
     private val expectedSimilarProducts = listOf(
-        ProductInfo.fakeInfo(VALID_PRODUCT_ID + 1),
-        ProductInfo.fakeInfo(VALID_PRODUCT_ID + 2),
+        ProductInfo.Companion.fakeInfo(VALID_PRODUCT_ID + 1),
+        ProductInfo.Companion.fakeInfo(VALID_PRODUCT_ID + 2),
     )
 
     private lateinit var viewModel: ProductViewModel

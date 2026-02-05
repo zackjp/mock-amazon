@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.em
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.zackjp.mockamazon.R
 import com.zackjp.mockamazon.shared.model.ProductInfo
 import com.zackjp.mockamazon.shared.theme.AmazonOutlineLight
 import com.zackjp.mockamazon.shared.theme.Gray90
@@ -49,6 +48,7 @@ import com.zackjp.mockamazon.shared.ui.getRatingStarsTextInfo
 import com.zackjp.mockamazon.shared.ui.screen.ErrorScreen
 import com.zackjp.mockamazon.shared.ui.screen.LoadingScreen
 import org.orbitmvi.orbit.compose.collectAsState
+import com.zackjp.mockamazon.shared.R as SharedR
 
 @Composable
 fun SearchResultsScreenRoot(
@@ -102,7 +102,7 @@ private fun LoadedView(
     onDecrementFromCart: (Int) -> Unit,
     onViewProduct: (Int) -> Unit,
 ) {
-    val contentPadding = dimensionResource(R.dimen.padding_small)
+    val contentPadding = dimensionResource(SharedR.dimen.padding_small)
     val cartCounts = loadedState.requestedCartCounts
 
     Surface(modifier = modifier) {
@@ -228,7 +228,7 @@ private fun SearchResultCard(
                         PrimaryCta(
                             modifier = cartInteractorModifier,
                             onClick = { onAddToCart(productInfo.id) },
-                            text = stringResource(R.string.add_to_cart),
+                            text = stringResource(SharedR.string.add_to_cart),
                         )
                     } else {
                         CartItemQuantityChip(

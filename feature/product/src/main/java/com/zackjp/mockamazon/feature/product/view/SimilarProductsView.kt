@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.product.view
+package com.zackjp.mockamazon.feature.product.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.zackjp.mockamazon.R
+import com.zackjp.mockamazon.feature.product.R
 import com.zackjp.mockamazon.shared.ignoreParentPadding
 import com.zackjp.mockamazon.shared.model.ProductInfo
 import com.zackjp.mockamazon.shared.theme.LinkBlue

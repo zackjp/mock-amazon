@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.product.view
+package com.zackjp.mockamazon.feature.product.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
