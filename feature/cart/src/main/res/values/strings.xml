@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cart_item_free_returns">FREE Returns</string>
+    <string name="cart_item_in_stock">In Stock</string>
+    <plurals name="cart_proceed_to_checkout">
+        <item quantity="one">Proceed to checkout (%d item)</item>
+        <item quantity="other">Proceed to checkout (%d items)</item>
+    </plurals>
+    <string name="cart_subtotal">Subtotal</string>
+    <string name="cart_title">Shopping Cart</string>
+    <string name="delete">Delete</string>
+</resources>

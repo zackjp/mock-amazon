@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.cart
+package com.zackjp.mockamazon.feature.cart
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -43,7 +43,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.zackjp.mockamazon.R
 import com.zackjp.mockamazon.shared.model.CartItem
 import com.zackjp.mockamazon.shared.theme.AmazonOutlineMedium
 import com.zackjp.mockamazon.shared.theme.Gray90
@@ -57,6 +56,7 @@ import com.zackjp.mockamazon.shared.ui.component.ExpectedDeliveryText
 import com.zackjp.mockamazon.shared.ui.component.PrimeDayText
 import com.zackjp.mockamazon.shared.ui.screen.ErrorScreen
 import com.zackjp.mockamazon.shared.ui.screen.LoadingScreen
+import com.zackjp.mockamazon.shared.R as SharedR
 
 private val CART_CONTAINER_COLOR = Gray90
 
@@ -122,7 +122,7 @@ private fun LoadedView(
 ) {
     val totalPriceUSD = screenState.totalPriceUSD
     val cartItems = screenState.cartItems
-    val paddingSmall = dimensionResource(R.dimen.padding_small)
+    val paddingSmall = dimensionResource(SharedR.dimen.padding_small)
 
     Surface(modifier = modifier) {
         val isReloading = screenState.isReloading
@@ -136,12 +136,12 @@ private fun LoadedView(
             modifier = Modifier.fillMaxWidth(),
         ) {
             item {
-                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
+                Spacer(modifier = Modifier.height(dimensionResource(SharedR.dimen.padding_medium)))
 
                 CartListHeader(
                     itemCount = cartItems.sumOf { it.quantity },
                     modifier = Modifier
-                        .padding(horizontal = dimensionResource(R.dimen.main_content_padding_horizontal))
+                        .padding(horizontal = dimensionResource(SharedR.dimen.main_content_padding_horizontal))
                         .fillMaxWidth(),
                     onStartCheckout = onStartCheckout,
                     totalPriceUSD = totalPriceUSD,

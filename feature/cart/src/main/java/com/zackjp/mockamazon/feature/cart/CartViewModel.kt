@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.cart
+package com.zackjp.mockamazon.feature.cart
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

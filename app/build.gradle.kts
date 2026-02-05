@@ -50,6 +50,7 @@ tasks.withType<Test> {
 dependencies {
     ksp(libs.hilt.compiler)
 
+    implementation(project(":feature:cart"))
     implementation(project(":feature:checkout"))
     implementation(project(":feature:home"))
     implementation(project(":feature:product"))
