@@ -218,7 +218,7 @@ private fun SimpleSearchBar(
     modifier: Modifier = Modifier,
     onOpenSearch: () -> Unit = {},
     onPerformSearch: (String) -> Unit = {},
-    viewModel: SearchBarViewModel = hiltViewModel()
+    viewModel: GlobalSearchBarViewModel = hiltViewModel()
 ) {
     val textFieldShape = MaterialTheme.shapes.extraLarge
     val currentOnOpenSearch by rememberUpdatedState(onOpenSearch)

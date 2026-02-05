@@ -7,11 +7,11 @@ import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
-class SearchBarViewModelTest {
+class GlobalSearchBarViewModelTest {
 
     @Test
     fun updateSearchText_EmitsNewTextValue() = runTest {
-        val viewModel = SearchBarViewModel()
+        val viewModel = GlobalSearchBarViewModel()
 
         val newText = "new search text"
         viewModel.searchText.test {

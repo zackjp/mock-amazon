@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchBarViewModel @Inject constructor() : ViewModel() {
+class GlobalSearchBarViewModel @Inject constructor() : ViewModel() {
 
     private val _searchText = MutableStateFlow(TextFieldValue("", TextRange.Companion.Zero))
     val searchText = _searchText.asStateFlow()
