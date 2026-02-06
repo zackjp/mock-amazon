@@ -25,38 +25,36 @@ class ProductViewModel @Inject constructor(
             val productInfo = productRepository.getProductById(productId)
 
             if (productInfo == null) {
-                _uiState.update { ProductUiState.Error }
+                _uiState.value = ProductUiState.Error
             } else {
                 val similarProducts = productRepository.getSimilarProducts(productId)
-                _uiState.update {
-                    ProductUiState.Loaded(
-                        productInfo = productInfo,
-                        similarProducts = similarProducts,
-                    )
-                }
+                _uiState.value = ProductUiState.Loaded(
+                    productInfo = productInfo,
+                    similarProducts = similarProducts,
+                )
             }
         }
     }
 
     fun addToCart() {
-        val currentState = _uiState.value
-        if (currentState !is ProductUiState.Loaded) {
-            return
-        }
-
-        if (currentState.addToCartState != AddToCartState.Inactive) {
-            return
-        }
-
-        _uiState.updateIf<ProductUiState.Loaded> { current ->
-            current.copy(addToCartState = AddToCartState.Adding)
-        }
-
         viewModelScope.launch {
-            cartRepository.addToCart(currentState.productInfo.id)
-
+            var productIdToAdd: Int? = null
             _uiState.updateIf<ProductUiState.Loaded> { current ->
-                current.copy(addToCartState = AddToCartState.Added)
+                if (current.addToCartState == AddToCartState.Inactive) {
+                    productIdToAdd = current.productInfo.id
+                    current.copy(addToCartState = AddToCartState.Adding)
+                } else {
+                    productIdToAdd = null
+                    current
+                }
+            }
+
+            productIdToAdd?.let {
+                cartRepository.addToCart(it)
+
+                _uiState.updateIf<ProductUiState.Loaded> { current ->
+                    current.copy(addToCartState = AddToCartState.Added)
+                }
             }
         }
     }
