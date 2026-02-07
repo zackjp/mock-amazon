@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,6 +20,7 @@ import com.zackjp.mockamazon.checkout.ui.CheckoutReviewScreenRoot
 import com.zackjp.mockamazon.feature.cart.CartScreenRoot
 import com.zackjp.mockamazon.feature.home.HomeScreenRoot
 import com.zackjp.mockamazon.feature.product.ProductScreenRoot
+import com.zackjp.mockamazon.feature.product.ProductViewModel
 import com.zackjp.mockamazon.feature.search.SearchResultsScreenRoot
 import com.zackjp.mockamazon.feature.search.SearchScreenRoot
 import com.zackjp.mockamazon.shared.ui.screen.ComingSoonScreen
@@ -113,12 +115,15 @@ fun AmazonNavGraph(
 
         composable<ViewProduct> { destination ->
             val route = destination.toRoute<ViewProduct>()
+            val viewModel = hiltViewModel<ProductViewModel, ProductViewModel.Factory>(
+                creationCallback = { it.create(route.productId) }
+            )
             ProductScreenRoot(
                 modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxWidth(),
                 onViewProduct = onViewProduct,
-                productId = route.productId,
+                viewModel = viewModel,
             )
         }
 

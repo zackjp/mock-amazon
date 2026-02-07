@@ -4,23 +4,39 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zackjp.mockamazon.shared.data.CartRepository
 import com.zackjp.mockamazon.shared.data.ProductRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class ProductViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = ProductViewModel.Factory::class)
+class ProductViewModel @AssistedInject constructor(
     private val cartRepository: CartRepository,
     private val productRepository: ProductRepository,
+    @Assisted private val productId: Int,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<ProductUiState>(ProductUiState.Loading)
-    val uiState = _uiState.asStateFlow()
+    @AssistedFactory
+    interface Factory {
+        fun create(id: Int): ProductViewModel
+    }
 
-    fun load(productId: Int) {
+    private val _uiState = MutableStateFlow<ProductUiState>(ProductUiState.Loading)
+    val uiState = _uiState
+        .onStart { load() }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            ProductUiState.Loading,
+        )
+
+    private fun load() {
         viewModelScope.launch {
             val productInfo = productRepository.getProductById(productId)
 

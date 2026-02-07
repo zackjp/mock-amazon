@@ -36,13 +36,8 @@ private const val CART_ADDED_OVERLAY_TIMEOUT = 2000L
 fun ProductScreenRoot(
     modifier: Modifier = Modifier,
     onViewProduct: (Int) -> Unit,
-    productId: Int,
     viewModel: ProductViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(viewModel, productId) {
-        viewModel.load(productId)
-    }
-
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     ProductScreen(

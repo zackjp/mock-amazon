@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
@@ -18,6 +19,7 @@ import com.zackjp.mockamazon.checkout.ui.CheckoutReviewScreenRoot
 import com.zackjp.mockamazon.feature.cart.CartScreenRoot
 import com.zackjp.mockamazon.feature.home.HomeScreenRoot
 import com.zackjp.mockamazon.feature.product.ProductScreenRoot
+import com.zackjp.mockamazon.feature.product.ProductViewModel
 import com.zackjp.mockamazon.feature.search.SearchResultsScreenRoot
 import com.zackjp.mockamazon.feature.search.SearchScreenRoot
 import com.zackjp.mockamazon.shared.ui.screen.ComingSoonScreen
@@ -85,12 +87,15 @@ fun AmazonNav3Display(
                 )
             }
             entry<ViewProduct> { key ->
+                val viewModel = hiltViewModel<ProductViewModel, ProductViewModel.Factory>() {
+                    it.create(key.productId)
+                }
                 ProductScreenRoot(
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxWidth(),
                     onViewProduct = onViewProduct,
-                    productId = key.productId,
+                    viewModel = viewModel,
                 )
             }
             entry<Search> {
