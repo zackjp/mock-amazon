@@ -21,6 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "Mock Amazon"
 include(":app")
+include(":core:analytics:api")
+include(":core:analytics:impl")
 include(":feature:checkout")
 include(":feature:home")
 include(":lib:shared")

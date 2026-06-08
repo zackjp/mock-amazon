@@ -50,6 +50,8 @@ tasks.withType<Test> {
 dependencies {
     ksp(libs.hilt.compiler)
 
+    implementation(project(":core:analytics:api"))
+    implementation(project(":core:analytics:impl"))
     implementation(project(":feature:cart"))
     implementation(project(":feature:checkout"))
     implementation(project(":feature:home"))
@@ -58,7 +60,6 @@ dependencies {
     implementation(project(":lib:shared"))
     testImplementation(project(":lib:shared-test-utils"))
 
-    implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -73,7 +74,6 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
-    implementation(libs.firebase.analytics)
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.orbit.compose)

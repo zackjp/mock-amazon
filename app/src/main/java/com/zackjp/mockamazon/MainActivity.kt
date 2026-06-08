@@ -6,7 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import com.google.firebase.analytics.FirebaseAnalytics
+import com.zackjp.mockamazon.analytics.api.AmazonAnalytics
+import com.zackjp.mockamazon.analytics.api.model.AnalyticsEvent
 import com.zackjp.mockamazon.app.ui.App
 import com.zackjp.mockamazon.ui.theme.MockAmazonTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,7 +16,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject lateinit var analytics: FirebaseAnalytics
+    @Inject lateinit var analytics: AmazonAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +36,7 @@ class MainActivity : ComponentActivity() {
     override fun onStart() {
         super.onStart()
 
-        analytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null)
+        analytics.logEvent(AnalyticsEvent.AppOpen)
     }
 
 }
