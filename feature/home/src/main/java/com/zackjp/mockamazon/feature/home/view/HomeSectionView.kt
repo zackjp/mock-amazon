@@ -3,7 +3,6 @@ package com.zackjp.mockamazon.feature.home.view
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,14 +29,14 @@ import androidx.compose.ui.unit.dp
 import com.zackjp.mockamazon.feature.home.R
 import com.zackjp.mockamazon.feature.home.component.ItemDisplayWindow
 import com.zackjp.mockamazon.shared.ignoreParentPadding
-import com.zackjp.mockamazon.shared.model.ItemGroup
-import com.zackjp.mockamazon.shared.model.ItemSection
 import com.zackjp.mockamazon.shared.theme.AmazonOutlineLight
+import com.zackjp.mockamazon.shared.ui.model.CarouselCard
+import com.zackjp.mockamazon.shared.ui.model.CategoryCarousel
 import com.zackjp.mockamazon.shared.R as SharedR
 
 @Composable
 fun HomeSectionView(
-    itemSection: ItemSection,
+    categoryCarousel: CategoryCarousel,
     mainContentHorizontalPadding: Dp,
     modifier: Modifier = Modifier,
     onViewProduct: (Int) -> Unit,
@@ -50,7 +49,7 @@ fun HomeSectionView(
         val paddingSmall = dimensionResource(SharedR.dimen.padding_small)
 
         Text(
-            text = itemSection.title,
+            text = categoryCarousel.title,
             style = MaterialTheme.typography.displayMedium,
         )
 
@@ -63,10 +62,10 @@ fun HomeSectionView(
                 .ignoreParentPadding(mainContentHorizontalPadding),
             horizontalArrangement = Arrangement.spacedBy(paddingSmall),
         ) {
-            items(itemSection.itemGroups) { itemGroup ->
+            items(categoryCarousel.carouselCards) { carouselCard ->
                 ItemSectionCard(
                     cardWidth = cardWidth,
-                    itemGroup = itemGroup,
+                    carouselCard = carouselCard,
                     modifier = Modifier.size(cardWidth, cardHeight),
                     onViewProduct = onViewProduct,
                 )
@@ -75,11 +74,10 @@ fun HomeSectionView(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class) // FlowRow
 @Composable
 private fun ItemSectionCard(
     cardWidth: Dp,
-    itemGroup: ItemGroup,
+    carouselCard: CarouselCard,
     modifier: Modifier = Modifier,
     onViewProduct: (Int) -> Unit,
 ) {
@@ -88,8 +86,8 @@ private fun ItemSectionCard(
     val paddingMedium = dimensionResource(SharedR.dimen.padding_medium)
     val cardPadding = paddingMedium
     val itemSpacing = paddingXSmall
-    val items = remember(itemGroup) {
-        listOf(itemGroup.rec1, itemGroup.rec2, itemGroup.rec3, itemGroup.rec4)
+    val items = remember(carouselCard) {
+        listOf(carouselCard.rec1, carouselCard.rec2, carouselCard.rec3, carouselCard.rec4)
     }
 
     Card(
@@ -104,7 +102,7 @@ private fun ItemSectionCard(
         ) {
             CardHeader(
                 modifier = Modifier.fillMaxWidth(),
-                title = itemGroup.title,
+                title = carouselCard.title,
             )
 
             Spacer(modifier = Modifier.height(paddingXXSmall))
@@ -112,7 +110,7 @@ private fun ItemSectionCard(
             ItemDisplayWindow(
                 cardPadding = cardPadding,
                 cardWidth = cardWidth,
-                items = items,
+                carouselItems = items,
                 itemSpacing = itemSpacing,
                 modifier = Modifier.fillMaxSize(),
                 onViewProduct = onViewProduct,

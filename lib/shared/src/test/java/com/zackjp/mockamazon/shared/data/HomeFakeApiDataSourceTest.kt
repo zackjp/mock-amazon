@@ -22,13 +22,13 @@ class HomeFakeApiDataSourceTest {
     }
 
     @Test
-    fun fetchTopHomeGroups_ReturnsMockData() = runTest(testDispatcher) {
-        homeFakeApiDataSource.fetchTopHomeGroups().size shouldBeGreaterThan 0
+    fun fetchHeroCarouselCards_ReturnsMockData() = runTest(testDispatcher) {
+        homeFakeApiDataSource.fetchHeroCarouselCards().size shouldBeGreaterThan 0
     }
 
     @Test
-    fun fetchHomeSections_ReturnsMockData() = runTest(testDispatcher) {
-        homeFakeApiDataSource.fetchHomeSections().size shouldBeGreaterThan 0
+    fun fetchCategoryCarousels_ReturnsMockData() = runTest(testDispatcher) {
+        homeFakeApiDataSource.fetchCategoryCarousels().size shouldBeGreaterThan 0
     }
 
 }

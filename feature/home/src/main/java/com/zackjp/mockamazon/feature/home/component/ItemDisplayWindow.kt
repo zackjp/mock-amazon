@@ -31,7 +31,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.zackjp.mockamazon.feature.home.model.DisplayableItem
 import com.zackjp.mockamazon.feature.home.model.toDisplayableItem
-import com.zackjp.mockamazon.shared.model.Item
+import com.zackjp.mockamazon.shared.ui.model.CarouselItem
 import kotlin.math.roundToInt
 import com.zackjp.mockamazon.shared.R as SharedR
 
@@ -42,21 +42,21 @@ val ITEM_BG_COLOR: Color = Color(0xFFF7F7F7)
 fun ItemDisplayWindow(
     cardPadding: Dp,
     cardWidth: Dp,
-    items: List<Item>,
+    carouselItems: List<CarouselItem>,
     itemSpacing: Dp,
     modifier: Modifier = Modifier,
     onViewProduct: (Int) -> Unit = {},
 ) {
     val itemWidth = (cardWidth - cardPadding * 2 - itemSpacing - 1.dp) / 2
-    val maxItemsInEachColumn = when (items.size) {
+    val maxItemsInEachColumn = when (carouselItems.size) {
         2 -> 1
         3, 4 -> 2
         5 -> 3
         else -> 3
     }
 
-    val reversedBottomUpItems = remember(items) {
-        items
+    val reversedBottomUpItems = remember(carouselItems) {
+        carouselItems
             .reversed()
             .chunked(maxItemsInEachColumn)
             .map { it.reversed() }

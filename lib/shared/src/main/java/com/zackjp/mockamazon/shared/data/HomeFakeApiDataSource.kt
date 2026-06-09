@@ -2,11 +2,11 @@ package com.zackjp.mockamazon.shared.data
 
 import androidx.compose.ui.graphics.Color
 import com.zackjp.mockamazon.shared.DispatcherProvider
-import com.zackjp.mockamazon.shared.model.Item
-import com.zackjp.mockamazon.shared.model.ItemGroup
-import com.zackjp.mockamazon.shared.model.ItemSection
+import com.zackjp.mockamazon.shared.model.CarouselCardResponse
+import com.zackjp.mockamazon.shared.model.CarouselItemResponse
+import com.zackjp.mockamazon.shared.model.CategoryCarouselResponse
+import com.zackjp.mockamazon.shared.model.HeroCarouselCardResponse
 import com.zackjp.mockamazon.shared.model.ProductInfo
-import com.zackjp.mockamazon.shared.model.TopHomeGroup
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -19,28 +19,28 @@ class HomeFakeApiDataSource @Inject constructor(
     private val productInMemoryDb: ProductInMemoryDb,
 ) {
 
-    suspend fun fetchTopHomeGroups(): List<TopHomeGroup> = withContext(dispatcherProvider.default) {
+    suspend fun fetchHeroCarouselCards(): List<HeroCarouselCardResponse> = withContext(dispatcherProvider.default) {
         delay(1000) // simulate network delay
-        createTopHomeGroups()
+        createHeroCarouselCards()
     }
 
-    suspend fun fetchHomeSections(): List<ItemSection> = withContext(dispatcherProvider.default) {
+    suspend fun fetchCategoryCarousels(): List<CategoryCarouselResponse> = withContext(dispatcherProvider.default) {
         delay(1000L) // simulate network delay
-        createHomeSections()
+        createCategoryCarousels()
     }
 
-    private fun getProductAsItem(id: Int, showDiscount: Boolean = true): Item =
+    private fun getProductAsItem(id: Int, showDiscount: Boolean = true): CarouselItemResponse =
         productInMemoryDb.getProductById(id)!!.toItem(showDiscount)
 
-    private fun ProductInfo.toItem(showDiscount: Boolean): Item =
-        Item(
+    private fun ProductInfo.toItem(showDiscount: Boolean): CarouselItemResponse =
+        CarouselItemResponse(
             id = id,
             imageRes = imageId,
             discount = if (showDiscount) discount else null,
         )
 
-    private fun createTopHomeGroups(): List<TopHomeGroup> = listOf(
-        TopHomeGroup(
+    private fun createHeroCarouselCards(): List<HeroCarouselCardResponse> = listOf(
+        HeroCarouselCardResponse(
             "More top\npicks for you",
             Color(0xFF3A6DB1),
             listOf(
@@ -51,7 +51,7 @@ class HomeFakeApiDataSource @Inject constructor(
                 getProductAsItem(SharedR.drawable.item_sneaker_adidas_swiftrun1),
             )
         ),
-        TopHomeGroup(
+        HeroCarouselCardResponse(
             "Snack time\nfor everyone",
             Color(0xFF6AD17D),
             listOf(
@@ -62,7 +62,7 @@ class HomeFakeApiDataSource @Inject constructor(
                 getProductAsItem(SharedR.drawable.item_snack_popsecret_popcorn),
             )
         ),
-        TopHomeGroup(
+        HeroCarouselCardResponse(
             "Amazon picks\nfor you",
             Color(0xFFED7571),
             listOf(
@@ -75,18 +75,18 @@ class HomeFakeApiDataSource @Inject constructor(
         )
     )
 
-    private fun createHomeSections(): List<ItemSection> = listOf(
-        ItemSection(
+    private fun createCategoryCarousels(): List<CategoryCarouselResponse> = listOf(
+        CategoryCarouselResponse(
             "Recommended deals for you",
             listOf(
-                ItemGroup(
+                CarouselCardResponse(
                     "Deals for you",
                     getProductAsItem(SharedR.drawable.item_backpack),
                     getProductAsItem(SharedR.drawable.item_headphones),
                     getProductAsItem(SharedR.drawable.item_detergent),
                     getProductAsItem(SharedR.drawable.item_dishwash_detergent),
                 ),
-                ItemGroup(
+                CarouselCardResponse(
                     "Inspired by your recent history",
                     getProductAsItem(SharedR.drawable.item_handsoap),
                     getProductAsItem(SharedR.drawable.item_sandwich_bags),
@@ -95,17 +95,17 @@ class HomeFakeApiDataSource @Inject constructor(
                 )
             )
         ),
-        ItemSection(
+        CategoryCarouselResponse(
             "Buy again",
             listOf(
-                ItemGroup(
+                CarouselCardResponse(
                     "Reorder soon",
                     getProductAsItem(SharedR.drawable.item_deodorant),
                     getProductAsItem(SharedR.drawable.item_soda),
                     getProductAsItem(SharedR.drawable.item_water_filter),
                     getProductAsItem(SharedR.drawable.item_cleaning_gloves),
                 ),
-                ItemGroup(
+                CarouselCardResponse(
                     "Home & Kitchen",
                     getProductAsItem(SharedR.drawable.item_kitchen_sponge),
                     getProductAsItem(SharedR.drawable.item_dishwash_detergent),

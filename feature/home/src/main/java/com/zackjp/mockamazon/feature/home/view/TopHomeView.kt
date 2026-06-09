@@ -34,25 +34,25 @@ import androidx.core.graphics.ColorUtils
 import com.zackjp.mockamazon.feature.home.R
 import com.zackjp.mockamazon.feature.home.component.ItemDisplayWindow
 import com.zackjp.mockamazon.shared.ignoreParentPadding
-import com.zackjp.mockamazon.shared.model.TopHomeGroup
+import com.zackjp.mockamazon.shared.ui.model.HeroCarouselCard
 import kotlin.math.abs
 import com.zackjp.mockamazon.shared.R as SharedR
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun TopHomeSection(
+fun HomeHeroSection(
     mainContentHorizontalPadding: Dp,
     modifier: Modifier = Modifier,
     onColorChanged: (Color) -> Unit = {},
     onViewProduct: (Int) -> Unit = {},
-    topHomeGroups: List<TopHomeGroup>,
+    heroCarouselCards: List<HeroCarouselCard>,
 ) {
     val cardWidth = dimensionResource(R.dimen.top_home_card_width)
     val cardHeight = dimensionResource(R.dimen.top_home_card_height)
     val paddingSmall = dimensionResource(SharedR.dimen.padding_small)
 
     val lazyListState = rememberLazyListState()
-    val groups by rememberUpdatedState(topHomeGroups)
+    val groups by rememberUpdatedState(heroCarouselCards)
 
     LaunchedEffect(lazyListState) {
         snapshotFlow {
@@ -79,28 +79,28 @@ fun TopHomeSection(
         horizontalArrangement = Arrangement.spacedBy(paddingSmall)
     ) {
         items(groups) { group ->
-            TopHomeCard(
+            HeroCard(
                 cardWidth = cardWidth,
                 modifier = Modifier.size(cardWidth, cardHeight),
                 onViewProduct = onViewProduct,
-                topHomeGroup = group,
+                heroCarouselCard = group,
             )
         }
     }
 }
 
 @Composable
-private fun TopHomeCard(
+private fun HeroCard(
     cardWidth: Dp,
     modifier: Modifier = Modifier,
     onViewProduct: (Int) -> Unit = {},
-    topHomeGroup: TopHomeGroup,
+    heroCarouselCard: HeroCarouselCard,
 ) {
     val paddingMedium = dimensionResource(SharedR.dimen.padding_medium)
     val itemSpacing = dimensionResource(SharedR.dimen.padding_small)
     val cardPadding = paddingMedium
 
-    val cardBackground = topHomeGroup.background
+    val cardBackground = heroCarouselCard.background
     val titleForeground = remember(cardBackground) {
         getContrastColor(cardBackground)
     }
@@ -116,7 +116,7 @@ private fun TopHomeCard(
         ) {
             Text(
                 color = titleForeground,
-                text = topHomeGroup.title,
+                text = heroCarouselCard.title,
                 style = MaterialTheme.typography.displayLarge
             )
 
@@ -125,7 +125,7 @@ private fun TopHomeCard(
             ItemDisplayWindow(
                 cardPadding = cardPadding,
                 cardWidth = cardWidth,
-                items = topHomeGroup.items,
+                carouselItems = heroCarouselCard.carouselItems,
                 itemSpacing = itemSpacing,
                 modifier = Modifier.fillMaxSize(),
                 onViewProduct = onViewProduct,

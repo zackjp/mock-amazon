@@ -4,10 +4,10 @@ import androidx.compose.ui.graphics.Color
 import app.cash.turbine.test
 import com.zackjp.mockamazon.shared.R
 import com.zackjp.mockamazon.shared.data.HomeRepository
-import com.zackjp.mockamazon.shared.model.Item
-import com.zackjp.mockamazon.shared.model.ItemGroup
-import com.zackjp.mockamazon.shared.model.ItemSection
-import com.zackjp.mockamazon.shared.model.TopHomeGroup
+import com.zackjp.mockamazon.shared.ui.model.CarouselCard
+import com.zackjp.mockamazon.shared.ui.model.CarouselItem
+import com.zackjp.mockamazon.shared.ui.model.CategoryCarousel
+import com.zackjp.mockamazon.shared.ui.model.HeroCarouselCard
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -23,51 +23,51 @@ import org.junit.jupiter.api.Test
 class HomeViewModelTest {
 
     val mockHomeRepository = mockk<HomeRepository>()
-    val mockSections = listOf(
-        ItemSection(
+    val mockCategoryCarousels = listOf(
+        CategoryCarousel(
             "Section Title 1",
             listOf(
-                ItemGroup(
+                CarouselCard(
                     "Group heading 1",
-                    Item(id = 123, imageRes = 123, discount = 0.01f),
-                    Item(id = 234, imageRes = 234, discount = 0.02f),
-                    Item(id = 345, imageRes = 345, discount = 0.03f),
-                    Item(id = 456, imageRes = 456, discount = 0.04f),
+                    CarouselItem(id = 123, imageRes = 123, discount = 0.01f),
+                    CarouselItem(id = 234, imageRes = 234, discount = 0.02f),
+                    CarouselItem(id = 345, imageRes = 345, discount = 0.03f),
+                    CarouselItem(id = 456, imageRes = 456, discount = 0.04f),
                 ),
             )
         ),
-        ItemSection(
+        CategoryCarousel(
             "Section Title 2",
             listOf(
-                ItemGroup(
+                CarouselCard(
                     "Group heading 2a",
-                    Item(id = 321, imageRes = 321, discount = 0.11f),
-                    Item(id = 432, imageRes = 432, discount = 0.12f),
-                    Item(id = 543, imageRes = 543, discount = 0.13f),
-                    Item(id = 654, imageRes = 654, discount = 0.14f),
+                    CarouselItem(id = 321, imageRes = 321, discount = 0.11f),
+                    CarouselItem(id = 432, imageRes = 432, discount = 0.12f),
+                    CarouselItem(id = 543, imageRes = 543, discount = 0.13f),
+                    CarouselItem(id = 654, imageRes = 654, discount = 0.14f),
                 ),
             ),
         ),
     )
 
-    private val mockTopHomeGroups: List<TopHomeGroup> = listOf(
-        TopHomeGroup(
+    private val mockHeroCarousel: List<HeroCarouselCard> = listOf(
+        HeroCarouselCard(
             "TopHome Title 1",
-            Color.Companion.Black,
+            Color.Black,
             listOf(
-                Item(id = R.drawable.item_headphones, imageRes = R.drawable.item_headphones),
-                Item(id = R.drawable.item_backpack, imageRes = R.drawable.item_backpack),
+                CarouselItem(id = R.drawable.item_headphones, imageRes = R.drawable.item_headphones),
+                CarouselItem(id = R.drawable.item_backpack, imageRes = R.drawable.item_backpack),
             )
         ),
-        TopHomeGroup(
+        HeroCarouselCard(
             "TopHome Title 2",
-            Color.Companion.White,
+            Color.White,
             listOf(
-                Item(
+                CarouselItem(
                     id = R.drawable.item_kitchen_sponge,
                     imageRes = R.drawable.item_kitchen_sponge
                 ),
-                Item(id = R.drawable.item_matcha, imageRes = R.drawable.item_matcha),
+                CarouselItem(id = R.drawable.item_matcha, imageRes = R.drawable.item_matcha),
             )
         ),
     )
@@ -76,8 +76,8 @@ class HomeViewModelTest {
 
     @BeforeEach
     fun setUp() {
-        coEvery { mockHomeRepository.getHomeSections() } returns mockSections
-        coEvery { mockHomeRepository.getTopHomeGroups() } returns mockTopHomeGroups
+        coEvery { mockHomeRepository.getCategoryCarousels() } returns mockCategoryCarousels
+        coEvery { mockHomeRepository.getHeroCarouselCards() } returns mockHeroCarousel
 
         viewModel = HomeViewModel(mockHomeRepository)
     }
@@ -90,20 +90,20 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun viewModel_Load_LoadsTopHomeAndHomeSectionsAsync() = runTest {
+    fun viewModel_Load_LoadsHeroCarouselAndCategoryCarouselsAsync() = runTest {
         viewModel.screenState.test {
             awaitItem() shouldBe HomeScreenState.Loading
 
             awaitItem().shouldBeInstanceOf<HomeScreenState.Loaded> {
-                it.topHomeGroups shouldBe mockTopHomeGroups
-                it.homeSections shouldNot beEmpty()
+                it.heroCarouselCards shouldBe mockHeroCarousel
+                it.categoryCarousels shouldNot beEmpty()
             }
         }
     }
 
     @Test
     fun viewModel_Load_EmitsErrorStateIfErred() = runTest {
-        coEvery { mockHomeRepository.getHomeSections() } throws Exception("cancellation test")
+        coEvery { mockHomeRepository.getCategoryCarousels() } throws Exception("cancellation test")
 
         viewModel.screenState.test {
             awaitItem() shouldBe HomeScreenState.Loading

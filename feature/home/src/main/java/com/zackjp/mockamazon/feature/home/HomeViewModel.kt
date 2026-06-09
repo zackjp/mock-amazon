@@ -3,8 +3,8 @@ package com.zackjp.mockamazon.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zackjp.mockamazon.shared.data.HomeRepository
-import com.zackjp.mockamazon.shared.model.ItemSection
-import com.zackjp.mockamazon.shared.model.TopHomeGroup
+import com.zackjp.mockamazon.shared.ui.model.CategoryCarousel
+import com.zackjp.mockamazon.shared.ui.model.HeroCarouselCard
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Deferred
@@ -36,19 +36,19 @@ class HomeViewModel @Inject constructor(
             _screenState.value = HomeScreenState.Loading
 
             try {
-                val topHomeDeferred: Deferred<List<TopHomeGroup>> = viewModelScope.async {
-                    homeRepository.getTopHomeGroups()
+                val heroCardsDeferred: Deferred<List<HeroCarouselCard>> = viewModelScope.async {
+                    homeRepository.getHeroCarouselCards()
                 }
 
-                val homeSectionsDeferred: Deferred<List<ItemSection>> = viewModelScope.async {
-                    homeRepository.getHomeSections()
+                val categoryCarouselsDeferred: Deferred<List<CategoryCarousel>> = viewModelScope.async {
+                    homeRepository.getCategoryCarousels()
                 }
 
-                awaitAll(topHomeDeferred, homeSectionsDeferred)
+                awaitAll(heroCardsDeferred, categoryCarouselsDeferred)
 
                 _screenState.value = HomeScreenState.Loaded(
-                    homeSections = homeSectionsDeferred.await(),
-                    topHomeGroups = topHomeDeferred.await(),
+                    categoryCarousels = categoryCarouselsDeferred.await(),
+                    heroCarouselCards = heroCardsDeferred.await(),
                 )
             } catch(e: Exception) {
                 if (e is CancellationException) throw e

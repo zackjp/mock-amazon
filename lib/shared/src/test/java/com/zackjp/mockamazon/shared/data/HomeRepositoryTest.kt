@@ -1,7 +1,9 @@
 package com.zackjp.mockamazon.shared.data
 
-import com.zackjp.mockamazon.shared.model.ItemSection
-import com.zackjp.mockamazon.shared.model.TopHomeGroup
+import com.zackjp.mockamazon.shared.model.CategoryCarouselResponse
+import com.zackjp.mockamazon.shared.model.HeroCarouselCardResponse
+import com.zackjp.mockamazon.shared.testutils.model.fake
+import com.zackjp.mockamazon.shared.ui.model.toUiModel
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -23,27 +25,31 @@ class HomeRepositoryTest {
     }
 
     @Test
-    fun getTopHomeGroups_HavingResultsFromApi_ReturnsTopHomeGroupsAsync() = runTest {
-        val topHomeGroup1 = mockk<TopHomeGroup>()
-        val topHomeGroup2 = mockk<TopHomeGroup>()
-        coEvery { homeFakeApiDataSource.fetchTopHomeGroups() } returns listOf(
-            topHomeGroup1,
-            topHomeGroup2,
+    fun getHeroCarouselCards_HavingResultsFromApi_ReturnsHeroCarouselCardsAsync() = runTest {
+        val apiResponse1 = HeroCarouselCardResponse.fake(id = 5)
+        val apiResponse2 = HeroCarouselCardResponse.fake(id = 11)
+        coEvery { homeFakeApiDataSource.fetchHeroCarouselCards() } returns listOf(
+            apiResponse1,
+            apiResponse2,
         )
 
-        repository.getTopHomeGroups() shouldBe listOf(topHomeGroup1, topHomeGroup2)
+        val expectedModel1 = apiResponse1.toUiModel()
+        val expectedModel2 = apiResponse2.toUiModel()
+        repository.getHeroCarouselCards() shouldBe listOf(expectedModel1, expectedModel2)
     }
 
     @Test
-    fun getHomeSections_HavingResultsFromApi_ReturnsHomeSectionsAsync() = runTest {
-        val homeSection1 = mockk<ItemSection>()
-        val homeSection2 = mockk<ItemSection>()
-        coEvery { homeFakeApiDataSource.fetchHomeSections() } returns listOf(
-            homeSection1,
-            homeSection2,
+    fun getCategoryCarousels_HavingResultsFromApi_ReturnsCategoryCarouselsAsync() = runTest {
+        val apiResponse1 = CategoryCarouselResponse.fake(id = 5)
+        val apiResponse2 = CategoryCarouselResponse.fake(id = 11)
+        coEvery { homeFakeApiDataSource.fetchCategoryCarousels() } returns listOf(
+            apiResponse1,
+            apiResponse2,
         )
 
-        repository.getHomeSections() shouldBe listOf(homeSection1, homeSection2)
+        val expectedModel1 = apiResponse1.toUiModel()
+        val expectedModel2 = apiResponse2.toUiModel()
+        repository.getCategoryCarousels() shouldBe listOf(expectedModel1, expectedModel2)
     }
 
 }

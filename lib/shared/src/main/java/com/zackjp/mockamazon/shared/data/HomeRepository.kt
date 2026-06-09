@@ -1,7 +1,8 @@
 package com.zackjp.mockamazon.shared.data
 
-import com.zackjp.mockamazon.shared.model.ItemSection
-import com.zackjp.mockamazon.shared.model.TopHomeGroup
+import com.zackjp.mockamazon.shared.ui.model.CategoryCarousel
+import com.zackjp.mockamazon.shared.ui.model.HeroCarouselCard
+import com.zackjp.mockamazon.shared.ui.model.toUiModel
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,8 +11,10 @@ class HomeRepository @Inject constructor(
     private val homeFakeApiDataSource: HomeFakeApiDataSource,
 ) {
 
-    suspend fun getTopHomeGroups(): List<TopHomeGroup> = homeFakeApiDataSource.fetchTopHomeGroups()
+    suspend fun getHeroCarouselCards(): List<HeroCarouselCard> =
+        homeFakeApiDataSource.fetchHeroCarouselCards().map { it.toUiModel() }
 
-    suspend fun getHomeSections(): List<ItemSection> = homeFakeApiDataSource.fetchHomeSections()
+    suspend fun getCategoryCarousels(): List<CategoryCarousel> =
+        homeFakeApiDataSource.fetchCategoryCarousels().map { it.toUiModel() }
 
 }
