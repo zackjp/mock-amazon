@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel(assistedFactory = ProductViewModel.Factory::class)
@@ -84,10 +83,4 @@ class ProductViewModel @AssistedInject constructor(
         }
     }
 
-}
-
-private inline fun <reified T> MutableStateFlow<in T>.updateIf(updateBlock: (T) -> T) {
-    update { current ->
-        if (current is T) updateBlock(current) else current
-    }
 }
