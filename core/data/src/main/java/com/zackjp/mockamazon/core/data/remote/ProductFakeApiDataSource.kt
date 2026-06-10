@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.data.remote
+package com.zackjp.mockamazon.core.data.remote
 
 import com.zackjp.mockamazon.shared.DispatcherProvider
 import com.zackjp.mockamazon.shared.data.ProductInMemoryDb

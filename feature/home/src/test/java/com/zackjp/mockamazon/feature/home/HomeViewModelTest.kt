@@ -2,7 +2,7 @@ package com.zackjp.mockamazon.feature.home
 
 import androidx.compose.ui.graphics.Color
 import app.cash.turbine.test
-import com.zackjp.mockamazon.data.HomeRepository
+import com.zackjp.mockamazon.core.data.HomeRepository
 import com.zackjp.mockamazon.model.CarouselCard
 import com.zackjp.mockamazon.model.CarouselItem
 import com.zackjp.mockamazon.model.CategoryCarousel

@@ -1,7 +1,9 @@
-package com.zackjp.mockamazon.data
+package com.zackjp.mockamazon.core.data
 
-import com.zackjp.mockamazon.data.model.toUiModel
-import com.zackjp.mockamazon.data.remote.HomeFakeApiDataSource
+import com.zackjp.mockamazon.core.data.HomeRepository
+import com.zackjp.mockamazon.core.data.HomeRepositoryImpl
+import com.zackjp.mockamazon.core.data.model.toUiModel
+import com.zackjp.mockamazon.core.data.remote.HomeFakeApiDataSource
 import com.zackjp.mockamazon.shared.model.CategoryCarouselResponse
 import com.zackjp.mockamazon.shared.model.HeroCarouselCardResponse
 import com.zackjp.mockamazon.shared.testutils.model.fake

@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.data
+package com.zackjp.mockamazon.core.data
 
 import com.zackjp.mockamazon.model.ProductInfo
 

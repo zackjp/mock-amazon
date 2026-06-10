@@ -1,6 +1,6 @@
-package com.zackjp.mockamazon.data
+package com.zackjp.mockamazon.core.data
 
-import com.zackjp.mockamazon.data.remote.ProductFakeApiDataSource
+import com.zackjp.mockamazon.core.data.remote.ProductFakeApiDataSource
 import com.zackjp.mockamazon.model.ProductInfo
 import javax.inject.Inject
 

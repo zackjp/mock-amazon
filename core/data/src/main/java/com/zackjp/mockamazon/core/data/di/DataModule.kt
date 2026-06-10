@@ -1,9 +1,9 @@
-package com.zackjp.mockamazon.data.di
+package com.zackjp.mockamazon.core.data.di
 
-import com.zackjp.mockamazon.data.HomeRepository
-import com.zackjp.mockamazon.data.HomeRepositoryImpl
-import com.zackjp.mockamazon.data.ProductRepository
-import com.zackjp.mockamazon.data.ProductRepositoryImpl
+import com.zackjp.mockamazon.core.data.HomeRepository
+import com.zackjp.mockamazon.core.data.HomeRepositoryImpl
+import com.zackjp.mockamazon.core.data.ProductRepository
+import com.zackjp.mockamazon.core.data.ProductRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.data.remote
+package com.zackjp.mockamazon.core.data.remote
 
 import androidx.compose.ui.graphics.Color
 import com.zackjp.mockamazon.shared.DispatcherProvider

@@ -1,5 +1,6 @@
-package com.zackjp.mockamazon.data.remote
+package com.zackjp.mockamazon.core.data.remote
 
+import com.zackjp.mockamazon.core.data.remote.HomeFakeApiDataSource
 import com.zackjp.mockamazon.shared.data.ProductInMemoryDb
 import com.zackjp.mockamazon.shared.testutils.TestDispatcherProvider
 import io.kotest.matchers.comparables.shouldBeGreaterThan

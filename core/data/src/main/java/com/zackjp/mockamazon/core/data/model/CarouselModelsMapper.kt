@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.data.model
+package com.zackjp.mockamazon.core.data.model
 
 import com.zackjp.mockamazon.model.CarouselCard
 import com.zackjp.mockamazon.model.CarouselItem

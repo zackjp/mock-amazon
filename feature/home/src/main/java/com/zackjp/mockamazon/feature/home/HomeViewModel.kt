@@ -2,7 +2,7 @@ package com.zackjp.mockamazon.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zackjp.mockamazon.data.HomeRepository
+import com.zackjp.mockamazon.core.data.HomeRepository
 import com.zackjp.mockamazon.model.CategoryCarousel
 import com.zackjp.mockamazon.model.HeroCarouselCard
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -2,7 +2,7 @@ package com.zackjp.mockamazon.feature.product
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zackjp.mockamazon.data.ProductRepository
+import com.zackjp.mockamazon.core.data.ProductRepository
 import com.zackjp.mockamazon.shared.data.CartRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
