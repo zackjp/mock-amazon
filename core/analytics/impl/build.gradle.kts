@@ -46,7 +46,7 @@ tasks.withType<Test> {
 dependencies {
     ksp(libs.hilt.compiler)
 
-    implementation(project(":core:analytics:api"))
+    implementation(projects.core.analytics.api)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)

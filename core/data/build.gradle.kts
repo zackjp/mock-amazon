@@ -47,9 +47,9 @@ dependencies {
 
     implementation(platform(libs.androidx.compose.bom))
 
-    implementation(project(":lib:shared"))
-    implementation(project(":core:model"))
-    testImplementation(project(":lib:shared-test-utils"))
+    implementation(projects.lib.shared)
+    implementation(projects.core.model)
+    testImplementation(projects.lib.sharedTestUtils)
 
     implementation(libs.hilt.android)
     implementation(libs.bundles.production.compose)

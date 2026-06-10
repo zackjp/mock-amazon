@@ -19,7 +19,9 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Mock Amazon"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+rootProject.name = "mock-amazon"
 include(":app")
 include(":core:analytics:api")
 include(":core:analytics:impl")

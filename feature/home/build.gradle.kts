@@ -45,10 +45,10 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     ksp(libs.hilt.compiler)
 
-    implementation(project(":core:data"))
-    implementation(project(":core:model"))
-    implementation(project(":lib:shared"))
-    testImplementation(project(":lib:shared-test-utils"))
+    implementation(projects.core.data)
+    implementation(projects.core.model)
+    implementation(projects.lib.shared)
+    testImplementation(projects.lib.sharedTestUtils)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.production.compose)

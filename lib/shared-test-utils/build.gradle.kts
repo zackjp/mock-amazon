@@ -45,8 +45,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     ksp(libs.hilt.compiler)
 
-    implementation(project(":core:model"))
-    implementation(project(":lib:shared"))
+    implementation(projects.core.model)
+    implementation(projects.lib.shared)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.production.compose)
