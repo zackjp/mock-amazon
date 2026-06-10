@@ -32,8 +32,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.zackjp.mockamazon.feature.home.view.HomeSectionView
-import com.zackjp.mockamazon.features.home.view.HomeHeroSection
+import com.zackjp.mockamazon.feature.home.view.HomeCategoryCarousel
+import com.zackjp.mockamazon.feature.home.view.HomeHeroCarousel
 import com.zackjp.mockamazon.shared.ignoreParentPadding
 import com.zackjp.mockamazon.shared.ui.screen.ErrorScreen
 import com.zackjp.mockamazon.shared.ui.screen.LoadingScreen
@@ -133,7 +133,7 @@ private fun LoadedView(
 
                     Spacer(modifier = Modifier.height(dimensionResource(SharedR.dimen.padding_medium)))
 
-                    HomeHeroSection(
+                    HomeHeroCarousel(
                         mainContentHorizontalPadding = mainContentPadding,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -149,7 +149,7 @@ private fun LoadedView(
         }
 
         items(screenState.categoryCarousels) { categoryCarousel ->
-            HomeSectionView(
+            HomeCategoryCarousel(
                 categoryCarousel = categoryCarousel,
                 mainContentHorizontalPadding = mainContentPadding,
                 modifier = Modifier.fillMaxWidth(),

@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.features.home.view
+package com.zackjp.mockamazon.feature.home.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
@@ -31,16 +31,16 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
+import com.zackjp.mockamazon.core.model.HeroCarouselCard
 import com.zackjp.mockamazon.feature.home.R
 import com.zackjp.mockamazon.feature.home.component.ItemDisplayWindow
-import com.zackjp.mockamazon.core.model.HeroCarouselCard
 import com.zackjp.mockamazon.shared.ignoreParentPadding
 import kotlin.math.abs
 import com.zackjp.mockamazon.shared.R as SharedR
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HomeHeroSection(
+fun HomeHeroCarousel(
     mainContentHorizontalPadding: Dp,
     modifier: Modifier = Modifier,
     onColorChanged: (Color) -> Unit = {},

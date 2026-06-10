@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zackjp.mockamazon.core.data.ProductRepository
 import com.zackjp.mockamazon.shared.data.CartRepository
+import com.zackjp.mockamazon.shared.updateIf
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
