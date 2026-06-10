@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.shared.ui.model
+package com.zackjp.mockamazon.model
 
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color

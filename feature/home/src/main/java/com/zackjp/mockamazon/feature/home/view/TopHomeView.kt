@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import com.zackjp.mockamazon.feature.home.R
 import com.zackjp.mockamazon.feature.home.component.ItemDisplayWindow
+import com.zackjp.mockamazon.model.HeroCarouselCard
 import com.zackjp.mockamazon.shared.ignoreParentPadding
-import com.zackjp.mockamazon.shared.ui.model.HeroCarouselCard
 import kotlin.math.abs
 import com.zackjp.mockamazon.shared.R as SharedR
 

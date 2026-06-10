@@ -31,7 +31,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.zackjp.mockamazon.feature.home.model.DisplayableItem
 import com.zackjp.mockamazon.feature.home.model.toDisplayableItem
-import com.zackjp.mockamazon.shared.ui.model.CarouselItem
+import com.zackjp.mockamazon.model.CarouselItem
 import kotlin.math.roundToInt
 import com.zackjp.mockamazon.shared.R as SharedR
 

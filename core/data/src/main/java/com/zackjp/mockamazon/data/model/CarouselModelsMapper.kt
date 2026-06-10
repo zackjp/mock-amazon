@@ -1,5 +1,9 @@
-package com.zackjp.mockamazon.shared.ui.model
+package com.zackjp.mockamazon.data.model
 
+import com.zackjp.mockamazon.model.CarouselCard
+import com.zackjp.mockamazon.model.CarouselItem
+import com.zackjp.mockamazon.model.CategoryCarousel
+import com.zackjp.mockamazon.model.HeroCarouselCard
 import com.zackjp.mockamazon.shared.model.CarouselCardResponse
 import com.zackjp.mockamazon.shared.model.CarouselItemResponse
 import com.zackjp.mockamazon.shared.model.CategoryCarouselResponse

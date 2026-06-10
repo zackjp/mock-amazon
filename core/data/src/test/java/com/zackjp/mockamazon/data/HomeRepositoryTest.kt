@@ -1,9 +1,10 @@
-package com.zackjp.mockamazon.shared.data
+package com.zackjp.mockamazon.data
 
+import com.zackjp.mockamazon.data.model.toUiModel
+import com.zackjp.mockamazon.data.HomeFakeApiDataSource
 import com.zackjp.mockamazon.shared.model.CategoryCarouselResponse
 import com.zackjp.mockamazon.shared.model.HeroCarouselCardResponse
 import com.zackjp.mockamazon.shared.testutils.model.fake
-import com.zackjp.mockamazon.shared.ui.model.toUiModel
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk

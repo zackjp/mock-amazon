@@ -23,6 +23,8 @@ rootProject.name = "Mock Amazon"
 include(":app")
 include(":core:analytics:api")
 include(":core:analytics:impl")
+include(":core:data")
+include(":core:model")
 include(":feature:checkout")
 include(":feature:home")
 include(":lib:shared")

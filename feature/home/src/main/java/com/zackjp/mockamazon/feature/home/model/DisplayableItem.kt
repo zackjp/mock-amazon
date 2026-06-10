@@ -1,7 +1,7 @@
 package com.zackjp.mockamazon.feature.home.model
 
 import androidx.annotation.DrawableRes
-import com.zackjp.mockamazon.shared.ui.model.CarouselItem
+import com.zackjp.mockamazon.model.CarouselItem
 
 data class DisplayableItem(
     @DrawableRes val imageId: Int,

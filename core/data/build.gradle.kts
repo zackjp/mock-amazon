@@ -2,15 +2,16 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.serialization)
 
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
 }
 
 android {
-    namespace = "com.zackjp.mockamazon.feature.home"
-    compileSdk = 36
+    namespace = "com.zackjp.mockamazon.data"
+    compileSdk {
+        version = release(36)
+    }
 
     defaultConfig {
         minSdk = 26
@@ -42,29 +43,17 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
     ksp(libs.hilt.compiler)
 
-    implementation(project(":core:data"))
-    implementation(project(":core:model"))
+    implementation(platform(libs.androidx.compose.bom))
+
     implementation(project(":lib:shared"))
+    implementation(project(":core:model"))
     testImplementation(project(":lib:shared-test-utils"))
 
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.bundles.production.compose)
-    implementation(libs.bundles.orbit.production)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.navigation3.runtime)
-    implementation(libs.androidx.navigation3.ui)
     implementation(libs.hilt.android)
+    implementation(libs.bundles.production.compose)
     implementation(libs.kotlinx.serialization.json)
     testRuntimeOnly(libs.junit.jupiter.engine)
-    testImplementation(libs.bundles.orbit.test)
     testImplementation(libs.bundles.test.unit)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.bundles.androidtest.common)
-    debugImplementation(libs.bundles.debug.compose)
 }

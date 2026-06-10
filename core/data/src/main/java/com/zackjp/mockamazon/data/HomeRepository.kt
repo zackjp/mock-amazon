@@ -1,8 +1,9 @@
-package com.zackjp.mockamazon.shared.data
+package com.zackjp.mockamazon.data
 
-import com.zackjp.mockamazon.shared.ui.model.CategoryCarousel
-import com.zackjp.mockamazon.shared.ui.model.HeroCarouselCard
-import com.zackjp.mockamazon.shared.ui.model.toUiModel
+import com.zackjp.mockamazon.data.model.toUiModel
+import com.zackjp.mockamazon.data.HomeFakeApiDataSource
+import com.zackjp.mockamazon.model.CategoryCarousel
+import com.zackjp.mockamazon.model.HeroCarouselCard
 import javax.inject.Inject
 import javax.inject.Singleton
 
