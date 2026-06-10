@@ -1,7 +1,7 @@
 package com.zackjp.mockamazon.feature.home
 
-import com.zackjp.mockamazon.model.CategoryCarousel
-import com.zackjp.mockamazon.model.HeroCarouselCard
+import com.zackjp.mockamazon.core.model.CategoryCarousel
+import com.zackjp.mockamazon.core.model.HeroCarouselCard
 
 sealed class HomeScreenState() {
     data object Error : HomeScreenState()

@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.model
+package com.zackjp.mockamazon.core.model
 
 import androidx.annotation.DrawableRes
 import java.time.LocalDate

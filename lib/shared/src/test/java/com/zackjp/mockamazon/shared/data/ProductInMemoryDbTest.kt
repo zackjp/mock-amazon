@@ -1,7 +1,7 @@
 package com.zackjp.mockamazon.shared.data
 
-import com.zackjp.mockamazon.model.ProductCategory
-import com.zackjp.mockamazon.model.ProductInfo
+import com.zackjp.mockamazon.core.model.ProductCategory
+import com.zackjp.mockamazon.core.model.ProductInfo
 import com.zackjp.mockamazon.shared.testutils.model.fakeInfo
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.withClue

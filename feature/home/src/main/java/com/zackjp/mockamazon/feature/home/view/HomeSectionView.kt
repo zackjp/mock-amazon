@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.zackjp.mockamazon.feature.home.R
 import com.zackjp.mockamazon.feature.home.component.ItemDisplayWindow
-import com.zackjp.mockamazon.model.CarouselCard
-import com.zackjp.mockamazon.model.CategoryCarousel
+import com.zackjp.mockamazon.core.model.CarouselCard
+import com.zackjp.mockamazon.core.model.CategoryCarousel
 import com.zackjp.mockamazon.shared.ignoreParentPadding
 import com.zackjp.mockamazon.shared.theme.AmazonOutlineLight
 import com.zackjp.mockamazon.shared.R as SharedR

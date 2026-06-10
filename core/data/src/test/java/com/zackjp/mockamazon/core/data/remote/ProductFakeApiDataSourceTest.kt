@@ -1,7 +1,6 @@
 package com.zackjp.mockamazon.core.data.remote
 
-import com.zackjp.mockamazon.core.data.remote.ProductFakeApiDataSource
-import com.zackjp.mockamazon.model.ProductInfo
+import com.zackjp.mockamazon.core.model.ProductInfo
 import com.zackjp.mockamazon.shared.data.ProductInMemoryDb
 import com.zackjp.mockamazon.shared.testutils.TestDispatcherProvider
 import com.zackjp.mockamazon.shared.testutils.model.fakeInfo

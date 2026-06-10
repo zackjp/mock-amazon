@@ -1,9 +1,9 @@
 package com.zackjp.mockamazon.core.data.model
 
-import com.zackjp.mockamazon.model.CarouselCard
-import com.zackjp.mockamazon.model.CarouselItem
-import com.zackjp.mockamazon.model.CategoryCarousel
-import com.zackjp.mockamazon.model.HeroCarouselCard
+import com.zackjp.mockamazon.core.model.CarouselCard
+import com.zackjp.mockamazon.core.model.CarouselItem
+import com.zackjp.mockamazon.core.model.CategoryCarousel
+import com.zackjp.mockamazon.core.model.HeroCarouselCard
 import com.zackjp.mockamazon.shared.model.CarouselCardResponse
 import com.zackjp.mockamazon.shared.model.CarouselItemResponse
 import com.zackjp.mockamazon.shared.model.CategoryCarouselResponse

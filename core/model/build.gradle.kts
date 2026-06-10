@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.zackjp.mockamazon.model"
+    namespace = "com.zackjp.mockamazon.core.model"
     compileSdk {
         version = release(36)
     }

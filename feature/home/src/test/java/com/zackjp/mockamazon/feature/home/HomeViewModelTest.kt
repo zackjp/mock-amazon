@@ -3,10 +3,10 @@ package com.zackjp.mockamazon.feature.home
 import androidx.compose.ui.graphics.Color
 import app.cash.turbine.test
 import com.zackjp.mockamazon.core.data.HomeRepository
-import com.zackjp.mockamazon.model.CarouselCard
-import com.zackjp.mockamazon.model.CarouselItem
-import com.zackjp.mockamazon.model.CategoryCarousel
-import com.zackjp.mockamazon.model.HeroCarouselCard
+import com.zackjp.mockamazon.core.model.CarouselCard
+import com.zackjp.mockamazon.core.model.CarouselItem
+import com.zackjp.mockamazon.core.model.CategoryCarousel
+import com.zackjp.mockamazon.core.model.HeroCarouselCard
 import com.zackjp.mockamazon.shared.R
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.shouldBe

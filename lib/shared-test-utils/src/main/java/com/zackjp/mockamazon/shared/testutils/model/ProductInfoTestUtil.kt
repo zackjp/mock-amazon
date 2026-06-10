@@ -1,7 +1,7 @@
 package com.zackjp.mockamazon.shared.testutils.model
 
-import com.zackjp.mockamazon.model.ProductCategory
-import com.zackjp.mockamazon.model.ProductInfo
+import com.zackjp.mockamazon.core.model.ProductCategory
+import com.zackjp.mockamazon.core.model.ProductInfo
 
 
 fun ProductInfo.Companion.fakeInfo(

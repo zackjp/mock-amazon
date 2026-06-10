@@ -3,8 +3,8 @@ package com.zackjp.mockamazon.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zackjp.mockamazon.core.data.HomeRepository
-import com.zackjp.mockamazon.model.CategoryCarousel
-import com.zackjp.mockamazon.model.HeroCarouselCard
+import com.zackjp.mockamazon.core.model.CategoryCarousel
+import com.zackjp.mockamazon.core.model.HeroCarouselCard
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Deferred

@@ -1,6 +1,6 @@
 package com.zackjp.mockamazon.shared.data
 
-import com.zackjp.mockamazon.model.ProductInfo
+import com.zackjp.mockamazon.core.model.ProductInfo
 import com.zackjp.mockamazon.shared.model.Cart
 import com.zackjp.mockamazon.shared.model.CartItem
 import com.zackjp.mockamazon.shared.model.toCartItem

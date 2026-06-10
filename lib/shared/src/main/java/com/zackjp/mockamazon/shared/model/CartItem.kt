@@ -1,7 +1,7 @@
 package com.zackjp.mockamazon.shared.model
 
 import androidx.annotation.DrawableRes
-import com.zackjp.mockamazon.model.ProductInfo
+import com.zackjp.mockamazon.core.model.ProductInfo
 import java.time.LocalDate
 
 data class Cart(

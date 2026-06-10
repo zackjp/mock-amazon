@@ -1,6 +1,6 @@
 package com.zackjp.mockamazon.shared.data
 
-import com.zackjp.mockamazon.model.ProductInfo
+import com.zackjp.mockamazon.core.model.ProductInfo
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 import javax.inject.Singleton

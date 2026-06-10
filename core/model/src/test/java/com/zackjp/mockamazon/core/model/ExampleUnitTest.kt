@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.model
+package com.zackjp.mockamazon.core.model
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

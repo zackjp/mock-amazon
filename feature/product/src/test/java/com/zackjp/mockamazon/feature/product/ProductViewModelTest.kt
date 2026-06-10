@@ -2,7 +2,7 @@ package com.zackjp.mockamazon.feature.product
 
 import app.cash.turbine.test
 import com.zackjp.mockamazon.core.data.ProductRepository
-import com.zackjp.mockamazon.model.ProductInfo
+import com.zackjp.mockamazon.core.model.ProductInfo
 import com.zackjp.mockamazon.shared.data.CartRepository
 import com.zackjp.mockamazon.shared.testutils.SetMainCoroutineDispatcher
 import com.zackjp.mockamazon.shared.testutils.model.fakeInfo

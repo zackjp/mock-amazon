@@ -2,8 +2,8 @@ package com.zackjp.mockamazon.core.data
 
 import com.zackjp.mockamazon.core.data.model.toUiModel
 import com.zackjp.mockamazon.core.data.remote.HomeFakeApiDataSource
-import com.zackjp.mockamazon.model.CategoryCarousel
-import com.zackjp.mockamazon.model.HeroCarouselCard
+import com.zackjp.mockamazon.core.model.CategoryCarousel
+import com.zackjp.mockamazon.core.model.HeroCarouselCard
 import javax.inject.Inject
 import javax.inject.Singleton
 

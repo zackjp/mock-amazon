@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.em
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.zackjp.mockamazon.model.ProductInfo
+import com.zackjp.mockamazon.core.model.ProductInfo
 import com.zackjp.mockamazon.shared.theme.AmazonOutlineLight
 import com.zackjp.mockamazon.shared.theme.Gray90
 import com.zackjp.mockamazon.shared.ui.CartItemQuantityChip

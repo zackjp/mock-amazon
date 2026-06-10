@@ -1,6 +1,6 @@
 package com.zackjp.mockamazon.feature.search
 
-import com.zackjp.mockamazon.model.ProductInfo
+import com.zackjp.mockamazon.core.model.ProductInfo
 import com.zackjp.mockamazon.shared.model.CartItem
 
 sealed class SearchResultsScreenState {

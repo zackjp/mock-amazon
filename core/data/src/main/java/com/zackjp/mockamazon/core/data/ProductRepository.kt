@@ -1,6 +1,6 @@
 package com.zackjp.mockamazon.core.data
 
-import com.zackjp.mockamazon.model.ProductInfo
+import com.zackjp.mockamazon.core.model.ProductInfo
 
 interface ProductRepository {
 

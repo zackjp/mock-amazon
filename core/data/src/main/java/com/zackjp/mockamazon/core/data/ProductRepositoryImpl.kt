@@ -1,7 +1,7 @@
 package com.zackjp.mockamazon.core.data
 
 import com.zackjp.mockamazon.core.data.remote.ProductFakeApiDataSource
-import com.zackjp.mockamazon.model.ProductInfo
+import com.zackjp.mockamazon.core.model.ProductInfo
 import javax.inject.Inject
 
 internal class ProductRepositoryImpl @Inject constructor(

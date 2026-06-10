@@ -2,7 +2,7 @@ package com.zackjp.mockamazon.core.data.remote
 
 import com.zackjp.mockamazon.shared.DispatcherProvider
 import com.zackjp.mockamazon.shared.data.ProductInMemoryDb
-import com.zackjp.mockamazon.model.ProductInfo
+import com.zackjp.mockamazon.core.model.ProductInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
