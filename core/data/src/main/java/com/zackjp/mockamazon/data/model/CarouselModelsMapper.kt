@@ -10,20 +10,20 @@ import com.zackjp.mockamazon.shared.model.CategoryCarouselResponse
 import com.zackjp.mockamazon.shared.model.HeroCarouselCardResponse
 
 
-fun HeroCarouselCardResponse.toUiModel(): HeroCarouselCard =
+internal fun HeroCarouselCardResponse.toUiModel(): HeroCarouselCard =
     HeroCarouselCard(
         title = this.title,
         background = this.background,
         carouselItems = this.carouselItemResponses.map { it.toUiModel() },
     )
 
-fun CategoryCarouselResponse.toUiModel(): CategoryCarousel =
+internal fun CategoryCarouselResponse.toUiModel(): CategoryCarousel =
     CategoryCarousel(
         title = this.title,
         carouselCards = this.carouselCardResponse.map { it.toUiModel() },
     )
 
-fun CarouselCardResponse.toUiModel(): CarouselCard =
+internal fun CarouselCardResponse.toUiModel(): CarouselCard =
     CarouselCard(
         title = this.title,
         rec1 = this.rec1.toUiModel(),
@@ -32,7 +32,7 @@ fun CarouselCardResponse.toUiModel(): CarouselCard =
         rec4 = this.rec4.toUiModel(),
     )
 
-fun CarouselItemResponse.toUiModel(): CarouselItem =
+internal fun CarouselItemResponse.toUiModel(): CarouselItem =
     CarouselItem(
         id = this.id,
         imageRes = this.imageRes,

@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.data
+package com.zackjp.mockamazon.data.remote
 
 import androidx.compose.ui.graphics.Color
 import com.zackjp.mockamazon.shared.DispatcherProvider
@@ -15,7 +15,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class HomeFakeApiDataSource @Inject constructor(
+internal class HomeFakeApiDataSource @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
     private val productInMemoryDb: ProductInMemoryDb,
 ) {

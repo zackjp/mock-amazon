@@ -1,7 +1,7 @@
 package com.zackjp.mockamazon.data
 
 import com.zackjp.mockamazon.data.model.toUiModel
-import com.zackjp.mockamazon.data.HomeFakeApiDataSource
+import com.zackjp.mockamazon.data.remote.HomeFakeApiDataSource
 import com.zackjp.mockamazon.shared.model.CategoryCarouselResponse
 import com.zackjp.mockamazon.shared.model.HeroCarouselCardResponse
 import com.zackjp.mockamazon.shared.testutils.model.fake
@@ -12,7 +12,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class HomeRepositoryTest {
+class HomeRepositoryImplTest {
 
     private val homeFakeApiDataSource = mockk<HomeFakeApiDataSource>()
 
@@ -20,7 +20,7 @@ class HomeRepositoryTest {
 
     @BeforeEach
     fun setUp() {
-        repository = HomeRepository(
+        repository = HomeRepositoryImpl(
             homeFakeApiDataSource = homeFakeApiDataSource,
         )
     }
