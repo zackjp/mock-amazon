@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.shared.model
+package com.zackjp.mockamazon.model
 
 import androidx.annotation.DrawableRes
 import java.time.LocalDate
@@ -16,7 +16,7 @@ data class ProductInfo(
     val category: ProductCategory,
     val discount: Float? = null,
 ) {
-    companion object
+    companion object // for utility functions
 }
 
 enum class ProductCategory() {

@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import com.zackjp.mockamazon.model.CarouselItem
 
 data class DisplayableItem(
-    @DrawableRes val imageId: Int,
+    @param:DrawableRes val imageId: Int,
     val discount: Float? = null,
 )
 

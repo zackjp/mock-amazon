@@ -1,12 +1,13 @@
-package com.zackjp.mockamazon.shared.data
+package com.zackjp.mockamazon.data.remote
 
 import com.zackjp.mockamazon.shared.DispatcherProvider
-import com.zackjp.mockamazon.shared.model.ProductInfo
+import com.zackjp.mockamazon.shared.data.ProductInMemoryDb
+import com.zackjp.mockamazon.model.ProductInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class ProductFakeApiDataSource @Inject constructor(
+internal class ProductFakeApiDataSource @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
     private val productInMemoryDb: ProductInMemoryDb,
 ) {

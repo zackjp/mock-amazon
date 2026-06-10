@@ -1,6 +1,7 @@
-package com.zackjp.mockamazon.shared.data
+package com.zackjp.mockamazon.data.remote
 
-import com.zackjp.mockamazon.shared.model.ProductInfo
+import com.zackjp.mockamazon.model.ProductInfo
+import com.zackjp.mockamazon.shared.data.ProductInMemoryDb
 import com.zackjp.mockamazon.shared.testutils.TestDispatcherProvider
 import com.zackjp.mockamazon.shared.testutils.model.fakeInfo
 import io.kotest.matchers.shouldBe
@@ -19,10 +20,10 @@ class ProductFakeApiDataSourceTest {
     private val testDispatcherProvider = TestDispatcherProvider()
     private val testDispatcher = testDispatcherProvider.default
 
-    private val expectedProductInfo = ProductInfo.fakeInfo(VALID_PRODUCT_ID)
+    private val expectedProductInfo = ProductInfo.Companion.fakeInfo(VALID_PRODUCT_ID)
     private val expectedSimilarProducts = listOf(
-        ProductInfo.fakeInfo(100),
-        ProductInfo.fakeInfo(200),
+        ProductInfo.Companion.fakeInfo(100),
+        ProductInfo.Companion.fakeInfo(200),
     )
 
     private lateinit var dataSource: ProductFakeApiDataSource

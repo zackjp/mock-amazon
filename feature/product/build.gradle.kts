@@ -45,6 +45,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     ksp(libs.hilt.compiler)
 
+    implementation(project(":core:data"))
+    implementation(project(":core:model"))
     implementation(project(":lib:shared"))
     testImplementation(project(":lib:shared-test-utils"))
 

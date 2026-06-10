@@ -1,8 +1,8 @@
 package com.zackjp.mockamazon.shared.data
 
+import com.zackjp.mockamazon.model.ProductInfo
 import com.zackjp.mockamazon.shared.model.Cart
 import com.zackjp.mockamazon.shared.model.CartItem
-import com.zackjp.mockamazon.shared.model.ProductInfo
 import com.zackjp.mockamazon.shared.model.toCartItem
 import com.zackjp.mockamazon.shared.testutils.model.fakeInfo
 import io.kotest.matchers.shouldBe

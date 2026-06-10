@@ -1,10 +1,10 @@
 package com.zackjp.mockamazon.feature.search
 
+import com.zackjp.mockamazon.model.ProductInfo
 import com.zackjp.mockamazon.shared.data.CartRepository
 import com.zackjp.mockamazon.shared.data.SearchApiDataSource
 import com.zackjp.mockamazon.shared.model.Cart
 import com.zackjp.mockamazon.shared.model.CartItem
-import com.zackjp.mockamazon.shared.model.ProductInfo
 import com.zackjp.mockamazon.shared.model.toCartItem
 import com.zackjp.mockamazon.shared.testutils.model.fakeCart
 import com.zackjp.mockamazon.shared.testutils.model.fakeInfo
@@ -29,13 +29,13 @@ class SearchResultsViewModelTest {
     private companion object {
         private const val VALID_SEARCH_STRING = "valid search string"
         private const val THROWING_SEARCH_STRING = "throwing search string"
-        private val PRODUCT_IN_CART = ProductInfo.Companion.fakeInfo(123)
-        private val PRODUCT_NOT_IN_CART = ProductInfo.Companion.fakeInfo(456)
+        private val PRODUCT_IN_CART = ProductInfo.fakeInfo(123)
+        private val PRODUCT_NOT_IN_CART = ProductInfo.fakeInfo(456)
         private val CART_ITEM = PRODUCT_IN_CART.toCartItem(quantity = 7)
 
         private val expectedSearchResults = listOf(
-            ProductInfo.Companion.fakeInfo(123),
-            ProductInfo.Companion.fakeInfo(456),
+            ProductInfo.fakeInfo(123),
+            ProductInfo.fakeInfo(456),
         )
 
         private val LOADED_STATE = SearchResultsScreenState.Loaded(

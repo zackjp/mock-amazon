@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zackjp.mockamazon.feature.product.R
+import com.zackjp.mockamazon.model.ProductInfo
 import com.zackjp.mockamazon.shared.ignoreParentPadding
-import com.zackjp.mockamazon.shared.model.ProductInfo
 import com.zackjp.mockamazon.shared.theme.LinkBlue
 import com.zackjp.mockamazon.shared.ui.getRatingStarsTextInfo
 

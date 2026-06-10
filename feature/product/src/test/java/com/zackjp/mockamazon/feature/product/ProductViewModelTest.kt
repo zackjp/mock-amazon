@@ -1,9 +1,9 @@
 package com.zackjp.mockamazon.feature.product
 
 import app.cash.turbine.test
+import com.zackjp.mockamazon.data.ProductRepository
+import com.zackjp.mockamazon.model.ProductInfo
 import com.zackjp.mockamazon.shared.data.CartRepository
-import com.zackjp.mockamazon.shared.data.ProductRepository
-import com.zackjp.mockamazon.shared.model.ProductInfo
 import com.zackjp.mockamazon.shared.testutils.SetMainCoroutineDispatcher
 import com.zackjp.mockamazon.shared.testutils.model.fakeInfo
 import io.kotest.matchers.shouldBe
@@ -16,7 +16,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -35,10 +34,10 @@ class ProductViewModelTest {
 
     private val cartRepository = mockk<CartRepository>()
     private val productRepository = mockk<ProductRepository>()
-    private val expectedProductInfo = ProductInfo.Companion.fakeInfo(VALID_PRODUCT_ID)
+    private val expectedProductInfo = ProductInfo.fakeInfo(VALID_PRODUCT_ID)
     private val expectedSimilarProducts = listOf(
-        ProductInfo.Companion.fakeInfo(VALID_PRODUCT_ID + 1),
-        ProductInfo.Companion.fakeInfo(VALID_PRODUCT_ID + 2),
+        ProductInfo.fakeInfo(VALID_PRODUCT_ID + 1),
+        ProductInfo.fakeInfo(VALID_PRODUCT_ID + 2),
     )
 
     private lateinit var viewModel: ProductViewModel

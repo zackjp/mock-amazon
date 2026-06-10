@@ -8,7 +8,7 @@ import com.zackjp.mockamazon.shared.model.CarouselCardResponse
 import com.zackjp.mockamazon.shared.model.CarouselItemResponse
 import com.zackjp.mockamazon.shared.model.CategoryCarouselResponse
 import com.zackjp.mockamazon.shared.model.HeroCarouselCardResponse
-import com.zackjp.mockamazon.shared.model.ProductInfo
+import com.zackjp.mockamazon.model.ProductInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

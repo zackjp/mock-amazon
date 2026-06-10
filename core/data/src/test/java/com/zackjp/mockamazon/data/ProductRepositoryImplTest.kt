@@ -1,6 +1,7 @@
-package com.zackjp.mockamazon.shared.data
+package com.zackjp.mockamazon.data
 
-import com.zackjp.mockamazon.shared.model.ProductInfo
+import com.zackjp.mockamazon.data.remote.ProductFakeApiDataSource
+import com.zackjp.mockamazon.model.ProductInfo
 import com.zackjp.mockamazon.shared.testutils.model.fakeInfo
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
@@ -9,7 +10,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class ProductRepositoryTest {
+class ProductRepositoryImplTest {
 
     private companion object {
         private val VALID_PRODUCT_ID = 123
@@ -21,7 +22,7 @@ class ProductRepositoryTest {
 
     @BeforeEach
     fun setUp() {
-        repository = ProductRepository(productFakeApiDataSource)
+        repository = ProductRepositoryImpl(productFakeApiDataSource)
     }
 
     @Test

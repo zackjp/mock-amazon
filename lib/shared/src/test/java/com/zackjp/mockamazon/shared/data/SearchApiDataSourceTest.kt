@@ -1,6 +1,6 @@
 package com.zackjp.mockamazon.shared.data
 
-import com.zackjp.mockamazon.shared.model.ProductInfo
+import com.zackjp.mockamazon.model.ProductInfo
 import com.zackjp.mockamazon.shared.testutils.model.fakeInfo
 import io.kotest.matchers.shouldBe
 import io.mockk.every

@@ -1,6 +1,6 @@
 package com.zackjp.mockamazon.feature.product
 
-import com.zackjp.mockamazon.shared.model.ProductInfo
+import com.zackjp.mockamazon.model.ProductInfo
 
 sealed class ProductUiState {
     data object Loading : ProductUiState()

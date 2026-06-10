@@ -2,6 +2,8 @@ package com.zackjp.mockamazon.data.di
 
 import com.zackjp.mockamazon.data.HomeRepository
 import com.zackjp.mockamazon.data.HomeRepositoryImpl
+import com.zackjp.mockamazon.data.ProductRepository
+import com.zackjp.mockamazon.data.ProductRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,5 +15,8 @@ internal abstract class DataModule {
 
     @Binds
     abstract fun bindHomeRepository(impl: HomeRepositoryImpl): HomeRepository
+
+    @Binds
+    abstract fun bindProductRepository(impl: ProductRepositoryImpl): ProductRepository
 
 }
