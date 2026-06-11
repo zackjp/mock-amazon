@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.zackjp.mockamazon.feature.cart"
+    namespace = "com.zackjp.mockamazon.feature.cart.impl"
     compileSdk = 36
 
     defaultConfig {

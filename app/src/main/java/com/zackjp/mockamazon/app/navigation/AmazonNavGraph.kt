@@ -17,7 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.zackjp.mockamazon.checkout.ui.CheckoutReviewScreenRoot
-import com.zackjp.mockamazon.feature.cart.CartScreenRoot
+import com.zackjp.mockamazon.feature.cart.impl.CartScreenRoot
 import com.zackjp.mockamazon.feature.home.HomeScreenRoot
 import com.zackjp.mockamazon.feature.product.ProductScreenRoot
 import com.zackjp.mockamazon.feature.product.ProductViewModel

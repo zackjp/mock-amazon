@@ -52,7 +52,7 @@ dependencies {
 
     implementation(projects.core.analytics.api)
     implementation(projects.core.analytics.impl)
-    implementation(projects.feature.cart)
+    implementation(projects.feature.cart.impl)
     implementation(projects.feature.checkout)
     implementation(projects.feature.home)
     implementation(projects.feature.product)

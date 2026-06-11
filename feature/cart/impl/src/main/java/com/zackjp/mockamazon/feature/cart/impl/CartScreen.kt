@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.feature.cart
+package com.zackjp.mockamazon.feature.cart.impl
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -1,4 +1,4 @@
-package com.zackjp.mockamazon.feature.cart
+package com.zackjp.mockamazon.feature.cart.impl
 
 import com.zackjp.mockamazon.shared.model.CartItem
 
