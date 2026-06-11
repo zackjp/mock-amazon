@@ -2,10 +2,10 @@ package com.zackjp.mockamazon.checkout.com.zackjp.mockamazon.checkout.ui
 
 import com.zackjp.mockamazon.checkout.ui.CheckoutReviewViewModel
 import com.zackjp.mockamazon.checkout.ui.model.CheckoutState
-import com.zackjp.mockamazon.shared.data.CartRepository
+import com.zackjp.mockamazon.core.model.Cart
+import com.zackjp.mockamazon.core.model.CartItem
+import com.zackjp.mockamazon.feature.cart.api.data.CartRepository
 import com.zackjp.mockamazon.shared.data.UserRepository
-import com.zackjp.mockamazon.shared.model.Cart
-import com.zackjp.mockamazon.shared.model.CartItem
 import com.zackjp.mockamazon.shared.model.User
 import com.zackjp.mockamazon.shared.testutils.model.fakeCart
 import com.zackjp.mockamazon.shared.testutils.model.fakeItem

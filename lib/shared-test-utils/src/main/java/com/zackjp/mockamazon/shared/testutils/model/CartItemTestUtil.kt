@@ -1,7 +1,7 @@
 package com.zackjp.mockamazon.shared.testutils.model
 
-import com.zackjp.mockamazon.shared.model.Cart
-import com.zackjp.mockamazon.shared.model.CartItem
+import com.zackjp.mockamazon.core.model.Cart
+import com.zackjp.mockamazon.core.model.CartItem
 import java.time.LocalDate
 
 fun Cart.Companion.fakeCart(cartItems: List<CartItem>) = Cart(

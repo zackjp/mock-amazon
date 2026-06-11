@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zackjp.mockamazon.checkout.ui.model.CheckoutEffect
 import com.zackjp.mockamazon.checkout.ui.model.CheckoutState
-import com.zackjp.mockamazon.shared.data.CartRepository
+import com.zackjp.mockamazon.feature.cart.api.data.CartRepository
 import com.zackjp.mockamazon.shared.data.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException

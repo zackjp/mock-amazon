@@ -1,7 +1,8 @@
-package com.zackjp.mockamazon.shared.data
+package com.zackjp.mockamazon.feature.cart.impl.datasource
 
 import com.zackjp.mockamazon.core.model.ProductInfo
-import com.zackjp.mockamazon.shared.model.toCartItem
+import com.zackjp.mockamazon.core.model.toCartItem
+import com.zackjp.mockamazon.shared.data.ProductInMemoryDb
 import com.zackjp.mockamazon.shared.testutils.TestDispatcherProvider
 import com.zackjp.mockamazon.shared.testutils.model.fakeInfo
 import io.kotest.matchers.collections.shouldContainExactly
@@ -17,8 +18,8 @@ import org.junit.jupiter.api.Test
 class CartFakeApiDataSourceTest {
 
     private companion object {
-        private val PRODUCT_IN_CART = ProductInfo.fakeInfo(123)
-        private val PRODUCT_NOT_IN_CART = ProductInfo.fakeInfo(456)
+        private val PRODUCT_IN_CART = ProductInfo.Companion.fakeInfo(123)
+        private val PRODUCT_NOT_IN_CART = ProductInfo.Companion.fakeInfo(456)
         private const val PRODUCT_IN_CART_QUANTITY = 7
         private val EXISTING_CART_ITEMS =
             listOf(PRODUCT_IN_CART.toCartItem(quantity = PRODUCT_IN_CART_QUANTITY))
@@ -53,7 +54,7 @@ class CartFakeApiDataSourceTest {
 
     @Test
     fun addToCart_WithValidProductId_ReturnsTrue() = runTest(testDispatcher) {
-        val productInfo = ProductInfo.fakeInfo(123)
+        val productInfo = ProductInfo.Companion.fakeInfo(123)
         every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
 
         dataSource.addToCart(productInfo.id) shouldBe true
@@ -69,9 +70,9 @@ class CartFakeApiDataSourceTest {
     @Test
     fun addToCart_WithDistinctValidProductIds_ReturnsCartItems() = runTest(testDispatcher) {
         val products = listOf(
-            ProductInfo.fakeInfo(11),
-            ProductInfo.fakeInfo(13),
-            ProductInfo.fakeInfo(17),
+            ProductInfo.Companion.fakeInfo(11),
+            ProductInfo.Companion.fakeInfo(13),
+            ProductInfo.Companion.fakeInfo(17),
         )
         products.forEach {
             every { productInMemoryDb.getProductById(it.id) } returns it
@@ -89,8 +90,8 @@ class CartFakeApiDataSourceTest {
     fun addToCart_WithRepeatedValidProductIds_ReturnsCartItemsWithQuantity() =
         runTest(testDispatcher) {
             val products = listOf(
-                ProductInfo.fakeInfo(11),
-                ProductInfo.fakeInfo(13),
+                ProductInfo.Companion.fakeInfo(11),
+                ProductInfo.Companion.fakeInfo(13),
             )
             products.forEach {
                 every { productInMemoryDb.getProductById(it.id) } returns it
@@ -125,14 +126,15 @@ class CartFakeApiDataSourceTest {
     }
 
     @Test
-    fun setQuantity_WithPositiveQuantityWhenProductNotInCart_SetsQuantity() = runTest(testDispatcher) {
-        val product = PRODUCT_NOT_IN_CART
-        val quantity = 13
+    fun setQuantity_WithPositiveQuantityWhenProductNotInCart_SetsQuantity() =
+        runTest(testDispatcher) {
+            val product = PRODUCT_NOT_IN_CART
+            val quantity = 13
 
-        dataSource.setQuantity(product.id, quantity)
+            dataSource.setQuantity(product.id, quantity)
 
-        dataSource.getCart().cartItems shouldContainExactly listOf(product.toCartItem(quantity = quantity)) + EXISTING_CART_ITEMS
-    }
+            dataSource.getCart().cartItems shouldContainExactly listOf(product.toCartItem(quantity = quantity)) + EXISTING_CART_ITEMS
+        }
 
     @Test
     fun setQuantity_WithPositiveQuantityWhenProductInCart_SetsQuantity() = runTest(testDispatcher) {
@@ -145,14 +147,15 @@ class CartFakeApiDataSourceTest {
     }
 
     @Test
-    fun setQuantity_WithNegativeQuantityWhenProductNotInCart_DoesNothing() = runTest(testDispatcher) {
-        val product = PRODUCT_NOT_IN_CART
-        val quantity = -3
+    fun setQuantity_WithNegativeQuantityWhenProductNotInCart_DoesNothing() =
+        runTest(testDispatcher) {
+            val product = PRODUCT_NOT_IN_CART
+            val quantity = -3
 
-        dataSource.setQuantity(product.id, quantity)
+            dataSource.setQuantity(product.id, quantity)
 
-        dataSource.getCart().cartItems shouldContainExactly EXISTING_CART_ITEMS
-    }
+            dataSource.getCart().cartItems shouldContainExactly EXISTING_CART_ITEMS
+        }
 
     @Test
     fun setQuantity_WithNegativeQuantityWhenProductInCart_RemovesItem() = runTest(testDispatcher) {
@@ -176,9 +179,9 @@ class CartFakeApiDataSourceTest {
     @Test
     fun getCart_ReturnsCartItemsInOrderWithMostRecentFirst() = runTest(testDispatcher) {
         val products = listOf(
-            ProductInfo.fakeInfo(11),
-            ProductInfo.fakeInfo(13),
-            ProductInfo.fakeInfo(17),
+            ProductInfo.Companion.fakeInfo(11),
+            ProductInfo.Companion.fakeInfo(13),
+            ProductInfo.Companion.fakeInfo(17),
         )
         products.forEach {
             every { productInMemoryDb.getProductById(it.id) } returns it

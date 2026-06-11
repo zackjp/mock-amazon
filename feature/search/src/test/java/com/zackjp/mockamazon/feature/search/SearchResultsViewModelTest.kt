@@ -1,11 +1,11 @@
 package com.zackjp.mockamazon.feature.search
 
 import com.zackjp.mockamazon.core.model.ProductInfo
-import com.zackjp.mockamazon.shared.data.CartRepository
+import com.zackjp.mockamazon.feature.cart.api.data.CartRepository
 import com.zackjp.mockamazon.shared.data.SearchApiDataSource
-import com.zackjp.mockamazon.shared.model.Cart
-import com.zackjp.mockamazon.shared.model.CartItem
-import com.zackjp.mockamazon.shared.model.toCartItem
+import com.zackjp.mockamazon.core.model.Cart
+import com.zackjp.mockamazon.core.model.CartItem
+import com.zackjp.mockamazon.core.model.toCartItem
 import com.zackjp.mockamazon.shared.testutils.model.fakeCart
 import com.zackjp.mockamazon.shared.testutils.model.fakeInfo
 import com.zackjp.mockamazon.shared.testutils.model.fakeItem

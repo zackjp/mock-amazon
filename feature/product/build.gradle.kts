@@ -47,6 +47,7 @@ dependencies {
 
     implementation(projects.core.data)
     implementation(projects.core.model)
+    implementation(projects.feature.cart.api)
     implementation(projects.lib.shared)
     testImplementation(projects.lib.sharedTestUtils)
 

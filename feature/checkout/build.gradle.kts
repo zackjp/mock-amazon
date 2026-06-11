@@ -45,6 +45,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     ksp(libs.hilt.compiler)
 
+    implementation(projects.core.model)
+    implementation(projects.feature.cart.api)
     implementation(projects.lib.shared)
     testImplementation(projects.lib.sharedTestUtils)
 

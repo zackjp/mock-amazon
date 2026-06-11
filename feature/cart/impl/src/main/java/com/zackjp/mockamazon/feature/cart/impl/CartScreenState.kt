@@ -1,6 +1,6 @@
 package com.zackjp.mockamazon.feature.cart.impl
 
-import com.zackjp.mockamazon.shared.model.CartItem
+import com.zackjp.mockamazon.core.model.CartItem
 
 sealed class CartScreenState {
     data object Loading : CartScreenState()

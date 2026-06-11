@@ -1,7 +1,7 @@
 package com.zackjp.mockamazon.feature.search
 
 import com.zackjp.mockamazon.core.model.ProductInfo
-import com.zackjp.mockamazon.shared.model.CartItem
+import com.zackjp.mockamazon.core.model.CartItem
 
 sealed class SearchResultsScreenState {
     data object Loading : SearchResultsScreenState()

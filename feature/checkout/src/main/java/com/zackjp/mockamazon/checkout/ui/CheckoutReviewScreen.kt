@@ -32,7 +32,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import com.zackjp.mockamazon.checkout.R
 import com.zackjp.mockamazon.checkout.ui.model.CheckoutState
-import com.zackjp.mockamazon.shared.model.Cart
+import com.zackjp.mockamazon.core.model.Cart
 import com.zackjp.mockamazon.shared.model.User
 import com.zackjp.mockamazon.shared.theme.LinkBlue
 import com.zackjp.mockamazon.shared.ui.PrimaryCta

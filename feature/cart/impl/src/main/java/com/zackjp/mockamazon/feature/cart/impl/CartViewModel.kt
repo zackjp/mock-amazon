@@ -2,7 +2,7 @@ package com.zackjp.mockamazon.feature.cart.impl
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zackjp.mockamazon.shared.data.CartRepository
+import com.zackjp.mockamazon.feature.cart.api.data.CartRepository
 import com.zackjp.mockamazon.shared.runIf
 import com.zackjp.mockamazon.shared.updateIf
 import dagger.hilt.android.lifecycle.HiltViewModel

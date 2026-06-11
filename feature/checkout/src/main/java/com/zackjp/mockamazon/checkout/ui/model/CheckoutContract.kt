@@ -1,6 +1,6 @@
 package com.zackjp.mockamazon.checkout.ui.model
 
-import com.zackjp.mockamazon.shared.model.Cart
+import com.zackjp.mockamazon.core.model.Cart
 import com.zackjp.mockamazon.shared.model.User
 
 

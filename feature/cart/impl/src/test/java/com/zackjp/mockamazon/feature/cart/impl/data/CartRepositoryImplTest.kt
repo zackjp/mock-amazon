@@ -1,9 +1,10 @@
-package com.zackjp.mockamazon.shared.data
+package com.zackjp.mockamazon.feature.cart.impl.data
 
+import com.zackjp.mockamazon.core.model.Cart
+import com.zackjp.mockamazon.core.model.CartItem
 import com.zackjp.mockamazon.core.model.ProductInfo
-import com.zackjp.mockamazon.shared.model.Cart
-import com.zackjp.mockamazon.shared.model.CartItem
-import com.zackjp.mockamazon.shared.model.toCartItem
+import com.zackjp.mockamazon.core.model.toCartItem
+import com.zackjp.mockamazon.feature.cart.impl.datasource.CartFakeApiDataSource
 import com.zackjp.mockamazon.shared.testutils.model.fakeInfo
 import io.kotest.matchers.shouldBe
 import io.mockk.Runs
@@ -15,15 +16,15 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class CartRepositoryTest {
+class CartRepositoryImplTest {
 
     val cartFakeApiDataSource = mockk<CartFakeApiDataSource>()
 
-    lateinit var repo: CartRepository
+    lateinit var repo: CartRepositoryImpl
 
     @BeforeEach
     fun setUp() {
-        repo = CartRepository(cartFakeApiDataSource)
+        repo = CartRepositoryImpl(cartFakeApiDataSource)
     }
 
     @Test

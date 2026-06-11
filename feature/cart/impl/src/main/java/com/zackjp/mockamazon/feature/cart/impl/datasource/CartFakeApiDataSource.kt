@@ -1,8 +1,9 @@
-package com.zackjp.mockamazon.shared.data
+package com.zackjp.mockamazon.feature.cart.impl.datasource
 
+import com.zackjp.mockamazon.core.model.Cart
+import com.zackjp.mockamazon.core.model.toCartItem
 import com.zackjp.mockamazon.shared.DispatcherProvider
-import com.zackjp.mockamazon.shared.model.Cart
-import com.zackjp.mockamazon.shared.model.toCartItem
+import com.zackjp.mockamazon.shared.data.ProductInMemoryDb
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.math.RoundingMode
@@ -11,7 +12,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CartFakeApiDataSource @Inject constructor(
+internal class CartFakeApiDataSource @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
     private val productInMemoryDb: ProductInMemoryDb,
 ) {

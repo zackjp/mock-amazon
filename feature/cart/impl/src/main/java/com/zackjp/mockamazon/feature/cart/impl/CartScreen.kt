@@ -43,7 +43,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.zackjp.mockamazon.shared.model.CartItem
+import com.zackjp.mockamazon.core.model.CartItem
 import com.zackjp.mockamazon.shared.theme.AmazonOutlineMedium
 import com.zackjp.mockamazon.shared.theme.Gray90
 import com.zackjp.mockamazon.shared.theme.Green60
