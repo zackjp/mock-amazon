@@ -26,8 +26,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 class CartViewModelTest {
 
     private val repository = mockk<CartRepository>()
-    private val expectedCartItems = listOf(CartItem.Companion.fakeItem(123).copy(quantity = 7))
-    private val expectedCart = Cart.Companion.fakeCart(expectedCartItems)
+    private val expectedCartItems = listOf(CartItem.fakeItem(123).copy(quantity = 7))
+    private val expectedCart = Cart.fakeCart(expectedCartItems)
 
     private lateinit var viewModel: CartViewModel
 
@@ -62,8 +62,8 @@ class CartViewModelTest {
     @Test
     fun load_WhenAlreadyLoaded_EmitsReloadingStateAndReloadsDataFromRepository() = runTest {
         val updatedCartItems =
-            listOf(CartItem.Companion.fakeItem(987), CartItem.Companion.fakeItem(654))
-        val updatedCart = Cart.Companion.fakeCart(updatedCartItems)
+            listOf(CartItem.fakeItem(987), CartItem.fakeItem(654))
+        val updatedCart = Cart.fakeCart(updatedCartItems)
 
         viewModel.screenState.test {
             viewModel.load()
@@ -80,8 +80,8 @@ class CartViewModelTest {
 
     @Test
     fun removeByProductId_RemovesFromRepositoryAndUpdatesState() = runTest {
-        val newCartItems = listOf(CartItem.Companion.fakeItem(987))
-        val newCart = Cart.Companion.fakeCart(newCartItems)
+        val newCartItems = listOf(CartItem.fakeItem(987))
+        val newCart = Cart.fakeCart(newCartItems)
         coEvery { repository.getCart() } returns newCart
 
         viewModel.screenState.test {
@@ -98,10 +98,10 @@ class CartViewModelTest {
     fun incrementCartItem_SetsRepositoryQuantityAndUpdatesState() = runTest {
         val cartItem = expectedCartItems[0]
         val updatedCartItems = listOf(
-            CartItem.Companion.fakeItem(987),
-            CartItem.Companion.fakeItem(654),
+            CartItem.fakeItem(987),
+            CartItem.fakeItem(654),
         )
-        val updatedCart = Cart.Companion.fakeCart(updatedCartItems)
+        val updatedCart = Cart.fakeCart(updatedCartItems)
 
         viewModel.load()
         advanceUntilIdle()
@@ -121,10 +121,10 @@ class CartViewModelTest {
     fun decrementCartItem_SetsRepositoryQuantityAndUpdatesState() = runTest {
         val cartItem = expectedCartItems[0]
         val updatedCartItems = listOf(
-            CartItem.Companion.fakeItem(987),
-            CartItem.Companion.fakeItem(654),
+            CartItem.fakeItem(987),
+            CartItem.fakeItem(654),
         )
-        val updatedCart = Cart.Companion.fakeCart(updatedCartItems)
+        val updatedCart = Cart.fakeCart(updatedCartItems)
 
         viewModel.load()
         advanceUntilIdle()

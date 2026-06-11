@@ -20,10 +20,10 @@ class ProductFakeApiDataSourceTest {
     private val testDispatcherProvider = TestDispatcherProvider()
     private val testDispatcher = testDispatcherProvider.default
 
-    private val expectedProductInfo = ProductInfo.Companion.fakeInfo(VALID_PRODUCT_ID)
+    private val expectedProductInfo = ProductInfo.fakeInfo(VALID_PRODUCT_ID)
     private val expectedSimilarProducts = listOf(
-        ProductInfo.Companion.fakeInfo(100),
-        ProductInfo.Companion.fakeInfo(200),
+        ProductInfo.fakeInfo(100),
+        ProductInfo.fakeInfo(200),
     )
 
     private lateinit var dataSource: ProductFakeApiDataSource
