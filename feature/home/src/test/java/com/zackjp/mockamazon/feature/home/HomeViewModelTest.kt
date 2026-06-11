@@ -3,10 +3,10 @@ package com.zackjp.mockamazon.feature.home
 import androidx.compose.ui.graphics.Color
 import app.cash.turbine.test
 import com.zackjp.mockamazon.core.data.HomeRepository
-import com.zackjp.mockamazon.core.model.CarouselCard
-import com.zackjp.mockamazon.core.model.CarouselItem
-import com.zackjp.mockamazon.core.model.CategoryCarousel
+import com.zackjp.mockamazon.core.model.ContextCard
 import com.zackjp.mockamazon.core.model.HeroCarouselCard
+import com.zackjp.mockamazon.core.model.IntentCarousel
+import com.zackjp.mockamazon.core.model.ProductTile
 import com.zackjp.mockamazon.shared.R
 import com.zackjp.mockamazon.shared.testutils.SetMainCoroutineDispatcher
 import io.kotest.matchers.collections.beEmpty
@@ -26,28 +26,28 @@ import org.junit.jupiter.api.extension.ExtendWith
 class HomeViewModelTest {
 
     val mockHomeRepository = mockk<HomeRepository>()
-    val mockCategoryCarousels = listOf(
-        CategoryCarousel(
+    val intentCarousels = listOf(
+        IntentCarousel(
             "Section Title 1",
             listOf(
-                CarouselCard(
+                ContextCard(
                     "Group heading 1",
-                    CarouselItem(id = 123, imageRes = 123, discount = 0.01f),
-                    CarouselItem(id = 234, imageRes = 234, discount = 0.02f),
-                    CarouselItem(id = 345, imageRes = 345, discount = 0.03f),
-                    CarouselItem(id = 456, imageRes = 456, discount = 0.04f),
+                    ProductTile(id = 123, imageRes = 123, discount = 0.01f),
+                    ProductTile(id = 234, imageRes = 234, discount = 0.02f),
+                    ProductTile(id = 345, imageRes = 345, discount = 0.03f),
+                    ProductTile(id = 456, imageRes = 456, discount = 0.04f),
                 ),
             )
         ),
-        CategoryCarousel(
+        IntentCarousel(
             "Section Title 2",
             listOf(
-                CarouselCard(
+                ContextCard(
                     "Group heading 2a",
-                    CarouselItem(id = 321, imageRes = 321, discount = 0.11f),
-                    CarouselItem(id = 432, imageRes = 432, discount = 0.12f),
-                    CarouselItem(id = 543, imageRes = 543, discount = 0.13f),
-                    CarouselItem(id = 654, imageRes = 654, discount = 0.14f),
+                    ProductTile(id = 321, imageRes = 321, discount = 0.11f),
+                    ProductTile(id = 432, imageRes = 432, discount = 0.12f),
+                    ProductTile(id = 543, imageRes = 543, discount = 0.13f),
+                    ProductTile(id = 654, imageRes = 654, discount = 0.14f),
                 ),
             ),
         ),
@@ -58,19 +58,19 @@ class HomeViewModelTest {
             "TopHome Title 1",
             Color.Black,
             listOf(
-                CarouselItem(id = R.drawable.item_headphones, imageRes = R.drawable.item_headphones),
-                CarouselItem(id = R.drawable.item_backpack, imageRes = R.drawable.item_backpack),
+                ProductTile(id = R.drawable.item_headphones, imageRes = R.drawable.item_headphones),
+                ProductTile(id = R.drawable.item_backpack, imageRes = R.drawable.item_backpack),
             )
         ),
         HeroCarouselCard(
             "TopHome Title 2",
             Color.White,
             listOf(
-                CarouselItem(
+                ProductTile(
                     id = R.drawable.item_kitchen_sponge,
                     imageRes = R.drawable.item_kitchen_sponge
                 ),
-                CarouselItem(id = R.drawable.item_matcha, imageRes = R.drawable.item_matcha),
+                ProductTile(id = R.drawable.item_matcha, imageRes = R.drawable.item_matcha),
             )
         ),
     )
@@ -79,7 +79,7 @@ class HomeViewModelTest {
 
     @BeforeEach
     fun setUp() {
-        coEvery { mockHomeRepository.getCategoryCarousels() } returns mockCategoryCarousels
+        coEvery { mockHomeRepository.getIntentCarousels() } returns intentCarousels
         coEvery { mockHomeRepository.getHeroCarouselCards() } returns mockHeroCarousel
 
         viewModel = HomeViewModel(mockHomeRepository)
@@ -93,20 +93,20 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun viewModel_Load_LoadsHeroCarouselAndCategoryCarouselsAsync() = runTest {
+    fun viewModel_Load_LoadsHeroCarouselAndIntentCarouselsAsync() = runTest {
         viewModel.screenState.test {
             awaitItem() shouldBe HomeScreenState.Loading
 
             awaitItem().shouldBeInstanceOf<HomeScreenState.Loaded> {
                 it.heroCarouselCards shouldBe mockHeroCarousel
-                it.categoryCarousels shouldNot beEmpty()
+                it.intentCarousels shouldNot beEmpty()
             }
         }
     }
 
     @Test
     fun viewModel_Load_EmitsErrorStateIfErred() = runTest {
-        coEvery { mockHomeRepository.getCategoryCarousels() } throws Exception("cancellation test")
+        coEvery { mockHomeRepository.getIntentCarousels() } throws Exception("cancellation test")
 
         viewModel.screenState.test {
             awaitItem() shouldBe HomeScreenState.Loading

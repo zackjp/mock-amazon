@@ -1,12 +1,12 @@
 package com.zackjp.mockamazon.core.data.model
 
-import com.zackjp.mockamazon.core.model.CarouselCard
-import com.zackjp.mockamazon.core.model.CarouselItem
-import com.zackjp.mockamazon.core.model.CategoryCarousel
+import com.zackjp.mockamazon.core.model.ContextCard
+import com.zackjp.mockamazon.core.model.ProductTile
+import com.zackjp.mockamazon.core.model.IntentCarousel
 import com.zackjp.mockamazon.core.model.HeroCarouselCard
-import com.zackjp.mockamazon.shared.model.CarouselCardResponse
-import com.zackjp.mockamazon.shared.model.CarouselItemResponse
-import com.zackjp.mockamazon.shared.model.CategoryCarouselResponse
+import com.zackjp.mockamazon.shared.model.ContextCardResponse
+import com.zackjp.mockamazon.shared.model.ProductTileResponse
+import com.zackjp.mockamazon.shared.model.IntentCarouselResponse
 import com.zackjp.mockamazon.shared.model.HeroCarouselCardResponse
 
 
@@ -14,17 +14,17 @@ internal fun HeroCarouselCardResponse.toUiModel(): HeroCarouselCard =
     HeroCarouselCard(
         title = this.title,
         background = this.background,
-        carouselItems = this.carouselItemResponses.map { it.toUiModel() },
+        productTiles = this.productTileRespons.map { it.toUiModel() },
     )
 
-internal fun CategoryCarouselResponse.toUiModel(): CategoryCarousel =
-    CategoryCarousel(
+internal fun IntentCarouselResponse.toUiModel(): IntentCarousel =
+    IntentCarousel(
         title = this.title,
-        carouselCards = this.carouselCardResponse.map { it.toUiModel() },
+        contextCards = this.contextCardResponse.map { it.toUiModel() },
     )
 
-internal fun CarouselCardResponse.toUiModel(): CarouselCard =
-    CarouselCard(
+internal fun ContextCardResponse.toUiModel(): ContextCard =
+    ContextCard(
         title = this.title,
         rec1 = this.rec1.toUiModel(),
         rec2 = this.rec2.toUiModel(),
@@ -32,8 +32,8 @@ internal fun CarouselCardResponse.toUiModel(): CarouselCard =
         rec4 = this.rec4.toUiModel(),
     )
 
-internal fun CarouselItemResponse.toUiModel(): CarouselItem =
-    CarouselItem(
+internal fun ProductTileResponse.toUiModel(): ProductTile =
+    ProductTile(
         id = this.id,
         imageRes = this.imageRes,
         discount = this.discount,

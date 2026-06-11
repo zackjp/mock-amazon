@@ -7,29 +7,29 @@ import androidx.compose.ui.graphics.Color
 data class HeroCarouselCardResponse(
     val title: String,
     val background: Color,
-    val carouselItemResponses: List<CarouselItemResponse>
+    val productTileRespons: List<ProductTileResponse>
 ) {
     companion object // for utility functions
 }
 
-data class CategoryCarouselResponse(
+data class IntentCarouselResponse(
     val title: String,
-    val carouselCardResponse: List<CarouselCardResponse>,
+    val contextCardResponse: List<ContextCardResponse>,
 ) {
     companion object // for utility functions
 }
 
-data class CarouselCardResponse(
+data class ContextCardResponse(
     val title: String,
-    val rec1: CarouselItemResponse,
-    val rec2: CarouselItemResponse,
-    val rec3: CarouselItemResponse,
-    val rec4: CarouselItemResponse,
+    val rec1: ProductTileResponse,
+    val rec2: ProductTileResponse,
+    val rec3: ProductTileResponse,
+    val rec4: ProductTileResponse,
 ) {
     companion object // for utility functions
 }
 
-data class CarouselItemResponse(
+data class ProductTileResponse(
     val id: Int,
     @param:DrawableRes val imageRes: Int,
     val discount: Float? = null,

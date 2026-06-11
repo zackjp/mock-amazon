@@ -26,8 +26,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.zackjp.mockamazon.core.model.CarouselCard
-import com.zackjp.mockamazon.core.model.CategoryCarousel
+import com.zackjp.mockamazon.core.model.ContextCard
+import com.zackjp.mockamazon.core.model.IntentCarousel
 import com.zackjp.mockamazon.feature.home.R
 import com.zackjp.mockamazon.feature.home.component.ItemDisplayWindow
 import com.zackjp.mockamazon.shared.ignoreParentPadding
@@ -35,8 +35,8 @@ import com.zackjp.mockamazon.shared.theme.AmazonOutlineLight
 import com.zackjp.mockamazon.shared.R as SharedR
 
 @Composable
-fun HomeCategoryCarousel(
-    categoryCarousel: CategoryCarousel,
+fun IntentCarousel(
+    intentCarousel: IntentCarousel,
     mainContentHorizontalPadding: Dp,
     modifier: Modifier = Modifier,
     onViewProduct: (Int) -> Unit,
@@ -44,12 +44,12 @@ fun HomeCategoryCarousel(
     Column(
         modifier = modifier
     ) {
-        val cardWidth = dimensionResource(R.dimen.item_section_group_card_width)
-        val cardHeight = dimensionResource(R.dimen.item_section_group_card_height)
+        val cardWidth = dimensionResource(R.dimen.intent_carousel_context_card_width)
+        val cardHeight = dimensionResource(R.dimen.intent_carousel_context_card_height)
         val paddingSmall = dimensionResource(SharedR.dimen.padding_small)
 
         Text(
-            text = categoryCarousel.title,
+            text = intentCarousel.title,
             style = MaterialTheme.typography.displayMedium,
         )
 
@@ -62,10 +62,10 @@ fun HomeCategoryCarousel(
                 .ignoreParentPadding(mainContentHorizontalPadding),
             horizontalArrangement = Arrangement.spacedBy(paddingSmall),
         ) {
-            items(categoryCarousel.carouselCards) { carouselCard ->
-                ItemSectionCard(
+            items(intentCarousel.contextCards) { contextCard ->
+                ContextCard(
                     cardWidth = cardWidth,
-                    carouselCard = carouselCard,
+                    contextCard = contextCard,
                     modifier = Modifier.size(cardWidth, cardHeight),
                     onViewProduct = onViewProduct,
                 )
@@ -75,9 +75,9 @@ fun HomeCategoryCarousel(
 }
 
 @Composable
-private fun ItemSectionCard(
+private fun ContextCard(
     cardWidth: Dp,
-    carouselCard: CarouselCard,
+    contextCard: ContextCard,
     modifier: Modifier = Modifier,
     onViewProduct: (Int) -> Unit,
 ) {
@@ -86,8 +86,8 @@ private fun ItemSectionCard(
     val paddingMedium = dimensionResource(SharedR.dimen.padding_medium)
     val cardPadding = paddingMedium
     val itemSpacing = paddingXSmall
-    val items = remember(carouselCard) {
-        listOf(carouselCard.rec1, carouselCard.rec2, carouselCard.rec3, carouselCard.rec4)
+    val items = remember(contextCard) {
+        listOf(contextCard.rec1, contextCard.rec2, contextCard.rec3, contextCard.rec4)
     }
 
     Card(
@@ -102,7 +102,7 @@ private fun ItemSectionCard(
         ) {
             CardHeader(
                 modifier = Modifier.fillMaxWidth(),
-                title = carouselCard.title,
+                title = contextCard.title,
             )
 
             Spacer(modifier = Modifier.height(paddingXXSmall))
@@ -110,7 +110,7 @@ private fun ItemSectionCard(
             ItemDisplayWindow(
                 cardPadding = cardPadding,
                 cardWidth = cardWidth,
-                carouselItems = items,
+                productTiles = items,
                 itemSpacing = itemSpacing,
                 modifier = Modifier.fillMaxSize(),
                 onViewProduct = onViewProduct,

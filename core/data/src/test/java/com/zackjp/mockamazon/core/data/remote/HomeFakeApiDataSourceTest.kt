@@ -1,6 +1,5 @@
 package com.zackjp.mockamazon.core.data.remote
 
-import com.zackjp.mockamazon.core.data.remote.HomeFakeApiDataSource
 import com.zackjp.mockamazon.shared.data.ProductInMemoryDb
 import com.zackjp.mockamazon.shared.testutils.TestDispatcherProvider
 import io.kotest.matchers.comparables.shouldBeGreaterThan
@@ -29,8 +28,8 @@ class HomeFakeApiDataSourceTest {
     }
 
     @Test
-    fun fetchCategoryCarousels_ReturnsMockData() = runTest(testDispatcher) {
-        homeFakeApiDataSource.fetchCategoryCarousels().size shouldBeGreaterThan 0
+    fun fetchIntentCarousels_ReturnsMockData() = runTest(testDispatcher) {
+        homeFakeApiDataSource.fetchIntentCarousels().size shouldBeGreaterThan 0
     }
 
 }

@@ -1,11 +1,9 @@
 package com.zackjp.mockamazon.core.data
 
-import com.zackjp.mockamazon.core.data.HomeRepository
-import com.zackjp.mockamazon.core.data.HomeRepositoryImpl
 import com.zackjp.mockamazon.core.data.model.toUiModel
 import com.zackjp.mockamazon.core.data.remote.HomeFakeApiDataSource
-import com.zackjp.mockamazon.shared.model.CategoryCarouselResponse
 import com.zackjp.mockamazon.shared.model.HeroCarouselCardResponse
+import com.zackjp.mockamazon.shared.model.IntentCarouselResponse
 import com.zackjp.mockamazon.shared.testutils.model.fake
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
@@ -42,17 +40,17 @@ class HomeRepositoryImplTest {
     }
 
     @Test
-    fun getCategoryCarousels_HavingResultsFromApi_ReturnsCategoryCarouselsAsync() = runTest {
-        val apiResponse1 = CategoryCarouselResponse.fake(id = 5)
-        val apiResponse2 = CategoryCarouselResponse.fake(id = 11)
-        coEvery { homeFakeApiDataSource.fetchCategoryCarousels() } returns listOf(
+    fun getIntentCarousels_HavingResultsFromApi_ReturnsIntentCarouselsAsync() = runTest {
+        val apiResponse1 = IntentCarouselResponse.fake(id = 5)
+        val apiResponse2 = IntentCarouselResponse.fake(id = 11)
+        coEvery { homeFakeApiDataSource.fetchIntentCarousels() } returns listOf(
             apiResponse1,
             apiResponse2,
         )
 
         val expectedModel1 = apiResponse1.toUiModel()
         val expectedModel2 = apiResponse2.toUiModel()
-        repository.getCategoryCarousels() shouldBe listOf(expectedModel1, expectedModel2)
+        repository.getIntentCarousels() shouldBe listOf(expectedModel1, expectedModel2)
     }
 
 }

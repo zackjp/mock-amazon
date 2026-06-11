@@ -2,9 +2,9 @@ package com.zackjp.mockamazon.shared.testutils.model
 
 import androidx.compose.ui.graphics.Color
 import com.zackjp.mockamazon.shared.R
-import com.zackjp.mockamazon.shared.model.CarouselCardResponse
-import com.zackjp.mockamazon.shared.model.CarouselItemResponse
-import com.zackjp.mockamazon.shared.model.CategoryCarouselResponse
+import com.zackjp.mockamazon.shared.model.ContextCardResponse
+import com.zackjp.mockamazon.shared.model.ProductTileResponse
+import com.zackjp.mockamazon.shared.model.IntentCarouselResponse
 import com.zackjp.mockamazon.shared.model.HeroCarouselCardResponse
 
 
@@ -16,37 +16,37 @@ fun HeroCarouselCardResponse.Companion.fake(
     HeroCarouselCardResponse(
         title = "Title $id",
         background = background,
-        carouselItemResponses = (0..<responseCount).map { count ->
-            CarouselItemResponse.fake(count)
+        productTileRespons = (0..<responseCount).map { count ->
+            ProductTileResponse.fake(count)
         },
     )
 
-fun CategoryCarouselResponse.Companion.fake(
+fun IntentCarouselResponse.Companion.fake(
     id: Long,
     cardCount: Int = 2,
 ) =
-    CategoryCarouselResponse(
+    IntentCarouselResponse(
         title = "Title $id",
-        carouselCardResponse = (0..<cardCount).map { count ->
-            CarouselCardResponse.fake(count)
+        contextCardResponse = (0..<cardCount).map { count ->
+            ContextCardResponse.fake(count)
         },
     )
 
-fun CarouselCardResponse.Companion.fake(
+fun ContextCardResponse.Companion.fake(
     id: Int,
 ) =
-    CarouselCardResponse(
+    ContextCardResponse(
         title = "Title $id",
-        rec1 = CarouselItemResponse.fake(id + 1),
-        rec2 = CarouselItemResponse.fake(id + 2),
-        rec3 = CarouselItemResponse.fake(id + 3),
-        rec4 = CarouselItemResponse.fake(id + 4),
+        rec1 = ProductTileResponse.fake(id + 1),
+        rec2 = ProductTileResponse.fake(id + 2),
+        rec3 = ProductTileResponse.fake(id + 3),
+        rec4 = ProductTileResponse.fake(id + 4),
     )
 
-fun CarouselItemResponse.Companion.fake(
+fun ProductTileResponse.Companion.fake(
     id: Int,
-): CarouselItemResponse =
-    CarouselItemResponse(
+): ProductTileResponse =
+    ProductTileResponse(
         id = id,
         imageRes = R.drawable.item_soda,
         discount = id * .1f,

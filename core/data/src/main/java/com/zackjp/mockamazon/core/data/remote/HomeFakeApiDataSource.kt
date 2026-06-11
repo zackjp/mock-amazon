@@ -1,14 +1,14 @@
 package com.zackjp.mockamazon.core.data.remote
 
 import androidx.compose.ui.graphics.Color
+import com.zackjp.mockamazon.core.model.ProductInfo
 import com.zackjp.mockamazon.shared.DispatcherProvider
 import com.zackjp.mockamazon.shared.R
 import com.zackjp.mockamazon.shared.data.ProductInMemoryDb
-import com.zackjp.mockamazon.shared.model.CarouselCardResponse
-import com.zackjp.mockamazon.shared.model.CarouselItemResponse
-import com.zackjp.mockamazon.shared.model.CategoryCarouselResponse
+import com.zackjp.mockamazon.shared.model.ContextCardResponse
 import com.zackjp.mockamazon.shared.model.HeroCarouselCardResponse
-import com.zackjp.mockamazon.core.model.ProductInfo
+import com.zackjp.mockamazon.shared.model.IntentCarouselResponse
+import com.zackjp.mockamazon.shared.model.ProductTileResponse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -26,17 +26,17 @@ internal class HomeFakeApiDataSource @Inject constructor(
             createHeroCarouselCards()
         }
 
-    suspend fun fetchCategoryCarousels(): List<CategoryCarouselResponse> =
+    suspend fun fetchIntentCarousels(): List<IntentCarouselResponse> =
         withContext(dispatcherProvider.default) {
             delay(1000L) // simulate network delay
-            createCategoryCarousels()
+            createIntentCarousels()
         }
 
-    private fun getProductAsItem(id: Int, showDiscount: Boolean = true): CarouselItemResponse =
+    private fun getProductAsItem(id: Int, showDiscount: Boolean = true): ProductTileResponse =
         productInMemoryDb.getProductById(id)!!.toItem(showDiscount)
 
-    private fun ProductInfo.toItem(showDiscount: Boolean): CarouselItemResponse =
-        CarouselItemResponse(
+    private fun ProductInfo.toItem(showDiscount: Boolean): ProductTileResponse =
+        ProductTileResponse(
             id = id,
             imageRes = imageId,
             discount = if (showDiscount) discount else null,
@@ -78,18 +78,18 @@ internal class HomeFakeApiDataSource @Inject constructor(
         )
     )
 
-    private fun createCategoryCarousels(): List<CategoryCarouselResponse> = listOf(
-        CategoryCarouselResponse(
+    private fun createIntentCarousels(): List<IntentCarouselResponse> = listOf(
+        IntentCarouselResponse(
             "Recommended deals for you",
             listOf(
-                CarouselCardResponse(
+                ContextCardResponse(
                     "Deals for you",
                     getProductAsItem(R.drawable.item_backpack),
                     getProductAsItem(R.drawable.item_headphones),
                     getProductAsItem(R.drawable.item_detergent),
                     getProductAsItem(R.drawable.item_dishwash_detergent),
                 ),
-                CarouselCardResponse(
+                ContextCardResponse(
                     "Inspired by your recent history",
                     getProductAsItem(R.drawable.item_handsoap),
                     getProductAsItem(R.drawable.item_sandwich_bags),
@@ -98,17 +98,17 @@ internal class HomeFakeApiDataSource @Inject constructor(
                 )
             )
         ),
-        CategoryCarouselResponse(
+        IntentCarouselResponse(
             "Buy again",
             listOf(
-                CarouselCardResponse(
+                ContextCardResponse(
                     "Reorder soon",
                     getProductAsItem(R.drawable.item_deodorant),
                     getProductAsItem(R.drawable.item_soda),
                     getProductAsItem(R.drawable.item_water_filter),
                     getProductAsItem(R.drawable.item_cleaning_gloves),
                 ),
-                CarouselCardResponse(
+                ContextCardResponse(
                     "Home & Kitchen",
                     getProductAsItem(R.drawable.item_kitchen_sponge),
                     getProductAsItem(R.drawable.item_dishwash_detergent),

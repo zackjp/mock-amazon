@@ -3,8 +3,8 @@ package com.zackjp.mockamazon.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zackjp.mockamazon.core.data.HomeRepository
-import com.zackjp.mockamazon.core.model.CategoryCarousel
 import com.zackjp.mockamazon.core.model.HeroCarouselCard
+import com.zackjp.mockamazon.core.model.IntentCarousel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Deferred
@@ -40,15 +40,15 @@ class HomeViewModel @Inject constructor(
                     homeRepository.getHeroCarouselCards()
                 }
 
-                val categoryCarouselsDeferred: Deferred<List<CategoryCarousel>> = viewModelScope.async {
-                    homeRepository.getCategoryCarousels()
+                val intentCarouselsDeferred: Deferred<List<IntentCarousel>> = viewModelScope.async {
+                    homeRepository.getIntentCarousels()
                 }
 
-                awaitAll(heroCardsDeferred, categoryCarouselsDeferred)
+                awaitAll(heroCardsDeferred, intentCarouselsDeferred)
 
                 _screenState.value = HomeScreenState.Loaded(
-                    categoryCarousels = categoryCarouselsDeferred.await(),
                     heroCarouselCards = heroCardsDeferred.await(),
+                    intentCarousels = intentCarouselsDeferred.await(),
                 )
             } catch(e: Exception) {
                 if (e is CancellationException) throw e

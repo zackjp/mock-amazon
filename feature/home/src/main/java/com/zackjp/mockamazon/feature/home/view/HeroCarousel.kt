@@ -40,7 +40,7 @@ import com.zackjp.mockamazon.shared.R as SharedR
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HomeHeroCarousel(
+fun HeroCarousel(
     mainContentHorizontalPadding: Dp,
     modifier: Modifier = Modifier,
     onColorChanged: (Color) -> Unit = {},
@@ -125,7 +125,7 @@ private fun HeroCard(
             ItemDisplayWindow(
                 cardPadding = cardPadding,
                 cardWidth = cardWidth,
-                carouselItems = heroCarouselCard.carouselItems,
+                productTiles = heroCarouselCard.productTiles,
                 itemSpacing = itemSpacing,
                 modifier = Modifier.fillMaxSize(),
                 onViewProduct = onViewProduct,
