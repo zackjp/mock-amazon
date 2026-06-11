@@ -8,6 +8,7 @@ import com.zackjp.mockamazon.core.model.CarouselItem
 import com.zackjp.mockamazon.core.model.CategoryCarousel
 import com.zackjp.mockamazon.core.model.HeroCarouselCard
 import com.zackjp.mockamazon.shared.R
+import com.zackjp.mockamazon.shared.testutils.SetMainCoroutineDispatcher
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -18,8 +19,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
 @OptIn(ExperimentalCoroutinesApi::class)
+@ExtendWith(SetMainCoroutineDispatcher::class)
 class HomeViewModelTest {
 
     val mockHomeRepository = mockk<HomeRepository>()
