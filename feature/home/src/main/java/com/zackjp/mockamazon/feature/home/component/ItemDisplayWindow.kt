@@ -85,7 +85,7 @@ fun ItemDisplayWindow(
                     val item = reversedBottomUpItems[i]
                     ItemDisplay(
                         item = item.toDisplayableItem(),
-                        modifier = itemModifier.clickable { onViewProduct(item.id) },
+                        modifier = itemModifier.clickable { onViewProduct(item.productId) },
                     )
                 }
             }

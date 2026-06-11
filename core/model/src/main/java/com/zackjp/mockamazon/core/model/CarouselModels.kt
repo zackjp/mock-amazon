@@ -5,17 +5,20 @@ import androidx.compose.ui.graphics.Color
 
 
 data class HeroCarouselCard(
+    val heroId: String,
     val title: String,
     val background: Color,
     val productTiles: List<ProductTile>
 )
 
 data class IntentCarousel(
+    val intentId: String,
     val title: String,
     val contextCards: List<ContextCard>,
 )
 
 data class ContextCard(
+    val contextId: String,
     val title: String,
     val rec1: ProductTile,
     val rec2: ProductTile,
@@ -24,7 +27,7 @@ data class ContextCard(
 )
 
 data class ProductTile(
-    val id: Int,
+    val productId: Int,
     @param:DrawableRes val imageRes: Int,
     val discount: Float? = null,
 )

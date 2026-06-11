@@ -5,14 +5,16 @@ import androidx.compose.ui.graphics.Color
 
 
 data class HeroCarouselCardResponse(
+    val heroId: String,
     val title: String,
     val background: Color,
-    val productTileRespons: List<ProductTileResponse>
+    val productTileResponse: List<ProductTileResponse>
 ) {
     companion object // for utility functions
 }
 
 data class IntentCarouselResponse(
+    val intentId: String,
     val title: String,
     val contextCardResponse: List<ContextCardResponse>,
 ) {
@@ -20,6 +22,7 @@ data class IntentCarouselResponse(
 }
 
 data class ContextCardResponse(
+    val contextId: String,
     val title: String,
     val rec1: ProductTileResponse,
     val rec2: ProductTileResponse,
@@ -30,7 +33,7 @@ data class ContextCardResponse(
 }
 
 data class ProductTileResponse(
-    val id: Int,
+    val productId: Int,
     @param:DrawableRes val imageRes: Int,
     val discount: Float? = null,
 ) {

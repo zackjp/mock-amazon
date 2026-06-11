@@ -3,9 +3,9 @@ package com.zackjp.mockamazon.shared.testutils.model
 import androidx.compose.ui.graphics.Color
 import com.zackjp.mockamazon.shared.R
 import com.zackjp.mockamazon.shared.model.ContextCardResponse
-import com.zackjp.mockamazon.shared.model.ProductTileResponse
-import com.zackjp.mockamazon.shared.model.IntentCarouselResponse
 import com.zackjp.mockamazon.shared.model.HeroCarouselCardResponse
+import com.zackjp.mockamazon.shared.model.IntentCarouselResponse
+import com.zackjp.mockamazon.shared.model.ProductTileResponse
 
 
 fun HeroCarouselCardResponse.Companion.fake(
@@ -14,9 +14,10 @@ fun HeroCarouselCardResponse.Companion.fake(
     background: Color = Color.Black,
 ) =
     HeroCarouselCardResponse(
+        heroId = "card_id_$id",
         title = "Title $id",
         background = background,
-        productTileRespons = (0..<responseCount).map { count ->
+        productTileResponse = (0..<responseCount).map { count ->
             ProductTileResponse.fake(count)
         },
     )
@@ -26,6 +27,7 @@ fun IntentCarouselResponse.Companion.fake(
     cardCount: Int = 2,
 ) =
     IntentCarouselResponse(
+        intentId = "intent_id_$id",
         title = "Title $id",
         contextCardResponse = (0..<cardCount).map { count ->
             ContextCardResponse.fake(count)
@@ -36,6 +38,7 @@ fun ContextCardResponse.Companion.fake(
     id: Int,
 ) =
     ContextCardResponse(
+        contextId = "context_id_$id",
         title = "Title $id",
         rec1 = ProductTileResponse.fake(id + 1),
         rec2 = ProductTileResponse.fake(id + 2),
@@ -47,7 +50,7 @@ fun ProductTileResponse.Companion.fake(
     id: Int,
 ): ProductTileResponse =
     ProductTileResponse(
-        id = id,
+        productId = id,
         imageRes = R.drawable.item_soda,
         discount = id * .1f,
     )

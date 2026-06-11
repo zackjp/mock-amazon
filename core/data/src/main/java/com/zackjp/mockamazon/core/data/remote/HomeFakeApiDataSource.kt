@@ -37,16 +37,17 @@ internal class HomeFakeApiDataSource @Inject constructor(
 
     private fun ProductInfo.toItem(showDiscount: Boolean): ProductTileResponse =
         ProductTileResponse(
-            id = id,
+            productId = id,
             imageRes = imageId,
             discount = if (showDiscount) discount else null,
         )
 
     private fun createHeroCarouselCards(): List<HeroCarouselCardResponse> = listOf(
         HeroCarouselCardResponse(
-            "More top\npicks for you",
-            Color(0xFF3A6DB1),
-            listOf(
+            heroId = "hero_more_top_picks",
+            title = "More top\npicks for you",
+            background = Color(0xFF3A6DB1),
+            productTileResponse = listOf(
                 getProductAsItem(R.drawable.item_sneaker_allbirds_treeglider),
                 getProductAsItem(R.drawable.item_sneaker_adidas_ubounce),
                 getProductAsItem(R.drawable.item_sneaker_allbirds_treedasher2),
@@ -55,9 +56,10 @@ internal class HomeFakeApiDataSource @Inject constructor(
             )
         ),
         HeroCarouselCardResponse(
-            "Snack time\nfor everyone",
-            Color(0xFF6AD17D),
-            listOf(
+            heroId = "hero_snack_time",
+            title = "Snack time\nfor everyone",
+            background = Color(0xFF6AD17D),
+            productTileResponse = listOf(
                 getProductAsItem(R.drawable.item_snack_larabar_pbchocolatechip),
                 getProductAsItem(R.drawable.item_snack_wonderful_pistachios),
                 getProductAsItem(R.drawable.item_snack_bluediamond_almonds),
@@ -66,9 +68,10 @@ internal class HomeFakeApiDataSource @Inject constructor(
             )
         ),
         HeroCarouselCardResponse(
-            "Amazon picks\nfor you",
-            Color(0xFFED7571),
-            listOf(
+            heroId = "hero_amazon_picks",
+            title = "Amazon picks\nfor you",
+            background = Color(0xFFED7571),
+            productTileResponse = listOf(
                 getProductAsItem(R.drawable.item_game_monopoly_deal),
                 getProductAsItem(R.drawable.item_game_catan),
                 getProductAsItem(R.drawable.item_game_ra),
@@ -80,40 +83,46 @@ internal class HomeFakeApiDataSource @Inject constructor(
 
     private fun createIntentCarousels(): List<IntentCarouselResponse> = listOf(
         IntentCarouselResponse(
-            "Recommended deals for you",
-            listOf(
+            intentId = "intent_recommended_deals",
+            title = "Recommended deals for you",
+            contextCardResponse = listOf(
                 ContextCardResponse(
-                    "Deals for you",
-                    getProductAsItem(R.drawable.item_backpack),
-                    getProductAsItem(R.drawable.item_headphones),
-                    getProductAsItem(R.drawable.item_detergent),
-                    getProductAsItem(R.drawable.item_dishwash_detergent),
+                    contextId = "context_deals_for_you",
+                    title = "Deals for you",
+                    rec1 = getProductAsItem(R.drawable.item_backpack),
+                    rec2 = getProductAsItem(R.drawable.item_headphones),
+                    rec3 = getProductAsItem(R.drawable.item_detergent),
+                    rec4 = getProductAsItem(R.drawable.item_dishwash_detergent),
                 ),
                 ContextCardResponse(
-                    "Inspired by your recent history",
-                    getProductAsItem(R.drawable.item_handsoap),
-                    getProductAsItem(R.drawable.item_sandwich_bags),
-                    getProductAsItem(R.drawable.item_matcha),
-                    getProductAsItem(R.drawable.item_kitchen_sponge),
+                    contextId = "context_inspired_by_recent_history",
+                    title = "Inspired by your recent history",
+                    rec1 = getProductAsItem(R.drawable.item_handsoap),
+                    rec2 = getProductAsItem(R.drawable.item_sandwich_bags),
+                    rec3 = getProductAsItem(R.drawable.item_matcha),
+                    rec4 = getProductAsItem(R.drawable.item_kitchen_sponge),
                 )
             )
         ),
         IntentCarouselResponse(
-            "Buy again",
-            listOf(
+            intentId = "intent_buy_again",
+            title = "Buy again",
+            contextCardResponse = listOf(
                 ContextCardResponse(
-                    "Reorder soon",
-                    getProductAsItem(R.drawable.item_deodorant),
-                    getProductAsItem(R.drawable.item_soda),
-                    getProductAsItem(R.drawable.item_water_filter),
-                    getProductAsItem(R.drawable.item_cleaning_gloves),
+                    contextId = "context_reorder_soon",
+                    title = "Reorder soon",
+                    rec1 = getProductAsItem(R.drawable.item_deodorant),
+                    rec2 = getProductAsItem(R.drawable.item_soda),
+                    rec3 = getProductAsItem(R.drawable.item_water_filter),
+                    rec4 = getProductAsItem(R.drawable.item_cleaning_gloves),
                 ),
                 ContextCardResponse(
-                    "Home & Kitchen",
-                    getProductAsItem(R.drawable.item_kitchen_sponge),
-                    getProductAsItem(R.drawable.item_dishwash_detergent),
-                    getProductAsItem(R.drawable.item_handsoap),
-                    getProductAsItem(R.drawable.item_sandwich_bags),
+                    contextId = "context_home_and_kitchen",
+                    title = "Home & Kitchen",
+                    rec1 = getProductAsItem(R.drawable.item_kitchen_sponge),
+                    rec2 = getProductAsItem(R.drawable.item_dishwash_detergent),
+                    rec3 = getProductAsItem(R.drawable.item_handsoap),
+                    rec4 = getProductAsItem(R.drawable.item_sandwich_bags),
                 )
             )
         ),

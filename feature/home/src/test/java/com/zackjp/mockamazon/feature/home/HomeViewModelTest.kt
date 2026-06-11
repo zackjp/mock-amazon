@@ -28,26 +28,30 @@ class HomeViewModelTest {
     val mockHomeRepository = mockk<HomeRepository>()
     val intentCarousels = listOf(
         IntentCarousel(
-            "Section Title 1",
-            listOf(
+            intentId = "intent_id_1",
+            title = "Section Title 1",
+            contextCards = listOf(
                 ContextCard(
-                    "Group heading 1",
-                    ProductTile(id = 123, imageRes = 123, discount = 0.01f),
-                    ProductTile(id = 234, imageRes = 234, discount = 0.02f),
-                    ProductTile(id = 345, imageRes = 345, discount = 0.03f),
-                    ProductTile(id = 456, imageRes = 456, discount = 0.04f),
+                    contextId = "context_id_1",
+                    title = "Context title 1",
+                    rec1 = ProductTile(productId = 123, imageRes = 123, discount = 0.01f),
+                    rec2 = ProductTile(productId = 234, imageRes = 234, discount = 0.02f),
+                    rec3 = ProductTile(productId = 345, imageRes = 345, discount = 0.03f),
+                    rec4 = ProductTile(productId = 456, imageRes = 456, discount = 0.04f),
                 ),
             )
         ),
         IntentCarousel(
-            "Section Title 2",
-            listOf(
+            intentId = "intent_id_2",
+            title = "Section Title 2",
+            contextCards = listOf(
                 ContextCard(
-                    "Group heading 2a",
-                    ProductTile(id = 321, imageRes = 321, discount = 0.11f),
-                    ProductTile(id = 432, imageRes = 432, discount = 0.12f),
-                    ProductTile(id = 543, imageRes = 543, discount = 0.13f),
-                    ProductTile(id = 654, imageRes = 654, discount = 0.14f),
+                    contextId = "context_id_2",
+                    title = "Context title 2",
+                    rec1 = ProductTile(productId = 321, imageRes = 321, discount = 0.11f),
+                    rec2 = ProductTile(productId = 432, imageRes = 432, discount = 0.12f),
+                    rec3 = ProductTile(productId = 543, imageRes = 543, discount = 0.13f),
+                    rec4 = ProductTile(productId = 654, imageRes = 654, discount = 0.14f),
                 ),
             ),
         ),
@@ -55,22 +59,24 @@ class HomeViewModelTest {
 
     private val mockHeroCarousel: List<HeroCarouselCard> = listOf(
         HeroCarouselCard(
-            "TopHome Title 1",
-            Color.Black,
-            listOf(
-                ProductTile(id = R.drawable.item_headphones, imageRes = R.drawable.item_headphones),
-                ProductTile(id = R.drawable.item_backpack, imageRes = R.drawable.item_backpack),
+            heroId = "hero_id_1",
+            title = "Hero Title 1",
+            background = Color.Black,
+            productTiles = listOf(
+                ProductTile(productId = R.drawable.item_headphones, imageRes = R.drawable.item_headphones),
+                ProductTile(productId = R.drawable.item_backpack, imageRes = R.drawable.item_backpack),
             )
         ),
         HeroCarouselCard(
-            "TopHome Title 2",
-            Color.White,
-            listOf(
+            heroId = "hero_id_2",
+            title = "Hero Title 2",
+            background = Color.White,
+            productTiles = listOf(
                 ProductTile(
-                    id = R.drawable.item_kitchen_sponge,
+                    productId = R.drawable.item_kitchen_sponge,
                     imageRes = R.drawable.item_kitchen_sponge
                 ),
-                ProductTile(id = R.drawable.item_matcha, imageRes = R.drawable.item_matcha),
+                ProductTile(productId = R.drawable.item_matcha, imageRes = R.drawable.item_matcha),
             )
         ),
     )
