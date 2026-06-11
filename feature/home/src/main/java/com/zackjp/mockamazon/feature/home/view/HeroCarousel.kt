@@ -78,7 +78,7 @@ fun HeroCarousel(
         flingBehavior = rememberSnapFlingBehavior(lazyListState),
         horizontalArrangement = Arrangement.spacedBy(paddingSmall)
     ) {
-        items(groups) { group ->
+        items(items = groups, key = { it.heroId }) { group ->
             HeroCard(
                 cardWidth = cardWidth,
                 modifier = Modifier.size(cardWidth, cardHeight),

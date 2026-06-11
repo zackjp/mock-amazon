@@ -62,7 +62,7 @@ fun IntentCarousel(
                 .ignoreParentPadding(mainContentHorizontalPadding),
             horizontalArrangement = Arrangement.spacedBy(paddingSmall),
         ) {
-            items(intentCarousel.contextCards) { contextCard ->
+            items(items = intentCarousel.contextCards, key = { it.contextId }) { contextCard ->
                 ContextCard(
                     cardWidth = cardWidth,
                     contextCard = contextCard,
