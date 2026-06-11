@@ -5,6 +5,7 @@ import com.zackjp.mockamazon.feature.cart.api.data.CartRepository
 import com.zackjp.mockamazon.shared.data.SearchApiDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.Syntax
 import org.orbitmvi.orbit.viewmodel.container
@@ -20,25 +21,30 @@ class SearchResultsViewModel @Inject constructor(
         SearchResultsScreenState.Loading
     )
 
-    fun load(searchString: String) = intent {
-        if (state is SearchResultsScreenState.Loaded) {
-            return@intent
-        }
+    private var loadIntent: Job? = null
 
-        try {
-            val searchResults = searchApiDataSource.getSearchResults(searchString)
-            val cartItems = cartRepository.getCart().cartItems
-
-            reduce {
-                SearchResultsScreenState.Loaded(
-                    cartItems = cartItems,
-                    requestedCartCounts = emptyMap(),
-                    searchResults = searchResults,
-                )
+    fun load(searchString: String) {
+        loadIntent?.cancel()
+        loadIntent = intent {
+            if (state is SearchResultsScreenState.Loaded) {
+                return@intent
             }
-        } catch (e: Exception) {
-            if (e is CancellationException) throw e
-            reduce { SearchResultsScreenState.Error }
+
+            try {
+                val searchResults = searchApiDataSource.getSearchResults(searchString)
+                val cartItems = cartRepository.getCart().cartItems
+
+                reduce {
+                    SearchResultsScreenState.Loaded(
+                        cartItems = cartItems,
+                        requestedCartCounts = emptyMap(),
+                        searchResults = searchResults,
+                    )
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                reduce { SearchResultsScreenState.Error }
+            }
         }
     }
 

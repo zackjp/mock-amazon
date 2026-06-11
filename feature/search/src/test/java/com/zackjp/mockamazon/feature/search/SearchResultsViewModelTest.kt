@@ -1,11 +1,11 @@
 package com.zackjp.mockamazon.feature.search
 
-import com.zackjp.mockamazon.core.model.ProductInfo
-import com.zackjp.mockamazon.feature.cart.api.data.CartRepository
-import com.zackjp.mockamazon.shared.data.SearchApiDataSource
 import com.zackjp.mockamazon.core.model.Cart
 import com.zackjp.mockamazon.core.model.CartItem
+import com.zackjp.mockamazon.core.model.ProductInfo
 import com.zackjp.mockamazon.core.model.toCartItem
+import com.zackjp.mockamazon.feature.cart.api.data.CartRepository
+import com.zackjp.mockamazon.shared.data.SearchApiDataSource
 import com.zackjp.mockamazon.shared.testutils.model.fakeCart
 import com.zackjp.mockamazon.shared.testutils.model.fakeInfo
 import com.zackjp.mockamazon.shared.testutils.model.fakeItem
@@ -18,12 +18,16 @@ import io.mockk.coVerify
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.orbitmvi.orbit.test.TestSettings
 import org.orbitmvi.orbit.test.test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class SearchResultsViewModelTest {
 
     private companion object {
@@ -83,6 +87,37 @@ class SearchResultsViewModelTest {
                 requestedCartCounts = emptyMap(),
                 searchResults = expectedSearchResults,
             )
+        }
+    }
+
+    @Test
+    fun load_WithMultipleRapidRequests_LoadsLatestSearchResults() = runTest {
+        val searchString1 = "searchString1"
+        val searchString2 = "searchString2"
+        val results1 = listOf(ProductInfo.fakeInfo(111))
+        val results2 = listOf(ProductInfo.fakeInfo(222))
+        val results1Delay = 500L
+        coEvery { searchApiDataSource.getSearchResults(searchString1) } coAnswers {
+            delay(results1Delay)
+            results1
+        }
+        coEvery { searchApiDataSource.getSearchResults(searchString2) } coAnswers {
+            results2
+        }
+
+        viewModel.test(this, SearchResultsScreenState.Loading) {
+            containerHost.load(searchString1)
+
+            advanceTimeBy(results1Delay - 1) // 1ms before results1 would return
+            containerHost.load(searchString2)
+
+            awaitState() shouldBe SearchResultsScreenState.Loaded(
+                cartItems = listOf(CART_ITEM),
+                requestedCartCounts = emptyMap(),
+                searchResults = results2,
+            )
+
+            expectNoItems()
         }
     }
 
