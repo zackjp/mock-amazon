@@ -1,6 +1,7 @@
 package com.zackjp.mockamazon.app.ui.view
 
 import androidx.annotation.FloatRange
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
@@ -26,6 +27,8 @@ import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.appendInlineContent
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +38,7 @@ import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,25 +70,49 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zackjp.mockamazon.R
 import com.zackjp.mockamazon.shared.theme.AmazonOutlineMedium
+import com.zackjp.mockamazon.shared.theme.AmazonPrimeBlue
 import com.zackjp.mockamazon.shared.R as SharedR
 
-val NAV_CHIPS = listOf(
-    "Early Prime Deals",
-    "Groceries",
-    "Haul",
-    "Medical Care",
-    "Same-Day",
-    "Pharmacy",
-    "In-Store Code",
-    "Alexa Lists",
-    "Prime",
-    "Video",
-    "Music",
-    "Customer Service"
+@Immutable
+private data class NavChipData(
+    @param:StringRes val labelId: Int,
+    val color: Color,
+)
+
+private val NAV_CHIPS = listOf(
+    NavChipData(
+        labelId = R.string.top_app_bar_nav_chip_grocery,
+        color = Color(0xFF09A300),
+    ),
+    NavChipData(
+        labelId = R.string.top_app_bar_nav_chip_haul,
+        color = Color(0xFF5A20C9),
+    ),
+    NavChipData(
+        labelId = R.string.top_app_bar_nav_chip_luxury,
+        color = Color.Black,
+    ),
+    NavChipData(
+        labelId = R.string.top_app_bar_nav_chip_prime_video,
+        color = AmazonPrimeBlue,
+    ),
+    NavChipData(
+        labelId = R.string.top_app_bar_nav_chip_pharmacy,
+        color = Color(0xFF029286),
+    ),
+    NavChipData(
+        labelId = R.string.top_app_bar_nav_chip_prime_day,
+        color = AmazonPrimeBlue,
+    ),
+    NavChipData(
+        labelId = R.string.top_app_bar_nav_chip_see_all,
+        color = Color.Black,
+    ),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -320,22 +348,15 @@ private fun SimpleSearchBar(
 }
 
 @Composable
-private fun NavChipsRow(modifier: Modifier, navigationChips: List<String>) {
-    val translucentWhite = Color(0x99FFFFFF)
-    val navChipFont = MaterialTheme.typography.bodyLarge
+private fun NavChipsRow(
+    modifier: Modifier = Modifier,
+    navigationChips: List<NavChipData>,
+) {
+    val navChipFont = MaterialTheme.typography.labelLarge.copy(fontSize = 20.sp)
 
     val paddingSmall = dimensionResource(R.dimen.padding_small)
-    val paddingMedium = dimensionResource(R.dimen.padding_medium)
     val paddingLarge = dimensionResource(R.dimen.padding_large)
     val locationIconData = remember { createLocationIconData(navChipFont) }
-
-    val navChipModifier = Modifier
-        .clip(MaterialTheme.shapes.extraLarge)
-        .background(translucentWhite)
-        .padding(
-            vertical = paddingSmall,
-            horizontal = paddingMedium
-        )
 
     Box(
         modifier = modifier
@@ -345,23 +366,49 @@ private fun NavChipsRow(modifier: Modifier, navigationChips: List<String>) {
             horizontalArrangement = Arrangement.spacedBy(paddingSmall),
         ) {
             item {
-                Text(
-                    inlineContent = locationIconData.inlineContent,
-                    modifier = navChipModifier,
-                    style = navChipFont,
-                    text = locationIconData.text,
-                )
+                NavChip {
+                    Text(
+                        inlineContent = locationIconData.inlineContent,
+                        style = navChipFont,
+                        text = locationIconData.text,
+                    )
+                }
             }
 
-            items(navigationChips) { item ->
-                Text(
-                    modifier = navChipModifier,
-                    style = navChipFont,
-                    text = item,
-                )
+            items(navigationChips) { navChip ->
+                NavChip {
+                    Text(
+                        style = navChipFont,
+                        text = stringResource(navChip.labelId),
+                        color = navChip.color,
+                    )
+                }
             }
         }
     }
+}
+
+@Composable
+private fun NavChip(
+    onClick: () -> Unit = {},
+    content: @Composable () -> Unit,
+) {
+    AssistChip(
+        border = null,
+        shape = MaterialTheme.shapes.large,
+        colors = AssistChipDefaults.assistChipColors(
+            containerColor = Color.White,
+        ),
+        onClick = onClick,
+        label = {
+            Box(
+                modifier = Modifier.padding(vertical = 12.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                content()
+            }
+        },
+    )
 }
 
 /**

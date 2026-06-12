@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Mock Amazon</string>
     <string name="search_bar_placeholder">Search or ask a question</string>
+    <string name="top_app_bar_nav_chip_grocery">grocery</string>
+    <string name="top_app_bar_nav_chip_haul">haul</string>
+    <string name="top_app_bar_nav_chip_luxury">luxury</string>
+    <string name="top_app_bar_nav_chip_pharmacy">pharmacy</string>
+    <string name="top_app_bar_nav_chip_prime_day">prime day</string>
+    <string name="top_app_bar_nav_chip_prime_video">prime video</string>
+    <string name="top_app_bar_nav_chip_see_all">See all</string>
 </resources>
