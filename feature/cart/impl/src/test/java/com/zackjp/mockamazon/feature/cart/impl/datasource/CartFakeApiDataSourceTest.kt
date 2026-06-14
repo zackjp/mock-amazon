@@ -18,8 +18,8 @@ import org.junit.jupiter.api.Test
 class CartFakeApiDataSourceTest {
 
     private companion object {
-        private val PRODUCT_IN_CART = ProductInfo.Companion.fakeInfo(123)
-        private val PRODUCT_NOT_IN_CART = ProductInfo.Companion.fakeInfo(456)
+        private val PRODUCT_IN_CART = ProductInfo.fakeInfo(123)
+        private val PRODUCT_NOT_IN_CART = ProductInfo.fakeInfo(456)
         private const val PRODUCT_IN_CART_QUANTITY = 7
         private val EXISTING_CART_ITEMS =
             listOf(PRODUCT_IN_CART.toCartItem(quantity = PRODUCT_IN_CART_QUANTITY))
@@ -54,7 +54,7 @@ class CartFakeApiDataSourceTest {
 
     @Test
     fun addToCart_WithValidProductId_ReturnsTrue() = runTest(testDispatcher) {
-        val productInfo = ProductInfo.Companion.fakeInfo(123)
+        val productInfo = ProductInfo.fakeInfo(123)
         every { productInMemoryDb.getProductById(productInfo.id) } returns productInfo
 
         dataSource.addToCart(productInfo.id) shouldBe true
@@ -70,9 +70,9 @@ class CartFakeApiDataSourceTest {
     @Test
     fun addToCart_WithDistinctValidProductIds_ReturnsCartItems() = runTest(testDispatcher) {
         val products = listOf(
-            ProductInfo.Companion.fakeInfo(11),
-            ProductInfo.Companion.fakeInfo(13),
-            ProductInfo.Companion.fakeInfo(17),
+            ProductInfo.fakeInfo(11),
+            ProductInfo.fakeInfo(13),
+            ProductInfo.fakeInfo(17),
         )
         products.forEach {
             every { productInMemoryDb.getProductById(it.id) } returns it
@@ -90,8 +90,8 @@ class CartFakeApiDataSourceTest {
     fun addToCart_WithRepeatedValidProductIds_ReturnsCartItemsWithQuantity() =
         runTest(testDispatcher) {
             val products = listOf(
-                ProductInfo.Companion.fakeInfo(11),
-                ProductInfo.Companion.fakeInfo(13),
+                ProductInfo.fakeInfo(11),
+                ProductInfo.fakeInfo(13),
             )
             products.forEach {
                 every { productInMemoryDb.getProductById(it.id) } returns it
@@ -179,9 +179,9 @@ class CartFakeApiDataSourceTest {
     @Test
     fun getCart_ReturnsCartItemsInOrderWithMostRecentFirst() = runTest(testDispatcher) {
         val products = listOf(
-            ProductInfo.Companion.fakeInfo(11),
-            ProductInfo.Companion.fakeInfo(13),
-            ProductInfo.Companion.fakeInfo(17),
+            ProductInfo.fakeInfo(11),
+            ProductInfo.fakeInfo(13),
+            ProductInfo.fakeInfo(17),
         )
         products.forEach {
             every { productInMemoryDb.getProductById(it.id) } returns it
