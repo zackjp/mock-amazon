@@ -33,5 +33,5 @@ sealed interface Nav: NavKey {
 
 data class BackStackState(
     val backStack: List<NavKey>,
-    val currentGroup: NavKey,
+    val currentGroup: NavKey?,
 )

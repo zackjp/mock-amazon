@@ -69,7 +69,7 @@ class AmazonNav2Controller(
     private val _currentBackStack = MutableStateFlow(
         BackStackState(
             backStack = emptyList(),
-            currentGroup = BottomTab.Home,
+            currentGroup = null,
         )
     )
     override val currentBackStack: StateFlow<BackStackState> = _currentBackStack.asStateFlow()
@@ -96,7 +96,7 @@ class AmazonNav2Controller(
                                 }
                                 error("Unrecognized route: ${entry.destination.route}")
                             },
-                        currentGroup = tabHistory.value.last(),
+                        currentGroup = tabHistory.value.lastOrNull(),
                     )
                 }
             }
@@ -105,7 +105,7 @@ class AmazonNav2Controller(
         coroutineScope.launch {
             tabHistory.collect { history ->
                 _currentBackStack.update { current ->
-                    current.copy(currentGroup = history.last<BottomTab>())
+                    current.copy(currentGroup = history.lastOrNull())
                 }
                 _backHandlerForTabs.value = calculateBackHandler(history)
             }

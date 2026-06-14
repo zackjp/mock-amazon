@@ -13,7 +13,7 @@ import com.zackjp.mockamazon.app.navigation.Nav
 
 @Composable
 fun AmazonBottomAppBar(
-    selectedTab: NavKey,
+    selectedTab: NavKey?,
     modifier: Modifier = Modifier,
     navItems: List<BottomNavItem>,
 ) {
@@ -23,6 +23,7 @@ fun AmazonBottomAppBar(
                 selected = when (selectedTab) {
                     is Nav.Tab -> selectedTab == navItem.bottomTab
                     is Nav.Route -> selectedTab.groupOwner() == navItem.bottomTab
+                    null -> false
                     else -> error("Unknown tab type: $selectedTab")
                 },
                 onClick = navItem.onClick,
