@@ -18,9 +18,9 @@ import org.junit.jupiter.api.Test
 
 class CartRepositoryImplTest {
 
-    val cartFakeApiDataSource = mockk<CartFakeApiDataSource>()
+    private val cartFakeApiDataSource = mockk<CartFakeApiDataSource>()
 
-    lateinit var repo: CartRepositoryImpl
+    private lateinit var repo: CartRepositoryImpl
 
     @BeforeEach
     fun setUp() {
