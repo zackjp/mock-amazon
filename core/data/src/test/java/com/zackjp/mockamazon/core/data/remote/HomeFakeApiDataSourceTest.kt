@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class HomeFakeApiDataSourceTest {
 
     private val testDispatcherProvider = TestDispatcherProvider()
-    private val testDispatcher = testDispatcherProvider.default
+    private val testDispatcher = testDispatcherProvider.io
 
     private lateinit var homeFakeApiDataSource: HomeFakeApiDataSource
 

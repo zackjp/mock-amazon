@@ -19,7 +19,7 @@ internal class CartFakeApiDataSource @Inject constructor(
 
     private val cartProductIdQuantityMap = Collections.synchronizedMap(LinkedHashMap<Int, Int>())
 
-    suspend fun addToCart(productId: Int): Boolean = withContext(dispatcherProvider.default) {
+    suspend fun addToCart(productId: Int): Boolean = withContext(dispatcherProvider.io) {
         delay(500)
 
         val productInfo = productInMemoryDb.getProductById(productId)
@@ -31,22 +31,23 @@ internal class CartFakeApiDataSource @Inject constructor(
         return@withContext true
     }
 
-    suspend fun setQuantity(productId: Int, quantity: Int) {
-        delay(500)
+    suspend fun setQuantity(productId: Int, quantity: Int): Unit =
+        withContext(dispatcherProvider.io) {
+            delay(500)
 
-        if (quantity > 0) {
-            cartProductIdQuantityMap.put(productId, quantity)
-        } else {
-            cartProductIdQuantityMap.remove(productId)
+            if (quantity > 0) {
+                cartProductIdQuantityMap.put(productId, quantity)
+            } else {
+                cartProductIdQuantityMap.remove(productId)
+            }
         }
-    }
 
-    suspend fun removeByProductId(productId: Int): Unit = withContext(dispatcherProvider.default) {
+    suspend fun removeByProductId(productId: Int): Unit = withContext(dispatcherProvider.io) {
         delay(1250)
         cartProductIdQuantityMap.remove(productId)
     }
 
-    suspend fun getCart(): Cart = withContext(dispatcherProvider.default) {
+    suspend fun getCart(): Cart = withContext(dispatcherProvider.io) {
         delay(300)
 
         val cartItems = cartProductIdQuantityMap
@@ -63,7 +64,7 @@ internal class CartFakeApiDataSource @Inject constructor(
         )
     }
 
-    suspend fun decrementByProductId(productId: Int): Unit = withContext(dispatcherProvider.default) {
+    suspend fun decrementByProductId(productId: Int): Unit = withContext(dispatcherProvider.io) {
         cartProductIdQuantityMap.compute(productId) { key, value ->
             val updatedQuantity = (value ?: 0) - 1
             if (updatedQuantity <= 0) null else updatedQuantity

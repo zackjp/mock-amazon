@@ -29,7 +29,7 @@ class CartFakeApiDataSourceTest {
     }
 
     private val testDispatcherProvider = TestDispatcherProvider()
-    private val testDispatcher = testDispatcherProvider.default
+    private val testDispatcher = testDispatcherProvider.io
 
     private val productInMemoryDb = mockk<ProductInMemoryDb>()
     private lateinit var dataSource: CartFakeApiDataSource

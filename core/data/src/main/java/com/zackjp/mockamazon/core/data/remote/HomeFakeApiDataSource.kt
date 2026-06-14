@@ -21,13 +21,13 @@ internal class HomeFakeApiDataSource @Inject constructor(
 ) {
 
     suspend fun fetchHeroCarouselCards(): List<HeroCarouselCardResponse> =
-        withContext(dispatcherProvider.default) {
+        withContext(dispatcherProvider.io) {
             delay(1000) // simulate network delay
             createHeroCarouselCards()
         }
 
     suspend fun fetchIntentCarousels(): List<IntentCarouselResponse> =
-        withContext(dispatcherProvider.default) {
+        withContext(dispatcherProvider.io) {
             delay(1000L) // simulate network delay
             createIntentCarousels()
         }
