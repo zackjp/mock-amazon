@@ -50,6 +50,7 @@ tasks.withType<Test> {
 dependencies {
     ksp(libs.hilt.compiler)
 
+    implementation("androidx.metrics:metrics-performance:1.0.0")
     implementation(projects.core.analytics.api)
     implementation(projects.core.analytics.impl)
     implementation(projects.feature.cart.impl)

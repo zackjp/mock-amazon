@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -20,10 +21,13 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.metrics.performance.PerformanceMetricsState
+import androidx.navigation3.runtime.NavKey
 import com.zackjp.mockamazon.app.navigation.AmazonNav2Controller
 import com.zackjp.mockamazon.app.navigation.AmazonNav3Controller
 import com.zackjp.mockamazon.app.navigation.AmazonNav3Display
@@ -65,6 +69,7 @@ fun App() {
 
     val backStackState: BackStackState by amazonNavController.currentBackStack.collectAsStateWithLifecycle()
     val currentRoute = backStackState.backStack.lastOrNull()
+    JankMetricsReporter(currentRoute)
     val isStartRoute = currentRoute != null && TOP_ROUTES_SET.contains(currentRoute)
     val isHome = currentRoute is HomeStart
     val searchMode = when (currentRoute) {
@@ -170,6 +175,29 @@ fun App() {
                 onPerformSearch = onPerformSearch,
             )
         }
+    }
+}
+
+@Composable
+private fun JankMetricsReporter(
+    currentRoute: NavKey?
+) {
+    val metricsStateHolder = rememberJankMetricsStateHolder()
+    LaunchedEffect(metricsStateHolder, currentRoute) {
+        val screenKey = "screen"
+        val screenValue = currentRoute?.let { it::class.simpleName } ?: "<null>"
+        metricsStateHolder.state?.putState(
+            screenKey,
+            screenValue,
+        )
+    }
+}
+
+@Composable
+private fun rememberJankMetricsStateHolder(): PerformanceMetricsState.Holder {
+    val view = LocalView.current
+    return remember(view) {
+        PerformanceMetricsState.getHolderForHierarchy(view)
     }
 }
 
