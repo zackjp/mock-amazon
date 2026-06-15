@@ -1,6 +1,5 @@
 package com.zackjp.mockamazon.feature.home.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,18 +19,21 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
+import com.zackjp.mockamazon.core.model.ProductTile
 import com.zackjp.mockamazon.feature.home.model.DisplayableItem
 import com.zackjp.mockamazon.feature.home.model.toDisplayableItem
-import com.zackjp.mockamazon.core.model.ProductTile
 import kotlin.math.roundToInt
 import com.zackjp.mockamazon.shared.R as SharedR
 
@@ -141,7 +143,11 @@ private fun ItemDisplay(
             )
         }
 
-        Image(
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(item.imageId)
+                .crossfade(true)
+                .build(),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             colorFilter = ColorFilter.tint(ITEM_BG_COLOR, BlendMode.Multiply),
@@ -161,7 +167,6 @@ private fun ItemDisplay(
                     height = Dimension.fillToConstraints
                 }
                 .padding(4.dp),
-            painter = painterResource(item.imageId),
         )
     }
 }
