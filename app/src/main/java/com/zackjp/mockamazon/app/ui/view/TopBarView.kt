@@ -126,7 +126,6 @@ fun AmazonTopAppBarWithNavChips(
     windowPadding: PaddingValues,
 ) {
     val paddingXXSmall = dimensionResource(R.dimen.padding_xxsmall)
-    val paddingSmall = dimensionResource(R.dimen.padding_small)
     val paddingLarge = dimensionResource(R.dimen.padding_large)
 
     val topBarBackgroundColorStart = Color.White.copy(alpha = offsetFraction)
@@ -165,7 +164,7 @@ fun AmazonTopAppBarWithNavChips(
                     .padding(
                         start = paddingLarge,
                         end = paddingLarge,
-                        bottom = paddingSmall
+                        bottom = 4.dp,
                     ),
                 onOpenSearch = onOpenSearch
             )
@@ -196,7 +195,6 @@ fun AmazonTopAppBar(
     windowPadding: PaddingValues,
 ) {
     val paddingLarge = dimensionResource(R.dimen.padding_large)
-    val paddingSmall = dimensionResource(R.dimen.padding_small)
     val layoutDirection = LocalLayoutDirection.current
 
     Row(
@@ -230,7 +228,7 @@ fun AmazonTopAppBar(
                 .padding(
                     start = if (showUpNavigation) 0.dp else paddingLarge,
                     end = paddingLarge,
-                    bottom = paddingSmall,
+                    bottom = 6.dp,
                 ),
             onOpenSearch = onOpenSearch,
             onPerformSearch = onPerformSearch,
@@ -352,7 +350,7 @@ private fun NavChipsRow(
     modifier: Modifier = Modifier,
     navigationChips: List<NavChipData>,
 ) {
-    val navChipFont = MaterialTheme.typography.labelLarge.copy(fontSize = 20.sp)
+    val navChipFont = MaterialTheme.typography.displayMedium.copy(fontSize = 16.sp)
 
     val paddingSmall = dimensionResource(R.dimen.padding_small)
     val paddingLarge = dimensionResource(R.dimen.padding_large)
@@ -395,14 +393,14 @@ private fun NavChip(
 ) {
     AssistChip(
         border = null,
-        shape = MaterialTheme.shapes.large,
+        shape = MaterialTheme.shapes.medium,
         colors = AssistChipDefaults.assistChipColors(
             containerColor = Color.White,
         ),
         onClick = onClick,
         label = {
             Box(
-                modifier = Modifier.padding(vertical = 12.dp),
+                modifier = Modifier.padding(vertical = 10.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 content()

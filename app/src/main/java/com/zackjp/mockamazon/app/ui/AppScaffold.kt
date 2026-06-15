@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -115,9 +114,7 @@ fun App() {
             if (isHome) {
                 AmazonTopAppBarWithNavChips(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 24.dp)
-                    ,
+                        .fillMaxWidth(),
                     navChipsOffset = collapsibleState.currentOffsetPx.value,
                     offsetFraction = collapsibleState.offsetFraction.value,
                     onNavChipsSizeChange = { intSize ->
@@ -132,8 +129,7 @@ fun App() {
                     isSearchEditable = searchMode is SearchMode.Suggestions,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(AmazonBeige)
-                        .padding(top = 24.dp),
+                        .background(AmazonBeige),
                     onOpenSearch = { onOpenSearch(searchMode.searchText) },
                     onPerformSearch = onPerformSearch,
                     onNavigateUp = if (isStartRoute) null else onNavigateUp,
