@@ -30,6 +30,22 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        // A profilable build, based on the Release variant, for performance tools & analysis
+        create("benchmark") {
+            val release by getting
+            val debug by getting
+
+            initWith(release)
+            isDebuggable = false
+            signingConfig = debug.signingConfig
+            // Includes source sets from other modules without having to define their own benchmark variant
+            matchingFallbacks += "release"
+
+            proguardFiles(
+                *(release.proguardFiles.toTypedArray() + file("proguard-benchmark.pro"))
+            )
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -60,6 +76,10 @@ dependencies {
     implementation(projects.feature.search)
     implementation(projects.lib.shared)
     testImplementation(projects.lib.sharedTestUtils)
+
+    val benchmarkImplementation by configurations.getting
+    benchmarkImplementation(platform(libs.androidx.compose.bom))
+    benchmarkImplementation(libs.androidx.compose.runtime.tracing)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
