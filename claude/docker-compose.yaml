@@ -4,10 +4,24 @@ services:
   claude-cli:
     build: .
     volumes:
-      # Mount to parent project folder
+      # Bind mount parent directory as project root
       - ..:/workspace
-    # Keeps container running to interact with the terminal
+      # Gradle dependency cache — persists across container restarts
+      - gradle-cache:/root/.gradle
+      # ADB keys — avoids device re-authentication on restart
+      - android-keys:/root/.android
     stdin_open: true
     tty: true
-    # Allows container to use the internet for AI requests
+    # Bridge + extra_hosts gives container access to host.docker.internal
+    # (automatic on Mac Docker Desktop; host-gateway handles Linux hosts)
     network_mode: bridge
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - ANDROID_HOME=/opt/android-sdk
+      - ANDROID_SDK_ROOT=/opt/android-sdk
+      - ANDROID_ADB_SERVER_HOST=host.docker.internal
+
+volumes:
+  gradle-cache:
+  android-keys:
