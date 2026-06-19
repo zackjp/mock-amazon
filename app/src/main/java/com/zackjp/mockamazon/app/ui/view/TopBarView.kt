@@ -2,7 +2,6 @@ package com.zackjp.mockamazon.app.ui.view
 
 import androidx.annotation.FloatRange
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -49,6 +48,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
@@ -119,17 +119,14 @@ private val NAV_CHIPS = listOf(
 @Composable
 fun AmazonTopAppBarWithNavChips(
     modifier: Modifier = Modifier,
-    navChipsOffset: Float,
-    @FloatRange(0.0, 1.0) offsetFraction: Float,
+    navChipsOffsetProvider: () -> Float,
+    @FloatRange(0.0, 1.0) offsetFractionProvider: () -> Float,
     onNavChipsSizeChange: (IntSize) -> Unit,
     onOpenSearch: () -> Unit = {},
     windowPadding: PaddingValues,
 ) {
     val paddingXXSmall = dimensionResource(R.dimen.padding_xxsmall)
     val paddingLarge = dimensionResource(R.dimen.padding_large)
-
-    val topBarBackgroundColorStart = Color.White.copy(alpha = offsetFraction)
-    val topBarBackgroundColorEnd = Color.White.copy(alpha = .75f * offsetFraction)
 
     val layoutDirection = LocalLayoutDirection.current
 
@@ -138,15 +135,23 @@ fun AmazonTopAppBarWithNavChips(
             modifier = Modifier
                 .matchParentSize()
                 .graphicsLayer {
-                    translationY = navChipsOffset
+                    translationY = navChipsOffsetProvider()
                 }
-                .background(
-                    Brush.verticalGradient(
+                .drawWithCache {
+                    val topBarBackgroundColorStart = Color.White.copy(alpha = offsetFractionProvider())
+                    val topBarBackgroundColorEnd = Color.White.copy(alpha = .75f * offsetFractionProvider())
+
+                    val verticalGradient = Brush.verticalGradient(
                         0f to topBarBackgroundColorStart,
                         .45f to topBarBackgroundColorStart,
                         .7f to topBarBackgroundColorEnd
                     )
-                )
+                    onDrawBehind {
+                        drawRect(
+                            brush = verticalGradient,
+                        )
+                    }
+                }
         )
 
         Column(
@@ -174,8 +179,8 @@ fun AmazonTopAppBarWithNavChips(
                     .onSizeChanged(onNavChipsSizeChange)
                     .padding(top = paddingXXSmall)
                     .graphicsLayer {
-                        alpha = (1 - offsetFraction)
-                        translationY = navChipsOffset
+                        alpha = (1 - offsetFractionProvider())
+                        translationY = navChipsOffsetProvider()
                     },
                 navigationChips = NAV_CHIPS,
             )

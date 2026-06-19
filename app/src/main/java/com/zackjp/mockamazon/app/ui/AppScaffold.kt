@@ -115,8 +115,8 @@ fun App() {
                 AmazonTopAppBarWithNavChips(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    navChipsOffset = collapsibleState.currentOffsetPx.value,
-                    offsetFraction = collapsibleState.offsetFraction.value,
+                    navChipsOffsetProvider = { collapsibleState.currentOffsetPx.value },
+                    offsetFractionProvider = { collapsibleState.offsetFraction.value },
                     onNavChipsSizeChange = { intSize ->
                         navChipsHeightPx = intSize.height.toFloat()
                     },
