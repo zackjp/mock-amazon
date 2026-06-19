@@ -20,11 +20,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -38,6 +41,12 @@ import com.zackjp.mockamazon.shared.ignoreParentPadding
 import com.zackjp.mockamazon.shared.ui.screen.ErrorScreen
 import com.zackjp.mockamazon.shared.ui.screen.LoadingScreen
 import com.zackjp.mockamazon.shared.R as SharedR
+
+
+private val ColorSaver = Saver<Color, Int>(
+    save = { color -> color.toArgb() },
+    restore = { value -> Color(value) }
+)
 
 @Composable
 fun HomeScreenRoot(
@@ -91,7 +100,10 @@ private fun LoadedView(
     val localDensity = LocalDensity.current
     var topHomeHeightPx by remember { mutableIntStateOf(0) }
     val endGradientHeight = with(localDensity) { (topHomeHeightPx * .8).toInt().toDp() }
-    var targetTopColor by remember { mutableStateOf(Color.Transparent) }
+
+    var targetTopColor by rememberSaveable(stateSaver = ColorSaver) {
+        mutableStateOf(Color.Transparent)
+    }
     val colorTransition = updateTransition(targetState = targetTopColor)
     val currentTopColor by colorTransition.animateColor(transitionSpec = {
         tween(
