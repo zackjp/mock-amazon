@@ -1,9 +1,8 @@
 package com.zackjp.mockamazon.feature.home
 
-import androidx.compose.animation.animateColor
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -104,13 +103,13 @@ private fun LoadedView(
     var targetTopColor by rememberSaveable(stateSaver = ColorSaver) {
         mutableStateOf(Color.Transparent)
     }
-    val colorTransition = updateTransition(targetState = targetTopColor)
-    val currentTopColor by colorTransition.animateColor(transitionSpec = {
-        tween(
+    val topColor by animateColorAsState(
+        targetValue = targetTopColor,
+        animationSpec = tween(
             durationMillis = 300,
-            easing = LinearEasing
+            easing = LinearEasing,
         )
-    }) { it }
+    )
 
     LazyColumn(
         modifier = modifier
@@ -128,7 +127,7 @@ private fun LoadedView(
                     modifier = Modifier
                         .drawWithCache {
                             val verticalGradient =
-                                Brush.verticalGradient(listOf(currentTopColor, Color.Transparent))
+                                Brush.verticalGradient(listOf(topColor, Color.Transparent))
                             onDrawBehind {
                                 drawRect(
                                     brush = verticalGradient,
