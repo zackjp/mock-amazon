@@ -64,7 +64,6 @@ fun IntentCarousel(
         ) {
             items(items = intentCarousel.contextCards, key = { it.contextId }) { contextCard ->
                 ContextCard(
-                    cardWidth = cardWidth,
                     contextCard = contextCard,
                     modifier = Modifier.size(cardWidth, cardHeight),
                     onViewProduct = onViewProduct,
@@ -76,7 +75,6 @@ fun IntentCarousel(
 
 @Composable
 private fun ContextCard(
-    cardWidth: Dp,
     contextCard: ContextCard,
     modifier: Modifier = Modifier,
     onViewProduct: (Int) -> Unit,
@@ -108,11 +106,11 @@ private fun ContextCard(
             Spacer(modifier = Modifier.height(paddingXXSmall))
 
             ItemDisplayWindow(
-                cardPadding = cardPadding,
-                cardWidth = cardWidth,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f),
                 productTiles = items,
                 itemSpacing = itemSpacing,
-                modifier = Modifier.fillMaxSize(),
                 onViewProduct = onViewProduct,
             )
         }

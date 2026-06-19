@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -80,7 +80,6 @@ fun HeroCarousel(
     ) {
         items(items = groups, key = { it.heroId }) { group ->
             HeroCard(
-                cardWidth = cardWidth,
                 modifier = Modifier.size(cardWidth, cardHeight),
                 onViewProduct = onViewProduct,
                 heroCarouselCard = group,
@@ -91,7 +90,6 @@ fun HeroCarousel(
 
 @Composable
 private fun HeroCard(
-    cardWidth: Dp,
     modifier: Modifier = Modifier,
     onViewProduct: (Int) -> Unit = {},
     heroCarouselCard: HeroCarouselCard,
@@ -123,11 +121,11 @@ private fun HeroCard(
             Spacer(Modifier.height(paddingMedium))
 
             ItemDisplayWindow(
-                cardPadding = cardPadding,
-                cardWidth = cardWidth,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
                 productTiles = heroCarouselCard.productTiles,
                 itemSpacing = itemSpacing,
-                modifier = Modifier.fillMaxSize(),
                 onViewProduct = onViewProduct,
             )
         }
