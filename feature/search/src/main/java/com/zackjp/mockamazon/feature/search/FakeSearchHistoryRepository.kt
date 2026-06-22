@@ -8,11 +8,19 @@ import javax.inject.Singleton
 @Singleton
 class FakeSearchHistoryRepository @Inject constructor() : SearchHistoryRepository {
 
-    private val history = MutableStateFlow(DEFAULT_HISTORY)
+    private val history = MutableStateFlow(emptyList<String>())
 
     override fun observeHistory(): Flow<List<String>> = history
 
+    override suspend fun saveQuery(query: String) {
+        history.value = buildList {
+            add(query)
+            addAll(history.value.filterNot { it == query })
+            if (size > MAX_HISTORY_SIZE) removeAt(MAX_HISTORY_SIZE)
+        }
+    }
+
     companion object {
-        val DEFAULT_HISTORY = listOf("mixed nuts", "popcorn", "snacks", "sneakers", "household")
+        private const val MAX_HISTORY_SIZE = 10
     }
 }

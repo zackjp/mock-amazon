@@ -16,10 +16,20 @@ class SearchScreenViewModelTest {
     private val viewModel = SearchScreenViewModel(fakeRepository)
 
     @Test
-    fun searchItems_EmitsHistoryFromRepository() = runTest {
+    fun searchItems_InitiallyEmpty() = runTest {
         viewModel.searchItems.test {
             awaitItem() shouldBe emptyList()
-            awaitItem() shouldBe FakeSearchHistoryRepository.DEFAULT_HISTORY
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun searchItems_EmitsNonEmptyHistoryFromRepository() = runTest {
+        fakeRepository.saveQuery("popcorn")
+
+        viewModel.searchItems.test {
+            awaitItem() shouldBe emptyList()
+            awaitItem() shouldBe listOf("popcorn")
         }
     }
 }

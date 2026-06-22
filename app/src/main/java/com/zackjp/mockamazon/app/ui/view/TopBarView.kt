@@ -306,7 +306,10 @@ private fun SimpleSearchBar(
                 onValueChange = { viewModel.updateSearchText(it) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(onSearch = { onPerformSearch(currentSearchText.text) }),
+                keyboardActions = KeyboardActions(onSearch = {
+                    viewModel.saveQuery(currentSearchText.text)
+                    onPerformSearch(currentSearchText.text)
+                }),
                 textStyle = MaterialTheme.typography.bodyLarge,
                 decorationBox = @Composable { innerTextField ->
                     val colors = TextFieldDefaults.colors().copy(
