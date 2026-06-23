@@ -39,6 +39,7 @@ tasks.withType<Test> {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.datastore.preferences)
     ksp(libs.hilt.compiler)
 
     implementation(projects.core.model)
