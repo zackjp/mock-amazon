@@ -71,7 +71,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zackjp.mockamazon.R
 import com.zackjp.mockamazon.shared.theme.AmazonOutlineMedium
@@ -119,6 +118,7 @@ private val NAV_CHIPS = listOf(
 @Composable
 fun AmazonTopAppBarWithNavChips(
     modifier: Modifier = Modifier,
+    globalSearchViewModel: GlobalSearchBarViewModel,
     navChipsOffsetProvider: () -> Float,
     @FloatRange(0.0, 1.0) offsetFractionProvider: () -> Float,
     onNavChipsSizeChange: (IntSize) -> Unit,
@@ -171,7 +171,8 @@ fun AmazonTopAppBarWithNavChips(
                         end = paddingLarge,
                         bottom = 4.dp,
                     ),
-                onOpenSearch = onOpenSearch
+                onOpenSearch = onOpenSearch,
+                globalSearchViewModel = globalSearchViewModel,
             )
 
             NavChipsRow(
@@ -197,6 +198,7 @@ fun AmazonTopAppBar(
     onOpenSearch: () -> Unit = {},
     onPerformSearch: (String) -> Unit,
     onNavigateUp: (() -> Unit)?,
+    globalSearchViewModel: GlobalSearchBarViewModel,
     windowPadding: PaddingValues,
 ) {
     val paddingLarge = dimensionResource(R.dimen.padding_large)
@@ -237,6 +239,7 @@ fun AmazonTopAppBar(
                 ),
             onOpenSearch = onOpenSearch,
             onPerformSearch = onPerformSearch,
+            globalSearchViewModel = globalSearchViewModel,
         )
     }
 }
@@ -249,20 +252,20 @@ private fun SimpleSearchBar(
     modifier: Modifier = Modifier,
     onOpenSearch: () -> Unit = {},
     onPerformSearch: (String) -> Unit = {},
-    viewModel: GlobalSearchBarViewModel = hiltViewModel()
+    globalSearchViewModel: GlobalSearchBarViewModel,
 ) {
     val textFieldShape = MaterialTheme.shapes.extraLarge
     val currentOnOpenSearch by rememberUpdatedState(onOpenSearch)
 
-    val currentSearchText by viewModel.searchText.collectAsStateWithLifecycle()
+    val currentSearchText by globalSearchViewModel.searchText.collectAsStateWithLifecycle()
     // Known bug: Non-empty initial text will overwrite user-entered text on rotation/config change.
     // NavGraph won't have restored the backstack in time. Initial text will default to "", then the
     // backstack + correct initial text comes in, which will update the VM and overwrite user text
     var shouldInitializeText by rememberSaveable(initialSearchText) { mutableStateOf(true) }
-    LaunchedEffect(viewModel, initialSearchText) {
+    LaunchedEffect(globalSearchViewModel, initialSearchText) {
         if (shouldInitializeText) {
             shouldInitializeText = false
-            viewModel.updateSearchText(
+            globalSearchViewModel.updateSearchText(
                 TextFieldValue(
                     initialSearchText,
                     TextRange(initialSearchText.length)
@@ -303,11 +306,10 @@ private fun SimpleSearchBar(
                     .border(0.5.dp, AmazonOutlineMedium, textFieldShape)
                     .focusable()
                     .focusRequester(focusRequester),
-                onValueChange = { viewModel.updateSearchText(it) },
+                onValueChange = { globalSearchViewModel.updateSearchText(it) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(onSearch = {
-                    viewModel.saveQuery(currentSearchText.text)
                     onPerformSearch(currentSearchText.text)
                 }),
                 textStyle = MaterialTheme.typography.bodyLarge,

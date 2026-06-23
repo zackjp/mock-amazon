@@ -27,10 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.metrics.performance.PerformanceMetricsState
 import androidx.navigation3.runtime.NavKey
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.zackjp.mockamazon.app.navigation.AmazonNav2Controller
 import com.zackjp.mockamazon.app.navigation.AmazonNav3Controller
 import com.zackjp.mockamazon.app.navigation.AmazonNav3Display
 import com.zackjp.mockamazon.app.navigation.AmazonNavGraph
+import com.zackjp.mockamazon.app.ui.view.GlobalSearchBarViewModel
 import com.zackjp.mockamazon.app.navigation.BackStackState
 import com.zackjp.mockamazon.app.navigation.BottomTab
 import com.zackjp.mockamazon.app.navigation.CheckoutReview
@@ -56,7 +58,9 @@ import com.zackjp.mockamazon.shared.R as SharedR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App() {
+fun App(
+    globalSearchBarViewModel: GlobalSearchBarViewModel = hiltViewModel(),
+) {
     val amazonNavController = when (FeatureFlags.USE_NAV3) {
         true -> rememberNav3Controller(TOP_ROUTES_SET, HomeStart)
         false -> rememberNav2Controller()
@@ -90,6 +94,7 @@ fun App() {
         amazonNavController.navigateTo(ViewProduct(productId))
     }
     val onPerformSearch = { searchString: String ->
+        globalSearchBarViewModel.saveQuery(searchString)
         // First, clear Search Screen from backstack
         if (currentRoute is Search) {
             amazonNavController.popBackStack()
@@ -121,6 +126,7 @@ fun App() {
                         navChipsHeightPx = intSize.height.toFloat()
                     },
                     onOpenSearch = { onOpenSearch("") },
+                    globalSearchViewModel = globalSearchBarViewModel,
                     windowPadding = windowPadding,
                 )
             } else {
@@ -133,6 +139,7 @@ fun App() {
                     onOpenSearch = { onOpenSearch(searchMode.searchText) },
                     onPerformSearch = onPerformSearch,
                     onNavigateUp = if (isStartRoute) null else onNavigateUp,
+                    globalSearchViewModel = globalSearchBarViewModel,
                     windowPadding = windowPadding,
                 )
             }

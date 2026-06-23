@@ -3,7 +3,10 @@ package com.zackjp.mockamazon.feature.search
 import app.cash.turbine.test
 import com.zackjp.mockamazon.shared.testutils.SetMainCoroutineDispatcher
 import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -12,8 +15,11 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(SetMainCoroutineDispatcher::class)
 class SearchScreenViewModelTest {
 
-    private val fakeRepository = FakeSearchHistoryRepository()
-    private val viewModel = SearchScreenViewModel(fakeRepository)
+    private val historyFlow = MutableStateFlow(emptyList<String>())
+    private val repository = mockk<SearchHistoryRepository>(relaxed = true) {
+        every { observeHistory() } returns historyFlow
+    }
+    private val viewModel = SearchScreenViewModel(repository)
 
     @Test
     fun searchItems_InitiallyEmpty() = runTest {
@@ -24,12 +30,14 @@ class SearchScreenViewModelTest {
     }
 
     @Test
-    fun searchItems_EmitsNonEmptyHistoryFromRepository() = runTest {
-        fakeRepository.saveQuery("popcorn")
-
+    fun searchItems_EmitsHistoryFromRepository() = runTest {
         viewModel.searchItems.test {
             awaitItem() shouldBe emptyList()
-            awaitItem() shouldBe listOf("popcorn")
+
+            historyFlow.value = listOf("query1")
+
+            awaitItem() shouldBe listOf("query1")
         }
     }
+
 }
