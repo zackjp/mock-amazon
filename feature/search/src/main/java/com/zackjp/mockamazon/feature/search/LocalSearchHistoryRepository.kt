@@ -23,6 +23,7 @@ class LocalSearchHistoryRepository @Inject constructor(
     private val historyKey = stringPreferencesKey("search_history")
 
     override fun observeHistory(): Flow<List<String>> = dataStore.data
+        // TODO (Zack): Log IOException once non-Android-specific logging strategy is added
         .catch { e -> if (e is IOException) emit(emptyPreferences()) else throw e }
         .map { prefs -> prefs[historyKey].decodeOrEmpty() }
 
@@ -38,6 +39,7 @@ class LocalSearchHistoryRepository @Inject constructor(
         }
     }
 
+    // TODO (Zack): Log SerializationException once non-Android-specific logging strategy is added
     private fun String?.decodeOrEmpty(): List<String> =
         this?.let { runCatching { Json.decodeFromString<List<String>>(it) }.getOrDefault(emptyList()) }
             ?: emptyList()
