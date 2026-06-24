@@ -8,8 +8,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.SerializationException
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.IOException
 import javax.inject.Inject
@@ -36,6 +34,14 @@ class LocalSearchHistoryRepository @Inject constructor(
                 if (size > MAX_HISTORY_SIZE) removeAt(MAX_HISTORY_SIZE)
             }
             prefs[historyKey] = Json.encodeToString(updated)
+        }
+    }
+
+    override suspend fun removeQuery(query: String) {
+        dataStore.edit { prefs ->
+            val history = prefs[historyKey].decodeOrEmpty()
+            val updatedHistory = history.filterNot { q -> q == query }
+            prefs[historyKey] = Json.encodeToString(updatedHistory)
         }
     }
 

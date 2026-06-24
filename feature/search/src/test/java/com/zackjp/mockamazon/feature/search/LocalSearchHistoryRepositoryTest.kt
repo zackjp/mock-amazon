@@ -87,6 +87,30 @@ class LocalSearchHistoryRepositoryTest {
     }
 
     @Test
+    fun removeQuery_RemovesExistingQuery() = runTest {
+        repository.saveQuery("query1")
+        repository.saveQuery("query2")
+        repository.saveQuery("query3")
+        repository.removeQuery("query2")
+
+        repository.observeHistory().test {
+            awaitItem() shouldBe listOf("query3", "query1")
+        }
+    }
+
+    @Test
+    fun removeQuery_NonExistingQuery_DoesNothing() = runTest {
+        repository.saveQuery("query1")
+        repository.saveQuery("query2")
+        repository.saveQuery("query3")
+        repository.removeQuery("nonExistingQuery")
+
+        repository.observeHistory().test {
+            awaitItem() shouldBe listOf("query3", "query2", "query1")
+        }
+    }
+
+    @Test
     fun observeHistory_EmitsEmptyList_WhenDataStoreThrowsIOException() = runTest {
         val failingDataStore = object : DataStore<Preferences> {
             override val data: Flow<Preferences> = flow { throw IOException("disk read failed") }

@@ -3,6 +3,7 @@ package com.zackjp.mockamazon.feature.search
 import app.cash.turbine.test
 import com.zackjp.mockamazon.shared.testutils.SetMainCoroutineDispatcher
 import io.kotest.matchers.shouldBe
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,6 +39,13 @@ class SearchScreenViewModelTest {
 
             awaitItem() shouldBe listOf("query1")
         }
+    }
+
+    @Test
+    fun onRemoveQuery_DelegatesToRepository() = runTest {
+        viewModel.onRemoveQuery("query1")
+
+        coVerify { repository.removeQuery("query1") }
     }
 
 }
