@@ -2,9 +2,7 @@
 # Mock Amazon App
 
 ## Purpose
-A fun project to build UIs and explore recently released and alternative Android libs.
-
-New libs so far: Nav3 and OrbitMVI 11.
+A recreation of the Amazon shopping app in Compose to research and validate latest patterns, libraries, and tools. This includes modularization, MVI frameworks, performance testing, analytics, and AI-assisted workflows.
 
 ## Screenshots
 <img src="screenshots/mock01_home_screen.png" height="400"/> <img src="screenshots/mock02_search_suggestions.png" height="400"/> <img src="screenshots/mock03_search_results.png" height="400"/>
