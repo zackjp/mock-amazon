@@ -23,9 +23,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.appendInlineContent
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,11 +41,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,16 +61,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zackjp.mockamazon.R
 import com.zackjp.mockamazon.shared.theme.AmazonOutlineMedium
 import com.zackjp.mockamazon.shared.theme.AmazonPrimeBlue
@@ -118,7 +114,6 @@ private val NAV_CHIPS = listOf(
 @Composable
 fun AmazonTopAppBarWithNavChips(
     modifier: Modifier = Modifier,
-    globalSearchViewModel: GlobalSearchBarViewModel,
     navChipsOffsetProvider: () -> Float,
     @FloatRange(0.0, 1.0) offsetFractionProvider: () -> Float,
     onNavChipsSizeChange: (IntSize) -> Unit,
@@ -164,6 +159,7 @@ fun AmazonTopAppBarWithNavChips(
         ) {
             SimpleSearchBar(
                 initialSearchText = "",
+                backStackSize = 0,
                 isSearchEditable = false,
                 modifier = Modifier
                     .padding(
@@ -172,7 +168,6 @@ fun AmazonTopAppBarWithNavChips(
                         bottom = 4.dp,
                     ),
                 onOpenSearch = onOpenSearch,
-                globalSearchViewModel = globalSearchViewModel,
             )
 
             NavChipsRow(
@@ -193,6 +188,7 @@ fun AmazonTopAppBarWithNavChips(
 @Composable
 fun AmazonTopAppBar(
     initialSearchText: String,
+    backStackSize: Int,
     isSearchEditable: Boolean,
     modifier: Modifier = Modifier,
     onOpenSearch: () -> Unit = {},
@@ -230,6 +226,7 @@ fun AmazonTopAppBar(
 
         SimpleSearchBar(
             initialSearchText = initialSearchText,
+            backStackSize = backStackSize,
             isSearchEditable = isSearchEditable,
             modifier = Modifier
                 .padding(
@@ -239,7 +236,6 @@ fun AmazonTopAppBar(
                 ),
             onOpenSearch = onOpenSearch,
             onPerformSearch = onPerformSearch,
-            globalSearchViewModel = globalSearchViewModel,
         )
     }
 }
@@ -248,30 +244,22 @@ fun AmazonTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 private fun SimpleSearchBar(
     initialSearchText: String,
+    backStackSize: Int,
     isSearchEditable: Boolean,
     modifier: Modifier = Modifier,
     onOpenSearch: () -> Unit = {},
     onPerformSearch: (String) -> Unit = {},
-    globalSearchViewModel: GlobalSearchBarViewModel,
 ) {
     val textFieldShape = MaterialTheme.shapes.extraLarge
     val currentOnOpenSearch by rememberUpdatedState(onOpenSearch)
-
-    val currentSearchText by globalSearchViewModel.searchText.collectAsStateWithLifecycle()
-    // Known bug: Non-empty initial text will overwrite user-entered text on rotation/config change.
-    // NavGraph won't have restored the backstack in time. Initial text will default to "", then the
-    // backstack + correct initial text comes in, which will update the VM and overwrite user text
-    var shouldInitializeText by rememberSaveable(initialSearchText) { mutableStateOf(true) }
-    LaunchedEffect(globalSearchViewModel, initialSearchText) {
-        if (shouldInitializeText) {
-            shouldInitializeText = false
-            globalSearchViewModel.updateSearchText(
-                TextFieldValue(
-                    initialSearchText,
-                    TextRange(initialSearchText.length)
-                )
-            )
-        }
+    val searchText = rememberSaveable(
+        initialSearchText,
+        backStackSize, // forces search text to reinitialize when navigating between search result screens
+        saver = TextFieldState.Saver,
+    ) {
+        TextFieldState(
+            initialText = initialSearchText,
+        )
     }
 
     val interactionSource = remember { MutableInteractionSource() }
@@ -298,7 +286,6 @@ private fun SimpleSearchBar(
             BasicTextField(
                 interactionSource = interactionSource,
                 readOnly = !isSearchEditable,
-                value = currentSearchText,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(44.dp)
@@ -306,14 +293,12 @@ private fun SimpleSearchBar(
                     .border(0.5.dp, AmazonOutlineMedium, textFieldShape)
                     .focusable()
                     .focusRequester(focusRequester),
-                onValueChange = { globalSearchViewModel.updateSearchText(it) },
-                singleLine = true,
+                state = searchText,
+                lineLimits = TextFieldLineLimits.SingleLine,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(onSearch = {
-                    onPerformSearch(currentSearchText.text)
-                }),
+                onKeyboardAction = { onPerformSearch(searchText.text.toString()) },
                 textStyle = MaterialTheme.typography.bodyLarge,
-                decorationBox = @Composable { innerTextField ->
+                decorator = @Composable { innerTextField ->
                     val colors = TextFieldDefaults.colors().copy(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
@@ -341,7 +326,7 @@ private fun SimpleSearchBar(
                             )
                         },
                         placeholder = {
-                            if (currentSearchText.text.isEmpty()) {
+                            if (searchText.text.isEmpty()) {
                                 Text(stringResource(R.string.search_bar_placeholder))
                             }
                         },

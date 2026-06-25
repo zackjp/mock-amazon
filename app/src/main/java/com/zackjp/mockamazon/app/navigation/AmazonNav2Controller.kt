@@ -12,6 +12,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.savedstate.SavedState
 import androidx.savedstate.read
 import kotlinx.coroutines.CoroutineScope
@@ -20,9 +21,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import kotlin.reflect.KClass
 
+private const val KEY_BACKSTACK = "amazon-nav:controller:backStack"
 private const val KEY_TAB_HISTORY = "amazon-nav:controller:tabHistory"
 
 @Composable
@@ -174,15 +177,33 @@ class AmazonNav2Controller(
 
     fun saveState(): SavedState {
         return SavedState().apply {
+            val currentBackStack = _currentBackStack.value
+            putString(
+                KEY_BACKSTACK,
+                Json.encodeToString(
+                    ListSerializer(NavKeySerializer()),
+                    currentBackStack.backStack,
+                ),
+            )
             putString(KEY_TAB_HISTORY, Json.encodeToString(tabHistory.value))
         }
     }
 
     fun restoreState(savedState: SavedState) {
-        val restoredHistory = savedState.read {
+        val restoredBackStack = savedState.read {
+            Json.decodeFromString(
+                ListSerializer(NavKeySerializer()),
+                getString(KEY_BACKSTACK),
+            )
+        }
+        val restoredTabHistory = savedState.read {
             Json.decodeFromString<List<BottomTab>>(getString(KEY_TAB_HISTORY))
         }
-        tabHistory.value = restoredHistory
+        _currentBackStack.value = BackStackState(
+            backStack = restoredBackStack,
+            currentGroup = restoredTabHistory.lastOrNull()
+        )
+        tabHistory.value = restoredTabHistory
     }
 
     private fun processTabChanges(backstack: List<NavBackStackEntry>) {

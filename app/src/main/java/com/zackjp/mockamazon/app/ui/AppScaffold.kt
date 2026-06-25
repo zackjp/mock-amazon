@@ -24,15 +24,14 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.metrics.performance.PerformanceMetricsState
 import androidx.navigation3.runtime.NavKey
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.zackjp.mockamazon.app.navigation.AmazonNav2Controller
 import com.zackjp.mockamazon.app.navigation.AmazonNav3Controller
 import com.zackjp.mockamazon.app.navigation.AmazonNav3Display
 import com.zackjp.mockamazon.app.navigation.AmazonNavGraph
-import com.zackjp.mockamazon.app.ui.view.GlobalSearchBarViewModel
 import com.zackjp.mockamazon.app.navigation.BackStackState
 import com.zackjp.mockamazon.app.navigation.BottomTab
 import com.zackjp.mockamazon.app.navigation.CheckoutReview
@@ -48,6 +47,7 @@ import com.zackjp.mockamazon.app.ui.view.AmazonBottomAppBar
 import com.zackjp.mockamazon.app.ui.view.AmazonTopAppBar
 import com.zackjp.mockamazon.app.ui.view.AmazonTopAppBarWithNavChips
 import com.zackjp.mockamazon.app.ui.view.BottomNavItem
+import com.zackjp.mockamazon.app.ui.view.GlobalSearchBarViewModel
 import com.zackjp.mockamazon.feature.home.HomeScreenRoot
 import com.zackjp.mockamazon.shared.model.FeatureFlags
 import com.zackjp.mockamazon.shared.theme.AmazonBeige
@@ -71,6 +71,7 @@ fun App(
     }
 
     val backStackState: BackStackState by amazonNavController.currentBackStack.collectAsStateWithLifecycle()
+    val backStackSize = backStackState.backStack.size
     val currentRoute = backStackState.backStack.lastOrNull()
     JankMetricsReporter(currentRoute)
     val isStartRoute = currentRoute != null && TOP_ROUTES_SET.contains(currentRoute)
@@ -84,7 +85,7 @@ fun App(
     var navChipsHeightPx by remember { mutableFloatStateOf(0f) }
     val collapsibleState = rememberCollapsibleState(maxCollapseHeightPx = -navChipsHeightPx)
 
-    val onNavigateUp: (() -> Unit)? = { if (!isStartRoute) amazonNavController.navigateUp() }
+    val onNavigateUp: (() -> Unit) = { if (!isStartRoute) amazonNavController.navigateUp() }
     val onOpenSearch: (String) -> Unit = { searchText: String ->
         if (searchMode !is SearchMode.Suggestions) {
             amazonNavController.navigateTo(Search(searchText))
@@ -126,12 +127,12 @@ fun App(
                         navChipsHeightPx = intSize.height.toFloat()
                     },
                     onOpenSearch = { onOpenSearch("") },
-                    globalSearchViewModel = globalSearchBarViewModel,
                     windowPadding = windowPadding,
                 )
             } else {
                 AmazonTopAppBar(
                     initialSearchText = searchMode.searchText,
+                    backStackSize = backStackSize,
                     isSearchEditable = searchMode is SearchMode.Suggestions,
                     modifier = Modifier
                         .fillMaxWidth()
