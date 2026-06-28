@@ -3,6 +3,7 @@ package com.zackjp.mockamazon.feature.home.view
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,20 +29,22 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.zackjp.mockamazon.core.model.HeroCarouselCard
 import com.zackjp.mockamazon.feature.home.R
 import com.zackjp.mockamazon.feature.home.component.ItemDisplayWindow
 import com.zackjp.mockamazon.shared.ignoreParentPadding
 import kotlin.math.abs
 import com.zackjp.mockamazon.shared.R as SharedR
-
-private const val ProductGridHeightFraction = 0.8f
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -107,6 +110,8 @@ private fun HeroCard(
     val cardPadding = paddingMedium
 
     val cardBackground = heroCarouselCard.background
+    val cardBackgroundImageId = heroCarouselCard.backgroundImageId
+    val productGridHeightFraction: Float = heroCarouselCard.productGridHeightFraction
     val titleForeground = remember(cardBackground) {
         getContrastColor(cardBackground)
     }
@@ -115,30 +120,62 @@ private fun HeroCard(
         modifier = modifier,
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .background(cardBackground)
-                .padding(cardPadding)
-                .fillMaxSize(),
+        Box(
+            modifier = Modifier.fillMaxSize(),
         ) {
-            UpperHeroSection(
+            HeroBackground(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(1 - ProductGridHeightFraction),
-                title = heroCarouselCard.title,
-                titleForeground = titleForeground,
+                    .background(cardBackground)
+                    .fillMaxSize(),
+                imageId = cardBackgroundImageId,
             )
 
-            ItemDisplayWindow(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                productTiles = heroCarouselCard.productTiles,
-                itemSpacing = itemSpacing,
-                onViewProduct = onViewProduct,
-            )
+                    .padding(cardPadding)
+                    .fillMaxSize(),
+            ) {
+                UpperHeroSection(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(1 - productGridHeightFraction),
+                    title = heroCarouselCard.title,
+                    titleForeground = titleForeground,
+                )
+
+                ItemDisplayWindow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    productTiles = heroCarouselCard.productTiles,
+                    itemSpacing = itemSpacing,
+                    onViewProduct = onViewProduct,
+                )
+            }
         }
     }
+}
+
+@Composable
+fun HeroBackground(
+    modifier: Modifier = Modifier,
+    imageId: Int?,
+) {
+    val context = LocalContext.current
+    val model = remember(imageId, context) {
+        imageId?.let {
+            ImageRequest.Builder(context)
+                .data(it)
+                .crossfade(true)
+                .build()
+        }
+    }
+
+    AsyncImage(
+        modifier = modifier,
+        contentDescription = null,
+        model = model,
+    )
 }
 
 @Composable

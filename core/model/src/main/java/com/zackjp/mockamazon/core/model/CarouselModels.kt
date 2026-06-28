@@ -8,6 +8,8 @@ data class HeroCarouselCard(
     val heroId: String,
     val title: String,
     val background: Color,
+    val backgroundImageId: Int?,
+    val productGridHeightFraction: Float,
     val productTiles: List<ProductTile>
 )
 

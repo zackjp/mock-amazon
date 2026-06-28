@@ -8,6 +8,8 @@ data class HeroCarouselCardResponse(
     val heroId: String,
     val title: String,
     val background: Color,
+    val backgroundImageId: Int? = null,
+    val productGridHeightFraction: Float,
     val productTileResponse: List<ProductTileResponse>
 ) {
     companion object // for utility functions

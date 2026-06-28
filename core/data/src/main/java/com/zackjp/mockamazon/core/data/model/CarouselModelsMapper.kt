@@ -15,6 +15,8 @@ internal fun HeroCarouselCardResponse.toUiModel(): HeroCarouselCard =
         heroId = this.heroId,
         title = this.title,
         background = this.background,
+        backgroundImageId = this.backgroundImageId,
+        productGridHeightFraction = this.productGridHeightFraction,
         productTiles = this.productTileResponse.map { it.toUiModel() },
     )
 

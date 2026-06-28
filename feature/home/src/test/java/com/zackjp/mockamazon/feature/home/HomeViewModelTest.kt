@@ -62,6 +62,8 @@ class HomeViewModelTest {
             heroId = "hero_id_1",
             title = "Hero Title 1",
             background = Color.Black,
+            backgroundImageId = 123,
+            productGridHeightFraction = 0.12f,
             productTiles = listOf(
                 ProductTile(productId = R.drawable.item_headphones, imageRes = R.drawable.item_headphones),
                 ProductTile(productId = R.drawable.item_backpack, imageRes = R.drawable.item_backpack),
@@ -71,6 +73,8 @@ class HomeViewModelTest {
             heroId = "hero_id_2",
             title = "Hero Title 2",
             background = Color.White,
+            backgroundImageId = 456,
+            productGridHeightFraction = 0.45f,
             productTiles = listOf(
                 ProductTile(
                     productId = R.drawable.item_kitchen_sponge,

@@ -47,6 +47,7 @@ internal class HomeFakeApiDataSource @Inject constructor(
             heroId = "hero_more_top_picks",
             title = "More top\npicks for you",
             background = Color(0xFF3A6DB1),
+            productGridHeightFraction = 0.8f,
             productTileResponse = listOf(
                 getProductAsItem(R.drawable.item_sneaker_allbirds_treeglider),
                 getProductAsItem(R.drawable.item_sneaker_adidas_ubounce),
@@ -56,9 +57,23 @@ internal class HomeFakeApiDataSource @Inject constructor(
             )
         ),
         HeroCarouselCardResponse(
+            heroId = "hero_top_100_apartment_finds",
+            title = "Top 100+\napartment finds",
+            background = Color(0xFF972AF7),
+            backgroundImageId = R.drawable.hero_bg_top_100_finds_lg,
+            productGridHeightFraction = 0.54f,
+            productTileResponse = listOf(
+                getProductAsItem(R.drawable.item_snack_amazon_pbpretzels),
+                getProductAsItem(R.drawable.item_water_filter),
+                getProductAsItem(R.drawable.item_deodorant),
+                getProductAsItem(R.drawable.item_soda),
+            )
+        ),
+        HeroCarouselCardResponse(
             heroId = "hero_snack_time",
             title = "Snack time\nfor everyone",
             background = Color(0xFF6AD17D),
+            productGridHeightFraction = 0.8f,
             productTileResponse = listOf(
                 getProductAsItem(R.drawable.item_snack_larabar_pbchocolatechip),
                 getProductAsItem(R.drawable.item_snack_wonderful_pistachios),
@@ -71,6 +86,7 @@ internal class HomeFakeApiDataSource @Inject constructor(
             heroId = "hero_amazon_picks",
             title = "Amazon picks\nfor you",
             background = Color(0xFFED7571),
+            productGridHeightFraction = 0.8f,
             productTileResponse = listOf(
                 getProductAsItem(R.drawable.item_game_monopoly_deal),
                 getProductAsItem(R.drawable.item_game_catan),

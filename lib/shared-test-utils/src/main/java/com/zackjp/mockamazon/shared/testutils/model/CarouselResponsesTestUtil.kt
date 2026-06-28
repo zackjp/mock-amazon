@@ -12,11 +12,14 @@ fun HeroCarouselCardResponse.Companion.fake(
     id: Long,
     responseCount: Int = 2,
     background: Color = Color.Black,
+    backgroundImageId: Int? = id.toInt() % 10_000,
 ) =
     HeroCarouselCardResponse(
         heroId = "card_id_$id",
         title = "Title $id",
         background = background,
+        backgroundImageId = backgroundImageId,
+        productGridHeightFraction = 1f / id,
         productTileResponse = (0..<responseCount).map { count ->
             ProductTileResponse.fake(count)
         },
