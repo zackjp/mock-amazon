@@ -165,8 +165,8 @@ private fun ItemTile(
 @Preview
 @Composable
 private fun ItemDisplayWindowPreview() {
-    val cardWidth = dimensionResource(R.dimen.top_home_card_width)
-    val cardHeight = dimensionResource(R.dimen.top_home_card_height)
+    val cardWidth = dimensionResource(R.dimen.home_hero_card_width)
+    val cardHeight = dimensionResource(R.dimen.home_hero_card_aspect_ratio)
     val itemSpacing = dimensionResource(SharedR.dimen.padding_small)
 
     ItemDisplayWindow(

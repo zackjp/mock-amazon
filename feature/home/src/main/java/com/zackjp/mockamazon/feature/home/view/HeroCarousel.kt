@@ -7,10 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -27,9 +28,11 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
 import com.zackjp.mockamazon.core.model.HeroCarouselCard
 import com.zackjp.mockamazon.feature.home.R
@@ -47,12 +50,12 @@ fun HeroCarousel(
     onViewProduct: (Int) -> Unit = {},
     heroCarouselCards: List<HeroCarouselCard>,
 ) {
-    val cardWidth = dimensionResource(R.dimen.top_home_card_width)
-    val cardHeight = dimensionResource(R.dimen.top_home_card_height)
+    val cardWidth = dimensionResource(R.dimen.home_hero_card_width)
+    val cardAspectRatio = ResourcesCompat.getFloat(LocalResources.current, R.dimen.home_hero_card_aspect_ratio)
     val paddingSmall = dimensionResource(SharedR.dimen.padding_small)
 
     val lazyListState = rememberLazyListState()
-    val groups by rememberUpdatedState(heroCarouselCards)
+    val heroCards by rememberUpdatedState(heroCarouselCards)
 
     LaunchedEffect(lazyListState) {
         snapshotFlow {
@@ -64,7 +67,7 @@ fun HeroCarousel(
             }
 
             closestItemToCenter?.index?.let {
-                groups[it].background
+                heroCards[it].background
             } ?: Color.Transparent
         }.collect { color ->
             onColorChanged(color)
@@ -78,11 +81,13 @@ fun HeroCarousel(
         flingBehavior = rememberSnapFlingBehavior(lazyListState),
         horizontalArrangement = Arrangement.spacedBy(paddingSmall)
     ) {
-        items(items = groups, key = { it.heroId }) { group ->
+        items(items = heroCards, key = { it.heroId }) { heroCard ->
             HeroCard(
-                modifier = Modifier.size(cardWidth, cardHeight),
+                modifier = Modifier
+                    .width(cardWidth)
+                    .aspectRatio(cardAspectRatio),
                 onViewProduct = onViewProduct,
-                heroCarouselCard = group,
+                heroCarouselCard = heroCard,
             )
         }
     }
