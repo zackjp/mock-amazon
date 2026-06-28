@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -41,6 +41,8 @@ import com.zackjp.mockamazon.shared.ignoreParentPadding
 import kotlin.math.abs
 import com.zackjp.mockamazon.shared.R as SharedR
 
+private const val ProductGridHeightFraction = 0.8f
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HeroCarousel(
@@ -51,7 +53,8 @@ fun HeroCarousel(
     heroCarouselCards: List<HeroCarouselCard>,
 ) {
     val cardWidth = dimensionResource(R.dimen.home_hero_card_width)
-    val cardAspectRatio = ResourcesCompat.getFloat(LocalResources.current, R.dimen.home_hero_card_aspect_ratio)
+    val cardAspectRatio =
+        ResourcesCompat.getFloat(LocalResources.current, R.dimen.home_hero_card_aspect_ratio)
     val paddingSmall = dimensionResource(SharedR.dimen.padding_small)
 
     val lazyListState = rememberLazyListState()
@@ -62,8 +65,8 @@ fun HeroCarousel(
             val layoutInfo = lazyListState.layoutInfo
             val visibleItems = layoutInfo.visibleItemsInfo
             val viewportCenter = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
-            val closestItemToCenter = visibleItems.minByOrNull {
-                item -> abs(viewportCenter - (item.offset + item.size / 2))
+            val closestItemToCenter = visibleItems.minByOrNull { item ->
+                abs(viewportCenter - (item.offset + item.size / 2))
             }
 
             closestItemToCenter?.index?.let {
@@ -116,14 +119,15 @@ private fun HeroCard(
             modifier = Modifier
                 .background(cardBackground)
                 .padding(cardPadding)
+                .fillMaxSize(),
         ) {
-            Text(
-                color = titleForeground,
-                text = heroCarouselCard.title,
-                style = MaterialTheme.typography.displayLarge
+            UpperHeroSection(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(1 - ProductGridHeightFraction),
+                title = heroCarouselCard.title,
+                titleForeground = titleForeground,
             )
-
-            Spacer(Modifier.height(paddingMedium))
 
             ItemDisplayWindow(
                 modifier = Modifier
@@ -134,6 +138,23 @@ private fun HeroCard(
                 onViewProduct = onViewProduct,
             )
         }
+    }
+}
+
+@Composable
+private fun UpperHeroSection(
+    modifier: Modifier = Modifier,
+    title: String,
+    titleForeground: Color,
+) {
+    Column(
+        modifier = modifier,
+    ) {
+        Text(
+            color = titleForeground,
+            text = title,
+            style = MaterialTheme.typography.displayLarge
+        )
     }
 }
 
