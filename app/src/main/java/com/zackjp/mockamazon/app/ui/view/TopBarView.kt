@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
@@ -27,6 +28,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -325,6 +327,16 @@ private fun SimpleSearchBar(
                                 contentDescription = null
                             )
                         },
+                        trailingIcon = {
+                            val showClearButton = isSearchEditable && searchText.text.isNotEmpty()
+
+                            if (showClearButton) {
+                                ClearSearchButton(
+                                    modifier = Modifier.size(dimensionResource(SharedR.dimen.search_clear_button)),
+                                    onClear = { searchText.clearText() },
+                                )
+                            }
+                        },
                         placeholder = {
                             if (searchText.text.isEmpty()) {
                                 Text(stringResource(R.string.search_bar_placeholder))
@@ -338,6 +350,23 @@ private fun SimpleSearchBar(
             )
         },
     ) { }
+}
+
+@Composable
+private fun ClearSearchButton(
+    modifier: Modifier = Modifier,
+    onClear: () -> Unit,
+) {
+    IconButton(
+        modifier = modifier,
+        onClick = onClear,
+    ) {
+        Icon(
+            contentDescription = null,
+            painter = painterResource(SharedR.drawable.ic_outline_close_24),
+            tint = AmazonOutlineMedium,
+        )
+    }
 }
 
 @Composable

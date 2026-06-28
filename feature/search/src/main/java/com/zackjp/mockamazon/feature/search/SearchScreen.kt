@@ -70,7 +70,7 @@ fun SearchScreenRoot(
                                 onClick = { viewModel.onRemoveQuery(searchItem) }
                             ) {
                                 Icon(
-                                    modifier = Modifier.size(18.dp),
+                                    modifier = Modifier.size(dimensionResource(SharedR.dimen.search_clear_button)),
                                     contentDescription = null,
                                     painter = painterResource(SharedR.drawable.ic_outline_close_24),
                                 )
