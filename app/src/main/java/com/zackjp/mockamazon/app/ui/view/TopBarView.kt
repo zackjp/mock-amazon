@@ -52,8 +52,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -204,6 +207,7 @@ fun AmazonTopAppBar(
 
     Row(
         modifier = modifier
+            .amazonStripeBackground()
             .padding(
                 end = windowPadding.calculateEndPadding(layoutDirection),
                 start = windowPadding.calculateStartPadding(layoutDirection),
@@ -431,6 +435,45 @@ private fun NavChip(
             }
         },
     )
+}
+
+private fun Modifier.amazonStripeBackground(): Modifier = this.drawWithCache {
+    val verticalLineBrush = Brush.verticalGradient(
+        colors = listOf(
+            TopAppBarTokens.TopStripeColor,
+            TopAppBarTokens.BottomStripeColor,
+        ),
+        endY = 48.dp.toPx(),
+        tileMode = TileMode.Clamp,
+    )
+    val overlayGradient = Brush.linearGradient(
+        colors = listOf(
+            TopAppBarTokens.OverlayStartColor,
+            TopAppBarTokens.OverlayEndColor,
+        ),
+    )
+    val stripeWidthPx = TopAppBarTokens.StripeWidth.toPx()
+    val spacingWidthPx = TopAppBarTokens.SpacingWidth.toPx()
+
+    onDrawBehind {
+        drawRect(color = TopAppBarTokens.BaseColor)
+
+        // Draw vertical lines
+        var x = 0f
+        while (x < size.width) {
+            drawRect(
+                brush = verticalLineBrush,
+                topLeft = Offset(x, 0f),
+                size = Size(stripeWidthPx, size.height)
+            )
+            x += spacingWidthPx
+        }
+
+        // Draw fading overlay
+        drawRect(
+            brush = overlayGradient,
+        )
+    }
 }
 
 /**

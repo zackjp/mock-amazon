@@ -1,6 +1,5 @@
 package com.zackjp.mockamazon.app.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,7 +49,6 @@ import com.zackjp.mockamazon.app.ui.view.BottomNavItem
 import com.zackjp.mockamazon.app.ui.view.GlobalSearchBarViewModel
 import com.zackjp.mockamazon.feature.home.HomeScreenRoot
 import com.zackjp.mockamazon.shared.model.FeatureFlags
-import com.zackjp.mockamazon.shared.theme.AmazonBeige
 import com.zackjp.mockamazon.shared.theme.AmazonOutlineLight
 import com.zackjp.mockamazon.ui.theme.MockAmazonTheme
 import com.zackjp.mockamazon.shared.R as SharedR
@@ -135,8 +133,7 @@ fun App(
                     backStackSize = backStackSize,
                     isSearchEditable = searchMode is SearchMode.Suggestions,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .background(AmazonBeige),
+                        .fillMaxWidth(),
                     onOpenSearch = { onOpenSearch(searchMode.searchText) },
                     onPerformSearch = onPerformSearch,
                     onNavigateUp = if (isStartRoute) null else onNavigateUp,
