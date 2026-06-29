@@ -1,8 +1,10 @@
 package com.zackjp.mockamazon.feature.home
 
-import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -103,13 +105,18 @@ private fun LoadedView(
     var targetTopColor by rememberSaveable(stateSaver = ColorSaver) {
         mutableStateOf(Color.Transparent)
     }
-    val topColor by animateColorAsState(
-        targetValue = targetTopColor,
-        animationSpec = tween(
-            durationMillis = 300,
-            easing = LinearEasing,
-        )
-    )
+    val topColorTransition = updateTransition(targetTopColor)
+    val topColor by topColorTransition.animateColor(
+        transitionSpec = {
+            when (topColorTransition.currentState) {
+                Color.Transparent -> snap() // snap to target color on first load
+                else -> tween(
+                    durationMillis = 300,
+                    easing = LinearEasing,
+                )
+            }
+        }
+    ) { targetColor -> targetColor }
 
     LazyColumn(
         modifier = modifier
