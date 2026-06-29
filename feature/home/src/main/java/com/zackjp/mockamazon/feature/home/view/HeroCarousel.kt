@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
@@ -195,6 +196,8 @@ private fun UpperHeroSection(
         if (preTitle != null) {
             Text(
                 color = titleForeground,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
                 text = preTitle,
                 style = MaterialTheme.typography.labelMedium,
             )
@@ -204,6 +207,8 @@ private fun UpperHeroSection(
 
         Text(
             color = titleForeground,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
             text = title,
             style = MaterialTheme.typography.displayLarge,
         )

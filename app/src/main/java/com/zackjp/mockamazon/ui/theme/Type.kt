@@ -5,6 +5,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.zackjp.mockamazon.R
 
@@ -65,11 +66,13 @@ val Typography = Typography(
         fontFamily = AmazonEmberDisplay,
         fontWeight = FontWeight.ExtraBold,
         letterSpacing = (-0.75).sp,
+        lineHeight = 1.em,
     ),
     displayLarge = TextStyle(
-        fontSize = 30.sp,
+        fontSize = 32.sp,
         fontFamily = AmazonEmberDisplay,
         fontWeight = FontWeight.ExtraBold,
         letterSpacing = (-0.75).sp,
+        lineHeight = 1.em,
     ),
 )

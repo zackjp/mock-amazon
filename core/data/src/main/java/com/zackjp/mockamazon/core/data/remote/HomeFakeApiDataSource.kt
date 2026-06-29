@@ -46,7 +46,7 @@ internal class HomeFakeApiDataSource @Inject constructor(
         HeroCarouselCardResponse(
             heroId = "hero_official_soccer_merch",
             preTitle = "Official soccer merch",
-            title = "Get ready for the\nknockout rounds",
+            title = "Get ready for the knockout rounds",
             background = Color(0xFF337a2b),
             backgroundImageId = R.drawable.hero_bg_official_soccer_merch__get_ready_for_the_knockout_rounds_lg,
             productGridHeightFraction = 0f,
@@ -54,7 +54,7 @@ internal class HomeFakeApiDataSource @Inject constructor(
         ),
         HeroCarouselCardResponse(
             heroId = "hero_top_100_apartment_finds",
-            title = "Top 100+\napartment finds",
+            title = "Top 100+ apartment finds",
             background = Color(0xFF972AF7),
             backgroundImageId = R.drawable.hero_bg_top_100_finds_lg,
             productGridHeightFraction = 0.54f,
@@ -67,7 +67,7 @@ internal class HomeFakeApiDataSource @Inject constructor(
         ),
         HeroCarouselCardResponse(
             heroId = "hero_more_top_picks",
-            title = "More top\npicks for you",
+            title = "More top picks for you",
             background = Color(0xFF58ADE3),
             productGridHeightFraction = 0.8f,
             productTileResponse = listOf(
@@ -81,7 +81,7 @@ internal class HomeFakeApiDataSource @Inject constructor(
         HeroCarouselCardResponse(
             heroId = "hero_4plus_stars_under_25",
             preTitle = "Spend less every day",
-            title = "Shop 4+ star\nfinds under $25",
+            title = "Shop 4+ star finds under $25",
             background = Color(0xFFF5DF03),
             backgroundImageId = R.drawable.hero_bg_4plus_star_finds_under_25_lg,
             productGridHeightFraction = 0.54f,
@@ -94,7 +94,7 @@ internal class HomeFakeApiDataSource @Inject constructor(
         ),
         HeroCarouselCardResponse(
             heroId = "hero_amazon_picks",
-            title = "Amazon picks\nfor you",
+            title = "Amazon picks for you",
             background = Color(0xFFED7571),
             productGridHeightFraction = 0.8f,
             productTileResponse = listOf(
@@ -107,7 +107,7 @@ internal class HomeFakeApiDataSource @Inject constructor(
         ),
         HeroCarouselCardResponse(
             heroId = "hero_snack_time",
-            title = "Snack time\nfor everyone",
+            title = "Snack time for everyone",
             background = Color(0xFF6AD17D),
             productGridHeightFraction = 0.8f,
             productTileResponse = listOf(
