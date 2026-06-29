@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -13,11 +14,9 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,19 +39,22 @@ fun SearchScreenRoot(
 
     Surface(modifier = modifier) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            itemsIndexed(searchItems) { index, searchItem ->
+            itemsIndexed(searchItems) { _, searchItem ->
                 Column(
                     modifier = Modifier
                         .clickable(onClick = { onPerformSearch(searchItem) })
-                        .fillMaxWidth()
+                        .heightIn(min = 36.dp)
+                        .fillMaxWidth(),
                 ) {
                     Row(
                         modifier = Modifier
+                            .weight(1f)
                             .padding(horizontal = mainContentPadding, vertical = 4.dp)
                             .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
+                            modifier = Modifier.size(dimensionResource(SharedR.dimen.search_icons_size)),
                             contentDescription = null,
                             painter = painterResource(SharedR.drawable.ic_sharp_history_24)
                         )
@@ -64,17 +66,14 @@ fun SearchScreenRoot(
                             text = searchItem,
                         )
 
-                        // Shrink the touch target to decrease row height
-                        CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
-                            IconButton(
-                                onClick = { viewModel.onRemoveQuery(searchItem) }
-                            ) {
-                                Icon(
-                                    modifier = Modifier.size(dimensionResource(SharedR.dimen.search_clear_button)),
-                                    contentDescription = null,
-                                    painter = painterResource(SharedR.drawable.ic_outline_close_24),
-                                )
-                            }
+                        IconButton(
+                            modifier = Modifier.size(dimensionResource(SharedR.dimen.search_icons_size)),
+                            onClick = { viewModel.onRemoveQuery(searchItem) }
+                        ) {
+                            Icon(
+                                contentDescription = null,
+                                painter = painterResource(SharedR.drawable.ic_outline_close_24),
+                            )
                         }
                     }
 

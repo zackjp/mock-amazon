@@ -336,7 +336,7 @@ private fun SimpleSearchBar(
 
                             if (showClearButton) {
                                 ClearSearchButton(
-                                    modifier = Modifier.size(dimensionResource(SharedR.dimen.search_clear_button)),
+                                    modifier = Modifier.size(dimensionResource(SharedR.dimen.search_icons_size)),
                                     onClear = { searchText.clearText() },
                                 )
                             }
