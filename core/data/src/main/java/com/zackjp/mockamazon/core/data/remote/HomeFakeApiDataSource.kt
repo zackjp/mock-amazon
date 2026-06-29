@@ -46,7 +46,7 @@ internal class HomeFakeApiDataSource @Inject constructor(
         HeroCarouselCardResponse(
             heroId = "hero_more_top_picks",
             title = "More top\npicks for you",
-            background = Color(0xFF3A6DB1),
+            background = Color(0xFF58ADE3),
             productGridHeightFraction = 0.8f,
             productTileResponse = listOf(
                 getProductAsItem(R.drawable.item_sneaker_allbirds_treeglider),
@@ -54,6 +54,33 @@ internal class HomeFakeApiDataSource @Inject constructor(
                 getProductAsItem(R.drawable.item_sneaker_allbirds_treedasher2),
                 getProductAsItem(R.drawable.item_sneaker_underarmour_chargedassert9),
                 getProductAsItem(R.drawable.item_sneaker_adidas_swiftrun1),
+            )
+        ),
+        HeroCarouselCardResponse(
+            heroId = "hero_4plus_stars_under_25",
+            // preTitle = "Spend less every day"
+            title = "Shop 4+ star\nfinds under $25",
+            background = Color(0xFFF5DF03),
+            backgroundImageId = R.drawable.hero_bg_4plus_star_finds_under_25_lg,
+            productGridHeightFraction = 0.54f,
+            productTileResponse = listOf(
+                getProductAsItem(R.drawable.item_household_yankee_candle_ocean_air_sm),
+                getProductAsItem(R.drawable.item_hats_adidas_bucket_hat_sm),
+                getProductAsItem(R.drawable.item_household_tervis_travel_cups_sm),
+                getProductAsItem(R.drawable.item_clothing_wrangler_jean_shorts_sm),
+            )
+        ),
+        HeroCarouselCardResponse(
+            heroId = "hero_amazon_picks",
+            title = "Amazon picks\nfor you",
+            background = Color(0xFFED7571),
+            productGridHeightFraction = 0.8f,
+            productTileResponse = listOf(
+                getProductAsItem(R.drawable.item_game_monopoly_deal),
+                getProductAsItem(R.drawable.item_game_catan),
+                getProductAsItem(R.drawable.item_game_ra),
+                getProductAsItem(R.drawable.item_game_lost_cities),
+                getProductAsItem(R.drawable.item_game_forest_shuffle),
             )
         ),
         HeroCarouselCardResponse(
@@ -82,19 +109,6 @@ internal class HomeFakeApiDataSource @Inject constructor(
                 getProductAsItem(R.drawable.item_snack_popsecret_popcorn),
             )
         ),
-        HeroCarouselCardResponse(
-            heroId = "hero_amazon_picks",
-            title = "Amazon picks\nfor you",
-            background = Color(0xFFED7571),
-            productGridHeightFraction = 0.8f,
-            productTileResponse = listOf(
-                getProductAsItem(R.drawable.item_game_monopoly_deal),
-                getProductAsItem(R.drawable.item_game_catan),
-                getProductAsItem(R.drawable.item_game_ra),
-                getProductAsItem(R.drawable.item_game_lost_cities),
-                getProductAsItem(R.drawable.item_game_forest_shuffle),
-            )
-        )
     )
 
     private fun createIntentCarousels(): List<IntentCarouselResponse> = listOf(

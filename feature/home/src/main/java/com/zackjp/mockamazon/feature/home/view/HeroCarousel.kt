@@ -148,6 +148,7 @@ private fun HeroCard(
                         .fillMaxWidth()
                         .weight(1f),
                     productTiles = heroCarouselCard.productTiles,
+                    displayDiscounts = false,
                     itemSpacing = itemSpacing,
                     onViewProduct = onViewProduct,
                 )

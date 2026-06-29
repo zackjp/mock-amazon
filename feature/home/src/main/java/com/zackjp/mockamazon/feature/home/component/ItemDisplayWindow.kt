@@ -43,9 +43,10 @@ val ITEM_BG_COLOR: Color = Color(0xFFF7F7F7)
  */
 @Composable
 fun ItemDisplayWindow(
+    modifier: Modifier = Modifier,
     productTiles: List<ProductTile>,
     itemSpacing: Dp,
-    modifier: Modifier = Modifier,
+    displayDiscounts: Boolean = true,
     onViewProduct: (Int) -> Unit = {},
 ) {
     val cappedProductTiles = productTiles.take(5)
@@ -62,6 +63,7 @@ fun ItemDisplayWindow(
             ProductTileColumn(
                 modifier = Modifier.weight(1f),
                 productTiles = startColumn,
+                displayDiscounts = displayDiscounts,
                 onViewProduct = onViewProduct,
                 itemSpacing = itemSpacing,
             )
@@ -71,6 +73,7 @@ fun ItemDisplayWindow(
             ProductTileColumn(
                 modifier = Modifier.weight(1f),
                 productTiles = endColumn,
+                displayDiscounts = displayDiscounts,
                 onViewProduct = onViewProduct,
                 itemSpacing = itemSpacing,
             )
@@ -85,6 +88,7 @@ fun ItemDisplayWindow(
 private fun ProductTileColumn(
     modifier: Modifier = Modifier,
     productTiles: List<ProductTile>,
+    displayDiscounts: Boolean,
     onViewProduct: (Int) -> Unit,
     itemSpacing: Dp
 ) {
@@ -95,6 +99,7 @@ private fun ProductTileColumn(
         productTiles.forEach { productTile ->
             ItemTile(
                 item = productTile,
+                displayDiscounts = displayDiscounts,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
@@ -107,6 +112,7 @@ private fun ProductTileColumn(
 @Composable
 private fun ItemTile(
     item: ProductTile,
+    displayDiscounts: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -133,11 +139,12 @@ private fun ItemTile(
                 .padding(4.dp),
         )
 
-        item.discount?.let {
+        val discount = item.discount
+        if (displayDiscounts && discount != null) {
             val paddingSmall = dimensionResource(SharedR.dimen.padding_small)
             val paddingXSmall = dimensionResource(SharedR.dimen.padding_xsmall)
 
-            val discountPercent = (it * 100).roundToInt()
+            val discountPercent = (discount * 100).roundToInt()
 
             Text(
                 color = DISCOUNT_RED,
