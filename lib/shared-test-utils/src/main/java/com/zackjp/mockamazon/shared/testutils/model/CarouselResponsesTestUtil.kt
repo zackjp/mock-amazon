@@ -16,6 +16,7 @@ fun HeroCarouselCardResponse.Companion.fake(
 ) =
     HeroCarouselCardResponse(
         heroId = "card_id_$id",
+        preTitle = "Pretitle $id",
         title = "Title $id",
         background = background,
         backgroundImageId = backgroundImageId,

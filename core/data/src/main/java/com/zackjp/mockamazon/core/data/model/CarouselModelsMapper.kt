@@ -13,6 +13,7 @@ import com.zackjp.mockamazon.shared.model.ProductTileResponse
 internal fun HeroCarouselCardResponse.toUiModel(): HeroCarouselCard =
     HeroCarouselCard(
         heroId = this.heroId,
+        preTitle = this.preTitle,
         title = this.title,
         background = this.background,
         backgroundImageId = this.backgroundImageId,

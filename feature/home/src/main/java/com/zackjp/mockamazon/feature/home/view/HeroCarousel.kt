@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -139,6 +141,7 @@ private fun HeroCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight(1 - productGridHeightFraction),
+                    preTitle = heroCarouselCard.preTitle,
                     title = heroCarouselCard.title,
                     titleForeground = titleForeground,
                 )
@@ -182,16 +185,27 @@ fun HeroBackground(
 @Composable
 private fun UpperHeroSection(
     modifier: Modifier = Modifier,
+    preTitle: String?,
     title: String,
     titleForeground: Color,
 ) {
     Column(
         modifier = modifier,
     ) {
+        if (preTitle != null) {
+            Text(
+                color = titleForeground,
+                text = preTitle,
+                style = MaterialTheme.typography.labelMedium,
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+        }
+
         Text(
             color = titleForeground,
             text = title,
-            style = MaterialTheme.typography.displayLarge
+            style = MaterialTheme.typography.displayLarge,
         )
     }
 }

@@ -45,7 +45,7 @@ internal class HomeFakeApiDataSource @Inject constructor(
     private fun createHeroCarouselCards(): List<HeroCarouselCardResponse> = listOf(
         HeroCarouselCardResponse(
             heroId = "hero_official_soccer_merch",
-            // preTitle = "Official soccer merch"
+            preTitle = "Official soccer merch",
             title = "Get ready for the\nknockout rounds",
             background = Color(0xFF337a2b),
             backgroundImageId = R.drawable.hero_bg_official_soccer_merch__get_ready_for_the_knockout_rounds_lg,
@@ -67,7 +67,7 @@ internal class HomeFakeApiDataSource @Inject constructor(
         ),
         HeroCarouselCardResponse(
             heroId = "hero_4plus_stars_under_25",
-            // preTitle = "Spend less every day"
+            preTitle = "Spend less every day",
             title = "Shop 4+ star\nfinds under $25",
             background = Color(0xFFF5DF03),
             backgroundImageId = R.drawable.hero_bg_4plus_star_finds_under_25_lg,
