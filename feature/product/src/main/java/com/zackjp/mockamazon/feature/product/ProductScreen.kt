@@ -101,13 +101,15 @@ private fun LoadedScreen(
                 StoreNameAndProductRatingView(
                     modifier = Modifier.fillMaxWidth(),
                     storeName = productInfo.storeName,
-                    storeInitials = productInfo.storeInitials,
                     productRating = productInfo.productRating,
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
-                Text(productInfo.title)
+                Text(
+                    style = MaterialTheme.typography.bodyMedium,
+                    text = productInfo.title,
+                )
             }
 
             item {
