@@ -53,6 +53,19 @@ internal class HomeFakeApiDataSource @Inject constructor(
             productTileResponse = emptyList()
         ),
         HeroCarouselCardResponse(
+            heroId = "hero_top_100_apartment_finds",
+            title = "Top 100+\napartment finds",
+            background = Color(0xFF972AF7),
+            backgroundImageId = R.drawable.hero_bg_top_100_finds_lg,
+            productGridHeightFraction = 0.54f,
+            productTileResponse = listOf(
+                getProductAsItem(R.drawable.item_snack_amazon_pbpretzels),
+                getProductAsItem(R.drawable.item_water_filter),
+                getProductAsItem(R.drawable.item_deodorant),
+                getProductAsItem(R.drawable.item_soda),
+            )
+        ),
+        HeroCarouselCardResponse(
             heroId = "hero_more_top_picks",
             title = "More top\npicks for you",
             background = Color(0xFF58ADE3),
@@ -90,19 +103,6 @@ internal class HomeFakeApiDataSource @Inject constructor(
                 getProductAsItem(R.drawable.item_game_ra),
                 getProductAsItem(R.drawable.item_game_lost_cities),
                 getProductAsItem(R.drawable.item_game_forest_shuffle),
-            )
-        ),
-        HeroCarouselCardResponse(
-            heroId = "hero_top_100_apartment_finds",
-            title = "Top 100+\napartment finds",
-            background = Color(0xFF972AF7),
-            backgroundImageId = R.drawable.hero_bg_top_100_finds_lg,
-            productGridHeightFraction = 0.54f,
-            productTileResponse = listOf(
-                getProductAsItem(R.drawable.item_snack_amazon_pbpretzels),
-                getProductAsItem(R.drawable.item_water_filter),
-                getProductAsItem(R.drawable.item_deodorant),
-                getProductAsItem(R.drawable.item_soda),
             )
         ),
         HeroCarouselCardResponse(
