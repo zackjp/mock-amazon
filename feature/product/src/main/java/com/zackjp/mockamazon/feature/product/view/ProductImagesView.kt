@@ -1,15 +1,19 @@
 package com.zackjp.mockamazon.feature.product.view
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,6 +35,7 @@ import com.zackjp.mockamazon.shared.theme.LinkBlue
 import com.zackjp.mockamazon.shared.theme.Teal60
 import com.zackjp.mockamazon.shared.ui.DotIndicators
 import kotlinx.coroutines.launch
+import com.zackjp.mockamazon.shared.R as SharedR
 
 
 @Composable
@@ -106,11 +111,38 @@ fun ProductImagesView(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        val currentPageExcludingEmptyPages = (pageState.currentPage - 1).coerceIn(0, imageCount - 1)
-        DotIndicators(
-            currentPage = currentPageExcludingEmptyPages,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            totalPageCount = imageCount,
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            val currentPageExcludingEmptyPages = (pageState.currentPage - 1).coerceIn(0, imageCount - 1)
+            DotIndicators(
+                currentPage = currentPageExcludingEmptyPages,
+                modifier = Modifier.align(Alignment.Center),
+                totalPageCount = imageCount,
+            )
+
+            FavoriteAndShareActions(
+                modifier = Modifier.align(Alignment.CenterEnd),
+            )
+        }
+    }
+}
+
+@Composable
+private fun FavoriteAndShareActions(
+    modifier: Modifier = Modifier,
+) {
+    Row(modifier = modifier) {
+        Icon(
+            contentDescription = null,
+            painter = painterResource(SharedR.drawable.ic_outline_favorite_24),
+        )
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        Icon(
+            contentDescription = null,
+            painter = painterResource(SharedR.drawable.ic_outline_share_24),
         )
     }
 }
