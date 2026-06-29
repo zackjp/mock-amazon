@@ -44,6 +44,17 @@ class ProductInMemoryDb(
                 imageId = SharedR.drawable.item_cleaning_gloves,
             ),
             ProductInfo(
+                // https://www.amazon.com/Wrangler-Authentics-Comfort-Denim-Stonewash/dp/B075MY6M7G
+                id = SharedR.drawable.item_clothing_wrangler_jean_shorts_sm,
+                storeName = "Wrangler Authentics",
+                storeInitials = "W",
+                title = "Wrangler Authentics Men’s Comfort Flex Waistband Jean Short",
+                productRating = 4.6f,
+                imageId = SharedR.drawable.item_clothing_wrangler_jean_shorts_sm,
+                priceUSD = 28.38f,
+                category = ProductCategory.CLOTHING,
+            ),
+            ProductInfo(
                 // https://www.amazon.com/Native-Deodorant-Aluminum-Parabens-Eucalyptus/dp/B07GB41NF9
                 id = SharedR.drawable.item_deodorant,
                 storeName = "Native",
@@ -148,6 +159,18 @@ class ProductInMemoryDb(
                 discount = 0.11f,
             ),
             ProductInfo(
+                // https://www.amazon.com/adidas-Victory-Bucket-Black-Large-X-Large/dp/B091DD99H7
+                id = SharedR.drawable.item_hats_adidas_bucket_hat_sm,
+                storeName = "Adidas",
+                storeInitials = "A",
+                title = "adidas Men's Victory Bucket Hat – Outdoor Sun Boonie for Hiking and Fishing",
+                productRating = 4.6f,
+                imageId = SharedR.drawable.item_hats_adidas_bucket_hat_sm,
+                priceUSD = 30.08f,
+                category = ProductCategory.HATS,
+                discount = 0.12f,
+            ),
+            ProductInfo(
                 // https://www.amazon.com/Bose-QuietComfort-Cancelling-Headphones-Bluetooth/dp/B0CCZ26B5V
                 id = SharedR.drawable.item_headphones,
                 storeName = "Bose",
@@ -158,6 +181,29 @@ class ProductInMemoryDb(
                 priceUSD = 349.99f,
                 category = ProductCategory.HEADPHONES,
                 discount = 0.2f,
+            ),
+            ProductInfo(
+                // https://www.amazon.com/Tervis-Clear-Colorful-Insulated-Tumbler/dp/B084GZMJ8P
+                id = SharedR.drawable.item_household_tervis_travel_cups_sm,
+                storeName = "Tervis",
+                storeInitials = "T",
+                title = "Tervis Clear & Colorful Tabletop Made in USA Double Walled Insulated Tumbler Travel Cup Keeps Drinks Cold & Hot, 16oz - 4pk, Assorted",
+                productRating = 4.7f,
+                imageId = SharedR.drawable.item_household_tervis_travel_cups_sm,
+                priceUSD = 47.99f,
+                category = ProductCategory.HOUSEHOLD_SUPPLIES,
+            ),
+            ProductInfo(
+                // https://www.amazon.com/Yankee-Candle-Ocean-Scented-Giftable/dp/B0F8KF2BVN
+                id = SharedR.drawable.item_household_yankee_candle_ocean_air_sm,
+                storeName = "Yankee Candle",
+                storeInitials = "YC",
+                title = "Yankee Candle Ocean Air Scented Candle, 22oz Large Jar with up to 150 Hour Burn Time, Giftable",
+                productRating = 4.6f,
+                imageId = SharedR.drawable.item_household_yankee_candle_ocean_air_sm,
+                priceUSD = 14.24f,
+                category = ProductCategory.HOUSEHOLD_SUPPLIES,
+                discount = 0.29f,
             ),
             ProductInfo(
                 // https://www.amazon.com/Scotch-Brite-Heavy-Scrub-Sponges-Strong/dp/B0043P0E2M

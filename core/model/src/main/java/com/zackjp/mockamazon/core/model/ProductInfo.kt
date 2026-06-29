@@ -24,6 +24,8 @@ enum class ProductCategory() {
     BEVERAGES_TEA,
     BEVERAGES_SOFT_DRINKS,
     BOARD_GAMES,
+    CLOTHING,
+    HATS,
     HEADPHONES,
     HOUSEHOLD_SUPPLIES,
     SNACKS,
