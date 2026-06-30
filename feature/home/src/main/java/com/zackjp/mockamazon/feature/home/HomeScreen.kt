@@ -101,7 +101,7 @@ private fun LoadedView(
     val topColorTransition = updateTransition(targetTopColor)
     val topColor by topColorTransition.animateColor(
         transitionSpec = {
-            when (topColorTransition.currentState) {
+            when (initialState) {
                 Color.Transparent -> snap() // snap to target color on first load
                 else -> tween(
                     durationMillis = 300,
