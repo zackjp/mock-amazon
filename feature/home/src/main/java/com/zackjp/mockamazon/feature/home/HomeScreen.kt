@@ -18,9 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -29,8 +27,6 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
@@ -42,7 +38,6 @@ import com.zackjp.mockamazon.shared.ignoreParentPadding
 import com.zackjp.mockamazon.shared.ui.screen.ErrorScreen
 import com.zackjp.mockamazon.shared.ui.screen.LoadingScreen
 import com.zackjp.mockamazon.shared.R as SharedR
-
 
 private val ColorSaver = Saver<Color, Int>(
     save = { color -> color.toArgb() },
@@ -98,10 +93,6 @@ private fun LoadedView(
 
     val currentLayoutDirection = LocalLayoutDirection.current
 
-    val localDensity = LocalDensity.current
-    var topHomeHeightPx by remember { mutableIntStateOf(0) }
-    val endGradientHeight = with(localDensity) { (topHomeHeightPx * .8).toInt().toDp() }
-
     var targetTopColor by rememberSaveable(stateSaver = ColorSaver) {
         mutableStateOf(Color.Transparent)
     }
@@ -130,11 +121,20 @@ private fun LoadedView(
     ) {
         item {
             Box {
+                val topPadding =
+                    innerPadding.calculateTopPadding() + dimensionResource(SharedR.dimen.padding_medium)
+
                 Box(
                     modifier = Modifier
                         .drawWithCache {
-                            val verticalGradient =
-                                Brush.verticalGradient(listOf(topColor, Color.Transparent))
+                            val topPaddingPx = topPadding.toPx()
+                            val calculatedCarouselHeightPx = size.height - topPaddingPx
+                            val endGradientHeightPx =
+                                topPaddingPx + calculatedCarouselHeightPx * 0.8f
+                            val verticalGradient = Brush.verticalGradient(
+                                colors = listOf(topColor, Color.Transparent),
+                                endY = endGradientHeightPx
+                            )
                             onDrawBehind {
                                 drawRect(
                                     brush = verticalGradient,
@@ -142,20 +142,16 @@ private fun LoadedView(
                             }
                         }
                         .ignoreParentPadding(mainContentPadding)
-                        .fillMaxWidth()
-                        .height(innerPadding.calculateTopPadding() + endGradientHeight)
+                        .matchParentSize()
                 )
 
                 Column {
-                    Spacer(modifier = Modifier.height(innerPadding.calculateTopPadding()))
-
-                    Spacer(modifier = Modifier.height(dimensionResource(SharedR.dimen.padding_medium)))
+                    Spacer(modifier = Modifier.height(topPadding))
 
                     HeroCarousel(
                         mainContentHorizontalPadding = mainContentPadding,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .onSizeChanged { topHomeHeightPx = it.height },
+                            .fillMaxWidth(),
                         onColorChanged = { color: Color -> targetTopColor = color },
                         onViewProduct = onViewProduct,
                         heroCarouselCards = screenState.heroCarouselCards,
