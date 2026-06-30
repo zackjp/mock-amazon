@@ -69,7 +69,9 @@ private fun HomeScreen(
     screenState: HomeScreenState,
 ) {
     when (screenState) {
-        is HomeScreenState.Loading -> LoadingScreen(modifier = modifier.padding(innerPadding))
+        is HomeScreenState.Loading -> LoadingScreen(
+            modifier = modifier, // pass modifier without innerPadding to cover full screen, including gradient
+        )
         is HomeScreenState.Loaded -> LoadedView(
             innerPadding = innerPadding,
             modifier = modifier,
