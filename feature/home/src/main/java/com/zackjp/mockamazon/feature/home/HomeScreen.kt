@@ -1,10 +1,8 @@
 package com.zackjp.mockamazon.feature.home
 
-import androidx.compose.animation.animateColor
+import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,8 +15,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -37,6 +37,7 @@ import com.zackjp.mockamazon.feature.home.view.IntentCarousel
 import com.zackjp.mockamazon.shared.ignoreParentPadding
 import com.zackjp.mockamazon.shared.ui.screen.ErrorScreen
 import com.zackjp.mockamazon.shared.ui.screen.LoadingScreen
+import kotlinx.coroutines.launch
 import com.zackjp.mockamazon.shared.R as SharedR
 
 private val ColorSaver = Saver<Color, Int>(
@@ -72,6 +73,7 @@ private fun HomeScreen(
         is HomeScreenState.Loading -> LoadingScreen(
             modifier = modifier, // pass modifier without innerPadding to cover full screen, including gradient
         )
+
         is HomeScreenState.Loaded -> LoadedView(
             innerPadding = innerPadding,
             modifier = modifier,
@@ -98,18 +100,27 @@ private fun LoadedView(
     var targetTopColor by rememberSaveable(stateSaver = ColorSaver) {
         mutableStateOf(Color.Transparent)
     }
-    val topColorTransition = updateTransition(targetTopColor)
-    val topColor by topColorTransition.animateColor(
-        transitionSpec = {
-            when (initialState) {
-                Color.Transparent -> snap() // snap to target color on first load
-                else -> tween(
-                    durationMillis = 300,
-                    easing = LinearEasing,
-                )
+    val isFirstLoad = rememberSaveable { mutableStateOf(true) }
+    val topColor = remember {
+        // Init with saved targetTopColor to prevent gradient fade on config change
+        Animatable(targetTopColor)
+    }
+
+    LaunchedEffect(targetTopColor) {
+        if (targetTopColor != Color.Transparent) {
+            if (isFirstLoad.value) {
+                isFirstLoad.value = false
+                launch { topColor.snapTo(targetTopColor) }
+            } else {
+                launch {
+                    topColor.animateTo(
+                        targetTopColor,
+                        tween(durationMillis = 300, easing = LinearEasing),
+                    )
+                }
             }
         }
-    ) { targetColor -> targetColor }
+    }
 
     LazyColumn(
         modifier = modifier
@@ -134,7 +145,7 @@ private fun LoadedView(
                             val endGradientHeightPx =
                                 topPaddingPx + calculatedCarouselHeightPx * 0.8f
                             val verticalGradient = Brush.verticalGradient(
-                                colors = listOf(topColor, Color.Transparent),
+                                colors = listOf(topColor.value, Color.Transparent),
                                 endY = endGradientHeightPx
                             )
                             onDrawBehind {
