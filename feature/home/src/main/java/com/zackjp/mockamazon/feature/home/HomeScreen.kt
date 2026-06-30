@@ -1,7 +1,9 @@
 package com.zackjp.mockamazon.feature.home
 
 import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
@@ -105,13 +108,19 @@ private fun LoadedView(
         // Init with saved targetTopColor to prevent gradient fade on config change
         Animatable(targetTopColor)
     }
+    val contentAlpha = remember {
+        // Init with saved isFirstLoad to prevent pop-in on config change
+        Animatable(if (isFirstLoad.value) 0f else 1f)
+    }
 
     LaunchedEffect(targetTopColor) {
         if (targetTopColor != Color.Transparent) {
             if (isFirstLoad.value) {
                 isFirstLoad.value = false
+                launch { contentAlpha.animateTo(1f, spring()) }
                 launch { topColor.snapTo(targetTopColor) }
             } else {
+                launch { contentAlpha.snapTo(1f) }
                 launch {
                     topColor.animateTo(
                         targetTopColor,
@@ -124,6 +133,9 @@ private fun LoadedView(
 
     LazyColumn(
         modifier = modifier
+            .graphicsLayer {
+                alpha = contentAlpha.value
+            }
             .padding(
                 top = 0.dp,
                 start = innerPadding.calculateStartPadding(currentLayoutDirection),
