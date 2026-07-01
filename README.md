@@ -5,9 +5,9 @@
 A recreation of the Amazon shopping app in Compose to research and validate latest patterns, libraries, and tools. This includes modularization, MVI frameworks, performance testing, analytics, and AI-assisted workflows.
 
 ## Screenshots
-<img src="screenshots/mock01_home_screen.png" height="400"/> <img src="screenshots/mock02_search_suggestions.png" height="400"/> <img src="screenshots/mock03_search_results.png" height="400"/>
+<img alt="Home screenshot 1" src="screenshots/s01a_home_hero.png" height="400"/> <img alt="Home screenshot 2" src="screenshots/s01b_home_hero.png" height="400"/> <img alt="Home screenshot 3" src="screenshots/s01c_home_hero.png" height="400"/> <img alt="Home screenshot 4" src="screenshots/s01d_home_intent_carousels.png" height="400"/>
 
-<img src="screenshots/mock04_cart.png" height="400"/> <img src="screenshots/mock05a_product.png" height="400"/> <img src="screenshots/mock05b_product_scrolled.png" height="400"/>
+<img alt="Search screenshot" src="screenshots/s02_search.png" height="400"/> <img alt="Search results screenshot" src="screenshots/s03_search_results.png" height="400"/> <img alt="Cart screenshot" src="screenshots/s04_cart.png" height="400"/> <img alt="Checkout screenshot" src="screenshots/s05_checkout.png" height="400"/>
 
 
 ## Setup
