@@ -17,6 +17,28 @@ This includes:
 
 <img alt="Search screenshot" src="screenshots/s02_search.png" height="400"/> <img alt="Search results screenshot" src="screenshots/s03_search_results.png" height="400"/> <img alt="Cart screenshot" src="screenshots/s04_cart.png" height="400"/> <img alt="Checkout screenshot" src="screenshots/s05_checkout.png" height="400"/>
 
+## Learnings
+
+1. **Prefer Navigation 3 over Navigation 2**
+
+> After experimenting with Nav3, I highly recommend adopting it. For new projects it is an easy
+> recommendation. Legacy projects will require thoughtful rearchitecting, but the upsides are significant:
+> simpler APIs, full ownership of your backstack, full modularization of feature screens, and native
+> support for adaptive layouts via `Scenes`.
+>
+> I won't go into all of the above here, but one of the main draws is that Nav3 lets you own the backstack
+> as a simple list in your code – that's it. No more fighting against Nav2's black box of navigation state,
+> e.g. creating brittle workarounds to support custom multi-tab behaviors.
+>
+> For migration, building an alternative Nav3 system behind a feature flag is the optimal approach
+> and the path I took in this app. By wrapping Nav2 and Nav3 logic in a common interface, you can
+> safely build out your Nav3 system and flip it on when ready. Ideally, we would want to incrementally
+> migrate features with Nav2 and Nav3 running in parallel, but unifying their backstacks and navigation
+> handling would require significant synchronization work, especially if supporting unique backstacks per
+> tab, that I don't think is worth it.
+
+*More learnings to be added.*
+
 ## Setup
 
 ### Firebase Analytics
