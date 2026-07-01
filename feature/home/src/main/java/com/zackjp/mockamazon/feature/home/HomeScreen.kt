@@ -17,13 +17,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.mapSaver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
@@ -40,13 +37,9 @@ import com.zackjp.mockamazon.feature.home.view.IntentCarousel
 import com.zackjp.mockamazon.shared.ignoreParentPadding
 import com.zackjp.mockamazon.shared.ui.screen.ErrorScreen
 import com.zackjp.mockamazon.shared.ui.screen.LoadingScreen
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import com.zackjp.mockamazon.shared.R as SharedR
-
-private val ColorSaver = Saver<Color, Int>(
-    save = { color -> color.toArgb() },
-    restore = { value -> Color(value) }
-)
 
 @Composable
 fun HomeScreenRoot(
@@ -100,41 +93,13 @@ private fun LoadedView(
 
     val currentLayoutDirection = LocalLayoutDirection.current
 
-    var targetTopColor by rememberSaveable(stateSaver = ColorSaver) {
-        mutableStateOf(Color.Transparent)
-    }
-    val isFirstLoad = rememberSaveable { mutableStateOf(true) }
-    val topColor = remember {
-        // Init with saved targetTopColor to prevent gradient fade on config change
-        Animatable(targetTopColor)
-    }
-    val contentAlpha = remember {
-        // Init with saved isFirstLoad to prevent pop-in on config change
-        Animatable(if (isFirstLoad.value) 0f else 1f)
-    }
-
-    LaunchedEffect(targetTopColor) {
-        if (targetTopColor != Color.Transparent) {
-            if (isFirstLoad.value) {
-                isFirstLoad.value = false
-                launch { contentAlpha.animateTo(1f, spring()) }
-                launch { topColor.snapTo(targetTopColor) }
-            } else {
-                launch { contentAlpha.snapTo(1f) }
-                launch {
-                    topColor.animateTo(
-                        targetTopColor,
-                        tween(durationMillis = 300, easing = LinearEasing),
-                    )
-                }
-            }
-        }
-    }
+    val coroutineScope = rememberCoroutineScope()
+    val homeUxState: HomeUxState = rememberHomeUxState()
 
     LazyColumn(
         modifier = modifier
             .graphicsLayer {
-                alpha = contentAlpha.value
+                alpha = homeUxState.contentAlpha
             }
             .padding(
                 top = 0.dp,
@@ -157,7 +122,7 @@ private fun LoadedView(
                             val endGradientHeightPx =
                                 topPaddingPx + calculatedCarouselHeightPx * 0.8f
                             val verticalGradient = Brush.verticalGradient(
-                                colors = listOf(topColor.value, Color.Transparent),
+                                colors = listOf(homeUxState.topGradientColor, Color.Transparent),
                                 endY = endGradientHeightPx
                             )
                             onDrawBehind {
@@ -177,7 +142,9 @@ private fun LoadedView(
                         mainContentHorizontalPadding = mainContentPadding,
                         modifier = Modifier
                             .fillMaxWidth(),
-                        onColorChanged = { color: Color -> targetTopColor = color },
+                        onColorChanged = { color: Color ->
+                            coroutineScope.launch { homeUxState.animateGradientTo(color) }
+                        },
                         onViewProduct = onViewProduct,
                         heroCarouselCards = screenState.heroCarouselCards,
                     )
@@ -198,5 +165,71 @@ private fun LoadedView(
             Spacer(modifier = Modifier.height(paddingXLarge))
         }
 
+    }
+}
+
+@Composable
+private fun rememberHomeUxState(): HomeUxState {
+    return rememberSaveable(saver = HomeUxStateSaver) {
+        HomeUxState(
+            initialTopColor = Color.Transparent,
+            initialIsFirstLoad = true,
+        )
+    }
+}
+
+private val HomeUxStateSaver = mapSaver(
+    save = {
+        mapOf(
+            "top_color" to it.topGradientColor.toArgb(),
+            "is_first_load" to it.isFirstLoad,
+        )
+    },
+    restore = { savedMap ->
+        HomeUxState(
+            initialTopColor = Color(savedMap["top_color"] as Int),
+            initialIsFirstLoad = savedMap["is_first_load"] as Boolean,
+        )
+    }
+)
+
+private class HomeUxState(
+    initialTopColor: Color,
+    initialIsFirstLoad: Boolean,
+) {
+
+    /** Init with topColor to prevent gradient re-fading on every config change */
+    private val _topColor = Animatable(initialTopColor)
+
+    /** Init with isFirstLoad to prevent pop-in on config change */
+    private val _contentAlpha = Animatable(if (initialIsFirstLoad) 0f else 1f)
+
+    var isFirstLoad = initialIsFirstLoad
+        private set
+
+    val topGradientColor: Color
+        get() = _topColor.value
+
+    val contentAlpha: Float
+        get() = _contentAlpha.value
+
+    suspend fun animateGradientTo(targetColor: Color) {
+        if (targetColor == Color.Transparent) return
+
+        coroutineScope {
+            if (isFirstLoad) {
+                isFirstLoad = false
+                launch { _contentAlpha.animateTo(1f, spring()) }
+                launch { _topColor.snapTo(targetColor) }
+            } else {
+                launch { _contentAlpha.snapTo(1f) }
+                launch {
+                    _topColor.animateTo(
+                        targetColor,
+                        tween(durationMillis = 300, easing = LinearEasing),
+                    )
+                }
+            }
+        }
     }
 }
